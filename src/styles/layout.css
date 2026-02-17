@@ -120,9 +120,34 @@
 
 .bookshelf-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: var(--spacing-lg);
   padding-bottom: var(--spacing-xl);
+}
+
+.bookshelf-player {
+  font-size: var(--font-size-md);
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.bookshelf-stats {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.stats-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-md);
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #333;
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-small);
 }
 
 /* 問題画面 */
