@@ -10,6 +10,10 @@ import { Config } from './core/Config.js';
 import Logger from './core/Logger.js';
 import { GameStore } from './core/GameStore.js';
 import { SoundManager } from './core/SoundManager.js';
+import BookshelfScreen from './screens/BookshelfScreen.js';
+
+// 画面管理
+let currentScreen = null;
 
 /**
  * アプリケーション初期化
@@ -82,23 +86,10 @@ function showGameScreen() {
   const gameScreen = document.getElementById('game-screen');
   if (gameScreen) {
     gameScreen.classList.remove('hidden');
-    
-    // TODO: BookshelfScreen.render()
-    gameScreen.innerHTML = `
-      <div style="
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-        flex-direction: column;
-        font-family: sans-serif;
-      ">
-        <div style="font-size: 64px; margin-bottom: 20px;">📘</div>
-        <h1 style="font-size: 32px; margin-bottom: 10px;">Grimoire Guardians</h1>
-        <p style="font-size: 18px; color: #666;">Phase 0.1 - 基盤構築完了</p>
-        <p style="font-size: 14px; color: #999; margin-top: 20px;">次: BookCardコンポーネント作成</p>
-      </div>
-    `;
+
+    // BookshelfScreenを描画
+    currentScreen = new BookshelfScreen(gameScreen);
+    currentScreen.render();
   }
 }
 

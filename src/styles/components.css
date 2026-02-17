@@ -89,29 +89,133 @@
   cursor: not-allowed;
 }
 
+.book-card.locked:hover {
+  transform: none;
+  box-shadow: var(--shadow-medium);
+}
+
 .book-card.locked::after {
-  content: '🔒';
+  content: '\1F512';
   position: absolute;
   top: var(--spacing-md);
   right: var(--spacing-md);
   font-size: var(--font-size-xl);
+  z-index: var(--z-content);
+}
+
+.book-card.cleared {
+  border: 2px solid var(--color-success);
+}
+
+.book-card:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 4px;
 }
 
 .book-card-header {
   padding: var(--spacing-lg);
   background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
   color: var(--text-light);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
 }
 
-.book-card-icon {
-  font-size: 48px;
-  margin-bottom: var(--spacing-sm);
+.text-shadow-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.15));
+  pointer-events: none;
+}
+
+/* BookCard画像ラッパー */
+.book-card-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  position: relative;
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
+}
+
+.book-card-icon-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* スケルトンローディング */
+.book-card-icon-skeleton {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+.book-card-icon-wrapper.loading .book-card-icon-skeleton {
+  display: block;
+}
+
+.book-card-icon-wrapper.loading .book-card-icon-image {
+  opacity: 0;
+}
+
+/* 画像エラー時のフォールバック */
+.book-card-icon-fallback {
+  display: none;
+  position: absolute;
+  inset: 0;
+  font-size: 32px;
+  line-height: 56px;
+  text-align: center;
+  animation: fade-in 0.3s ease-out;
+}
+
+.book-card-icon-wrapper.image-error .book-card-icon-fallback {
+  display: block;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* タイトルエリア */
+.book-card-title-area {
+  flex: 1;
+  min-width: 0;
 }
 
 .book-card-title {
   font-size: var(--font-size-lg);
   font-weight: bold;
   margin-bottom: var(--spacing-xs);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* 難易度の星 */
+.book-card-difficulty {
+  font-size: var(--font-size-sm);
+}
+
+.book-card-difficulty .star {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.book-card-difficulty .star.filled {
+  color: #FFD700;
 }
 
 .book-card-body {
@@ -122,22 +226,111 @@
   margin-bottom: var(--spacing-sm);
 }
 
+/* カード情報行 */
+.book-card-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.book-card-score {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
 /* ==========================================================================
-   Progress Bar
+   Progress Bar（進捗バーコンポーネント）
    ========================================================================== */
 
+.progress-bar-wrapper {
+  width: 100%;
+}
+
+.progress-bar-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-xs);
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+}
+
+.progress-bar-label {
+  font-weight: 500;
+}
+
+.progress-bar-percentage {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.progress-bar-container {
+  width: 100%;
+  background: var(--bg-primary);
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  position: relative;
+  will-change: width;
+  transition: none; /* JS rAFで制御するためCSSトランジション無効 */
+}
+
+/* 光沢エフェクト */
+.progress-bar-shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    transparent 100%
+  );
+  border-radius: inherit;
+}
+
+/* 100%完了時のグロー */
+.progress-bar-fill.completed {
+  animation: progress-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes progress-glow {
+  0%, 100% {
+    box-shadow: 0 0 4px rgba(255, 215, 0, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.8);
+  }
+}
+
+/* 星パーティクルコンテナ */
+.progress-bar-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.star-particle {
+  position: absolute;
+  bottom: 0;
+  font-size: 14px;
+  animation: star-rise 0.8s ease-out forwards;
+  pointer-events: none;
+}
+
+/* 旧CSSとの互換: シンプルなprogress-barクラス */
 .progress-bar {
   width: 100%;
   height: 8px;
   background: var(--bg-primary);
   border-radius: 4px;
   overflow: hidden;
-}
-
-.progress-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
-  transition: width var(--transition-normal);
 }
 
 /* ==========================================================================
