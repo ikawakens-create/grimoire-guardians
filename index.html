@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
+  <title>Grimoire Guardians - グリモア・ガーディアンズ</title>
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icons/icon-512.png">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="src/styles/common.css">
+  <link rel="stylesheet" href="src/styles/layout.css">
+  <link rel="stylesheet" href="src/styles/components.css">
+  <link rel="stylesheet" href="src/styles/effects.css">
+  
+  <!-- Preload Critical Resources -->
+  <link rel="preload" as="script" href="src/index.js">
+</head>
+<body>
+  <!-- 横向き警告（縦向き時のみ表示） -->
+  <div id="orientation-warning" class="orientation-warning hidden">
+    <div class="warning-content">
+      <p>📱</p>
+      <p>たてむきでは<br>あそべません</p>
+      <p>よこむきに<br>してね！</p>
+    </div>
+  </div>
+
+  <!-- メインコンテナ -->
+  <div id="app" class="app-container">
+    <!-- ローディング画面 -->
+    <div id="loading-screen" class="loading-screen">
+      <div class="loading-content">
+        <div class="loading-logo">📘</div>
+        <h1>Grimoire Guardians</h1>
+        <div class="loading-spinner"></div>
+        <p>よみこみちゅう...</p>
+      </div>
+    </div>
+
+    <!-- ゲーム画面（動的に生成） -->
+    <div id="game-screen" class="game-screen hidden">
+      <!-- BookshelfScreen, QuizScreen等がここに描画される -->
+    </div>
+  </div>
+
+  <!-- エラー通知（必要時のみ表示） -->
+  <div id="error-toast" class="error-toast hidden">
+    <p id="error-message"></p>
+  </div>
+
+  <!-- メインスクリプト（type="module"） -->
+  <script type="module" src="src/index.js"></script>
+  
+  <!-- Service Worker登録 -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('[SW] Registered:', reg.scope))
+          .catch(err => console.error('[SW] Registration failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,281 @@
+/**
+ * components.css - Grimoire Guardians
+ * コンポーネントスタイル
+ * 
+ * @version 1.0
+ * @date 2026-02-15
+ */
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+.button {
+  display: inline-block;
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  color: var(--text-light);
+  background: var(--color-primary);
+  border: none;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-medium);
+  cursor: pointer;
+  user-select: none;
+  transition: all var(--transition-fast);
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-large);
+}
+
+.button:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-small);
+}
+
+.button-large {
+  padding: var(--spacing-lg) var(--spacing-xl);
+  font-size: var(--font-size-lg);
+}
+
+.button-small {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-sm);
+}
+
+.button-success {
+  background: var(--color-success);
+}
+
+.button-danger {
+  background: var(--color-danger);
+}
+
+.button-warning {
+  background: var(--color-warning);
+}
+
+.button-secondary {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+}
+
+/* ==========================================================================
+   Book Card（本棚のカード）
+   ========================================================================== */
+
+.book-card {
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-medium);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  position: relative;
+}
+
+.book-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-large);
+}
+
+.book-card.locked {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.book-card.locked::after {
+  content: '🔒';
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  font-size: var(--font-size-xl);
+}
+
+.book-card-header {
+  padding: var(--spacing-lg);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: var(--text-light);
+}
+
+.book-card-icon {
+  font-size: 48px;
+  margin-bottom: var(--spacing-sm);
+}
+
+.book-card-title {
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+  margin-bottom: var(--spacing-xs);
+}
+
+.book-card-body {
+  padding: var(--spacing-md);
+}
+
+.book-card-progress {
+  margin-bottom: var(--spacing-sm);
+}
+
+/* ==========================================================================
+   Progress Bar
+   ========================================================================== */
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--bg-primary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  transition: width var(--transition-normal);
+}
+
+/* ==========================================================================
+   Question Components（問題関連）
+   ========================================================================== */
+
+.question-container {
+  width: 100%;
+  max-width: 800px;
+}
+
+.question-text {
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+  color: var(--text-primary);
+}
+
+.question-choices {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+}
+
+.choice-button {
+  padding: var(--spacing-xl);
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+  background: var(--bg-secondary);
+  border: 3px solid var(--border-color);
+  border-radius: var(--border-radius-large);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.choice-button:hover {
+  border-color: var(--color-primary);
+  transform: scale(1.05);
+}
+
+.choice-button.correct {
+  background: var(--color-success);
+  color: var(--text-light);
+  border-color: var(--color-success);
+}
+
+.choice-button.wrong {
+  background: var(--color-danger);
+  color: var(--text-light);
+  border-color: var(--color-danger);
+}
+
+/* ==========================================================================
+   Cards
+   ========================================================================== */
+
+.card {
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-medium);
+  padding: var(--spacing-lg);
+}
+
+.card-header {
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.card-title {
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+  margin: 0;
+}
+
+.card-body {
+  /* スタイルは子要素で定義 */
+}
+
+.card-footer {
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-color);
+}
+
+/* ==========================================================================
+   Badges
+   ========================================================================== */
+
+.badge {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--text-light);
+  background: var(--color-primary);
+  border-radius: var(--border-radius-small);
+}
+
+.badge-success {
+  background: var(--color-success);
+}
+
+.badge-danger {
+  background: var(--color-danger);
+}
+
+.badge-warning {
+  background: var(--color-warning);
+}
+
+/* ==========================================================================
+   Multiplier Icon（おみくじ倍率アイコン）
+   ========================================================================== */
+
+.multiplier-icon {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #333;
+  padding: 15px 25px;
+  border-radius: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  z-index: var(--z-ui);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  animation: pulse 2s infinite;
+}
+
+.multiplier-icon.shield {
+  background: linear-gradient(135deg, #4A90E2, #50C878);
+}
+
+/* ==========================================================================
+   TODO: Phase 0.1で追加実装予定
+   - Inventory UI
+   - Event UI (Omikuji, ThreePaths, Monster, Treasure)
+   - Settings UI
+   ========================================================================== */

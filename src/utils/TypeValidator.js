@@ -1,0 +1,287 @@
+/**
+ * TypeValidator.js - Grimoire Guardians
+ * 型検証ユーティリティ
+ * 
+ * Pure JavaScriptプロジェクトでの型安全性を向上
+ * TypeScriptの代替として実行時の型チェックを提供
+ * 
+ * @version 1.0
+ * @date 2026-02-15
+ */
+
+import Logger from '../core/Logger.js';
+import { Config } from '../core/Config.js';
+
+/**
+ * TypeValidator クラス
+ * データ型の検証を行う
+ */
+export class TypeValidator {
+  /**
+   * 文字列かどうかをチェック
+   * @param {*} value - 検証する値
+   * @param {string} name - パラメータ名（エラー表示用）
+   * @returns {boolean} 検証結果
+   */
+  static isString(value, name = 'value') {
+    const valid = typeof value === 'string';
+    if (!valid) {
+      this._logError(name, 'string', typeof value);
+    }
+    return valid;
+  }
+
+  /**
+   * 数値かどうかをチェック
+   * @param {*} value - 検証する値
+   * @param {string} name - パラメータ名
+   * @returns {boolean} 検証結果
+   */
+  static isNumber(value, name = 'value') {
+    const valid = typeof value === 'number' && !isNaN(value);
+    if (!valid) {
+      this._logError(name, 'number', typeof value);
+    }
+    return valid;
+  }
+
+  /**
+   * 真偽値かどうかをチェック
+   * @param {*} value - 検証する値
+   * @param {string} name - パラメータ名
+   * @returns {boolean} 検証結果
+   */
+  static isBoolean(value, name = 'value') {
+    const valid = typeof value === 'boolean';
+    if (!valid) {
+      this._logError(name, 'boolean', typeof value);
+    }
+    return valid;
+  }
+
+  /**
+   * オブジェクトかどうかをチェック
+   * @param {*} value - 検証する値
+   * @param {string} name - パラメータ名
+   * @returns {boolean} 検証結果
+   */
+  static isObject(value, name = 'value') {
+    const valid = typeof value === 'object' && value !== null && !Array.isArray(value);
+    if (!valid) {
+      this._logError(name, 'object', typeof value);
+    }
+    return valid;
+  }
+
+  /**
+   * 配列かどうかをチェック
+   * @param {*} value - 検証する値
+   * @param {string} name - パラメータ名
+   * @returns {boolean} 検証結果
+   */
+  static isArray(value, name = 'value') {
+    const valid = Array.isArray(value);
+    if (!valid) {
+      this._logError(name, 'array', typeof value);
+    }
+    return valid;
+  }
+
+  /**
+   * 関数かどうかをチェック
+   * @param {*} value - 検証する値
+   * @param {string} name - パラメータ名
+   * @returns {boolean} 検証結果
+   */
+  static isFunction(value, name = 'value') {
+    const valid = typeof value === 'function';
+    if (!valid) {
+      this._logError(name, 'function', typeof value);
+    }
+    return valid;
+  }
+
+  /**
+   * nullまたはundefinedかどうかをチェック
+   * @param {*} value - 検証する値
+   * @returns {boolean} 検証結果
+   */
+  static isNullOrUndefined(value) {
+    return value === null || value === undefined;
+  }
+
+  /**
+   * 空文字列かどうかをチェック
+   * @param {*} value - 検証する値
+   * @returns {boolean} 検証結果
+   */
+  static isEmpty(value) {
+    if (this.isNullOrUndefined(value)) return true;
+    if (typeof value === 'string') return value.trim().length === 0;
+    if (Array.isArray(value)) return value.length === 0;
+    if (typeof value === 'object') return Object.keys(value).length === 0;
+    return false;
+  }
+
+  /**
+   * 範囲内の数値かどうかをチェック
+   * @param {number} value - 検証する値
+   * @param {number} min - 最小値
+   * @param {number} max - 最大値
+   * @param {string} name - パラメータ名
+   * @returns {boolean} 検証結果
+   */
+  static isNumberInRange(value, min, max, name = 'value') {
+    if (!this.isNumber(value, name)) {
+      return false;
+    }
+
+    const valid = value >= min && value <= max;
+    if (!valid) {
+      Logger.error(`[Validation] ${name} must be between ${min} and ${max}, got ${value}`);
+    }
+    return valid;
+  }
+
+  /**
+   * 配列の要素が全て指定した型かどうかをチェック
+   * @param {Array} arr - 検証する配列
+   * @param {Function} typeChecker - 型チェック関数
+   * @param {string} name - パラメータ名
+   * @returns {boolean} 検証結果
+   */
+  static isArrayOf(arr, typeChecker, name = 'array') {
+    if (!this.isArray(arr, name)) {
+      return false;
+    }
+
+    for (let i = 0; i < arr.length; i++) {
+      if (!typeChecker(arr[i])) {
+        Logger.error(`[Validation] ${name}[${i}] failed type check`);
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * オブジェクトが指定したスキーマに従っているかをチェック
+   * @param {Object} obj - 検証するオブジェクト
+   * @param {Object} schema - スキーマ定義
+   * @param {string} name - パラメータ名
+   * @returns {boolean} 検証結果
+   * 
+   * @example
+   * const schema = {
+   *   id: TypeValidator.isString,
+   *   age: TypeValidator.isNumber,
+   *   active: TypeValidator.isBoolean
+   * };
+   * TypeValidator.matchesSchema(user, schema, 'user');
+   */
+  static matchesSchema(obj, schema, name = 'object') {
+    if (!this.isObject(obj, name)) {
+      return false;
+    }
+
+    for (const [key, validator] of Object.entries(schema)) {
+      if (!(key in obj)) {
+        Logger.error(`[Validation] ${name}.${key} is missing`);
+        return false;
+      }
+
+      if (!validator(obj[key], `${name}.${key}`)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * 必須パラメータのチェック
+   * @param {*} value - 検証する値
+   * @param {string} name - パラメータ名
+   * @throws {Error} 値がnullまたはundefinedの場合
+   */
+  static requireNonNull(value, name = 'parameter') {
+    if (this.isNullOrUndefined(value)) {
+      const error = new Error(`${name} is required but got ${value}`);
+      Logger.error('[Validation]', error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * アサーション（条件が満たされない場合はエラー）
+   * @param {boolean} condition - 条件
+   * @param {string} message - エラーメッセージ
+   * @throws {Error} 条件がfalseの場合
+   */
+  static assert(condition, message = 'Assertion failed') {
+    if (!condition) {
+      const error = new Error(`[Validation] ${message}`);
+      Logger.error(error.message);
+      
+      if (Config.IS_DEVELOPMENT) {
+        debugger;  // 開発時のみブレークポイント
+      }
+      
+      throw error;
+    }
+  }
+
+  /**
+   * 問題データの検証
+   * @param {Object} question - 問題データ
+   * @returns {boolean} 検証結果
+   */
+  static validateQuestion(question) {
+    const schema = {
+      id: (v) => this.isString(v),
+      unitId: (v) => this.isString(v),
+      type: (v) => this.isString(v),
+      content: (v) => this.isObject(v),
+      correctAnswer: (v) => !this.isNullOrUndefined(v),
+      difficulty: (v) => this.isNumberInRange(v, 1, 5)
+    };
+
+    return this.matchesSchema(question, schema, 'question');
+  }
+
+  /**
+   * セーブデータの検証
+   * @param {Object} saveData - セーブデータ
+   * @returns {boolean} 検証結果
+   */
+  static validateSaveData(saveData) {
+    if (!this.isObject(saveData, 'saveData')) {
+      return false;
+    }
+
+    if (!this.isString(saveData.version, 'saveData.version')) {
+      return false;
+    }
+
+    if (!this.isObject(saveData.core, 'saveData.core')) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * エラーログ出力
+   * @private
+   * @param {string} name - パラメータ名
+   * @param {string} expected - 期待される型
+   * @param {string} actual - 実際の型
+   */
+  static _logError(name, expected, actual) {
+    Logger.error(`[Validation] ${name} expected ${expected}, got ${actual}`);
+  }
+}
+
+// デフォルトエクスポート
+export default TypeValidator;
