@@ -234,20 +234,38 @@ export class TypeValidator {
 
   /**
    * 問題データの検証
+   * データ形式: { id, unitId, type, question, choices, correctAnswer }
    * @param {Object} question - 問題データ
    * @returns {boolean} 検証結果
    */
   static validateQuestion(question) {
-    const schema = {
-      id: (v) => this.isString(v),
-      unitId: (v) => this.isString(v),
-      type: (v) => this.isString(v),
-      content: (v) => this.isObject(v),
-      correctAnswer: (v) => !this.isNullOrUndefined(v),
-      difficulty: (v) => this.isNumberInRange(v, 1, 5)
+    if (!this.isObject(question, 'question')) return false;
+
+    // 必須フィールド
+    const requiredSchema = {
+      id:            (v) => this.isString(v, 'question.id'),
+      unitId:        (v) => this.isString(v, 'question.unitId'),
+      type:          (v) => this.isString(v, 'question.type'),
+      question:      (v) => this.isString(v, 'question.question'),
+      choices:       (v) => this.isArray(v, 'question.choices'),
+      correctAnswer: (v) => this.isString(v, 'question.correctAnswer')
     };
 
-    return this.matchesSchema(question, schema, 'question');
+    if (!this.matchesSchema(question, requiredSchema, 'question')) return false;
+
+    // choices は2個以上必要
+    if (question.choices.length < 2) {
+      Logger.error('[Validation] question.choices must have at least 2 items');
+      return false;
+    }
+
+    // correctAnswer は choices の中に含まれていなければならない
+    if (!question.choices.includes(question.correctAnswer)) {
+      Logger.error('[Validation] question.correctAnswer must be one of the choices');
+      return false;
+    }
+
+    return true;
   }
 
   /**

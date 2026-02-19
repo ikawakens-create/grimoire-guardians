@@ -11,6 +11,7 @@ import Logger from './core/Logger.js';
 import { GameStore } from './core/GameStore.js';
 import { SoundManager } from './core/SoundManager.js';
 import BookshelfScreen from './screens/BookshelfScreen.js';
+import QuizScreen from './screens/QuizScreen.js';
 
 /**
  * アプリケーション初期化
@@ -76,27 +77,80 @@ function hideLoadingScreen() {
   }
 }
 
+/** 現在アクティブな画面インスタンスを保持 */
+let _activeScreen = null;
+
 /**
- * ゲーム画面を表示
+ * ゲーム画面を表示（BookshelfScreen から開始）
  */
 function showGameScreen() {
   const gameScreen = document.getElementById('game-screen');
   if (!gameScreen) return;
 
   gameScreen.classList.remove('hidden');
+  showBookshelf(gameScreen);
+}
 
-  // BookshelfScreen を描画
+/**
+ * BookshelfScreen を描画する
+ * @param {HTMLElement} gameScreen - ゲーム画面コンテナ
+ */
+function showBookshelf(gameScreen) {
+  // 既存の画面を破棄
+  if (_activeScreen) {
+    _activeScreen.destroy();
+    _activeScreen = null;
+  }
+
+  GameStore.setState('app.currentScreen', 'bookshelf');
+
   const bookshelf = new BookshelfScreen(gameScreen, (worldData) => {
-    // TODO: QuizScreen への遷移（Phase 0.1 Week 2後半で実装）
-    Logger.info(`[App] World selected → QuizScreen coming soon: ${worldData.id}`);
-    showError(`「${worldData.title}」は準備中です。もうしばらくお待ちください！`);
+    Logger.info(`[App] World selected: ${worldData.id} (unit: ${worldData.unitId})`);
+    showQuiz(gameScreen, worldData);
   });
 
   bookshelf.render();
+  _activeScreen = bookshelf;
 
-  // デバッグ用にアクセスできるように保持
   if (Config.IS_DEBUG) {
-    window.GG._bookshelf = bookshelf;
+    window.GG._screen = bookshelf;
+  }
+}
+
+/**
+ * QuizScreen を描画する
+ * @param {HTMLElement} gameScreen - ゲーム画面コンテナ
+ * @param {Object} worldData       - 選択されたワールドデータ
+ */
+function showQuiz(gameScreen, worldData) {
+  // 既存の画面を破棄
+  if (_activeScreen) {
+    _activeScreen.destroy();
+    _activeScreen = null;
+  }
+
+  GameStore.setState('app.currentScreen', 'quiz');
+
+  const quiz = new QuizScreen(gameScreen, (result) => {
+    // クイズ終了（完了 or 中断）→ ブックシェルフへ戻る
+    Logger.info('[App] Quiz exited:', result);
+
+    if (result.type === 'finish') {
+      const pct = Math.round(result.percentage * 100);
+      Logger.info(
+        `[App] Quiz complete: ${result.correctCount}/${result.total} (${pct}%)`
+      );
+      // TODO: ResultScreen への遷移（Phase 0.1 Week 3 で実装）
+    }
+
+    showBookshelf(gameScreen);
+  });
+
+  quiz.render(worldData);
+  _activeScreen = quiz;
+
+  if (Config.IS_DEBUG) {
+    window.GG._screen = quiz;
   }
 }
 
