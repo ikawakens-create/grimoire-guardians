@@ -23,6 +23,7 @@ import ProgressBar from '../components/ProgressBar.js';
 import HapticFeedback from '../utils/HapticFeedback.js';
 import { TypeValidator } from '../utils/TypeValidator.js';
 import { loadUnitQuestions } from '../data/units.js';
+import EventManager from '../core/EventManager.js';
 
 /** フィードバック待機時間（ms） */
 const FEEDBACK_DELAY = {
@@ -86,6 +87,9 @@ export class QuizScreen {
 
     /** @type {number} 連続正解数（クイズ内ストリーク） */
     this._correctStreak = 0;
+
+    /** @type {Object|null} ワールドデータ（イベントトリガー照合用） */
+    this._worldData = null;
   }
 
   // ============================================================
@@ -103,7 +107,8 @@ export class QuizScreen {
     Logger.info(`[QuizScreen] Rendering for world: ${worldData.id}, unit: ${worldData.unitId}`);
     Logger.time('QuizScreen.render');
 
-    this._unitId = worldData.unitId;
+    this._unitId    = worldData.unitId;
+    this._worldData = worldData;
 
     // DOM 骨格を構築（まずローディング状態で表示）
     this._buildUI(worldData.title);
@@ -437,6 +442,10 @@ export class QuizScreen {
 
     // フィードバックオーバーレイ表示＆待機
     await this._showFeedback(isCorrect);
+
+    // イベントチェック（triggerAt が一致すれば演出完了まで待機）
+    const answeredNum = this._currentIndex + 1;  // 1始まり
+    await EventManager.checkAndTrigger(answeredNum, this._worldData);
 
     // 次へ進む
     this._nextQuestion();

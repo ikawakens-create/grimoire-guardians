@@ -15,6 +15,7 @@ import Logger from './core/Logger.js';
 import { GameStore } from './core/GameStore.js';
 import { SoundManager } from './core/SoundManager.js';
 import { SaveManager } from './core/SaveManager.js';
+import EventManager from './core/EventManager.js';
 import BookshelfScreen from './screens/BookshelfScreen.js';
 import QuizScreen from './screens/QuizScreen.js';
 import ResultScreen from './screens/ResultScreen.js';
@@ -43,7 +44,11 @@ async function init() {
     Logger.info('[Init] Loading save data...');
     await SaveManager.init();
 
-    // 4. 初期化完了
+    // 4. EventManager 初期化（#event-layer DOM 取得）
+    Logger.info('[Init] Initializing event manager...');
+    EventManager.init();
+
+    // 5. 初期化完了
     GameStore.setState('app.isInitialized', true);
     GameStore.setState('app.isLoading', false);
     GameStore.setState('app.currentScreen', 'bookshelf');

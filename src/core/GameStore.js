@@ -77,7 +77,8 @@ export class GameStore {
       answers: [],
       startedAt: null,
       rewardMultiplier: 1.0,  // おみくじの倍率
-      shieldActive: false      // おまもり
+      shieldActive: false,     // おまもり
+      activeBuffs: []          // 有効なバフ一覧 [{ type, value?, appliedAt }]
     },
 
     // ライセンス情報
@@ -254,7 +255,8 @@ export class GameStore {
         answers: [],
         startedAt: null,
         rewardMultiplier: 1.0,
-        shieldActive: false
+        shieldActive: false,
+        activeBuffs: []
       },
       license: {
         core: {
@@ -321,7 +323,8 @@ export class GameStore {
       answers: [],
       startedAt: new Date().toISOString(),
       rewardMultiplier: 1.0,
-      shieldActive: false
+      shieldActive: false,
+      activeBuffs: []
     });
 
     Logger.info(`[Session] Started: ${worldId} (${questions.length} questions)`);
@@ -378,6 +381,45 @@ export class GameStore {
       return true;
     }
     return false;
+  }
+
+  /**
+   * バフを追加する
+   * @param {{ type: string, value?: number }} buff - バフ情報
+   */
+  static addBuff(buff) {
+    const current = this.getState('currentSession.activeBuffs') || [];
+    this.setState('currentSession.activeBuffs', [
+      ...current,
+      { ...buff, appliedAt: Date.now() }
+    ]);
+    Logger.info('[Buff] Added:', buff);
+  }
+
+  /**
+   * 有効なバフ一覧を返す
+   * @returns {Array}
+   */
+  static getActiveBuffs() {
+    return this.getState('currentSession.activeBuffs') || [];
+  }
+
+  /**
+   * セッションをクリアする（次のワールド開始前）
+   */
+  static clearSession() {
+    this.setState('currentSession', {
+      worldId: null,
+      unitId: null,
+      questions: [],
+      currentQuestionIndex: 0,
+      answers: [],
+      startedAt: null,
+      rewardMultiplier: 1.0,
+      shieldActive: false,
+      activeBuffs: []
+    });
+    Logger.info('[Session] Cleared');
   }
 
   /**

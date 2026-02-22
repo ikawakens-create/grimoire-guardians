@@ -737,8 +737,146 @@
 }
 
 /* ==========================================================================
-   TODO: Phase 0.1で追加実装予定
-   - Inventory UI
-   - Event UI (Omikuji, ThreePaths, Monster, Treasure)
-   - Settings UI
+   Event Layer（イベントレイヤー）
+   - #event-layer は #app の直下に常駐
+   - .hidden クラスとの衝突を避けるため visibility ベースで表示制御
+   ========================================================================== */
+
+#event-layer {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: var(--z-modal);
+  /* デフォルト: 非表示 */
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-normal), visibility var(--transition-normal);
+}
+
+#event-layer.event-layer-active {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ==========================================================================
+   Omikuji Event（おみくじイベント）
+   ========================================================================== */
+
+.omikuji-modal {
+  background: linear-gradient(160deg, #fff9e6 0%, #fff3cc 100%);
+  border: 3px solid #e8a800;
+  border-radius: var(--border-radius-large);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  padding: var(--spacing-xl);
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  animation: omikuji-modal-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.omikuji-header {
+  margin-bottom: var(--spacing-lg);
+}
+
+.omikuji-title {
+  font-size: var(--font-size-xxl);
+  font-weight: bold;
+  color: #7a4800;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: var(--spacing-xs);
+}
+
+.omikuji-subtitle {
+  font-size: var(--font-size-md);
+  color: #9c6200;
+}
+
+/* 巻物ボタン 3枚 */
+.omikuji-scrolls {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  transition: opacity var(--transition-normal);
+}
+
+.omikuji-scrolls-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.omikuji-scroll {
+  font-size: 3rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius);
+  transition: transform var(--transition-fast);
+  animation: omikuji-scroll-float 2s ease-in-out infinite;
+  will-change: transform;
+}
+
+.omikuji-scroll:nth-child(2) { animation-delay: 0.3s; }
+.omikuji-scroll:nth-child(3) { animation-delay: 0.6s; }
+
+.omikuji-scroll:hover {
+  transform: scale(1.15) translateY(-4px);
+}
+
+.omikuji-scroll:active {
+  transform: scale(0.95);
+}
+
+.omikuji-scroll-selected {
+  animation: omikuji-scroll-select 0.5s ease both !important;
+}
+
+.omikuji-scroll:disabled {
+  cursor: default;
+}
+
+/* 結果エリア */
+.omikuji-result {
+  animation: none;
+}
+
+.omikuji-result-show {
+  animation: omikuji-result-reveal 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.omikuji-result-emoji {
+  font-size: 4rem;
+  margin-bottom: var(--spacing-sm);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.omikuji-result-label {
+  font-size: var(--font-size-xxl);
+  font-weight: bold;
+  color: #7a4800;
+  margin-bottom: var(--spacing-xs);
+}
+
+.omikuji-result-text {
+  font-size: var(--font-size-lg);
+  color: #9c6200;
+  margin-bottom: var(--spacing-lg);
+  font-weight: 600;
+}
+
+.omikuji-continue-btn {
+  min-width: 140px;
+}
+
+/* ==========================================================================
+   TODO: Phase 0.2以降で追加実装予定
+   - Monster Event UI
+   - Treasure Chest UI
+   - Three Paths UI
    ========================================================================== */
