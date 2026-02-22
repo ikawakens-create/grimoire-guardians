@@ -875,8 +875,577 @@
 }
 
 /* ==========================================================================
-   TODO: Phase 0.2以降で追加実装予定
-   - Monster Event UI
-   - Treasure Chest UI
-   - Three Paths UI
+   Quiz Buff Indicator（クイズ画面バフアイコン）
    ========================================================================== */
+
+.quiz-buff-indicator {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  z-index: var(--z-overlay);
+  transition: opacity var(--transition-normal);
+  pointer-events: none;
+}
+
+.quiz-buff-multiplier {
+  background: linear-gradient(135deg, #FFD700, #FF8C00);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(255, 140, 0, 0.45);
+  animation: buff-pulse 1.8s ease-in-out infinite;
+}
+
+.quiz-buff-shield {
+  background: linear-gradient(135deg, #4FC3F7, #0288D1);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(2, 136, 209, 0.45);
+  animation: buff-pulse 1.8s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   Result Screen — Multiplier Banner（マルチプライヤーバナー）
+   ========================================================================== */
+
+.result-multiplier-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 20px;
+  margin: 8px auto;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #FFD700, #FF8C00);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  box-shadow: 0 2px 10px rgba(255, 140, 0, 0.4);
+  animation: fade-in 0.4s ease-out;
+  max-width: 320px;
+}
+
+/* ==========================================================================
+   Three Paths Event（3つの道イベント）
+   ========================================================================== */
+
+.paths-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 16px;
+  background: var(--color-surface);
+  border-radius: var(--border-radius-large);
+  box-shadow: var(--shadow-xl);
+  width: min(480px, 92vw);
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: event-modal-enter 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.paths-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  text-align: center;
+}
+
+.paths-subtitle {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin: 0;
+}
+
+.paths-rare-announce {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #C850C0;
+  text-align: center;
+  margin: 0;
+  animation: paths-rare-glow 1.5s ease-in-out infinite alternate;
+}
+
+.paths-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.path-choice-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--color-background);
+  border: 2px solid var(--color-border);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  text-align: left;
+  width: 100%;
+}
+
+.path-choice-btn:hover:not(:disabled),
+.path-choice-btn:focus:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary);
+}
+
+.path-choice-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.path-choice-btn.path-rare {
+  border-color: #C850C0;
+  background: linear-gradient(135deg, rgba(65, 88, 208, 0.08), rgba(200, 80, 192, 0.08));
+}
+
+.path-choice-btn.path-rare:hover:not(:disabled) {
+  border-color: #4158D0;
+  box-shadow: 0 4px 16px rgba(200, 80, 192, 0.35);
+}
+
+.path-choice-btn.path-selected {
+  transform: scale(0.97);
+  border-color: var(--color-primary);
+  background: rgba(var(--color-primary-rgb, 79, 70, 229), 0.08);
+}
+
+.path-icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.path-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.path-hint {
+  font-size: 0.78rem;
+  color: var(--color-text-secondary);
+  margin-left: auto;
+}
+
+/* Paths Question Phase */
+.paths-question-phase {
+  gap: 14px;
+}
+
+.paths-question-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.paths-path-icon {
+  font-size: 1.5rem;
+}
+
+.paths-path-name {
+  font-size: 1rem;
+}
+
+.paths-question-text {
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-text);
+  padding: 10px;
+  background: var(--color-background);
+  border-radius: var(--border-radius);
+  width: 100%;
+}
+
+.paths-question-choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+}
+
+.path-answer-btn {
+  padding: 12px 8px;
+  background: var(--color-background);
+  border: 2px solid var(--color-border);
+  border-radius: var(--border-radius);
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.path-answer-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: var(--color-primary);
+}
+
+.path-answer-btn:disabled { cursor: not-allowed; }
+
+.path-answer-correct {
+  background: var(--color-success-light, #d1fae5) !important;
+  border-color: var(--color-success) !important;
+}
+
+.path-answer-wrong {
+  background: var(--color-error-light, #fee2e2) !important;
+  border-color: var(--color-error) !important;
+}
+
+.paths-feedback {
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 6px 16px;
+  border-radius: var(--border-radius);
+}
+
+.paths-feedback-correct { color: var(--color-success); }
+.paths-feedback-wrong   { color: var(--color-error); }
+
+/* Paths Result Phase */
+.paths-result-phase { gap: 12px; }
+
+.paths-result-icon {
+  font-size: 3rem;
+  animation: bounce 0.6s ease-out;
+}
+
+.paths-result-message {
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-text);
+}
+
+.paths-drop-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #FFF9E6, #FFF3CC);
+  border: 2px solid #FFD700;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 700;
+  animation: drop-fall 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.paths-drop-item span:first-child { font-size: 1.6rem; }
+
+/* ==========================================================================
+   Monster Battle Event（モンスターバトルイベント）
+   ========================================================================== */
+
+.monster-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 24px 20px;
+  background: var(--color-surface);
+  border-radius: var(--border-radius-large);
+  box-shadow: var(--shadow-xl);
+  width: min(400px, 90vw);
+  animation: event-modal-enter 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.monster-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--color-error);
+  text-align: center;
+}
+
+.monster-icon {
+  font-size: 4rem;
+  animation: monster-appear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  line-height: 1;
+}
+
+.monster-icon.monster-rare {
+  animation: monster-appear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+             rare-shimmer 1.5s ease-in-out infinite 0.5s;
+  filter: drop-shadow(0 0 8px gold);
+}
+
+.monster-rare-shine {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: goldenrod;
+  animation: paths-rare-glow 1.2s ease-in-out infinite alternate;
+}
+
+.monster-icon-small {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+/* Monster Battle Phase */
+.monster-battle-phase { gap: 12px; }
+
+.monster-question-text {
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-text);
+  padding: 10px;
+  background: var(--color-background);
+  border-radius: var(--border-radius);
+  width: 100%;
+}
+
+.monster-question-choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+}
+
+.monster-answer-btn {
+  padding: 12px 8px;
+  background: var(--color-background);
+  border: 2px solid var(--color-border);
+  border-radius: var(--border-radius);
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.monster-answer-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: var(--color-error);
+}
+
+.monster-answer-btn:disabled { cursor: not-allowed; }
+
+.monster-answer-correct {
+  background: var(--color-success-light, #d1fae5) !important;
+  border-color: var(--color-success) !important;
+}
+
+.monster-answer-wrong {
+  background: var(--color-error-light, #fee2e2) !important;
+  border-color: var(--color-error) !important;
+}
+
+.monster-feedback {
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 6px 16px;
+  border-radius: var(--border-radius);
+}
+
+.monster-feedback-correct { color: var(--color-success); }
+.monster-feedback-wrong   { color: var(--color-error); }
+
+/* Monster Result Phase */
+.monster-result-phase { gap: 12px; }
+
+.monster-result-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-align: center;
+  color: var(--color-text);
+}
+
+.monster-result-icon {
+  font-size: 2.5rem;
+  animation: bounce 0.6s ease-out;
+}
+
+.monster-drop {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #FFF9E6, #FFF3CC);
+  border: 2px solid #FFD700;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 700;
+  animation: drop-fall 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.monster-drop span:first-child { font-size: 1.6rem; }
+
+/* ==========================================================================
+   Treasure Chest Event（宝箱チャレンジイベント）
+   ========================================================================== */
+
+.treasure-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 24px 20px;
+  background: var(--color-surface);
+  border-radius: var(--border-radius-large);
+  box-shadow: var(--shadow-xl);
+  width: min(400px, 90vw);
+  animation: event-modal-enter 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.treasure-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #B8860B;
+  text-align: center;
+}
+
+.treasure-subtitle {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin: 0;
+}
+
+.treasure-icon {
+  font-size: 4rem;
+  animation: treasure-bounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  line-height: 1;
+}
+
+.treasure-icon.treasure-shake {
+  animation: shake 0.4s ease-in-out 3;
+}
+
+/* Mimic Phase */
+.treasure-mimic-phase {
+  background: linear-gradient(160deg, #1a1a2e 0%, #16213e 100%);
+  border: 2px solid #E94560;
+}
+
+.treasure-mimic-title {
+  color: #E94560 !important;
+}
+
+.treasure-mimic-icon {
+  animation: monster-appear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.treasure-open-btn {
+  min-width: 130px;
+}
+
+/* Treasure Question Phase */
+.treasure-question-phase { gap: 12px; }
+
+.treasure-question-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.treasure-question-text {
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-text);
+  padding: 10px;
+  background: var(--color-background);
+  border-radius: var(--border-radius);
+  width: 100%;
+}
+
+.treasure-question-choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+}
+
+.treasure-answer-btn {
+  padding: 12px 8px;
+  background: var(--color-background);
+  border: 2px solid var(--color-border);
+  border-radius: var(--border-radius);
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.treasure-answer-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: #B8860B;
+}
+
+.treasure-answer-btn:disabled { cursor: not-allowed; }
+
+.treasure-answer-correct {
+  background: var(--color-success-light, #d1fae5) !important;
+  border-color: var(--color-success) !important;
+}
+
+.treasure-answer-wrong {
+  background: var(--color-error-light, #fee2e2) !important;
+  border-color: var(--color-error) !important;
+}
+
+.treasure-feedback {
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 6px 16px;
+  border-radius: var(--border-radius);
+}
+
+.treasure-feedback-correct { color: var(--color-success); }
+.treasure-feedback-wrong   { color: var(--color-error); }
+
+/* Treasure Result Phase */
+.treasure-result-phase { gap: 12px; }
+
+.treasure-result-icon {
+  font-size: 3rem;
+  animation: bounce 0.6s ease-out;
+}
+
+.treasure-result-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  text-align: center;
+  color: var(--color-text);
+}
+
+.treasure-result-sub {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin: 0;
+}
+
+.treasure-drop-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #FFF9E6, #FFF3CC);
+  border: 2px solid #FFD700;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 700;
+  animation: drop-fall 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.treasure-drop-item span:first-child { font-size: 1.6rem; }
+
+.treasure-fight-btn {
+  min-width: 140px;
+}

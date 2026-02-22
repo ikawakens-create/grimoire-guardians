@@ -7,7 +7,7 @@
  *   - checkAndTrigger() で問題番号とワールド定義を照合
  *   - 各イベントは Promise を返し、完了まで QuizScreen の進行を停止
  *
- * @version 1.0
+ * @version 1.1
  * @date 2026-02-22
  */
 
@@ -61,12 +61,17 @@ class EventManager {
     if (match.type === 'omikuji') {
       const { default: OmikujiEvent } = await import('../events/OmikujiEvent.js');
       await OmikujiEvent.play(this.#layer);
+    } else if (match.type === 'three_paths') {
+      const { default: ThreePathsEvent } = await import('../events/ThreePathsEvent.js');
+      await ThreePathsEvent.play(this.#layer);
+    } else if (match.type === 'monster') {
+      const { default: MonsterBattleEvent } = await import('../events/MonsterBattleEvent.js');
+      await MonsterBattleEvent.play(this.#layer);
+    } else if (match.type === 'treasure') {
+      const { default: TreasureEvent } = await import('../events/TreasureEvent.js');
+      await TreasureEvent.play(this.#layer);
     }
-
-    // TODO: Phase 0.2 以降で実装予定
-    // if (match.type === 'monster')   { ... }
-    // if (match.type === 'treasure')  { ... }
-    // if (match.type === 'paths')     { ... }
+    // phase_complete は ResultScreen / index.js 側で別途処理
   }
 }
 
