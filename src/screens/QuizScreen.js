@@ -30,6 +30,26 @@ const FEEDBACK_DELAY = {
   WRONG: 2000
 };
 
+/** マスコットの応援メッセージ */
+const MASCOT_MESSAGES = {
+  correct: [
+    'すごい！',
+    'やったー！',
+    'せいかい！',
+    'かんぺき！',
+    'よくできました！'
+  ],
+  wrong: [
+    'ざんねん...',
+    'つぎは がんばろう！',
+    'もういちど！',
+    'だいじょうぶ！'
+  ],
+  streak3: 'すごいれんぞく！✨',
+  streak5: '5れんぞく！🌟🌟',
+  streak7: '7れんぞく！🔥🔥🔥'
+};
+
 /**
  * QuizScreen クラス
  * 問題一覧を受け取り、クイズを進行する画面コンポーネント
@@ -63,6 +83,9 @@ export class QuizScreen {
 
     /** @type {HTMLElement|null} 確認モーダル */
     this._confirmModal = null;
+
+    /** @type {number} 連続正解数（クイズ内ストリーク） */
+    this._correctStreak = 0;
   }
 
   // ============================================================
@@ -122,6 +145,10 @@ export class QuizScreen {
     if (this._confirmModal) {
       this._removeModal();
     }
+
+    // マスコット・ストリークのタイマーを解除
+    if (this._mascotTimer)      clearTimeout(this._mascotTimer);
+    if (this._streakBadgeTimer) clearTimeout(this._streakBadgeTimer);
 
     if (this._el && this._el.parentNode) {
       this._el.parentNode.removeChild(this._el);
@@ -205,6 +232,15 @@ export class QuizScreen {
           text-shadow: 0 2px 8px rgba(0,0,0,0.4);
         "></div>
       </div>
+
+      <!-- マスコット（右下固定） -->
+      <div class="quiz-mascot hidden" aria-live="polite" aria-atomic="true">
+        <div class="mascot-bubble"></div>
+        <div class="mascot-icon">🧙</div>
+      </div>
+
+      <!-- 連続正解ストリーク表示 -->
+      <div class="quiz-streak-badge hidden" aria-live="polite"></div>
     `;
 
     // position: relative が必要（絶対配置の子要素のため）
@@ -365,6 +401,13 @@ export class QuizScreen {
 
     Logger.debug(`[QuizScreen] Answer: "${selectedChoice}" → ${isCorrect ? '正解' : '不正解'}`);
 
+    // 連続正解ストリーク更新
+    if (isCorrect) {
+      this._correctStreak++;
+    } else {
+      this._correctStreak = 0;
+    }
+
     // 選択ボタンのビジュアルフィードバック
     this._applyChoiceFeedback(selectedChoice, question.correctAnswer, isCorrect);
 
@@ -383,6 +426,14 @@ export class QuizScreen {
       selectedChoice,
       isCorrect
     );
+
+    // マスコットメッセージ表示
+    this._showMascot(isCorrect);
+
+    // 連続正解ストリーク演出
+    if (isCorrect && this._correctStreak >= 3) {
+      this._showStreakBadge(this._correctStreak);
+    }
 
     // フィードバックオーバーレイ表示＆待機
     await this._showFeedback(isCorrect);
@@ -500,6 +551,74 @@ export class QuizScreen {
         percentage
       });
     }
+  }
+
+  // ============================================================
+  // Private — マスコット & ストリーク演出
+  // ============================================================
+
+  /**
+   * マスコットの応援メッセージを表示する
+   * @private
+   * @param {boolean} isCorrect
+   */
+  _showMascot(isCorrect) {
+    const mascot = this._el.querySelector('.quiz-mascot');
+    const bubble = this._el.querySelector('.mascot-bubble');
+    if (!mascot || !bubble) return;
+
+    // メッセージ選択
+    let message;
+    if (isCorrect && this._correctStreak >= 7) {
+      message = MASCOT_MESSAGES.streak7;
+    } else if (isCorrect && this._correctStreak >= 5) {
+      message = MASCOT_MESSAGES.streak5;
+    } else if (isCorrect && this._correctStreak >= 3) {
+      message = MASCOT_MESSAGES.streak3;
+    } else {
+      const pool = isCorrect ? MASCOT_MESSAGES.correct : MASCOT_MESSAGES.wrong;
+      message = pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    bubble.textContent = message;
+
+    // 表示
+    mascot.classList.remove('hidden');
+    mascot.classList.remove('mascot-exit');
+    mascot.classList.add('mascot-enter');
+
+    // 一定時間後に退場
+    if (this._mascotTimer) clearTimeout(this._mascotTimer);
+    this._mascotTimer = setTimeout(() => {
+      mascot.classList.remove('mascot-enter');
+      mascot.classList.add('mascot-exit');
+      setTimeout(() => {
+        if (mascot) mascot.classList.add('hidden');
+      }, 300);
+    }, 1200);
+  }
+
+  /**
+   * 連続正解ストリークバッジを表示する
+   * @private
+   * @param {number} count - 連続正解数
+   */
+  _showStreakBadge(count) {
+    const badge = this._el.querySelector('.quiz-streak-badge');
+    if (!badge) return;
+
+    badge.textContent = `🔥 ${count}れんぞく！`;
+    badge.classList.remove('hidden');
+    badge.classList.remove('streak-pop');
+
+    // アニメーションリセット
+    void badge.offsetHeight;
+    badge.classList.add('streak-pop');
+
+    if (this._streakBadgeTimer) clearTimeout(this._streakBadgeTimer);
+    this._streakBadgeTimer = setTimeout(() => {
+      if (badge) badge.classList.add('hidden');
+    }, 1500);
   }
 
   // ============================================================
