@@ -2,11 +2,12 @@
  * BookshelfScreen.js - Grimoire Guardians
  * 本棚画面（ワールド選択）
  *
- * GameStore の状態を参照してワールド一覧をカード形式で表示する。
- * ライセンス状態に応じてロック/アンロックを切り替える。
+ * 変更履歴:
+ *   v1.1 (2026-02-22): ストリーク表示 + ワールドクリアアニメーション追加
+ *   v1.0 (2026-02-17): 初版
  *
- * @version 1.0
- * @date 2026-02-17
+ * @version 1.1
+ * @date 2026-02-22
  */
 
 import Logger from '../core/Logger.js';
@@ -23,18 +24,21 @@ import WORLDS from '../data/worlds.js';
  * @example
  * const screen = new BookshelfScreen(
  *   document.getElementById('game-screen'),
- *   (worldData) => console.log('World selected:', worldData.id)
+ *   (worldData) => console.log('World selected:', worldData.id),
+ *   'world_1'   // クリア直後のワールドID（省略可）
  * );
  * screen.render();
  */
 class BookshelfScreen {
   /**
-   * @param {HTMLElement} container   - 描画先の親要素
-   * @param {Function}    onWorldSelect - ワールド選択時のコールバック (worldData) => void
+   * @param {HTMLElement} container       - 描画先の親要素
+   * @param {Function}    onWorldSelect   - ワールド選択時のコールバック (worldData) => void
+   * @param {string|null} [newlyClearedWorldId] - 直前にクリアしたワールドID（アニメーション用）
    */
-  constructor(container, onWorldSelect) {
-    this.container = container;
-    this.onWorldSelect = onWorldSelect;
+  constructor(container, onWorldSelect, newlyClearedWorldId = null) {
+    this.container             = container;
+    this.onWorldSelect         = onWorldSelect;
+    this._newlyClearedWorldId  = newlyClearedWorldId;
 
     /** @type {HTMLElement|null} */
     this.element = null;
@@ -56,7 +60,7 @@ class BookshelfScreen {
     Logger.info('[BookshelfScreen] Rendering...');
 
     const screen = document.createElement('div');
-    screen.className = 'bookshelf-screen';
+    screen.className = 'bookshelf-screen screen-transition-enter';
 
     // ヘッダー
     screen.appendChild(this._buildHeader());
@@ -82,6 +86,14 @@ class BookshelfScreen {
 
     Logger.info('[BookshelfScreen] Rendered');
     SoundManager.playBGM(SoundType.BGM_BOOKSHELF);
+
+    // クリア直後のカードをアニメーション
+    if (this._newlyClearedWorldId) {
+      // 次フレームで実行（DOM 完成後に適用）
+      requestAnimationFrame(() => {
+        this._animateWorldClear(this._newlyClearedWorldId);
+      });
+    }
 
     return this;
   }
@@ -114,7 +126,7 @@ class BookshelfScreen {
   // ─────────────────────────────────────────
 
   /**
-   * ヘッダー要素を生成する
+   * ヘッダー要素を生成する（ストリークバッジ含む）
    * @returns {HTMLElement}
    * @private
    */
@@ -133,20 +145,38 @@ class BookshelfScreen {
     playerInfo.className = 'bookshelf-player';
     playerInfo.textContent = `${playerName} さん`;
 
-    // 統計バッジ（クリア数 / 全ワールド数）
-    const worlds = GameStore.getState('progress.worlds') || {};
+    // 右側バッジ群
+    const rightGroup = document.createElement('div');
+    rightGroup.className = 'bookshelf-header-right';
+
+    // ストリークバッジ
+    const streak = GameStore.getState('player.streak') || 1;
+    if (streak >= 1) {
+      const streakBadge = document.createElement('div');
+      streakBadge.className = 'streak-badge' + (streak >= 3 ? ' streak-badge-hot' : '');
+      streakBadge.innerHTML = `
+        <span class="streak-fire">${streak >= 3 ? '🔥' : '📅'}</span>
+        <span class="streak-count">${streak}</span>
+        <span class="streak-label">日れんぞく</span>
+      `;
+      rightGroup.appendChild(streakBadge);
+    }
+
+    // クリア数バッジ
+    const worlds       = GameStore.getState('progress.worlds') || {};
     const clearedCount = Object.values(worlds).filter(w => w.cleared).length;
-    const statsEl = document.createElement('div');
-    statsEl.className = 'bookshelf-stats';
-    statsEl.innerHTML = `
+    const statsBadge   = document.createElement('div');
+    statsBadge.className = 'bookshelf-stats';
+    statsBadge.innerHTML = `
       <span class="stats-badge">
         ⭐ ${clearedCount} / ${WORLDS.length} クリア
       </span>
     `;
+    rightGroup.appendChild(statsBadge);
 
     header.appendChild(title);
     header.appendChild(playerInfo);
-    header.appendChild(statsEl);
+    header.appendChild(rightGroup);
 
     return header;
   }
@@ -157,7 +187,7 @@ class BookshelfScreen {
    * @private
    */
   _buildCards(grid) {
-    const licensed = GameStore.getState('license.core.licensed');
+    const licensed      = GameStore.getState('license.core.licensed');
     const worldProgress = GameStore.getState('progress.worlds') || {};
 
     WORLDS.forEach(worldDef => {
@@ -202,6 +232,68 @@ class BookshelfScreen {
       const shouldBeLocked = !worldDef.freeToPlay && !licensed;
       card.setLocked(shouldBeLocked);
     });
+  }
+
+  /**
+   * クリア直後のワールドカードにお祝いアニメーションを適用する
+   * @param {string} worldId - クリアしたワールドID
+   * @private
+   */
+  _animateWorldClear(worldId) {
+    const worldIndex = WORLDS.findIndex(w => w.id === worldId);
+    if (worldIndex < 0) return;
+
+    const card = this.cards[worldIndex];
+    if (!card || !card.element) return;
+
+    Logger.info(`[BookshelfScreen] Animating world clear: ${worldId}`);
+
+    // カードに解放アニメーションクラスを付与
+    card.element.classList.add('world-clear-animate');
+
+    // スパークルを生成してカード上にオーバーレイ
+    this._spawnSparkles(card.element);
+
+    // アニメーション終了後にクラスを除去
+    setTimeout(() => {
+      if (card.element) {
+        card.element.classList.remove('world-clear-animate');
+      }
+    }, 1500);
+  }
+
+  /**
+   * カード上にキラキラパーティクルを生成する
+   * @param {HTMLElement} cardEl
+   * @private
+   */
+  _spawnSparkles(cardEl) {
+    const count = 8;
+    const rect  = cardEl.getBoundingClientRect();
+
+    for (let i = 0; i < count; i++) {
+      setTimeout(() => {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'world-clear-sparkle';
+
+        // カード内のランダム位置
+        const x = Math.random() * rect.width;
+        const y = Math.random() * rect.height;
+        sparkle.style.left = `${x}px`;
+        sparkle.style.top  = `${y}px`;
+
+        // ランダムな大きさ
+        const size = 12 + Math.random() * 16;
+        sparkle.style.width  = `${size}px`;
+        sparkle.style.height = `${size}px`;
+
+        cardEl.style.position = 'relative';
+        cardEl.appendChild(sparkle);
+
+        // 1秒後に削除
+        setTimeout(() => sparkle.remove(), 1000);
+      }, i * 120);
+    }
   }
 
   /**

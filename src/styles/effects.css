@@ -369,6 +369,111 @@
 }
 
 /* ==========================================================================
+   Star Pop Animation（結果画面の星アニメーション）
+   Phase 0.1 Week 3B で追加
+   ========================================================================== */
+
+@keyframes star-pop {
+  0%   { transform: scale(0) rotate(-30deg); opacity: 0; }
+  60%  { transform: scale(1.3) rotate(10deg); opacity: 1; }
+  80%  { transform: scale(0.9) rotate(-5deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.result-star-pop {
+  animation: star-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+/* ==========================================================================
+   World Clear Animation（ワールドクリア解放アニメーション）
+   ========================================================================== */
+
+@keyframes world-clear-glow {
+  0%   { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.8); }
+  50%  { box-shadow: 0 0 0 16px rgba(255, 215, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+}
+
+@keyframes world-clear-bounce {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.08); }
+  60%  { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+
+.world-clear-animate {
+  animation:
+    world-clear-glow   1.2s ease-out,
+    world-clear-bounce 0.6s ease-out;
+}
+
+/* スパークルパーティクル */
+@keyframes sparkle-burst {
+  0%   { transform: scale(0) rotate(0deg);   opacity: 1; }
+  70%  { transform: scale(1) rotate(180deg); opacity: 1; }
+  100% { transform: scale(0) rotate(270deg); opacity: 0; }
+}
+
+.world-clear-sparkle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FFD700 0%, #FFA500 60%, transparent 100%);
+  pointer-events: none;
+  animation: sparkle-burst 0.9s ease-out forwards;
+  z-index: 10;
+  will-change: transform;
+}
+
+/* ==========================================================================
+   Mascot Animations（マスコット表示・退場）
+   ========================================================================== */
+
+@keyframes mascot-slide-in {
+  from { transform: translateY(20px) scale(0.8); opacity: 0; }
+  to   { transform: translateY(0) scale(1);      opacity: 1; }
+}
+
+@keyframes mascot-slide-out {
+  from { transform: translateY(0) scale(1);      opacity: 1; }
+  to   { transform: translateY(10px) scale(0.8); opacity: 0; }
+}
+
+.mascot-enter {
+  animation: mascot-slide-in 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.mascot-exit {
+  animation: mascot-slide-out 0.25s ease-in both;
+}
+
+/* ==========================================================================
+   Streak Badge Pop Animation（連続正解バッジ）
+   ========================================================================== */
+
+@keyframes streak-badge-pop {
+  0%   { transform: scale(0.6) translateX(-50%); opacity: 0; }
+  60%  { transform: scale(1.1) translateX(-50%); opacity: 1; }
+  100% { transform: scale(1)   translateX(-50%); opacity: 1; }
+}
+
+.streak-pop {
+  animation: streak-badge-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+/* ==========================================================================
+   Result Screen Button Fade-in
+   ========================================================================== */
+
+@keyframes result-buttons-fadein {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.result-buttons-visible {
+  animation: result-buttons-fadein 0.35s ease-out both;
+}
+
+/* ==========================================================================
    TODO: Phase 0.1で追加実装予定
    - Monster appearance effects
    - Mimic transformation effects

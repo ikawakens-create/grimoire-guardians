@@ -32,7 +32,11 @@ export class GameStore {
     player: {
       name: 'プレイヤー',
       createdAt: null,
-      lastPlayedAt: null
+      lastPlayedAt: null,
+      /** 連続プレイ日数 */
+      streak: 1,
+      /** ストリーク最終更新日（Date.toDateString()形式） */
+      streakLastDate: null
     },
 
     // 進捗情報
@@ -213,7 +217,9 @@ export class GameStore {
       player: {
         name: 'プレイヤー',
         createdAt: new Date().toISOString(),
-        lastPlayedAt: new Date().toISOString()
+        lastPlayedAt: new Date().toISOString(),
+        streak: 1,
+        streakLastDate: null
       },
       progress: {
         subject: Config.GAME.SUBJECT,
