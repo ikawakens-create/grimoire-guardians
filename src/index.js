@@ -3,11 +3,12 @@
  * メインエントリーポイント
  *
  * 変更履歴:
+ *   v1.2 (2026-02-23): WelcomeScreen 追加（初回起動時の名前入力）
  *   v1.1 (2026-02-22): SaveManager 初期化 + Quiz→Result→Bookshelf 遷移追加
  *   v1.0 (2026-02-15): 初版
  *
- * @version 1.1
- * @date 2026-02-22
+ * @version 1.2
+ * @date 2026-02-23
  */
 
 import { Config } from './core/Config.js';
@@ -16,6 +17,7 @@ import { GameStore } from './core/GameStore.js';
 import { SoundManager } from './core/SoundManager.js';
 import { SaveManager } from './core/SaveManager.js';
 import EventManager from './core/EventManager.js';
+import WelcomeScreen from './screens/WelcomeScreen.js';
 import BookshelfScreen from './screens/BookshelfScreen.js';
 import QuizScreen from './screens/QuizScreen.js';
 import ResultScreen from './screens/ResultScreen.js';
@@ -87,14 +89,47 @@ function hideLoadingScreen() {
 let _activeScreen = null;
 
 /**
- * ゲーム画面を表示（BookshelfScreen から開始）
+ * ゲーム画面を表示する
+ * 初回プレイヤー（createdAt === null）は WelcomeScreen を表示する
  */
 function showGameScreen() {
   const gameScreen = document.getElementById('game-screen');
   if (!gameScreen) return;
 
   gameScreen.classList.remove('hidden');
-  showBookshelf(gameScreen);
+
+  // 初回起動かどうかを確認（セーブデータがなければ名前入力画面へ）
+  const createdAt = GameStore.getState('player.createdAt');
+  if (!createdAt) {
+    showWelcome(gameScreen);
+  } else {
+    showBookshelf(gameScreen);
+  }
+}
+
+/**
+ * WelcomeScreen を描画する（初回のみ）
+ * @param {HTMLElement} gameScreen
+ */
+function showWelcome(gameScreen) {
+  if (_activeScreen) {
+    _activeScreen.destroy();
+    _activeScreen = null;
+  }
+
+  GameStore.setState('app.currentScreen', 'welcome');
+
+  const welcome = new WelcomeScreen(gameScreen, () => {
+    Logger.info('[App] Welcome complete, showing bookshelf');
+    showBookshelf(gameScreen);
+  });
+
+  welcome.render();
+  _activeScreen = welcome;
+
+  if (Config.IS_DEBUG) {
+    window.GG._screen = welcome;
+  }
 }
 
 /**

@@ -46,6 +46,10 @@ class BookshelfScreen {
     this.cards = [];
     /** @type {Function|null} GameStore 購読解除関数 */
     this._unsubscribe = null;
+    /** @type {number|null} requestAnimationFrame ID（destroy 時にキャンセル） */
+    this._rafId = null;
+    /** @type {number[]} setTimeout ID 一覧（destroy 時に clearTimeout） */
+    this._timers = [];
   }
 
   // ─────────────────────────────────────────
@@ -90,7 +94,8 @@ class BookshelfScreen {
     // クリア直後のカードをアニメーション
     if (this._newlyClearedWorldId) {
       // 次フレームで実行（DOM 完成後に適用）
-      requestAnimationFrame(() => {
+      this._rafId = requestAnimationFrame(() => {
+        this._rafId = null;
         this._animateWorldClear(this._newlyClearedWorldId);
       });
     }
@@ -102,6 +107,16 @@ class BookshelfScreen {
    * 画面を破棄する
    */
   destroy() {
+    // RAF キャンセル（クリアアニメーション中断時のメモリリーク防止）
+    if (this._rafId !== null) {
+      cancelAnimationFrame(this._rafId);
+      this._rafId = null;
+    }
+
+    // setTimeout キャンセル（スパークル生成タイマー）
+    this._timers.forEach(id => clearTimeout(id));
+    this._timers = [];
+
     // カードをクリーンアップ
     this.cards.forEach(card => card.destroy());
     this.cards = [];
@@ -139,8 +154,9 @@ class BookshelfScreen {
     title.className = 'bookshelf-title';
     title.textContent = 'ほんだな';
 
-    // プレイヤー名
-    const playerName = GameStore.getState('player.name');
+    // プレイヤー名（空文字列の場合は「プレイヤー」にフォールバック）
+    const rawName    = GameStore.getState('player.name');
+    const playerName = rawName && rawName.trim() ? rawName.trim() : 'プレイヤー';
     const playerInfo = document.createElement('div');
     playerInfo.className = 'bookshelf-player';
     playerInfo.textContent = `${playerName} さん`;
@@ -190,6 +206,19 @@ class BookshelfScreen {
     const licensed      = GameStore.getState('license.core.licensed');
     const worldProgress = GameStore.getState('progress.worlds') || {};
 
+    // 「つぎはここ！」バッジを付けるワールドを特定する
+    // ルール: ロックされていないワールドの中で最初の未クリアワールド
+    let nextWorldId = null;
+    for (const worldDef of WORLDS) {
+      const locked = !worldDef.freeToPlay && !licensed;
+      if (locked) continue;
+      const prog = worldProgress[worldDef.id];
+      if (!prog || !prog.cleared) {
+        nextWorldId = worldDef.id;
+        break;
+      }
+    }
+
     WORLDS.forEach(worldDef => {
       const progress = worldProgress[worldDef.id] || {
         cleared: false,
@@ -204,7 +233,8 @@ class BookshelfScreen {
       const cardData = {
         ...worldDef,
         progress,
-        locked
+        locked,
+        isNextRecommended: worldDef.id === nextWorldId
       };
 
       const card = new BookCard(
@@ -255,11 +285,12 @@ class BookshelfScreen {
     this._spawnSparkles(card.element);
 
     // アニメーション終了後にクラスを除去
-    setTimeout(() => {
+    const removeTimer = setTimeout(() => {
       if (card.element) {
         card.element.classList.remove('world-clear-animate');
       }
     }, 1500);
+    this._timers.push(removeTimer);
   }
 
   /**
@@ -272,7 +303,9 @@ class BookshelfScreen {
     const rect  = cardEl.getBoundingClientRect();
 
     for (let i = 0; i < count; i++) {
-      setTimeout(() => {
+      const spawnTimer = setTimeout(() => {
+        if (!this.element) return;  // 画面破棄済みなら何もしない
+
         const sparkle = document.createElement('div');
         sparkle.className = 'world-clear-sparkle';
 
@@ -291,8 +324,10 @@ class BookshelfScreen {
         cardEl.appendChild(sparkle);
 
         // 1秒後に削除
-        setTimeout(() => sparkle.remove(), 1000);
+        const removeTimer = setTimeout(() => sparkle.remove(), 1000);
+        this._timers.push(removeTimer);
       }, i * 120);
+      this._timers.push(spawnTimer);
     }
   }
 

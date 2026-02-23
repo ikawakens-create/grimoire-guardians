@@ -565,3 +565,65 @@
   from { text-shadow: 0 0 4px currentColor; }
   to   { text-shadow: 0 0 14px currentColor, 0 0 28px currentColor; }
 }
+
+/* ==========================================================================
+   Welcome Screen
+   ========================================================================== */
+
+@keyframes welcome-float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%       { transform: translateY(-14px) scale(1.06); }
+}
+
+@keyframes welcome-fade-in {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   Streak Effects（連続正解エフェクト）
+   ========================================================================== */
+
+/* 5連続正解: ゴールドグロー（画面の枠がキラッと光る） */
+@keyframes streak-glow-pulse {
+  0%   { box-shadow: inset 0 0 0   0   rgba(255, 215, 0, 0);    }
+  40%  { box-shadow: inset 0 0 40px 16px rgba(255, 215, 0, 0.35); }
+  100% { box-shadow: inset 0 0 0   0   rgba(255, 215, 0, 0);    }
+}
+
+.quiz-streak-glow {
+  animation: streak-glow-pulse 1.0s ease-out forwards;
+}
+
+/* 10連続正解: レインボー（hue-rotate で色相が一周する） */
+@keyframes streak-rainbow {
+  0%   { filter: hue-rotate(0deg)   brightness(1.1); }
+  100% { filter: hue-rotate(360deg) brightness(1); }
+}
+
+.quiz-streak-rainbow {
+  animation: streak-rainbow 1.5s linear forwards;
+}
+
+/* ==========================================================================
+   Phase Complete Overlay（全ワールドクリア演出）
+   ========================================================================== */
+
+@keyframes phase-complete-in {
+  from { opacity: 0; transform: scale(0.7); }
+  60%  { transform: scale(1.08); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes phase-complete-out {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(1.2); }
+}
+
+.phase-complete-exit .phase-complete-content {
+  animation: phase-complete-out 0.6s ease forwards;
+}
+
+.phase-complete-exit {
+  pointer-events: none;
+}

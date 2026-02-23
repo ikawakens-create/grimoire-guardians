@@ -19,7 +19,7 @@ import { SaveManager } from '../core/SaveManager.js';
 import { Config } from '../core/Config.js';
 import { SoundManager, SoundType } from '../core/SoundManager.js';
 import HapticFeedback from '../utils/HapticFeedback.js';
-import { getWorldById } from '../data/worlds.js';
+import WORLDS, { getWorldById } from '../data/worlds.js';
 
 // ─────────────────────────────────────────
 // 定数
@@ -396,6 +396,46 @@ class ResultScreen {
     const btns = this._el.querySelector('.result-buttons');
     if (btns) {
       btns.classList.add('result-buttons-visible');
+    }
+
+    // ④ 全ワールドクリア判定（phase_complete）
+    if (cleared) {
+      this._checkPhaseComplete();
+    }
+  }
+
+  /**
+   * 全ワールドをクリアしていれば「Phase Complete！」演出を表示する
+   * @private
+   */
+  _checkPhaseComplete() {
+    const worldProgress = GameStore.getState('progress.worlds') || {};
+    const allCleared = WORLDS.every(w => worldProgress[w.id]?.cleared);
+
+    if (!allCleared) return;
+
+    Logger.info('[ResultScreen] 🎊 Phase Complete! All worlds cleared!');
+    SoundManager.playSFX(SoundType.PHASE_CLEAR);
+
+    const overlay = document.createElement('div');
+    overlay.className = 'phase-complete-overlay';
+    overlay.innerHTML = `
+      <div class="phase-complete-content">
+        <div class="phase-complete-icon">🏆</div>
+        <div class="phase-complete-title">おめでとう！</div>
+        <div class="phase-complete-sub">ぜんぶの ワールドを クリア！</div>
+        <div class="phase-complete-stars">⭐⭐⭐</div>
+      </div>
+    `;
+
+    // タップで閉じる
+    overlay.addEventListener('click', () => {
+      overlay.classList.add('phase-complete-exit');
+      setTimeout(() => overlay.remove(), 600);
+    });
+
+    if (this._el) {
+      this._el.appendChild(overlay);
     }
   }
 
