@@ -25,11 +25,11 @@ import { getWorldById } from '../data/worlds.js';
 // 定数
 // ─────────────────────────────────────────
 
-/** 星評価の閾値（高い順）*/
+/** 星評価の閾値（高い順）— 仕様書 v1.3 準拠 */
 const STAR_THRESHOLDS = [
   { stars: 3, min: 0.90 },  // 90%以上 → ★★★
-  { stars: 2, min: 0.60 },  // 60%以上 → ★★
-  { stars: 1, min: 0.40 },  // 40%以上 → ★
+  { stars: 2, min: 0.80 },  // 80%以上 → ★★
+  { stars: 1, min: 0.60 },  // 60%以上 → ★（クリア最低ライン）
   { stars: 0, min: 0    }   // それ以下 → ☆☆☆
 ];
 
@@ -177,13 +177,14 @@ class ResultScreen {
   _calcDrops(cleared) {
     if (!cleared) return [];
 
-    const multiplier = GameStore.getState('currentSession.rewardMultiplier') || 1.0;
+    const multiplier = GameStore.getState('currentSession.rewardMultiplier') ?? 1.0;
     const { correctCount } = this._result;
     const baseRate  = Config.DROP.NORMAL_QUESTION_DROP_RATE;
     const drops     = [];
 
+    // ① 倍率なしで基本ドロップを確率計算
     for (let i = 0; i < correctCount; i++) {
-      if (Math.random() < baseRate * multiplier) {
+      if (Math.random() < baseRate) {
         // 90% で基本素材、10% でレア素材
         const pool  = Math.random() < 0.9 ? BASIC_MATERIALS : RARE_MATERIALS;
         const matId = pool[Math.floor(Math.random() * pool.length)];
@@ -193,6 +194,19 @@ class ResultScreen {
         } else {
           drops.push({ id: matId, count: 1 });
         }
+      }
+    }
+
+    // ② 倍率を個数に乗算（仕様: 素材×5 → ×3 = 素材×15）
+    if (multiplier > 1.0) {
+      if (drops.length > 0) {
+        drops.forEach(d => {
+          d.count = Math.ceil(d.count * multiplier);
+        });
+      } else {
+        // ドロップがゼロでも倍率バフがある場合は最低1個保証
+        const matId = BASIC_MATERIALS[Math.floor(Math.random() * BASIC_MATERIALS.length)];
+        drops.push({ id: matId, count: Math.ceil(multiplier) });
       }
     }
 
@@ -222,6 +236,14 @@ class ResultScreen {
       : '';
     const effortBadge = !cleared && pct >= 40
       ? '<div class="result-effort-badge">🌟 がんばったで賞！</div>'
+      : '';
+
+    // おみくじ倍率バナー（×1.5以上の時のみ）
+    const multiplier = GameStore.getState('currentSession.rewardMultiplier') ?? 1.0;
+    const multiplierHTML = cleared && multiplier > 1.0
+      ? `<div class="result-multiplier-banner">
+           🎊 おみくじバフ <strong>×${multiplier}</strong> てきよう！
+         </div>`
       : '';
 
     // ドロップ領域
@@ -271,6 +293,9 @@ class ResultScreen {
 
         <!-- ストリーク -->
         ${streakHTML}
+
+        <!-- 倍率バナー -->
+        ${multiplierHTML}
 
         <!-- ドロップ -->
         ${dropsHTML}

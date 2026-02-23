@@ -64,7 +64,9 @@ export const WORLDS = [
     },
     order: 2,
     freeToPlay: true,
-    events: []
+    events: [
+      { triggerAt: 10, type: 'omikuji' }   // ロードマップ: おみくじ（10問目）
+    ]
   },
 
   // ============================================================
@@ -87,7 +89,9 @@ export const WORLDS = [
     },
     order: 3,
     freeToPlay: true,
-    events: []
+    events: [
+      { triggerAt: 8, type: 'three_paths' } // ロードマップ: 3つの道（8問目）
+    ]
   },
 
   // ============================================================
@@ -110,7 +114,9 @@ export const WORLDS = [
     },
     order: 4,
     freeToPlay: false,
-    events: []
+    events: [
+      { triggerAt: 10, type: 'monster' }    // ロードマップ: モンスターバトル（10問目）
+    ]
   },
 
   // ============================================================
@@ -133,7 +139,9 @@ export const WORLDS = [
     },
     order: 5,
     freeToPlay: false,
-    events: []
+    events: [
+      { triggerAt: 10, type: 'treasure' }   // ロードマップ: 宝箱チャレンジ（10問目）
+    ]
   },
 
   // ============================================================

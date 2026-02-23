@@ -474,9 +474,94 @@
 }
 
 /* ==========================================================================
-   TODO: Phase 0.1で追加実装予定
-   - Monster appearance effects
-   - Mimic transformation effects
-   - Rare path effects
-   - Multiplier effect animations
+   Omikuji Event Animations（おみくじイベントアニメーション）
    ========================================================================== */
+
+/* モーダル登場 */
+@keyframes omikuji-modal-in {
+  from { transform: scale(0.7) translateY(30px); opacity: 0; }
+  to   { transform: scale(1)   translateY(0);    opacity: 1; }
+}
+
+/* 巻物の浮遊 */
+@keyframes omikuji-scroll-float {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
+}
+
+/* 巻物を選択したときのバウンス */
+@keyframes omikuji-scroll-select {
+  0%   { transform: scale(1);    }
+  30%  { transform: scale(1.4) rotate(-10deg); }
+  60%  { transform: scale(0.9) rotate(5deg);  }
+  80%  { transform: scale(1.1);  }
+  100% { transform: scale(1);    }
+}
+
+/* 結果エリアのフェードイン */
+@keyframes omikuji-result-reveal {
+  from { transform: scale(0.8) translateY(12px); opacity: 0; }
+  to   { transform: scale(1)   translateY(0);    opacity: 1; }
+}
+
+/* ==========================================================================
+   Event Modal Enter（イベントモーダル共通登場アニメ）
+   ========================================================================== */
+
+@keyframes event-modal-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.85) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ==========================================================================
+   Buff Indicator（バフアイコン点滅）
+   ========================================================================== */
+
+@keyframes buff-pulse {
+  0%, 100% { transform: scale(1);    opacity: 1;    }
+  50%       { transform: scale(1.1); opacity: 0.85; }
+}
+
+/* ==========================================================================
+   Monster Effects（モンスターエフェクト）
+   ========================================================================== */
+
+@keyframes monster-appear {
+  0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
+  60%  { transform: scale(1.2) rotate(5deg); opacity: 1; }
+  80%  { transform: scale(0.9); }
+  100% { transform: scale(1) rotate(0deg);  opacity: 1; }
+}
+
+@keyframes rare-shimmer {
+  0%   { filter: drop-shadow(0 0 4px gold); }
+  50%  { filter: drop-shadow(0 0 16px gold) drop-shadow(0 0 8px #fff); }
+  100% { filter: drop-shadow(0 0 4px gold); }
+}
+
+/* ==========================================================================
+   Treasure Effects（宝箱エフェクト）
+   ========================================================================== */
+
+@keyframes treasure-bounce {
+  0%   { transform: scale(0) translateY(-20px); opacity: 0; }
+  60%  { transform: scale(1.2) translateY(0);   opacity: 1; }
+  80%  { transform: scale(0.95); }
+  100% { transform: scale(1);    opacity: 1; }
+}
+
+/* ==========================================================================
+   Rare Path Effects（レアな道エフェクト）
+   ========================================================================== */
+
+@keyframes paths-rare-glow {
+  from { text-shadow: 0 0 4px currentColor; }
+  to   { text-shadow: 0 0 14px currentColor, 0 0 28px currentColor; }
+}
