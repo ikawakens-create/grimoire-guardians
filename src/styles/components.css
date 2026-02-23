@@ -1449,3 +1449,172 @@
 .treasure-fight-btn {
   min-width: 140px;
 }
+
+/* ==========================================================================
+   Welcome Screen（ようこそ画面）
+   ========================================================================== */
+
+.welcome-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(160deg, #1a1a3e 0%, #2d1b69 50%, #1a1a3e 100%);
+  overflow: hidden;
+}
+
+.welcome-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xl);
+  animation: welcome-fade-in 0.6s ease both;
+}
+
+.welcome-logo {
+  font-size: 3.5rem;
+  animation: welcome-float 3s ease-in-out infinite;
+  will-change: transform;
+}
+
+.welcome-title {
+  font-size: var(--font-size-2xl);
+  font-weight: 900;
+  color: #f0e6ff;
+  text-align: center;
+  line-height: 1.2;
+  text-shadow: 0 0 20px rgba(160, 100, 255, 0.7);
+  margin: 0;
+}
+
+.welcome-subtitle {
+  font-size: var(--font-size-sm);
+  color: rgba(200, 180, 255, 0.8);
+  letter-spacing: 0.1em;
+}
+
+.welcome-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-sm);
+  width: 100%;
+  max-width: 320px;
+  animation: welcome-fade-in 0.6s ease 0.3s both;
+}
+
+.welcome-prompt {
+  font-size: var(--font-size-lg);
+  color: #f0e6ff;
+  font-weight: bold;
+  margin: 0;
+}
+
+.welcome-name-input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-lg);
+  font-family: inherit;
+  border: 2px solid rgba(160, 100, 255, 0.5);
+  border-radius: var(--border-radius);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  text-align: center;
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  box-sizing: border-box;
+}
+
+.welcome-name-input::placeholder {
+  color: rgba(200, 180, 255, 0.4);
+  font-size: var(--font-size-sm);
+}
+
+.welcome-name-input:focus {
+  border-color: #a064ff;
+  box-shadow: 0 0 12px rgba(160, 100, 255, 0.4);
+}
+
+.welcome-start-btn {
+  width: 100%;
+  font-size: var(--font-size-lg);
+}
+
+/* ==========================================================================
+   BookCard: つぎはここ！バッジ
+   ========================================================================== */
+
+.book-card-next-badge {
+  position: absolute;
+  top: -10px;
+  right: -8px;
+  background: linear-gradient(135deg, #ff6b35, #ff3b6b);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(255, 60, 100, 0.5);
+  white-space: nowrap;
+  z-index: 2;
+  animation: pulse 1.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Phase Complete Overlay（全ワールドクリア演出）
+   ========================================================================== */
+
+.phase-complete-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 5, 30, 0.88);
+  z-index: 50;
+  cursor: pointer;
+}
+
+.phase-complete-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xl) var(--spacing-2xl, 3rem);
+  background: linear-gradient(160deg, #2d1b69, #1a1a3e);
+  border: 2px solid rgba(255, 215, 0, 0.6);
+  border-radius: 24px;
+  box-shadow:
+    0 0 40px rgba(255, 215, 0, 0.25),
+    0 8px 32px rgba(0, 0, 0, 0.5);
+  animation: phase-complete-in 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  will-change: transform, opacity;
+}
+
+.phase-complete-icon {
+  font-size: 4rem;
+  animation: bounce 0.6s ease 0.5s both;
+}
+
+.phase-complete-title {
+  font-size: var(--font-size-2xl);
+  font-weight: 900;
+  color: #FFD700;
+  text-shadow: 0 0 16px rgba(255, 215, 0, 0.6);
+}
+
+.phase-complete-sub {
+  font-size: var(--font-size-lg);
+  color: #f0e6ff;
+  text-align: center;
+}
+
+.phase-complete-stars {
+  font-size: 2rem;
+  letter-spacing: 0.3em;
+  animation: pulse 1.2s ease-in-out infinite;
+}

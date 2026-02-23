@@ -92,7 +92,7 @@ export const Config = {
     
     // タッチフィードバック
     ENABLE_HAPTIC: false,  // Phase 0ではモック
-    ENABLE_SOUND: false    // Phase 0ではモック
+    ENABLE_SOUND: true     // Web Audio API 合成音（将来はファイルに差し替え可能）
   },
   
   // ストレージ設定

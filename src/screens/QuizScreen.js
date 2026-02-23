@@ -46,9 +46,10 @@ const MASCOT_MESSAGES = {
     'もういちど！',
     'だいじょうぶ！'
   ],
-  streak3: 'すごいれんぞく！✨',
-  streak5: '5れんぞく！🌟🌟',
-  streak7: '7れんぞく！🔥🔥🔥'
+  streak3:  'すごいれんぞく！✨',
+  streak5:  '5れんぞく！🌟 きらきら！',
+  streak7:  '7れんぞく！🔥🔥🔥',
+  streak10: '10れんぞく！🌈 すごすぎる！！'
 };
 
 /**
@@ -90,6 +91,16 @@ export class QuizScreen {
 
     /** @type {Object|null} ワールドデータ（イベントトリガー照合用） */
     this._worldData = null;
+
+    /**
+     * フィードバック待機中の setTimeout ID
+     * destroy() 時にキャンセルして、破棄済み画面への操作を防ぐ
+     * @type {number|null}
+     */
+    this._feedbackTimer = null;
+
+    /** @type {number|null} ローディングオーバーレイの fadeout タイマー */
+    this._loadingTimer = null;
   }
 
   // ============================================================
@@ -157,9 +168,15 @@ export class QuizScreen {
       this._buffUnsubscribe = null;
     }
 
-    // マスコット・ストリークのタイマーを解除
+    // タイマーを全て解除（フィードバック待機 / ローディング / マスコット / ストリーク）
+    if (this._feedbackTimer)    clearTimeout(this._feedbackTimer);
+    if (this._loadingTimer)     clearTimeout(this._loadingTimer);
     if (this._mascotTimer)      clearTimeout(this._mascotTimer);
     if (this._streakBadgeTimer) clearTimeout(this._streakBadgeTimer);
+    this._feedbackTimer    = null;
+    this._loadingTimer     = null;
+    this._mascotTimer      = null;
+    this._streakBadgeTimer = null;
 
     if (this._el && this._el.parentNode) {
       this._el.parentNode.removeChild(this._el);
@@ -454,6 +471,7 @@ export class QuizScreen {
     // 連続正解ストリーク演出
     if (isCorrect && this._correctStreak >= 3) {
       this._showStreakBadge(this._correctStreak);
+      this._applyStreakEffect(this._correctStreak);
     }
 
     // フィードバックオーバーレイ表示＆待機
@@ -531,7 +549,12 @@ export class QuizScreen {
     iconEl.style.animation = 'bounce 0.4s ease';
 
     const delay = isCorrect ? FEEDBACK_DELAY.CORRECT : FEEDBACK_DELAY.WRONG;
-    return new Promise((resolve) => setTimeout(resolve, delay));
+    return new Promise((resolve) => {
+      this._feedbackTimer = setTimeout(() => {
+        this._feedbackTimer = null;
+        resolve();
+      }, delay);
+    });
   }
 
   // ============================================================
@@ -598,7 +621,9 @@ export class QuizScreen {
 
     // メッセージ選択
     let message;
-    if (isCorrect && this._correctStreak >= 7) {
+    if (isCorrect && this._correctStreak >= 10) {
+      message = MASCOT_MESSAGES.streak10;
+    } else if (isCorrect && this._correctStreak >= 7) {
       message = MASCOT_MESSAGES.streak7;
     } else if (isCorrect && this._correctStreak >= 5) {
       message = MASCOT_MESSAGES.streak5;
@@ -648,6 +673,29 @@ export class QuizScreen {
     this._streakBadgeTimer = setTimeout(() => {
       if (badge) badge.classList.add('hidden');
     }, 1500);
+  }
+
+  /**
+   * 連続正解数に応じて画面全体にエフェクトを適用する
+   * @private
+   * @param {number} count - 連続正解数
+   */
+  _applyStreakEffect(count) {
+    if (!this._el) return;
+
+    if (count >= 10) {
+      // 10連続: レインボーエフェクト（既存クラスを一旦消してリセット）
+      this._el.classList.remove('quiz-streak-glow', 'quiz-streak-rainbow');
+      void this._el.offsetHeight;
+      this._el.classList.add('quiz-streak-rainbow');
+      setTimeout(() => this._el?.classList.remove('quiz-streak-rainbow'), 1600);
+    } else if (count >= 5) {
+      // 5連続: ゴールドグロー
+      this._el.classList.remove('quiz-streak-glow', 'quiz-streak-rainbow');
+      void this._el.offsetHeight;
+      this._el.classList.add('quiz-streak-glow');
+      setTimeout(() => this._el?.classList.remove('quiz-streak-glow'), 1000);
+    }
   }
 
   /**
@@ -768,11 +816,14 @@ export class QuizScreen {
    * @private
    */
   _hideLoadingOverlay() {
-    const overlay = this._el.querySelector('.quiz-loading-overlay');
+    const overlay = this._el?.querySelector('.quiz-loading-overlay');
     if (overlay) {
       overlay.style.opacity = '0';
       overlay.style.transition = 'opacity var(--transition-normal)';
-      setTimeout(() => overlay.remove(), 300);
+      this._loadingTimer = setTimeout(() => {
+        this._loadingTimer = null;
+        overlay.remove();
+      }, 300);
     }
   }
 

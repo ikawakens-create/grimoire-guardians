@@ -255,6 +255,14 @@ class BookCard {
       body.appendChild(badge);
     }
 
+    // 「つぎはここ！」バッジ（最初の未クリアワールドに表示）
+    if (data.isNextRecommended && !data.progress.cleared && !data.locked) {
+      const nextBadge = document.createElement('div');
+      nextBadge.className = 'book-card-next-badge';
+      nextBadge.textContent = '➡ つぎはここ！';
+      card.appendChild(nextBadge);
+    }
+
     card.appendChild(header);
     card.appendChild(body);
 
