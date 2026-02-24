@@ -151,12 +151,12 @@ export const UNITS = {
     loader: () => import('./questions/M1-12c.js')
   },
 
-  // ---- 未実装 ----
+  // ---- Phase 0.2（実装済み: M1-13）----
 
   'M1-13': {
     unitId: 'M1-13',
     title: 'かたちあそび',
-    loader: null  // Phase 0.3 で実装予定
+    loader: () => import('./questions/M1-13.js')
   }
 };
 

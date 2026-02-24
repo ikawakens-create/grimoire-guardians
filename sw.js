@@ -64,6 +64,8 @@ const ASSETS = [
   './src/data/questions/M1-12a.js',
   './src/data/questions/M1-12b.js',
   './src/data/questions/M1-12c.js',
+  // Phase 0.2 問題データ（M1-13）
+  './src/data/questions/M1-13.js',
   './src/utils/TypeValidator.js',
   './src/utils/HapticFeedback.js',
   './src/styles/common.css',

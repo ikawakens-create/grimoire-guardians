@@ -240,6 +240,10 @@ export class QuizScreen {
             align-items: center;
             margin-bottom: var(--spacing-sm);
           "></div>
+          <!-- 問題画像エリア（image フィールドがある問題のみ表示 / nanobanana 対応） -->
+          <div class="question-image-wrap hidden">
+            <img class="question-image" src="" alt="" />
+          </div>
           <!-- 問題文 -->
           <div class="question-text" style="white-space: pre-line;"></div>
           <!-- 選択肢グリッド -->
@@ -390,6 +394,17 @@ export class QuizScreen {
       clockDisplayEl.classList.add('hidden');
     }
 
+    // 問題画像（nanobanana 対応: image フィールドがある場合のみ表示）
+    const questionImageWrapEl = this._el.querySelector('.question-image-wrap');
+    const questionImageEl     = this._el.querySelector('.question-image');
+    if (q.image) {
+      questionImageEl.src = q.image;
+      questionImageWrapEl.classList.remove('hidden');
+    } else {
+      questionImageEl.src = '';
+      questionImageWrapEl.classList.add('hidden');
+    }
+
     // 問題文（アニメーション付きで差し替え）
     const questionTextEl = this._el.querySelector('.question-text');
     questionTextEl.style.animation = 'none';
@@ -408,26 +423,63 @@ export class QuizScreen {
 
   /**
    * 選択肢ボタンをシャッフルして描画する（非破壊）
+   *
+   * distractorPool モード:
+   *   正解1つ + distractorPool からランダムに Config.GAME.DISTRACTOR_COUNT 個を選んで出題。
+   *   毎回異なる不正解の組み合わせが出るため、消去法のパターンが変化する。
+   *
+   * 通常 choices モード:
+   *   従来通り choices をそのままシャッフルして出題。
+   *
+   * choiceImages サポート（nanobanana 拡張点）:
+   *   question.choiceImages が存在する場合、選択肢ボタンに画像を追加表示する。
+   *
    * @private
-   * @param {{ choices: string[], correctAnswer: string }} question
+   * @param {{ choices?: string[], distractorPool?: string[], correctAnswer: string, choiceImages?: Object }} question
    */
   _buildChoices(question) {
     const choicesEl = this._el.querySelector('.question-choices');
     choicesEl.innerHTML = '';
 
-    // Fisher-Yates シャッフル（元配列を破壊しないようコピー）
-    const shuffled = [...question.choices];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    // --- 選択肢プールの構築 ---
+    let pool;
+    if (question.distractorPool != null &&
+        question.distractorPool.length >= Config.GAME.DISTRACTOR_COUNT) {
+      // distractorPool モード: プールをシャッフルして DISTRACTOR_COUNT 個を選ぶ
+      const shuffledPool = [...question.distractorPool];
+      for (let i = shuffledPool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledPool[i], shuffledPool[j]] = [shuffledPool[j], shuffledPool[i]];
+      }
+      pool = [question.correctAnswer, ...shuffledPool.slice(0, Config.GAME.DISTRACTOR_COUNT)];
+    } else {
+      // 通常 choices モード（後方互換）
+      pool = [...question.choices];
     }
 
-    shuffled.forEach((choice) => {
+    // --- pool 全体をシャッフル（正解位置をランダム化） ---
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+
+    // --- ボタン生成 ---
+    pool.forEach((choice) => {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'choice-button';
-      btn.textContent = choice;
       btn.dataset.choice = choice;
+
+      // choiceImages サポート（nanobanana 対応: 画像が設定されていれば画像＋テキスト表示）
+      const imgSrc = question.choiceImages?.[choice];
+      if (imgSrc) {
+        btn.classList.add('choice-button--with-image');
+        btn.innerHTML =
+          `<img class="choice-image" src="${imgSrc}" alt="" aria-hidden="true">` +
+          `<span class="choice-label">${choice}</span>`;
+      } else {
+        btn.textContent = choice;
+      }
 
       btn.addEventListener('click', () => {
         if (this._isAnswered) return;

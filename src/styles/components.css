@@ -191,6 +191,47 @@
   border-color: var(--color-danger);
 }
 
+/* 問題画像（nanobanana 対応）
+   image フィールドが設定された問題に表示する
+   ========================================================================== */
+
+.question-image-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.question-image {
+  max-height: 140px;
+  max-width: 100%;
+  border-radius: var(--border-radius);
+  object-fit: contain;
+}
+
+/* 画像付き選択肢（choiceImages 対応）
+   choiceImages フィールドで各選択肢に画像を追加できる
+   ========================================================================== */
+
+.choice-button--with-image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md) var(--spacing-sm);
+}
+
+.choice-image {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.choice-label {
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+}
+
 /* ==========================================================================
    Cards
    ========================================================================== */
