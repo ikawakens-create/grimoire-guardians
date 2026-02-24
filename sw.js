@@ -9,7 +9,7 @@
  * @date 2026-02-23
  */
 
-const SW_VERSION   = '1.0.0';
+const SW_VERSION   = '1.1.0';
 const CACHE_NAME   = `grimoire-${SW_VERSION}`;
 
 /** キャッシュ対象ファイル（静的アセット） */
@@ -36,13 +36,23 @@ const ASSETS = [
   './src/events/ThreePathsEvent.js',
   './src/data/worlds.js',
   './src/data/units.js',
+  // Phase 0.1 問題データ
   './src/data/questions/M1-01.js',
   './src/data/questions/M1-02.js',
   './src/data/questions/M1-03.js',
   './src/data/questions/M1-04.js',
   './src/data/questions/M1-05.js',
+  './src/data/questions/M1-05b.js',
   './src/data/questions/M1-06.js',
   './src/data/questions/M1-06b.js',
+  // Phase 0.2 問題データ（M1-11・M1-12）
+  './src/data/questions/M1-11a.js',
+  './src/data/questions/M1-11b.js',
+  './src/data/questions/M1-11c.js',
+  './src/data/questions/M1-11d.js',
+  './src/data/questions/M1-12a.js',
+  './src/data/questions/M1-12b.js',
+  './src/data/questions/M1-12c.js',
   './src/utils/TypeValidator.js',
   './src/utils/HapticFeedback.js',
   './src/styles/common.css',

@@ -58,16 +58,16 @@ async function init() {
     Logger.timeEnd('App Initialization');
     Logger.info('✅ Initialization complete!');
 
-    // 5. ローディング画面を非表示
-    hideLoadingScreen();
-
-    // 6. ゲーム画面を表示
-    showGameScreen();
-
-    // デバッグ情報
+    // 5. デバッグヘルパーを先に設定（showGameScreen内でwindow.GGを参照するため）
     if (Config.IS_DEBUG) {
       displayDebugInfo();
     }
+
+    // 6. ローディング画面を非表示
+    hideLoadingScreen();
+
+    // 7. ゲーム画面を表示
+    showGameScreen();
 
   } catch (error) {
     Logger.error('❌ Initialization failed:', error);
