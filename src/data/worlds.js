@@ -1,6 +1,6 @@
 /**
  * worlds.js - Grimoire Guardians
- * ワールド定義データ（Phase 0.1 - 1年生算数）
+ * ワールド定義データ（Phase 0.1 + Phase 0.2）
  *
  * 日本文教出版の教科書単元に基づく。
  * 各ワールドは本棚画面に表示される1枚のカードに対応する。
@@ -8,22 +8,28 @@
  * B案採用（2026-02-20 Gemini承認）:
  *   - たしざん・ひきざんをきほん／おうように分割
  *   - 8ワールド・120問構成（各ワールド15問に統一）
- *   - おうようワールドはスキップ不可（必須ルート）
  *
- * ロック解除順: world_1 → 2 → 3 → 4 → 5 → 5b → 6 → 6b
+ * Phase 0.2 更新（2026-02-24）:
+ *   - world_8 を world_8a/8b/8c に分割（なんじ・なんじはん・5分単位）
+ *   - world_7〜10cにイベントを追加
+ *   - orderを全体で振り直し（合計25ワールド）
  *
- * @version 2.0
- * @date 2026-02-20
+ * ロック解除順:
+ *   Phase 0.1: world_1 → 2 → 3 → 4 → 5 → 5b → 6 → 6b
+ *   Phase 0.2: world_7 → 8a → 8b → 8c → 9 → 10a → 10b → 10c → 10d
+ *              → 11a → 11b → 11c → 11d → 12a → 12b → 12c
+ *
+ * @version 3.0
+ * @date 2026-02-24
  */
 
 /**
- * Phase 0.1 ワールド一覧（1年生算数 M1-01〜M1-06b）
+ * Phase 0.1 + Phase 0.2 ワールド一覧
  * @type {Object[]}
  */
 export const WORLDS = [
   // ============================================================
   // world_1: M1-01 なかまづくりと かず（無料）
-  // 1〜5の数の認識・数え方・大小比較
   // ============================================================
   {
     id: 'world_1',
@@ -46,7 +52,6 @@ export const WORLDS = [
 
   // ============================================================
   // world_2: M1-02 10までの かず（無料）
-  // 6〜10の数・数の順序・漢数字
   // ============================================================
   {
     id: 'world_2',
@@ -65,13 +70,12 @@ export const WORLDS = [
     order: 2,
     freeToPlay: true,
     events: [
-      { triggerAt: 10, type: 'omikuji' }   // ロードマップ: おみくじ（10問目）
+      { triggerAt: 10, type: 'omikuji' }
     ]
   },
 
   // ============================================================
   // world_3: M1-03 なんばんめ（無料）
-  // 順序・位置の理解（前から・後ろから・何番目）
   // ============================================================
   {
     id: 'world_3',
@@ -90,13 +94,12 @@ export const WORLDS = [
     order: 3,
     freeToPlay: true,
     events: [
-      { triggerAt: 8, type: 'three_paths' } // ロードマップ: 3つの道（8問目）
+      { triggerAt: 8, type: 'three_paths' }
     ]
   },
 
   // ============================================================
   // world_4: M1-04 いくつと いくつ（有料）
-  // 数の合成・分解（10までの数の組み合わせ）
   // ============================================================
   {
     id: 'world_4',
@@ -115,13 +118,12 @@ export const WORLDS = [
     order: 4,
     freeToPlay: false,
     events: [
-      { triggerAt: 10, type: 'monster' }    // ロードマップ: モンスターバトル（10問目）
+      { triggerAt: 10, type: 'monster' }
     ]
   },
 
   // ============================================================
   // world_5: M1-05 たしざん（1）きほん（有料）
-  // 10以内の足し算基礎・足して10になる数・穴埋め算
   // ============================================================
   {
     id: 'world_5',
@@ -140,13 +142,12 @@ export const WORLDS = [
     order: 5,
     freeToPlay: false,
     events: [
-      { triggerAt: 10, type: 'treasure' }   // ロードマップ: 宝箱チャレンジ（10問目）
+      { triggerAt: 10, type: 'treasure' }
     ]
   },
 
   // ============================================================
   // world_5b: M1-05b たしざん（1）おうよう（有料・必須）
-  // 文章題・穴埋め・式の選択・混合判断
   // ============================================================
   {
     id: 'world_5b',
@@ -171,7 +172,6 @@ export const WORLDS = [
 
   // ============================================================
   // world_6: M1-06 ひきざん（1）きほん（有料）
-  // 10以内の引き算基礎・穴埋め引き算
   // ============================================================
   {
     id: 'world_6',
@@ -193,9 +193,7 @@ export const WORLDS = [
   },
 
   // ============================================================
-  // world_6b: M1-06b ひきざん（1）おうよう（有料・必須・最終）
-  // 文章題・ちがいを求める・たし引き混合判断
-  // Phase 0.1 最終ワールド（クリアでフェーズ完了）
+  // world_6b: M1-06b ひきざん（1）おうよう（有料・Phase 0.1 最終）
   // ============================================================
   {
     id: 'world_6b',
@@ -220,10 +218,12 @@ export const WORLDS = [
   },
 
   // ============================================================
-  // Phase 0.2 スタブワールド（M1-07〜M1-10d）
-  // 問題データ未実装のため loader: null。ロック解除チェーン維持用
+  // Phase 0.2 実装ワールド（M1-07〜M1-12c）
   // ============================================================
 
+  // ============================================================
+  // world_7: M1-07 20までの かず
+  // ============================================================
   {
     id: 'world_7',
     unitId: 'M1-07',
@@ -238,26 +238,82 @@ export const WORLDS = [
     theme: { gradient: 'linear-gradient(135deg, #00C6FF, #0072FF)' },
     order: 9,
     freeToPlay: false,
-    events: []
+    events: [
+      { triggerAt: 8, type: 'treasure' }
+    ]
   },
 
+  // ============================================================
+  // world_8a: M1-08a なんじ（ちょうど）
+  // SVGアナログ時計を使った時刻読み（type:'clock'問題）
+  // ============================================================
   {
-    id: 'world_8',
-    unitId: 'M1-08',
-    title: 'なんじ・なんじはん',
-    description: 'とけいの よみかたを まなぼう',
+    id: 'world_8a',
+    unitId: 'M1-08a',
+    title: 'なんじ（ちょうど）',
+    description: 'とけいで ちょうどの じこくを よもう',
     difficulty: 2,
     totalQuestions: 15,
     assets: {
-      icon: 'assets/icons/worlds/world_8.png',
-      iconLocked: 'assets/icons/worlds/world_8_locked.png'
+      icon: 'assets/icons/worlds/world_8a.png',
+      iconLocked: 'assets/icons/worlds/world_8a_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #11998E, #38EF7D)' },
     order: 10,
     freeToPlay: false,
-    events: []
+    events: [
+      { triggerAt: 8, type: 'omikuji' }
+    ]
   },
 
+  // ============================================================
+  // world_8b: M1-08b なんじはん
+  // ============================================================
+  {
+    id: 'world_8b',
+    unitId: 'M1-08b',
+    title: 'なんじはん',
+    description: 'ながいはりが 6を さすとき「はん」',
+    difficulty: 2,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/world_8b.png',
+      iconLocked: 'assets/icons/worlds/world_8b_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #56ab2f, #a8e063)' },
+    order: 11,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 8, type: 'three_paths' }
+    ]
+  },
+
+  // ============================================================
+  // world_8c: M1-08c ５ふんたんいに ちょうせん！
+  // ============================================================
+  {
+    id: 'world_8c',
+    unitId: 'M1-08c',
+    title: '５ふんたんいに ちょうせん！',
+    description: 'ながいはりが さす かずに ５を かけよう',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/world_8c.png',
+      iconLocked: 'assets/icons/worlds/world_8c_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #f7971e, #ffd200)' },
+    order: 12,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 10, type: 'monster' }
+    ]
+  },
+
+  // ============================================================
+  // world_9: M1-09 さくらんぼ算のひみつ
+  // くりあがりの橋渡し。補数と分解を体得する
+  // ============================================================
   {
     id: 'world_9',
     unitId: 'M1-09',
@@ -270,11 +326,16 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_9_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #FFD700, #FF6B6B)' },
-    order: 11,
+    order: 13,
     freeToPlay: false,
-    events: []
+    events: [
+      { triggerAt: 8, type: 'three_paths' }
+    ]
   },
 
+  // ============================================================
+  // world_10a: M1-10a くりあがり（9のせかい）
+  // ============================================================
   {
     id: 'world_10a',
     unitId: 'M1-10a',
@@ -287,11 +348,16 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_10a_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #FF416C, #FF4B2B)' },
-    order: 12,
+    order: 14,
     freeToPlay: false,
-    events: []
+    events: [
+      { triggerAt: 10, type: 'monster' }
+    ]
   },
 
+  // ============================================================
+  // world_10b: M1-10b くりあがり（8のせかい）
+  // ============================================================
   {
     id: 'world_10b',
     unitId: 'M1-10b',
@@ -304,11 +370,16 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_10b_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #FF6B35, #F7C59F)' },
-    order: 13,
+    order: 15,
     freeToPlay: false,
-    events: []
+    events: [
+      { triggerAt: 10, type: 'treasure' }
+    ]
   },
 
+  // ============================================================
+  // world_10c: M1-10c くりあがり（7・6のせかい）
+  // ============================================================
   {
     id: 'world_10c',
     unitId: 'M1-10c',
@@ -321,11 +392,16 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_10c_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #F7971E, #FFD200)' },
-    order: 14,
+    order: 16,
     freeToPlay: false,
-    events: []
+    events: [
+      { triggerAt: 10, type: 'three_paths' }
+    ]
   },
 
+  // ============================================================
+  // world_10d: M1-10d くりあがりのおうよう
+  // ============================================================
   {
     id: 'world_10d',
     unitId: 'M1-10d',
@@ -338,7 +414,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_10d_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #56AB2F, #A8E063)' },
-    order: 15,
+    order: 17,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'omikuji' }
@@ -346,12 +422,7 @@ export const WORLDS = [
   },
 
   // ============================================================
-  // Phase 0.2 実装済みワールド（M1-11a〜M1-12c）
-  // ============================================================
-
-  // ============================================================
-  // world_11a: M1-11a 10からひくひみつ（事前練習）
-  // 繰り下がり前の橋渡し。減加法のひらめきを育てる
+  // world_11a: M1-11a 10からひくひみつ（繰り下がり橋渡し）
   // ============================================================
   {
     id: 'world_11a',
@@ -365,7 +436,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_11a_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #1CB5E0, #000851)' },
-    order: 16,
+    order: 18,
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'three_paths' }
@@ -387,7 +458,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_11b_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #4776E6, #8E54E9)' },
-    order: 17,
+    order: 19,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'treasure' }
@@ -409,7 +480,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_11c_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #360033, #0b8793)' },
-    order: 18,
+    order: 20,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'monster' }
@@ -431,7 +502,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_11d_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #0F2027, #203A43, #2C5364)' },
-    order: 19,
+    order: 21,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'omikuji' }
@@ -453,7 +524,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_12a_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #cc2b5e, #753a88)' },
-    order: 20,
+    order: 22,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'treasure' }
@@ -475,7 +546,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_12b_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #8E0E00, #1F1C18)' },
-    order: 21,
+    order: 23,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'monster' }
@@ -483,8 +554,7 @@ export const WORLDS = [
   },
 
   // ============================================================
-  // world_12c: M1-12c たしざん・ひきざんまじり
-  // Phase 0.2 最終実装ワールド
+  // world_12c: M1-12c たしざん・ひきざんまじり（Phase 0.2 最終）
   // ============================================================
   {
     id: 'world_12c',
@@ -498,7 +568,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_12c_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #373B44, #4286f4)' },
-    order: 22,
+    order: 24,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'omikuji' },
@@ -521,7 +591,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_13_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #e1eec3, #f05053)' },
-    order: 23,
+    order: 25,
     freeToPlay: false,
     events: []
   }

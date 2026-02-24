@@ -265,6 +265,13 @@ export class TypeValidator {
       return false;
     }
 
+    // type:'clock' の場合は clockFace フィールドを検証
+    if (question.type === 'clock') {
+      if (!this.isObject(question.clockFace, 'question.clockFace')) return false;
+      if (!this.isNumberInRange(question.clockFace.hour,   0, 23, 'question.clockFace.hour'))   return false;
+      if (!this.isNumberInRange(question.clockFace.minute, 0, 59, 'question.clockFace.minute')) return false;
+    }
+
     return true;
   }
 
