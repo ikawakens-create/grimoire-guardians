@@ -4,7 +4,7 @@
 
 **Grimoire Guardians** (グリモア・ガーディアンズ) is an educational math game PWA targeting Japanese elementary school students (grades 1-6). Players progress through quiz-based worlds, collecting materials and encountering events. The app is landscape-only and touch-optimized.
 
-- **Version**: 0.1.0 (Phase 0.1 - Foundation)
+- **Version**: 0.2.0 (Phase 0.2 - Content Expansion)
 - **Language**: Pure vanilla JavaScript (ES6 Modules), no frameworks or build tools
 - **Target**: 60fps, mobile-first, offline-capable PWA
 - **Content Language**: Japanese (game content, docs, and inline comments)
@@ -15,6 +15,7 @@
 grimoire-guardians/
 ├── index.html              # PWA entry point (loads src/index.js as ES module)
 ├── manifest.json           # PWA manifest (landscape, standalone)
+├── sw.js                   # Service Worker v1.2.0 (cache-first, offline support)
 ├── CLAUDE.md
 ├── README.md
 ├── src/
@@ -23,9 +24,54 @@ grimoire-guardians/
 │   │   ├── Config.js       # Frozen configuration constants
 │   │   ├── Logger.js       # Logging system with levels/timing
 │   │   ├── GameStore.js    # Observable state management (single source of truth)
-│   │   └── SoundManager.js # Audio system (Phase 0 mock, Web Audio planned)
+│   │   ├── SoundManager.js # Audio system (Phase 0 mock, Web Audio planned)
+│   │   ├── SaveManager.js  # localStorage persistence
+│   │   └── EventManager.js # Quiz event orchestration (omikuji/monster/treasure/paths)
+│   ├── components/
+│   │   ├── BookCard.js     # World card UI component
+│   │   ├── ProgressBar.js  # Quiz progress indicator
+│   │   └── ClockFace.js    # SVG analog clock renderer (for type:'clock' questions)
+│   ├── screens/
+│   │   ├── WelcomeScreen.js   # Title/name entry screen
+│   │   ├── BookshelfScreen.js # World selection grid
+│   │   ├── QuizScreen.js      # Quiz UI + clock rendering
+│   │   └── ResultScreen.js    # Score, stars, material drops
+│   ├── events/
+│   │   ├── OmikujiEvent.js       # Reward multiplier / shield event
+│   │   ├── MonsterBattleEvent.js # Slash/explode animations
+│   │   ├── TreasureEvent.js      # Treasure chest / mimic
+│   │   └── ThreePathsEvent.js    # Branching path choice
 │   ├── utils/
-│   │   └── TypeValidator.js # Runtime type/schema validation
+│   │   ├── TypeValidator.js  # Runtime type/schema validation (incl. clockFace)
+│   │   └── HapticFeedback.js # Vibration API wrapper
+│   ├── data/
+│   │   ├── worlds.js         # 25 world definitions (world_1 – world_13, incl. 8a/8b/8c)
+│   │   ├── units.js          # Unit registry with lazy import loaders
+│   │   └── questions/        # 375 questions across 19 unit files
+│   │       ├── M1-01.js      # 1〜5のかず (15問)
+│   │       ├── M1-02.js      # 6〜10のかず (15問)
+│   │       ├── M1-03.js      # なんばんめ (15問)
+│   │       ├── M1-04.js      # たしざん① (15問)
+│   │       ├── M1-05.js      # ひきざん① (15問)
+│   │       ├── M1-05b.js     # ひきざん① 応用 (15問)
+│   │       ├── M1-06.js      # 10までのかず (15問)
+│   │       ├── M1-06b.js     # 10までのかず 応用 (15問)
+│   │       ├── M1-07.js      # 20までのかず (15問)
+│   │       ├── M1-08a.js     # なんじ・ちょうど (15問, type:'clock')
+│   │       ├── M1-08b.js     # なんじはん (15問, type:'clock')
+│   │       ├── M1-08c.js     # 5ふんたんい (15問, type:'clock')
+│   │       ├── M1-09.js      # さくらんぼ算 (15問)
+│   │       ├── M1-10a.js     # くりあがり 9のせかい (15問)
+│   │       ├── M1-10b.js     # くりあがり 8のせかい (15問)
+│   │       ├── M1-10c.js     # くりあがり 7・6のせかい (15問)
+│   │       ├── M1-10d.js     # くりあがりのおうよう (15問)
+│   │       ├── M1-11a.js     # (15問)
+│   │       ├── M1-11b.js     # (15問)
+│   │       ├── M1-11c.js     # (15問)
+│   │       ├── M1-11d.js     # (15問)
+│   │       ├── M1-12a.js     # (15問)
+│   │       ├── M1-12b.js     # (15問)
+│   │       └── M1-12c.js     # (15問)
 │   └── styles/
 │       ├── common.css      # CSS variables, base styles, orientation warning
 │       ├── layout.css      # Grid/flex layout system, screen layouts
@@ -94,7 +140,7 @@ Use `Logger` for all console output. Supports levels (debug/info/warn/error), ti
 
 ### Type Validation — TypeValidator.js
 
-Runtime type checking as a lightweight TypeScript alternative. Use `TypeValidator.matchesSchema()` for complex objects and specialized validators like `validateQuestion()` and `validateSaveData()`.
+Runtime type checking as a lightweight TypeScript alternative. Use `TypeValidator.matchesSchema()` for complex objects and specialized validators like `validateQuestion()` and `validateSaveData()`. Questions with `type:'clock'` are validated to also include `clockFace: { hour: 0-23, minute: 0-59 }`.
 
 ### Sound — SoundManager.js
 
@@ -149,7 +195,9 @@ All animations use `transform`/`will-change` for GPU acceleration. Standard bord
 
 ### Worlds and Units
 
-The game is organized into worlds containing units. Each unit has quiz questions. Phase 0.1 covers units M1-01 through M1-06 (Grade 1 math, based on 日本文教出版 textbook).
+The game is organized into worlds containing units. Each unit has 15 quiz questions. Phase 0.2 covers units M1-01 through M1-12c (Grade 1 math, based on 日本文教出版 textbook), organized into 25 worlds.
+
+Time/clock units (M1-08a/b/c) use `type:'clock'` questions which render an SVG analog clock above the question text via `ClockFace.renderSVG(hour, minute)`. These questions include a `clockFace: { hour, minute }` field.
 
 ### Quiz Flow
 
@@ -194,24 +242,14 @@ GG.Logger                      // Access logger
 
 ## Project Status
 
-**Phase 0.1 — Foundation (current)**
+**Phase 0.2 — Content Expansion (current)**
 
-- Week 1 (complete): Project structure, Config, Logger, GameStore, SoundManager, TypeValidator, CSS system, index.html, manifest.json
-- Week 2 (next): BookCard component, ProgressBar component, BookshelfScreen, QuizScreen, problem data (M1-01, 15 questions), unit mapping
-- Week 3 (planned): Event system, drop mechanics, visual effects, testing
+- Phase 0.1 (complete): Project structure, Config, Logger, GameStore, SoundManager, TypeValidator, CSS system, index.html, manifest.json, BookCard, ProgressBar, BookshelfScreen, QuizScreen, ResultScreen, SaveManager, EventManager, event handlers (Omikuji/Monster/Treasure/ThreePaths), M1-01〜M1-06b (8 units, 120 questions)
+- Phase 0.2 (in progress): M1-07〜M1-12c question data, ClockFace SVG component, clock-type question rendering in QuizScreen, worlds.js v3.0 (25 worlds), units.js v3.0, sw.js v1.2.0
+  - **Completed**: M1-07, M1-08a/b/c, M1-09, M1-10a/b/c/d (10 units, 150 questions), ClockFace.js, TypeValidator clockFace validation
+  - **Remaining**: M1-11a/b/c/d, M1-12a/b/c (7 units, 105 questions) — stubs exist in units.js, files not yet created
 
-**Future Phases**: Phase 0.2–0.3 add remaining units (M1-07 through M1-16). Phase 1 adds offline support, Web Audio, house building, skins, Memory Isle, and DLC.
-
-## Planned Directory Structure (not yet created)
-
-```
-src/
-├── components/    # Reusable UI components (BookCard, ProgressBar)
-├── screens/       # Full-screen views (BookshelfScreen, QuizScreen, ResultScreen)
-├── events/        # Event handlers (Omikuji, Monster, Treasure, Paths)
-├── effects/       # Visual effect controllers
-└── data/          # Static game data (question banks, unit maps)
-```
+**Future Phases**: Phase 0.3 adds remaining M1 units (M1-13〜M1-16) and begins M2. Phase 1 adds Web Audio, house building, skins, Memory Isle, and DLC.
 
 ## Key Files for Common Tasks
 
@@ -224,4 +262,6 @@ src/
 | Add animation | `src/styles/effects.css` |
 | Add new sound type | `src/core/SoundManager.js` — extend `SoundType` |
 | Validate data shapes | `src/utils/TypeValidator.js` — add schema validator |
+| Add a new unit | Create `src/data/questions/M1-XX.js`, register loader in `src/data/units.js`, add world entry in `src/data/worlds.js`, add file to ASSETS in `sw.js` |
+| Add clock questions | Use `type:'clock'` with `clockFace: { hour, minute }` — ClockFace.js renders SVG automatically in QuizScreen |
 | Read design specs | `docs/` directory (all in Japanese) |
