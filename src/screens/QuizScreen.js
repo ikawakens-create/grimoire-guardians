@@ -24,6 +24,7 @@ import HapticFeedback from '../utils/HapticFeedback.js';
 import { TypeValidator } from '../utils/TypeValidator.js';
 import { loadUnitQuestions } from '../data/units.js';
 import EventManager from '../core/EventManager.js';
+import ClockFace from '../components/ClockFace.js';
 
 /** フィードバック待機時間（ms） */
 const FEEDBACK_DELAY = {
@@ -232,6 +233,13 @@ export class QuizScreen {
           <div class="quiz-question-num text-center mb-3">
             <span class="badge" style="font-size: var(--font-size-sm);"></span>
           </div>
+          <!-- 時計表示エリア（type:'clock' の問題のみ表示） -->
+          <div class="quiz-clock-display hidden" style="
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: var(--spacing-sm);
+          "></div>
           <!-- 問題文 -->
           <div class="question-text" style="white-space: pre-line;"></div>
           <!-- 選択肢グリッド -->
@@ -371,6 +379,16 @@ export class QuizScreen {
     // 問題番号バッジ
     this._el.querySelector('.quiz-question-num .badge').textContent =
       `Q${String(displayNum).padStart(2, '0')}`;
+
+    // 時計タイプの場合はSVG時計を表示する
+    const clockDisplayEl = this._el.querySelector('.quiz-clock-display');
+    if (q.type === 'clock' && q.clockFace) {
+      clockDisplayEl.innerHTML = ClockFace.renderSVG(q.clockFace.hour, q.clockFace.minute, 170);
+      clockDisplayEl.classList.remove('hidden');
+    } else {
+      clockDisplayEl.innerHTML = '';
+      clockDisplayEl.classList.add('hidden');
+    }
 
     // 問題文（アニメーション付きで差し替え）
     const questionTextEl = this._el.querySelector('.question-text');

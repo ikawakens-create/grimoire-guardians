@@ -5,11 +5,12 @@
  * 各ユニットの問題データを動的インポート（import()）で遅延ロードする。
  * DLC・未実装ユニットも定義し、loader が null のものは未実装扱い。
  *
- * B案採用（2026-02-20 Gemini承認）:
- *   M1-05b（たしざんおうよう）・M1-06b（ひきざんおうよう）を追加
+ * Phase 0.2 更新（2026-02-24）:
+ *   - M1-07 〜 M1-10d を実装済みに変更
+ *   - M1-08 を M1-08a / M1-08b / M1-08c に分割（時計3ワールド）
  *
- * @version 2.0
- * @date 2026-02-20
+ * @version 3.0
+ * @date 2026-02-24
  */
 
 /**
@@ -20,7 +21,7 @@
  * @type {Object<string, {unitId: string, title: string, loader: (() => Promise<{default: Array}>) | null}>}
  */
 export const UNITS = {
-  // ---- Phase 0.1（Week 3A 実装済み）----
+  // ---- Phase 0.1（実装済み）----
 
   'M1-01': {
     unitId: 'M1-01',
@@ -63,45 +64,56 @@ export const UNITS = {
     loader: () => import('./questions/M1-06b.js')
   },
 
-  // ---- Phase 0.2（スタブ: 未実装）----
+  // ---- Phase 0.2（実装済み: M1-07〜M1-12c）----
 
   'M1-07': {
     unitId: 'M1-07',
     title: '20までの かず',
-    loader: null  // Phase 0.2 で実装予定
+    loader: () => import('./questions/M1-07.js')
   },
-  'M1-08': {
-    unitId: 'M1-08',
-    title: 'なんじ・なんじはん',
-    loader: null  // Phase 0.2 で実装予定
+
+  // M1-08 は 3ワールドに分割（なんじ・なんじはん・5分単位）
+  'M1-08a': {
+    unitId: 'M1-08a',
+    title: 'なんじ（ちょうど）',
+    loader: () => import('./questions/M1-08a.js')
   },
+  'M1-08b': {
+    unitId: 'M1-08b',
+    title: 'なんじはん',
+    loader: () => import('./questions/M1-08b.js')
+  },
+  'M1-08c': {
+    unitId: 'M1-08c',
+    title: '５ふんたんいに ちょうせん！',
+    loader: () => import('./questions/M1-08c.js')
+  },
+
   'M1-09': {
     unitId: 'M1-09',
     title: 'さくらんぼ算のひみつ',
-    loader: null  // Phase 0.2 で実装予定（くりあがりの事前練習）
+    loader: () => import('./questions/M1-09.js')
   },
   'M1-10a': {
     unitId: 'M1-10a',
     title: 'くりあがり（9のせかい）',
-    loader: null  // Phase 0.2 で実装予定
+    loader: () => import('./questions/M1-10a.js')
   },
   'M1-10b': {
     unitId: 'M1-10b',
     title: 'くりあがり（8のせかい）',
-    loader: null  // Phase 0.2 で実装予定
+    loader: () => import('./questions/M1-10b.js')
   },
   'M1-10c': {
     unitId: 'M1-10c',
     title: 'くりあがり（7・6のせかい）',
-    loader: null  // Phase 0.2 で実装予定
+    loader: () => import('./questions/M1-10c.js')
   },
   'M1-10d': {
     unitId: 'M1-10d',
     title: 'くりあがりのおうよう',
-    loader: null  // Phase 0.2 で実装予定
+    loader: () => import('./questions/M1-10d.js')
   },
-
-  // ---- Phase 0.2（実装済み: M1-11・M1-12）----
 
   'M1-11a': {
     unitId: 'M1-11a',
@@ -139,12 +151,12 @@ export const UNITS = {
     loader: () => import('./questions/M1-12c.js')
   },
 
-  // ---- Phase 0.2（スタブ: 未実装）----
+  // ---- 未実装 ----
 
   'M1-13': {
     unitId: 'M1-13',
     title: 'かたちあそび',
-    loader: null  // Phase 0.2 で実装予定
+    loader: null  // Phase 0.3 で実装予定
   }
 };
 
