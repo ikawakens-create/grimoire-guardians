@@ -594,6 +594,162 @@ export const WORLDS = [
     order: 25,
     freeToPlay: false,
     events: []
+  },
+
+  // ============================================================
+  // Phase 0.3 ワールド（M1-14〜M1-16）
+  // ============================================================
+
+  // world_14a: M1-14a かずの よみかき（10のまとまり）
+  // ============================================================
+  {
+    id: 'world_14a',
+    unitId: 'M1-14a',
+    title: 'かずの よみかき',
+    description: '10のまとまりで 100まで かぞえよう',
+    difficulty: 2,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/world_14a.png',
+      iconLocked: 'assets/icons/worlds/world_14a_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #74b9ff, #0984e3)' },
+    order: 26,
+    freeToPlay: false,
+    events: []
+  },
+
+  // world_14b: M1-14b かずの じゅんばん と だいしょう
+  // ============================================================
+  {
+    id: 'world_14b',
+    unitId: 'M1-14b',
+    title: 'かずの じゅんばん',
+    description: 'かずを ならべたり くらべたり しよう',
+    difficulty: 2,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/world_14b.png',
+      iconLocked: 'assets/icons/worlds/world_14b_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #55efc4, #00b894)' },
+    order: 27,
+    freeToPlay: false,
+    events: []
+  },
+
+  // world_14c: M1-14c おおきい かず の たしざん
+  // ============================================================
+  {
+    id: 'world_14c',
+    unitId: 'M1-14c',
+    title: 'おおきいかずの たしざん',
+    description: '100まで の たしざんに ちょうせん！',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/world_14c.png',
+      iconLocked: 'assets/icons/worlds/world_14c_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #fdcb6e, #e17055)' },
+    order: 28,
+    freeToPlay: false,
+    events: []
+  },
+
+  // world_14d: M1-14d おおきい かず の ひきざん
+  // ============================================================
+  {
+    id: 'world_14d',
+    unitId: 'M1-14d',
+    title: 'おおきいかずの ひきざん',
+    description: '100まで の ひきざんに ちょうせん！',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/world_14d.png',
+      iconLocked: 'assets/icons/worlds/world_14d_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #fd79a8, #e84393)' },
+    order: 29,
+    freeToPlay: false,
+    events: []
+  },
+
+  // world_15a: M1-15a なんじ なんぷん（〜30ぷん）
+  // ============================================================
+  {
+    id: 'world_15a',
+    unitId: 'M1-15a',
+    title: 'なんじなんぷん①',
+    description: 'とけいで 1〜30ぷんを よもう',
+    difficulty: 2,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/world_15a.png',
+      iconLocked: 'assets/icons/worlds/world_15a_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #a29bfe, #6c5ce7)' },
+    order: 30,
+    freeToPlay: false,
+    events: []
+  },
+
+  // world_15b: M1-15b なんじ なんぷん（31ぷん〜）
+  // ============================================================
+  {
+    id: 'world_15b',
+    unitId: 'M1-15b',
+    title: 'なんじなんぷん②',
+    description: 'とけいで 31〜59ぷんを よもう',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/world_15b.png',
+      iconLocked: 'assets/icons/worlds/world_15b_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #81ecec, #00cec9)' },
+    order: 31,
+    freeToPlay: false,
+    events: []
+  },
+
+  // world_16a: M1-16a ずを つかって（たしざん 文章題）
+  // ============================================================
+  {
+    id: 'world_16a',
+    unitId: 'M1-16a',
+    title: 'たしざん もんだい',
+    description: 'ずをつかって たしざんの もんだいを とこう',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/world_16a.png',
+      iconLocked: 'assets/icons/worlds/world_16a_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #ffeaa7, #fdcb6e)' },
+    order: 32,
+    freeToPlay: false,
+    events: []
+  },
+
+  // world_16b: M1-16b ずを つかって（ひきざん 文章題）
+  // ============================================================
+  {
+    id: 'world_16b',
+    unitId: 'M1-16b',
+    title: 'ひきざん もんだい',
+    description: 'ずをつかって ひきざんの もんだいを とこう',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/world_16b.png',
+      iconLocked: 'assets/icons/worlds/world_16b_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #fab1a0, #e17055)' },
+    order: 33,
+    freeToPlay: false,
+    events: []
   }
 ];
 

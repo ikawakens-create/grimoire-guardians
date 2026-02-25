@@ -157,6 +157,49 @@ export const UNITS = {
     unitId: 'M1-13',
     title: 'かたちあそび',
     loader: () => import('./questions/M1-13.js')
+  },
+
+  // ---- Phase 0.3（M1-14〜M1-16）----
+
+  'M1-14a': {
+    unitId: 'M1-14a',
+    title: 'かずの よみかき（10のまとまり）',
+    loader: () => import('./questions/M1-14a.js')
+  },
+  'M1-14b': {
+    unitId: 'M1-14b',
+    title: 'かずの じゅんばん と だいしょう',
+    loader: () => import('./questions/M1-14b.js')
+  },
+  'M1-14c': {
+    unitId: 'M1-14c',
+    title: 'おおきい かず の たしざん',
+    loader: () => import('./questions/M1-14c.js')
+  },
+  'M1-14d': {
+    unitId: 'M1-14d',
+    title: 'おおきい かず の ひきざん',
+    loader: () => import('./questions/M1-14d.js')
+  },
+  'M1-15a': {
+    unitId: 'M1-15a',
+    title: 'なんじ なんぷん（〜30ぷん）',
+    loader: () => import('./questions/M1-15a.js')
+  },
+  'M1-15b': {
+    unitId: 'M1-15b',
+    title: 'なんじ なんぷん（31ぷん〜）',
+    loader: () => import('./questions/M1-15b.js')
+  },
+  'M1-16a': {
+    unitId: 'M1-16a',
+    title: 'ずを つかって（たしざん 文章題）',
+    loader: () => import('./questions/M1-16a.js')
+  },
+  'M1-16b': {
+    unitId: 'M1-16b',
+    title: 'ずを つかって（ひきざん 文章題）',
+    loader: () => import('./questions/M1-16b.js')
   }
 };
 
