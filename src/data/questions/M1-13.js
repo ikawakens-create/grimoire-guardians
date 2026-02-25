@@ -5,12 +5,12 @@
  * 対象: 小学1年生、立体図形の認識（はこ・まる・つつのかたち）
  * 準拠: 日本文教出版 算数1年
  *
- * カテゴリ構成（合計15問）:
- *   A: かたちの なまえ（Q01〜Q03）  身近なものを3つの形に分類
- *   B: なかま さがし（Q04〜Q07）    同じ形のものをグループから選ぶ
- *   C: ころがる・ころがらない（Q08〜Q10）  特性で形を識別
- *   D: 面を数えよう（Q11〜Q13）     平らな面の数で形を識別
- *   E: 文章題・チャレンジ（Q14〜Q15）  複数条件から形を絞る
+ * Step構成（シャッフル出題）
+ *   Step1: かたちの なまえ（プール5問 → 3問出題）
+ *   Step2: なかまさがし（プール6問 → 4問出題）
+ *   Step3: ころがる・ころがらない（プール5問 → 3問出題）
+ *   Step4: 面を数えよう（プール4問 → 3問出題）
+ *   Step5: 文章題・チャレンジ（プール4問 → 2問出題）
  *
  * 設計方針:
  *   - 全問 distractorPool 形式で出題（毎回異なる不正解が出題される）
@@ -18,22 +18,22 @@
  *   - 「両方が正解になりうる」問題を除外
  *   - 画像拡張に対応（image / choiceImages は null → nanobanana で後から設定可能）
  *
- * @version 1.0
- * @date 2026-02-24
+ * @version 2.0
+ * @date 2026-02-25
  */
 
-/** @type {Array<import('../units.js').Question>} */
+/** @type {Array} */
 const questions = [
 
   // =====================================================
-  // カテゴリA: かたちの なまえ
+  // Step1: かたちの なまえ（5問）
   // 身近なものが3種類の立体（はこ・まる・つつ）のどれか識別する
-  // distractorPool = 残り2つの形の名前（毎回順番が変わる）
   // =====================================================
 
   {
     id: 'M1-13-Q01',
     unitId: 'M1-13',
+    step: 1,
     type: 'choice',
     question: 'さいころは　どの　かたち？',
     correctAnswer: 'はこの　かたち',
@@ -41,13 +41,14 @@ const questions = [
       'まるの　かたち',
       'つつの　かたち',
     ],
-    image: null,        // nanobanana で さいころの画像を設定できる
-    choiceImages: null, // nanobanana で 各かたちのアイコンを設定できる
+    image: null,
+    choiceImages: null,
   },
 
   {
     id: 'M1-13-Q02',
     unitId: 'M1-13',
+    step: 1,
     type: 'choice',
     question: 'テニスボールは　どの　かたち？',
     correctAnswer: 'まるの　かたち',
@@ -62,6 +63,7 @@ const questions = [
   {
     id: 'M1-13-Q03',
     unitId: 'M1-13',
+    step: 1,
     type: 'choice',
     question: 'ツナかん（空きかん）は　どの　かたち？',
     correctAnswer: 'つつの　かたち',
@@ -73,24 +75,53 @@ const questions = [
     choiceImages: null,
   },
 
+  {
+    id: 'M1-13-Q16',
+    unitId: 'M1-13',
+    step: 1,
+    type: 'choice',
+    question: 'ぎゅうにゅうパックは　どの　かたち？',
+    correctAnswer: 'はこの　かたち',
+    distractorPool: [
+      'まるの　かたち',
+      'つつの　かたち',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13-Q17',
+    unitId: 'M1-13',
+    step: 1,
+    type: 'choice',
+    question: 'トイレットペーパーのしんは　どの　かたち？',
+    correctAnswer: 'つつの　かたち',
+    distractorPool: [
+      'はこの　かたち',
+      'まるの　かたち',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
   // =====================================================
-  // カテゴリB: なかま さがし
-  // 「同じかたちのもの」を選ぶ。distractorPool に4つ以上あるので
-  // 毎回ランダムに2つの不正解が選ばれ、消去法のパターンが変化する
+  // Step2: なかまさがし（6問）
+  // 「同じかたちのもの」を選ぶ
   // =====================================================
 
   {
     id: 'M1-13-Q04',
     unitId: 'M1-13',
+    step: 2,
     type: 'choice',
-    // ビー玉（まるのかたち）→ 同じかたちを選ぶ
     question: 'ビー玉と　おなじ　かたちの\nものは　どれ？',
     correctAnswer: 'テニスボール',
     distractorPool: [
-      'つみき（四角い）',  // はこのかたち
-      'ツナかん',          // つつのかたち
-      'さいころ',          // はこのかたち
-      'ストロー',          // つつのかたち
+      'つみき（四角い）',
+      'ツナかん',
+      'さいころ',
+      'ストロー',
     ],
     image: null,
     choiceImages: null,
@@ -99,15 +130,15 @@ const questions = [
   {
     id: 'M1-13-Q05',
     unitId: 'M1-13',
+    step: 2,
     type: 'choice',
-    // 消しゴムの箱（はこのかたち）→ 同じかたちを選ぶ
     question: '消しゴムの　はこと　おなじ\nかたちの　ものは　どれ？',
     correctAnswer: 'クッキーの　はこ',
     distractorPool: [
-      'ボール',              // まるのかたち
-      'ストロー',            // つつのかたち
-      'テニスボール',        // まるのかたち
-      'トイレットペーパーの　しん',  // つつのかたち
+      'ボール',
+      'ストロー',
+      'テニスボール',
+      'トイレットペーパーの　しん',
     ],
     image: null,
     choiceImages: null,
@@ -116,15 +147,15 @@ const questions = [
   {
     id: 'M1-13-Q06',
     unitId: 'M1-13',
+    step: 2,
     type: 'choice',
-    // ストロー（つつのかたち）→ 同じかたちを選ぶ
     question: 'ストローと　おなじ　かたちの\nものは　どれ？',
     correctAnswer: 'ツナかん',
     distractorPool: [
-      'さいころ',    // はこのかたち
-      'ボール',      // まるのかたち
-      'つみき',      // はこのかたち
-      'ビー玉',      // まるのかたち
+      'さいころ',
+      'ボール',
+      'つみき',
+      'ビー玉',
     ],
     image: null,
     choiceImages: null,
@@ -133,32 +164,63 @@ const questions = [
   {
     id: 'M1-13-Q07',
     unitId: 'M1-13',
+    step: 2,
     type: 'choice',
-    // 3つの中で仲間外れを選ぶ（正解: ビー玉＝まるのかたち、他ははこのかたち）
-    // distractorPool = はこのかたちのもの（正解:ビー玉）
     question: 'つぎの　うち、はこのかたちで\nないものは　どれ？',
     correctAnswer: 'ビー玉',
     distractorPool: [
-      'さいころ',          // はこのかたち（不正解として出る）
-      '消しゴムの　はこ',  // はこのかたち
-      'つみき',            // はこのかたち
-      'クッキーの　はこ',  // はこのかたち
+      'さいころ',
+      '消しゴムの　はこ',
+      'つみき',
+      'クッキーの　はこ',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13-Q18',
+    unitId: 'M1-13',
+    step: 2,
+    type: 'choice',
+    question: 'トイレットペーパーのしんと\nおなじかたちは　どれ？',
+    correctAnswer: 'ストロー',
+    distractorPool: [
+      'さいころ',
+      'ボール',
+      'つみき',
+      'ビー玉',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13-Q19',
+    unitId: 'M1-13',
+    step: 2,
+    type: 'choice',
+    question: 'さいころと　おなじ\nかたちは　どれ？',
+    correctAnswer: 'つみき',
+    distractorPool: [
+      'ボール',
+      'ストロー',
+      'ビー玉',
+      'ツナかん',
     ],
     image: null,
     choiceImages: null,
   },
 
   // =====================================================
-  // カテゴリC: ころがる・ころがらない
-  // 「どこでもころがる＝まる」「ころがらない＝はこ」を明確に区別
-  // 「つつはころがるが一方向のみ」という細かい区別は Q10 で扱う
+  // Step3: ころがる・ころがらない（5問）
   // =====================================================
 
   {
     id: 'M1-13-Q08',
     unitId: 'M1-13',
+    step: 3,
     type: 'choice',
-    // はこのかたちだけが転がらない（まる・つつはどちらも転がる）
     question: 'ころがらない　かたちは　どれ？',
     correctAnswer: 'はこの　かたち',
     distractorPool: [
@@ -172,8 +234,8 @@ const questions = [
   {
     id: 'M1-13-Q09',
     unitId: 'M1-13',
+    step: 3,
     type: 'choice',
-    // 「たてにも よこにも」を明記してまるとつつを区別する
     question: 'たてにも　よこにも、\nどこでも　ころがる　かたちは？',
     correctAnswer: 'まるの　かたち',
     distractorPool: [
@@ -187,29 +249,59 @@ const questions = [
   {
     id: 'M1-13-Q10',
     unitId: 'M1-13',
+    step: 3,
     type: 'choice',
-    // 缶を横に寝かせた場合→一方向だけ転がる（つつの特性）
-    // 「よこに ねかせて」で向きを明示し曖昧さをなくす
     question: 'ツナかんを　よこに　ねかせたら\nどうなるかな？',
     correctAnswer: '一方向だけ　ころがる',
     distractorPool: [
-      'どこでも　ころがる',   // まるの特性（誤り）
-      'ころがらない',          // はこの特性（誤り）
-      'うごかない',            // 明らかな誤りだが低学年には有効
-      'とびはねる',            // 明らかな誤り（易しい消去肢）
+      'どこでも　ころがる',
+      'ころがらない',
+      'うごかない',
+      'とびはねる',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13-Q20',
+    unitId: 'M1-13',
+    step: 3,
+    type: 'choice',
+    question: 'さかみちに　おいたら\nころがるのは　どれ？',
+    correctAnswer: 'まるの　かたち',
+    distractorPool: [
+      'はこの　かたち',
+      'つつの　かたち',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13-Q21',
+    unitId: 'M1-13',
+    step: 3,
+    type: 'choice',
+    question: 'はこのかたちを　さかみちに\nおいたら　どうなる？',
+    correctAnswer: 'ころがらない',
+    distractorPool: [
+      'どこでも　ころがる',
+      '一方向だけ　ころがる',
+      'とびはねる',
     ],
     image: null,
     choiceImages: null,
   },
 
   // =====================================================
-  // カテゴリD: 面を数えよう
-  // 数値が答えなので向き・解釈で変わらない。最も明確なカテゴリ
+  // Step4: 面を数えよう（4問）
   // =====================================================
 
   {
     id: 'M1-13-Q11',
     unitId: 'M1-13',
+    step: 4,
     type: 'choice',
     question: 'はこのかたちの　平らな面は\nぜんぶで　なんまい？\n（上・下・前・後ろ・左・右）',
     correctAnswer: '6まい',
@@ -226,8 +318,8 @@ const questions = [
   {
     id: 'M1-13-Q12',
     unitId: 'M1-13',
+    step: 4,
     type: 'choice',
-    // 「上と下のまるいところ」と明示して側面（曲面）との混同を防ぐ
     question: 'つつのかたちの　上と下の\nまるい面は　なんまい？',
     correctAnswer: '2まい',
     distractorPool: [
@@ -243,6 +335,7 @@ const questions = [
   {
     id: 'M1-13-Q13',
     unitId: 'M1-13',
+    step: 4,
     type: 'choice',
     question: 'まるのかたち（ボール）に\n平らな面は　いくつ？',
     correctAnswer: '0（ない）',
@@ -256,19 +349,33 @@ const questions = [
     choiceImages: null,
   },
 
+  {
+    id: 'M1-13-Q22',
+    unitId: 'M1-13',
+    step: 4,
+    type: 'choice',
+    question: 'つつのかたちに　まるくない\nひらたい面は　なんまい？',
+    correctAnswer: '0（ない）',
+    distractorPool: [
+      '1まい',
+      '2まい',
+      '4まい',
+      '6まい',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
   // =====================================================
-  // カテゴリE: 文章題・チャレンジ
+  // Step5: 文章題・チャレンジ（4問）
   // 複数の条件を AND で組み合わせて答えを一意に絞る
   // =====================================================
 
   {
     id: 'M1-13-Q14',
     unitId: 'M1-13',
+    step: 5,
     type: 'choice',
-    // 3条件すべてに当てはまるのは「はこのかたち」だけ
-    // ・ころがらない → はこ○ / まる× / つつ×
-    // ・つみかさねられる → はこ○ / まる○ / つつ○（この1条件だけでは絞れない）
-    // ・平らな面が6まい → はこ○ だけ
     question: 'つぎの　3つに　あてはまる\nかたちは　どれ？\n\n・ころがらない\n・つみかさねられる\n・平らな面が　6まい',
     correctAnswer: 'はこの　かたち',
     distractorPool: [
@@ -282,12 +389,8 @@ const questions = [
   {
     id: 'M1-13-Q15',
     unitId: 'M1-13',
+    step: 5,
     type: 'choice',
-    // 「はこ」と「つつ」の共通点を選ぶチャレンジ問題
-    // ・つみあげられる → 両方○（正解）
-    // ・ころがる → はこ× → 共通でない
-    // ・まるい面がある → はこ× → 共通でない
-    // ・どこでもころがる → つつ× → 共通でない
     question: 'はこのかたちと　つつのかたちに\nりょうほう　あてはまるのは？',
     correctAnswer: 'つみあげられる',
     distractorPool: [
@@ -300,6 +403,43 @@ const questions = [
     choiceImages: null,
   },
 
+  {
+    id: 'M1-13-Q23',
+    unitId: 'M1-13',
+    step: 5,
+    type: 'choice',
+    question: 'まるくて、どこでもころがって、\nひらたい面がない　かたちは？',
+    correctAnswer: 'まるの　かたち',
+    distractorPool: [
+      'はこの　かたち',
+      'つつの　かたち',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13-Q24',
+    unitId: 'M1-13',
+    step: 5,
+    type: 'choice',
+    question: 'よこにねかせると\nころがる　かたちを　えらぼう\n（2つあるよ）\n\nどちらが「どこでも」ころがる？',
+    correctAnswer: 'まるの　かたち',
+    distractorPool: [
+      'はこの　かたち',
+      'つつの　かたち',
+    ],
+    image: null,
+    choiceImages: null,
+  }
+];
+
+export const stepConfig = [
+  { step: 1, pick: 3 },
+  { step: 2, pick: 4 },
+  { step: 3, pick: 3 },
+  { step: 4, pick: 3 },
+  { step: 5, pick: 2 }
 ];
 
 export default questions;

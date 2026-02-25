@@ -5,31 +5,25 @@
  * 対象: 小学1年生、7+nと6+nの繰り上がりたし算
  * 準拠: 日本文教出版 算数1年
  *
- * 【くりあがりのポイント: 7・6のせかい】
- *   7に 3を たすと 10（補数3）
- *   6に 4を たすと 10（補数4）
- *   9のせかい（補数1）・8のせかい（補数2）よりも
- *   分ける数が大きくなるので、もう一段階考える力が必要。
+ * Step構成（シャッフル出題）
+ *   Step1: 7のせかい（プール7問 → 5問出題）
+ *   Step2: 6のせかい（プール6問 → 5問出題）
+ *   Step3: あなうめ・もんだいぶん（プール5問 → 5問出題）
  *
- * カテゴリ構成（15問）
- *   A: 7のせかい（Q1〜Q6）- 7+4から7+9
- *   B: 6のせかい（Q7〜Q11）- 6+5から6+9
- *   C: 穴埋め・文章題（Q12〜Q15）
- *
- * @version 1.0
- * @date 2026-02-24
+ * @version 2.0
+ * @date 2026-02-25
  */
 
 /** @type {Array} */
 const questions = [
 
   // =====================================================
-  // カテゴリA: 7のせかい（補数3）
-  // 7に3を足すと10。nを「3とのこり」に分ける
+  // Step1: 7のせかい（補数3）
   // =====================================================
   {
     id: 'M1-10c-Q01',
     unitId: 'M1-10c',
+    step: 1,
     type: 'choice',
     question: '7のせかいの かくにん！\n7に いくつ たすと 10？\n7 + □ = 10',
     choices: ['２', '３', '４', '５'],
@@ -39,6 +33,7 @@ const questions = [
   {
     id: 'M1-10c-Q02',
     unitId: 'M1-10c',
+    step: 1,
     type: 'choice',
     question: '7 + 4 = ？\n（ヒント：7 + 3 = 10、4を「3と1」に わけよう）',
     choices: ['１０', '１１', '１２', '１３'],
@@ -48,6 +43,7 @@ const questions = [
   {
     id: 'M1-10c-Q03',
     unitId: 'M1-10c',
+    step: 1,
     type: 'choice',
     question: '7 + 5 = ？',
     choices: ['１１', '１２', '１３', '１４'],
@@ -57,6 +53,7 @@ const questions = [
   {
     id: 'M1-10c-Q04',
     unitId: 'M1-10c',
+    step: 1,
     type: 'choice',
     question: '7 + 6 = ？',
     choices: ['１２', '１３', '１４', '１５'],
@@ -66,6 +63,7 @@ const questions = [
   {
     id: 'M1-10c-Q05',
     unitId: 'M1-10c',
+    step: 1,
     type: 'choice',
     question: '7 + 7 = ？',
     choices: ['１３', '１４', '１５', '１６'],
@@ -75,20 +73,31 @@ const questions = [
   {
     id: 'M1-10c-Q06',
     unitId: 'M1-10c',
+    step: 1,
     type: 'choice',
     question: '7 + 8 = ？',
     choices: ['１４', '１５', '１６', '１７'],
     correctAnswer: '１５',
     explanation: '7 + 3 = 10、8を「3と5」に わけて、10 + 5 = 15。答えは 15！'
   },
+  {
+    id: 'M1-10c-Q16',
+    unitId: 'M1-10c',
+    step: 1,
+    type: 'choice',
+    question: '5 + 7 = ？\n（ヒント：7 + 5 と おなじ こたえだよ）',
+    choices: ['１１', '１２', '１３', '１４'],
+    correctAnswer: '１２',
+    explanation: '5 + 7 = 7 + 5 = 12。たし算は じゅんばんを かえても おなじ！'
+  },
 
   // =====================================================
-  // カテゴリB: 6のせかい（補数4）
-  // 6に4を足すと10。nを「4とのこり」に分ける
+  // Step2: 6のせかい（補数4）
   // =====================================================
   {
     id: 'M1-10c-Q07',
     unitId: 'M1-10c',
+    step: 2,
     type: 'choice',
     question: '6のせかいの かくにん！\n6に いくつ たすと 10？\n6 + □ = 10',
     choices: ['２', '３', '４', '５'],
@@ -98,6 +107,7 @@ const questions = [
   {
     id: 'M1-10c-Q08',
     unitId: 'M1-10c',
+    step: 2,
     type: 'choice',
     question: '6 + 5 = ？\n（ヒント：6 + 4 = 10、5を「4と1」に わけよう）',
     choices: ['１０', '１１', '１２', '１３'],
@@ -107,6 +117,7 @@ const questions = [
   {
     id: 'M1-10c-Q09',
     unitId: 'M1-10c',
+    step: 2,
     type: 'choice',
     question: '6 + 6 = ？',
     choices: ['１１', '１２', '１３', '１４'],
@@ -116,6 +127,7 @@ const questions = [
   {
     id: 'M1-10c-Q10',
     unitId: 'M1-10c',
+    step: 2,
     type: 'choice',
     question: '6 + 7 = ？',
     choices: ['１２', '１３', '１４', '１５'],
@@ -125,52 +137,83 @@ const questions = [
   {
     id: 'M1-10c-Q11',
     unitId: 'M1-10c',
+    step: 2,
     type: 'choice',
     question: '6 + 9 = ？',
     choices: ['１４', '１５', '１６', '１７'],
     correctAnswer: '１５',
     explanation: '6 + 4 = 10、9を「4と5」に わけて、10 + 5 = 15。答えは 15！'
   },
+  {
+    id: 'M1-10c-Q17',
+    unitId: 'M1-10c',
+    step: 2,
+    type: 'choice',
+    question: '6 + 8 = ？',
+    choices: ['１３', '１４', '１５', '１６'],
+    correctAnswer: '１４',
+    explanation: '6 + 4 = 10、8を「4と4」に わけて、10 + 4 = 14。答えは 14！'
+  },
 
   // =====================================================
-  // カテゴリC: 穴埋め・文章題
+  // Step3: あなうめ・もんだいぶん
   // =====================================================
   {
     id: 'M1-10c-Q12',
     unitId: 'M1-10c',
+    step: 3,
     type: 'choice',
     question: '7 + □ = 13\n□に はいる かずは？',
     choices: ['４', '５', '６', '７'],
     correctAnswer: '６',
-    explanation: '7 + 6 = 13 です。13 - 7 = 6 で かんがえても いいですね。'
+    explanation: '7 + 6 = 13 です。'
   },
   {
     id: 'M1-10c-Q13',
     unitId: 'M1-10c',
+    step: 3,
     type: 'choice',
     question: '6 + □ = 14\n□に はいる かずは？',
     choices: ['６', '７', '８', '９'],
     correctAnswer: '８',
-    explanation: '6 + 8 = 14 です。6 + 4 = 10、10 + 4 = 14 なので、□は 8です。'
+    explanation: '6 + 8 = 14 です。'
   },
   {
     id: 'M1-10c-Q14',
     unitId: 'M1-10c',
+    step: 3,
     type: 'choice',
     question: 'きのこが 7こ、どんぐりが 6こ あります。\nあわせて なんこ？',
     choices: ['１２こ', '１３こ', '１４こ', '１５こ'],
     correctAnswer: '１３こ',
-    explanation: '7 + 6 = 13。7 + 3 = 10、6を「3と3」に わけて 10 + 3 = 13こ です。'
+    explanation: '7 + 6 = 13。7 + 3 = 10、10 + 3 = 13こ です。'
   },
   {
     id: 'M1-10c-Q15',
     unitId: 'M1-10c',
+    step: 3,
     type: 'choice',
     question: 'あかい ちょうちょが 6ぴき、しろい ちょうちょが 9ひき います。\nあわせて なんびき？',
     choices: ['１３ひき', '１４ひき', '１５ひき', '１６ひき'],
     correctAnswer: '１５ひき',
-    explanation: '6 + 9 = 15。6 + 4 = 10、9を「4と5」に わけて 10 + 5 = 15ひき です。'
+    explanation: '6 + 9 = 15。6 + 4 = 10、10 + 5 = 15ひき です。'
+  },
+  {
+    id: 'M1-10c-Q18',
+    unitId: 'M1-10c',
+    step: 3,
+    type: 'choice',
+    question: '□ + 6 = 12\n□に はいる かずは？',
+    choices: ['４', '５', '６', '７'],
+    correctAnswer: '６',
+    explanation: '6 + 6 = 12 です。'
   }
+];
+
+export const stepConfig = [
+  { step: 1, pick: 5 },
+  { step: 2, pick: 5 },
+  { step: 3, pick: 5 }
 ];
 
 export default questions;
