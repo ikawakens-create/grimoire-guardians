@@ -206,11 +206,13 @@ export const UNITS = {
 /**
  * ユニットの問題データを動的ロード
  * @param {string} unitId - ユニットID（例: 'M1-01'）
- * @returns {Promise<Array>} 問題データ配列
+ * @returns {Promise<{questions: Array, stepConfig: Array|null}>}
+ *   questions: 問題データ配列
+ *   stepConfig: ステップ別選出設定（stepConfigをexportしないユニットはnull）
  * @throws {Error} ユニットが未実装またはロード失敗の場合
  *
  * @example
- * const questions = await loadUnitQuestions('M1-01');
+ * const { questions, stepConfig } = await loadUnitQuestions('M1-01');
  */
 export async function loadUnitQuestions(unitId) {
   const unit = UNITS[unitId];
@@ -223,8 +225,11 @@ export async function loadUnitQuestions(unitId) {
     throw new Error(`[Units] Unit "${unitId}" (${unit.title}) は未実装です`);
   }
 
-  const module = await unit.loader();
-  return module.default;
+  const mod = await unit.loader();
+  return {
+    questions: mod.default,
+    stepConfig: mod.stepConfig ?? null
+  };
 }
 
 export default UNITS;

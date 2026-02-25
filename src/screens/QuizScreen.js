@@ -332,7 +332,7 @@ export class QuizScreen {
     Logger.info(`[QuizScreen] Loading questions for unit: ${unitId}`);
     Logger.time(`loadUnit_${unitId}`);
 
-    const raw = await loadUnitQuestions(unitId);
+    const { questions: raw, stepConfig } = await loadUnitQuestions(unitId);
 
     // バリデーション
     const validated = raw.filter((q, i) => {
@@ -345,13 +345,40 @@ export class QuizScreen {
       throw new Error(`ユニット ${unitId} に有効な問題がありません`);
     }
 
-    this._questions = validated;
-    Logger.info(`[QuizScreen] Loaded ${validated.length} questions`);
+    // stepConfig があればステップ別シャッフル選出、なければ全問そのまま
+    this._questions = stepConfig
+      ? this._pickByStep(validated, stepConfig)
+      : validated;
+
+    Logger.info(`[QuizScreen] Loaded ${this._questions.length} questions (pool: ${validated.length})`);
     Logger.timeEnd(`loadUnit_${unitId}`);
 
     // カウンター表示を更新
     this._el.querySelector('.quiz-counter').textContent =
       `1 / ${this._questions.length}`;
+  }
+
+  /**
+   * ステップ別シャッフル選出
+   * 各ステップのプールからランダムにpick問を選び、ステップ順に結合して返す。
+   * @param {Array} allQuestions - 全問題（step フィールド付き）
+   * @param {Array<{step:number, pick:number}>} stepConfig - 各ステップの選出設定
+   * @returns {Array} 選出・順序確定済みの問題配列
+   * @private
+   */
+  _pickByStep(allQuestions, stepConfig) {
+    const result = [];
+    for (const { step, pick } of stepConfig) {
+      const pool = allQuestions.filter(q => q.step === step);
+      // Fisher-Yates シャッフル
+      const shuffled = [...pool];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      result.push(...shuffled.slice(0, pick));
+    }
+    return result;
   }
 
   // ============================================================

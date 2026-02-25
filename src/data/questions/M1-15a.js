@@ -17,12 +17,12 @@
  *   端数分（6分・16分・23分など）に進む。
  *   0x分（07分・03分）は特に読み間違いが起きやすいため丁寧に扱う。
  *
- * カテゴリ構成（15問）
- *   Category A: 5の倍数・復習から始める（3問）
- *   Category B: 端数分（1〜30分）（7問）
- *   Category C: 難しいパターン（5問）← 0x分・ひっかけ
+ * Step構成（シャッフル出題）
+ *   Step1: 5の倍数・復習から始める（プール5問 → 3問出題）
+ *   Step2: 端数分（1〜30分）（プール9問 → 7問出題）
+ *   Step3: 難しいパターン（0x分・ひっかけ）（プール7問 → 5問出題）
  *
- * @version 1.0
+ * @version 2.0
  * @date 2026-02-25
  */
 
@@ -30,12 +30,12 @@
 const questions = [
 
   // =====================================================
-  // Category A: 5の倍数・復習（3問）
-  // 既習の5分単位から入ってウォームアップ
+  // Step1: 5の倍数・復習（プール5問）
   // =====================================================
   {
     id: 'M1-15a-Q01',
     unitId: 'M1-15a',
+    step: 1,
     type: 'clock',
     question: 'とけいは なんじ なんぷん？',
     clockFace: { hour: 3, minute: 5 },
@@ -46,6 +46,7 @@ const questions = [
   {
     id: 'M1-15a-Q02',
     unitId: 'M1-15a',
+    step: 1,
     type: 'clock',
     question: 'とけいは なんじ なんぷん？',
     clockFace: { hour: 7, minute: 10 },
@@ -56,6 +57,7 @@ const questions = [
   {
     id: 'M1-15a-Q03',
     unitId: 'M1-15a',
+    step: 1,
     type: 'clock',
     question: 'とけいは なんじ なんぷん？',
     clockFace: { hour: 1, minute: 15 },
@@ -63,14 +65,36 @@ const questions = [
     correctAnswer: '1じ 15ふん',
     explanation: 'みじかいはりが 1、ながいはりが 3（15ふん）のところ。1じ15ふん！'
   },
+  {
+    id: 'M1-15a-Q16',
+    unitId: 'M1-15a',
+    step: 1,
+    type: 'clock',
+    question: 'とけいは なんじ なんぷん？',
+    clockFace: { hour: 9, minute: 20 },
+    choices: ['9じ 4ふん', '9じ 20ふん', '9じ 25ふん', '10じ 20ふん'],
+    correctAnswer: '9じ 20ふん',
+    explanation: 'みじかいはりが 9、ながいはりが 4（20ふん）のところ。9じ20ふん！'
+  },
+  {
+    id: 'M1-15a-Q17',
+    unitId: 'M1-15a',
+    step: 1,
+    type: 'clock',
+    question: 'とけいは なんじ なんぷん？',
+    clockFace: { hour: 5, minute: 25 },
+    choices: ['5じ 20ふん', '5じ 25ふん', '5じ 30ふん', '6じ 25ふん'],
+    correctAnswer: '5じ 25ふん',
+    explanation: 'みじかいはりが 5、ながいはりが 5（25ふん）のところ。5じ25ふん！'
+  },
 
   // =====================================================
-  // Category B: 端数分（1〜30分）（7問）
-  // 5の倍数でない分数を読む
+  // Step2: 端数分（1〜30分）（プール9問）
   // =====================================================
   {
     id: 'M1-15a-Q04',
     unitId: 'M1-15a',
+    step: 2,
     type: 'clock',
     question: 'とけいは なんじ なんぷん？',
     clockFace: { hour: 6, minute: 16 },
@@ -81,6 +105,7 @@ const questions = [
   {
     id: 'M1-15a-Q05',
     unitId: 'M1-15a',
+    step: 2,
     type: 'clock',
     question: 'とけいは なんじ なんぷん？',
     clockFace: { hour: 2, minute: 23 },
@@ -91,6 +116,7 @@ const questions = [
   {
     id: 'M1-15a-Q06',
     unitId: 'M1-15a',
+    step: 2,
     type: 'clock',
     question: 'とけいは なんじ なんぷん？',
     clockFace: { hour: 11, minute: 27 },
@@ -101,6 +127,7 @@ const questions = [
   {
     id: 'M1-15a-Q07',
     unitId: 'M1-15a',
+    step: 2,
     type: 'clock',
     question: 'とけいは なんじ なんぷん？',
     clockFace: { hour: 4, minute: 18 },
@@ -111,6 +138,7 @@ const questions = [
   {
     id: 'M1-15a-Q08',
     unitId: 'M1-15a',
+    step: 2,
     type: 'clock',
     question: 'とけいは なんじ なんぷん？',
     clockFace: { hour: 9, minute: 13 },
@@ -121,6 +149,7 @@ const questions = [
   {
     id: 'M1-15a-Q09',
     unitId: 'M1-15a',
+    step: 2,
     type: 'clock',
     question: 'とけいは なんじ なんぷん？',
     clockFace: { hour: 5, minute: 29 },
@@ -131,6 +160,7 @@ const questions = [
   {
     id: 'M1-15a-Q10',
     unitId: 'M1-15a',
+    step: 2,
     type: 'clock',
     question: 'とけいは なんじ なんぷん？',
     clockFace: { hour: 10, minute: 22 },
@@ -138,14 +168,36 @@ const questions = [
     correctAnswer: '10じ 22ふん',
     explanation: '10じ 22ふん。ながいはりは 20ふんより 2つすすんだところ。'
   },
+  {
+    id: 'M1-15a-Q18',
+    unitId: 'M1-15a',
+    step: 2,
+    type: 'clock',
+    question: 'とけいは なんじ なんぷん？',
+    clockFace: { hour: 8, minute: 11 },
+    choices: ['8じ 10ふん', '8じ 11ふん', '8じ 12ふん', '9じ 11ふん'],
+    correctAnswer: '8じ 11ふん',
+    explanation: '8じ 11ふん。ながいはりは 10ふんより 1つすすんだところ。'
+  },
+  {
+    id: 'M1-15a-Q19',
+    unitId: 'M1-15a',
+    step: 2,
+    type: 'clock',
+    question: 'とけいは なんじ なんぷん？',
+    clockFace: { hour: 12, minute: 26 },
+    choices: ['12じ 24ふん', '12じ 25ふん', '12じ 26ふん', '1じ 26ふん'],
+    correctAnswer: '12じ 26ふん',
+    explanation: '12じ 26ふん。ながいはりは 25ふんより 1つすすんだところ。'
+  },
 
   // =====================================================
-  // Category C: 難しいパターン（5問）
-  // 0x分・読み間違いが起きやすいパターン
+  // Step3: 難しいパターン（プール7問）
   // =====================================================
   {
     id: 'M1-15a-Q11',
     unitId: 'M1-15a',
+    step: 3,
     type: 'clock',
     question: 'とけいは なんじ なんぷん？\n（ながいはりに ちゅうもく！）',
     clockFace: { hour: 8, minute: 7 },
@@ -156,6 +208,7 @@ const questions = [
   {
     id: 'M1-15a-Q12',
     unitId: 'M1-15a',
+    step: 3,
     type: 'clock',
     question: 'とけいは なんじ なんぷん？',
     clockFace: { hour: 12, minute: 14 },
@@ -166,6 +219,7 @@ const questions = [
   {
     id: 'M1-15a-Q13',
     unitId: 'M1-15a',
+    step: 3,
     type: 'clock',
     question: 'とけいは なんじ なんぷん？',
     clockFace: { hour: 3, minute: 21 },
@@ -176,6 +230,7 @@ const questions = [
   {
     id: 'M1-15a-Q14',
     unitId: 'M1-15a',
+    step: 3,
     type: 'clock',
     question: 'とけいは なんじ なんぷん？\n（ながいはりに ちゅうもく！）',
     clockFace: { hour: 7, minute: 3 },
@@ -186,13 +241,42 @@ const questions = [
   {
     id: 'M1-15a-Q15',
     unitId: 'M1-15a',
+    step: 3,
     type: 'clock',
     question: 'とけいは なんじ なんぷん？',
     clockFace: { hour: 11, minute: 28 },
     choices: ['11じ 25ふん', '11じ 26ふん', '11じ 28ふん', '12じ 28ふん'],
     correctAnswer: '11じ 28ふん',
     explanation: '11じ 28ふん。ながいはりは 25ふんより 3つすすんだところ。'
+  },
+  {
+    id: 'M1-15a-Q20',
+    unitId: 'M1-15a',
+    step: 3,
+    type: 'clock',
+    question: 'とけいは なんじ なんぷん？\n（ながいはりに ちゅうもく！）',
+    clockFace: { hour: 2, minute: 4 },
+    choices: ['2じ 1ぷん', '2じ 4ふん', '2じ 20ふん', '3じ 4ふん'],
+    correctAnswer: '2じ 4ふん',
+    explanation: '2じ 4ふん。ながいはりは 12から 4つすすんで 4ふん。「にじかん4ふん」ではなく「2じ4ふん」！'
+  },
+  {
+    id: 'M1-15a-Q21',
+    unitId: 'M1-15a',
+    step: 3,
+    type: 'clock',
+    question: 'とけいは なんじ なんぷん？\n（ながいはりに ちゅうもく！）',
+    clockFace: { hour: 10, minute: 9 },
+    choices: ['10じ 1ぷん', '10じ 9ふん', '10じ 45ふん', '11じ 9ふん'],
+    correctAnswer: '10じ 9ふん',
+    explanation: '10じ 9ふん。ながいはりは 5ふんより 4つすすんで 9ふん。'
   }
+];
+
+export const stepConfig = [
+  { step: 1, pick: 3 },
+  { step: 2, pick: 7 },
+  { step: 3, pick: 5 }
 ];
 
 export default questions;
