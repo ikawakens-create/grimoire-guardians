@@ -53,19 +53,19 @@ const questions = [
     id: 'M1-14c-Q03',
     unitId: 'M1-14c',
     type: 'choice',
-    question: '10 + 80 = ？\n（じゅう たす はちじゅう）',
-    choices: ['70', '80', '90', '100'],
-    correctAnswer: '90',
-    explanation: '10（1つ）＋ 80（8つ）= 90（9つ）。'
+    question: '30 + 40 = ？\n（さんじゅう たす よんじゅう）',
+    choices: ['50', '60', '70', '80'],
+    correctAnswer: '70',
+    explanation: '30（3つ）＋ 40（4つ）= 70（7つ）。'
   },
   {
     id: 'M1-14c-Q04',
     unitId: 'M1-14c',
     type: 'choice',
-    question: '60 + 30 = ？\n（ろくじゅう たす さんじゅう）',
-    choices: ['70', '80', '90', '100'],
-    correctAnswer: '90',
-    explanation: '60（6つ）＋ 30（3つ）= 90（9つ）。'
+    question: '20 + 60 = ？\n（にじゅう たす ろくじゅう）',
+    choices: ['60', '70', '80', '90'],
+    correctAnswer: '80',
+    explanation: '20（2つ）＋ 60（6つ）= 80（8つ）。'
   },
 
   // =====================================================

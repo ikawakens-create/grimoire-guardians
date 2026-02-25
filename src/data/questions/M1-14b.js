@@ -163,10 +163,10 @@ const questions = [
     id: 'M1-14b-Q14',
     unitId: 'M1-14b',
     type: 'choice',
-    question: '80より 20 ちいさい かずは？',
-    choices: ['40', '50', '60', '70'],
-    correctAnswer: '60',
-    explanation: '80から 20 もどると 60。'
+    question: '80より 10 ちいさい かずは？',
+    choices: ['50', '60', '70', '80'],
+    correctAnswer: '70',
+    explanation: '80から 10 もどると 70。'
   },
   {
     id: 'M1-14b-Q15',

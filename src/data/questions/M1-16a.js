@@ -60,10 +60,10 @@ const questions = [
     id: 'M1-16a-Q04',
     unitId: 'M1-16a',
     type: 'choice',
-    question: 'きのう はっぱを 9まい ひろいました。\nきょう 6まい ひろいました。\nあわせて なんまい？',
-    choices: ['13まい', '14まい', '15まい', '16まい'],
-    correctAnswer: '15まい',
-    explanation: '9 + 6 = 15。'
+    question: 'きのう どんぐりを 8こ ひろいました。\nきょう 4こ ひろいました。\nあわせて なんこ？',
+    choices: ['10こ', '11こ', '12こ', '13こ'],
+    correctAnswer: '12こ',
+    explanation: '8 + 4 = 12。「あわせて」はたし算！'
   },
   {
     id: 'M1-16a-Q05',
@@ -92,10 +92,10 @@ const questions = [
     id: 'M1-16a-Q07',
     unitId: 'M1-16a',
     type: 'choice',
-    question: 'おはじきが 13こ あります。\n4こ もらって なんこに なりましたか？',
-    choices: ['15こ', '16こ', '17こ', '18こ'],
-    correctAnswer: '17こ',
-    explanation: '13 + 4 = 17。'
+    question: 'おはじきが 14こ あります。\n5こ もらって なんこに なりましたか？',
+    choices: ['16こ', '17こ', '18こ', '19こ'],
+    correctAnswer: '19こ',
+    explanation: '14 + 5 = 19。'
   },
   {
     id: 'M1-16a-Q08',
@@ -133,7 +133,7 @@ const questions = [
     id: 'M1-16a-Q11',
     unitId: 'M1-16a',
     type: 'choice',
-    question: '🔵 赤いボールが 20こ、\n🔴 青いボールが 30こ あります。\nあわせて なんこ？',
+    question: '🔴 赤いボールが 20こ、\n🔵 青いボールが 30こ あります。\nあわせて なんこ？',
     choices: ['40こ', '50こ', '60こ', '70こ'],
     correctAnswer: '50こ',
     explanation: '20 + 30 = 50。じゅうのくらいどうしを たせばOK！'

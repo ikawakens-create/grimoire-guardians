@@ -53,19 +53,19 @@ const questions = [
     id: 'M1-14d-Q03',
     unitId: 'M1-14d',
     type: 'choice',
-    question: '70 - 40 = ？\n（ななじゅう ひく よんじゅう）',
-    choices: ['20', '30', '40', '50'],
-    correctAnswer: '30',
-    explanation: '70（7つ）－ 40（4つ）= 30（3つ）。'
+    question: '90 - 50 = ？\n（きゅうじゅう ひく ごじゅう）',
+    choices: ['30', '40', '50', '60'],
+    correctAnswer: '40',
+    explanation: '90（9つ）－ 50（5つ）= 40（4つ）。'
   },
   {
     id: 'M1-14d-Q04',
     unitId: 'M1-14d',
     type: 'choice',
-    question: '100 - 60 = ？\n（ひゃく ひく ろくじゅう）',
-    choices: ['30', '40', '50', '60'],
-    correctAnswer: '40',
-    explanation: '100（10つ）－ 60（6つ）= 40（4つ）。'
+    question: '100 - 30 = ？\n（ひゃく ひく さんじゅう）',
+    choices: ['50', '60', '70', '80'],
+    correctAnswer: '70',
+    explanation: '100（10つ）－ 30（3つ）= 70（7つ）。'
   },
 
   // =====================================================

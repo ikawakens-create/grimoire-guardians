@@ -105,10 +105,10 @@ const questions = [
     unitId: 'M1-15b',
     type: 'clock',
     question: 'とけいは なんじ なんぷん？',
-    clockFace: { hour: 4, minute: 50 },
-    choices: ['4じ 45ふん', '4じ 48ふん', '4じ 50ふん', '5じ 50ふん'],
-    correctAnswer: '4じ 50ふん',
-    explanation: '4じ 50ふん。ながいはりは 10（50ふん）のところ。'
+    clockFace: { hour: 3, minute: 50 },
+    choices: ['3じ 45ふん', '3じ 48ふん', '3じ 50ふん', '4じ 50ふん'],
+    correctAnswer: '3じ 50ふん',
+    explanation: '3じ 50ふん。ながいはりは 10（50ふん）のところ。'
   },
   {
     id: 'M1-15b-Q09',

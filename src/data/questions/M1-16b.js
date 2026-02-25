@@ -49,10 +49,10 @@ const questions = [
     id: 'M1-16b-Q03',
     unitId: 'M1-16b',
     type: 'choice',
-    question: '⭐ シールが 18まい あります。\n9まい おともだちに あげました。\nのこりは なんまい？',
-    choices: ['7まい', '8まい', '9まい', '10まい'],
-    correctAnswer: '9まい',
-    explanation: '18 - 9 = 9。「あげた」のでひき算！'
+    question: '🖍️ クレヨンが 14ほん あります。\n8ほん つかいました。のこりは なんほん？',
+    choices: ['4ほん', '5ほん', '6ほん', '7ほん'],
+    correctAnswer: '6ほん',
+    explanation: '14 - 8 = 6。「つかった」のでひき算！'
   },
   {
     id: 'M1-16b-Q04',
@@ -167,10 +167,10 @@ const questions = [
     id: 'M1-16b-Q15',
     unitId: 'M1-16b',
     type: 'choice',
-    question: '💴 100えん もって います。\n37えんの おかしを かいました。\nのこりは なんえん？',
-    choices: ['53えん', '60えん', '63えん', '67えん'],
-    correctAnswer: '63えん',
-    explanation: '100 - 37 = 63。（100 - 30 = 70、70 - 7 = 63）'
+    question: '💴 100えん もって います。\n60えんの おかしを かいました。\nのこりは なんえん？',
+    choices: ['30えん', '40えん', '50えん', '60えん'],
+    correctAnswer: '40えん',
+    explanation: '100 - 60 = 40。じゅうのくらいどうしを ひけばOK！'
   }
 ];
 
