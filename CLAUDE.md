@@ -47,31 +47,32 @@ grimoire-guardians/
 │   ├── data/
 │   │   ├── worlds.js         # 25 world definitions (world_1 – world_13, incl. 8a/8b/8c)
 │   │   ├── units.js          # Unit registry with lazy import loaders
-│   │   └── questions/        # 375 questions across 19 unit files
-│   │       ├── M1-01.js      # 1〜5のかず (15問)
-│   │       ├── M1-02.js      # 6〜10のかず (15問)
-│   │       ├── M1-03.js      # なんばんめ (15問)
-│   │       ├── M1-04.js      # たしざん① (15問)
-│   │       ├── M1-05.js      # ひきざん① (15問)
-│   │       ├── M1-05b.js     # ひきざん① 応用 (15問)
-│   │       ├── M1-06.js      # 10までのかず (15問)
-│   │       ├── M1-06b.js     # 10までのかず 応用 (15問)
-│   │       ├── M1-07.js      # 20までのかず (15問)
-│   │       ├── M1-08a.js     # なんじ・ちょうど (15問, type:'clock')
-│   │       ├── M1-08b.js     # なんじはん (15問, type:'clock')
-│   │       ├── M1-08c.js     # 5ふんたんい (15問, type:'clock')
-│   │       ├── M1-09.js      # さくらんぼ算 (15問)
-│   │       ├── M1-10a.js     # くりあがり 9のせかい (15問)
-│   │       ├── M1-10b.js     # くりあがり 8のせかい (15問)
-│   │       ├── M1-10c.js     # くりあがり 7・6のせかい (15問)
-│   │       ├── M1-10d.js     # くりあがりのおうよう (15問)
-│   │       ├── M1-11a.js     # (15問)
-│   │       ├── M1-11b.js     # (15問)
-│   │       ├── M1-11c.js     # (15問)
-│   │       ├── M1-11d.js     # (15問)
-│   │       ├── M1-12a.js     # (15問)
-│   │       ├── M1-12b.js     # (15問)
-│   │       └── M1-12c.js     # (15問)
+│   │   └── questions/        # 549 questions (pool) across 25 unit files — each play picks 15 via stepConfig
+│   │       ├── M1-01.js      # 1〜5のかず (25問 pool, 5 steps)
+│   │       ├── M1-02.js      # 6〜10のかず (23問 pool, 4 steps)
+│   │       ├── M1-03.js      # なんばんめ (22問 pool, 4 steps)
+│   │       ├── M1-04.js      # たしざん① (21問 pool, 3 steps)
+│   │       ├── M1-05.js      # ひきざん① (25問 pool, 5 steps)
+│   │       ├── M1-05b.js     # ひきざん① 応用 (22問 pool, 4 steps)
+│   │       ├── M1-06.js      # 10までのかず (25問 pool, 5 steps)
+│   │       ├── M1-06b.js     # 10までのかず 応用 (22問 pool, 4 steps)
+│   │       ├── M1-07.js      # 20までのかず (25問 pool, 5 steps)
+│   │       ├── M1-08a.js     # なんじ・ちょうど (17問 pool, 3 steps, type:'clock')
+│   │       ├── M1-08b.js     # なんじはん (17問 pool, 3 steps, type:'clock')
+│   │       ├── M1-08c.js     # 5ふんたんい (17問 pool, 3 steps, type:'clock')
+│   │       ├── M1-09.js      # さくらんぼ算 (25問 pool, 5 steps)
+│   │       ├── M1-10a.js     # くりあがり 9のせかい (18問 pool, 3 steps)
+│   │       ├── M1-10b.js     # くりあがり 8のせかい (18問 pool, 3 steps)
+│   │       ├── M1-10c.js     # くりあがり 7・6のせかい (18問 pool, 3 steps)
+│   │       ├── M1-10d.js     # くりあがりのおうよう (19問 pool, 3 steps)
+│   │       ├── M1-11a.js     # 10からひくひみつ・事前練習 (24問 pool, 4 steps)
+│   │       ├── M1-11b.js     # くりさがり 11・12のせかい (23問 pool, 4 steps)
+│   │       ├── M1-11c.js     # くりさがり 13〜18のせかい (23問 pool, 4 steps)
+│   │       ├── M1-11d.js     # くりさがりのおうよう (24問 pool, 4 steps)
+│   │       ├── M1-12a.js     # 3つのかずのたしざん (24問 pool, 5 steps)
+│   │       ├── M1-12b.js     # 3つのかずのひきざん (24問 pool, 5 steps)
+│   │       ├── M1-12c.js     # たしざん・ひきざんまじり (24問 pool, 5 steps)
+│   │       └── M1-13.js      # かたちあそび (24問 pool, 5 steps, distractorPool形式)
 │   └── styles/
 │       ├── common.css      # CSS variables, base styles, orientation warning
 │       ├── layout.css      # Grid/flex layout system, screen layouts
@@ -244,12 +245,12 @@ GG.Logger                      // Access logger
 
 **Phase 0.2 — Content Expansion (current)**
 
-- Phase 0.1 (complete): Project structure, Config, Logger, GameStore, SoundManager, TypeValidator, CSS system, index.html, manifest.json, BookCard, ProgressBar, BookshelfScreen, QuizScreen, ResultScreen, SaveManager, EventManager, event handlers (Omikuji/Monster/Treasure/ThreePaths), M1-01〜M1-06b (8 units, 120 questions)
-- Phase 0.2 (in progress): M1-07〜M1-12c question data, ClockFace SVG component, clock-type question rendering in QuizScreen, worlds.js v3.0 (25 worlds), units.js v3.0, sw.js v1.2.0
-  - **Completed**: M1-07, M1-08a/b/c, M1-09, M1-10a/b/c/d (10 units, 150 questions), ClockFace.js, TypeValidator clockFace validation
-  - **Remaining**: M1-11a/b/c/d, M1-12a/b/c (7 units, 105 questions) — stubs exist in units.js, files not yet created
+- Phase 0.1 (complete): Project structure, Config, Logger, GameStore, SoundManager, TypeValidator, CSS system, index.html, manifest.json, BookCard, ProgressBar, BookshelfScreen, QuizScreen, ResultScreen, SaveManager, EventManager, event handlers (Omikuji/Monster/Treasure/ThreePaths), M1-01〜M1-06b (8 units)
+- Phase 0.2 (**complete**): M1-07〜M1-13 question data (17 units), ClockFace SVG component, clock-type question rendering in QuizScreen, worlds.js v3.0 (25 worlds), units.js v3.0, sw.js v1.2.0, step-based shuffle architecture (stepConfig + _pickByStep)
+  - **All 25 units implemented**: M1-01〜M1-13 (549 questions pool, each play picks 15 via stepConfig)
+  - **Architecture**: Each unit exports `stepConfig` for difficulty-ordered random selection; `QuizScreen._pickByStep()` ensures varied yet progressive playthroughs
 
-**Future Phases**: Phase 0.3 adds remaining M1 units (M1-13〜M1-16) and begins M2. Phase 1 adds Web Audio, house building, skins, Memory Isle, and DLC.
+**Future Phases**: Phase 0.3 adds M1-14〜M1-16 (8 units, already scaffolded in units.js) and begins M2. Phase 1 adds Web Audio, house building, skins, Memory Isle, and DLC.
 
 ## Key Files for Common Tasks
 
