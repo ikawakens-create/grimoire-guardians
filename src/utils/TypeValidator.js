@@ -234,35 +234,62 @@ export class TypeValidator {
 
   /**
    * 問題データの検証
-   * データ形式: { id, unitId, type, question, choices, correctAnswer }
+   *
+   * 通常モード: { id, unitId, type, question, choices, correctAnswer }
+   * distractorPool モード: { id, unitId, type, question, correctAnswer, distractorPool }
+   *   - distractorPool: 不正解の候補リスト（Config.GAME.DISTRACTOR_COUNT 個をランダム選択して出題）
+   *   - correctAnswer は distractorPool に含まれていてはならない
+   *
+   * 画像拡張（nanobanana 対応, optional）:
+   *   - image: string | null — 問題文上部に表示する画像パス
+   *   - choiceImages: { [choiceText]: imagePath } | null — 選択肢ごとの画像マップ
+   *
    * @param {Object} question - 問題データ
    * @returns {boolean} 検証結果
    */
   static validateQuestion(question) {
     if (!this.isObject(question, 'question')) return false;
 
-    // 必須フィールド
+    // 必須フィールド（choices は distractorPool モードでは不要）
     const requiredSchema = {
       id:            (v) => this.isString(v, 'question.id'),
       unitId:        (v) => this.isString(v, 'question.unitId'),
       type:          (v) => this.isString(v, 'question.type'),
       question:      (v) => this.isString(v, 'question.question'),
-      choices:       (v) => this.isArray(v, 'question.choices'),
       correctAnswer: (v) => this.isString(v, 'question.correctAnswer')
     };
 
     if (!this.matchesSchema(question, requiredSchema, 'question')) return false;
 
-    // choices は2個以上必要
-    if (question.choices.length < 2) {
-      Logger.error('[Validation] question.choices must have at least 2 items');
-      return false;
-    }
+    // distractorPool モード vs 通常 choices モード
+    if (question.distractorPool != null) {
+      // --- distractorPool モード ---
+      if (!this.isArray(question.distractorPool, 'question.distractorPool')) return false;
 
-    // correctAnswer は choices の中に含まれていなければならない
-    if (!question.choices.includes(question.correctAnswer)) {
-      Logger.error('[Validation] question.correctAnswer must be one of the choices');
-      return false;
+      if (question.distractorPool.length < 2) {
+        Logger.error('[Validation] question.distractorPool must have at least 2 items');
+        return false;
+      }
+
+      // correctAnswer は distractorPool に含まれていてはならない
+      if (question.distractorPool.includes(question.correctAnswer)) {
+        Logger.error('[Validation] question.correctAnswer must NOT be in distractorPool');
+        return false;
+      }
+    } else {
+      // --- 通常 choices モード ---
+      if (!this.isArray(question.choices, 'question.choices')) return false;
+
+      if (question.choices.length < 2) {
+        Logger.error('[Validation] question.choices must have at least 2 items');
+        return false;
+      }
+
+      // correctAnswer は choices の中に含まれていなければならない
+      if (!question.choices.includes(question.correctAnswer)) {
+        Logger.error('[Validation] question.correctAnswer must be one of the choices');
+        return false;
+      }
     }
 
     // type:'clock' の場合は clockFace フィールドを検証
@@ -270,6 +297,17 @@ export class TypeValidator {
       if (!this.isObject(question.clockFace, 'question.clockFace')) return false;
       if (!this.isNumberInRange(question.clockFace.hour,   0, 23, 'question.clockFace.hour'))   return false;
       if (!this.isNumberInRange(question.clockFace.minute, 0, 59, 'question.clockFace.minute')) return false;
+    }
+
+    // image フィールド（optional: string または null）
+    if (question.image != null && typeof question.image !== 'string') {
+      Logger.error('[Validation] question.image must be a string or null');
+      return false;
+    }
+
+    // choiceImages フィールド（optional: object または null）
+    if (question.choiceImages != null && !this.isObject(question.choiceImages, 'question.choiceImages')) {
+      return false;
     }
 
     return true;

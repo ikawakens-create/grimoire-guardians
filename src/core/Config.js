@@ -37,7 +37,10 @@ export const Config = {
     
     // タイマー設定（オプション）
     ENABLE_TIMER: false,
-    TIME_LIMIT_PER_QUESTION: 30  // 秒
+    TIME_LIMIT_PER_QUESTION: 30,  // 秒
+
+    // distractorPool 方式で出題する不正解の数（正解1 + DISTRACTOR_COUNT = 選択肢総数）
+    DISTRACTOR_COUNT: 2
   },
   
   // イベント設定
