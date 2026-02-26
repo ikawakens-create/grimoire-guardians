@@ -4,7 +4,7 @@
 
 **Grimoire Guardians** (グリモア・ガーディアンズ) is an educational math game PWA targeting Japanese elementary school students (grades 1-6). Players progress through quiz-based worlds, collecting materials and encountering events. The app is landscape-only and touch-optimized.
 
-- **Version**: 0.2.0 (Phase 0.2 - Content Expansion)
+- **Version**: 0.3.0 (Phase 0.3 - Complete)
 - **Language**: Pure vanilla JavaScript (ES6 Modules), no frameworks or build tools
 - **Target**: 60fps, mobile-first, offline-capable PWA
 - **Content Language**: Japanese (game content, docs, and inline comments)
@@ -15,7 +15,7 @@
 grimoire-guardians/
 ├── index.html              # PWA entry point (loads src/index.js as ES module)
 ├── manifest.json           # PWA manifest (landscape, standalone)
-├── sw.js                   # Service Worker v1.2.0 (cache-first, offline support)
+├── sw.js                   # Service Worker v1.3.0 (cache-first, offline support)
 ├── CLAUDE.md
 ├── README.md
 ├── src/
@@ -45,9 +45,9 @@ grimoire-guardians/
 │   │   ├── TypeValidator.js  # Runtime type/schema validation (incl. clockFace)
 │   │   └── HapticFeedback.js # Vibration API wrapper
 │   ├── data/
-│   │   ├── worlds.js         # 25 world definitions (world_1 – world_13, incl. 8a/8b/8c)
+│   │   ├── worlds.js         # 33 world definitions (world_1 – world_16b, incl. 8a/8b/8c)
 │   │   ├── units.js          # Unit registry with lazy import loaders
-│   │   └── questions/        # 549 questions (pool) across 25 unit files — each play picks 15 via stepConfig
+│   │   └── questions/        # 700+ questions (pool) across 33 unit files — each play picks 15 via stepConfig
 │   │       ├── M1-01.js      # 1〜5のかず (25問 pool, 5 steps)
 │   │       ├── M1-02.js      # 6〜10のかず (23問 pool, 4 steps)
 │   │       ├── M1-03.js      # なんばんめ (22問 pool, 4 steps)
@@ -72,7 +72,15 @@ grimoire-guardians/
 │   │       ├── M1-12a.js     # 3つのかずのたしざん (24問 pool, 5 steps)
 │   │       ├── M1-12b.js     # 3つのかずのひきざん (24問 pool, 5 steps)
 │   │       ├── M1-12c.js     # たしざん・ひきざんまじり (24問 pool, 5 steps)
-│   │       └── M1-13.js      # かたちあそび (24問 pool, 5 steps, distractorPool形式)
+│   │       ├── M1-13.js      # かたちあそび (24問 pool, 5 steps, distractorPool形式)
+│   │       ├── M1-14a.js     # かずの よみかき・10のまとまり
+│   │       ├── M1-14b.js     # かずの じゅんばん と だいしょう
+│   │       ├── M1-14c.js     # おおきいかずの たしざん
+│   │       ├── M1-14d.js     # おおきいかずの ひきざん
+│   │       ├── M1-15a.js     # なんじなんぷん 前半（〜30ぷん, type:'clock'）
+│   │       ├── M1-15b.js     # なんじなんぷん 後半（31〜59ぷん, type:'clock'）
+│   │       ├── M1-16a.js     # ずをつかって・たしざん文章題
+│   │       └── M1-16b.js     # ずをつかって・ひきざん文章題
 │   └── styles/
 │       ├── common.css      # CSS variables, base styles, orientation warning
 │       ├── layout.css      # Grid/flex layout system, screen layouts
@@ -196,9 +204,9 @@ All animations use `transform`/`will-change` for GPU acceleration. Standard bord
 
 ### Worlds and Units
 
-The game is organized into worlds containing units. Each unit has 15 quiz questions. Phase 0.2 covers units M1-01 through M1-12c (Grade 1 math, based on 日本文教出版 textbook), organized into 25 worlds.
+The game is organized into worlds containing units. Each unit has 15 quiz questions. Phase 0.3 covers all units M1-01 through M1-16b (Grade 1 math, based on 日本文教出版 textbook), organized into 33 worlds.
 
-Time/clock units (M1-08a/b/c) use `type:'clock'` questions which render an SVG analog clock above the question text via `ClockFace.renderSVG(hour, minute)`. These questions include a `clockFace: { hour, minute }` field.
+Time/clock units (M1-08a/b/c and M1-15a/b) use `type:'clock'` questions which render an SVG analog clock above the question text via `ClockFace.renderSVG(hour, minute)`. These questions include a `clockFace: { hour, minute }` field.
 
 ### Quiz Flow
 
@@ -243,14 +251,17 @@ GG.Logger                      // Access logger
 
 ## Project Status
 
-**Phase 0.2 — Content Expansion (current)**
+**Phase 0.3 — Complete**
 
 - Phase 0.1 (complete): Project structure, Config, Logger, GameStore, SoundManager, TypeValidator, CSS system, index.html, manifest.json, BookCard, ProgressBar, BookshelfScreen, QuizScreen, ResultScreen, SaveManager, EventManager, event handlers (Omikuji/Monster/Treasure/ThreePaths), M1-01〜M1-06b (8 units)
-- Phase 0.2 (**complete**): M1-07〜M1-13 question data (17 units), ClockFace SVG component, clock-type question rendering in QuizScreen, worlds.js v3.0 (25 worlds), units.js v3.0, sw.js v1.2.0, step-based shuffle architecture (stepConfig + _pickByStep)
+- Phase 0.2 (complete): M1-07〜M1-13 question data (17 units), ClockFace SVG component, clock-type question rendering in QuizScreen, worlds.js v3.0 (25 worlds), units.js v3.0, sw.js v1.3.0, step-based shuffle architecture (stepConfig + _pickByStep)
   - **All 25 units implemented**: M1-01〜M1-13 (549 questions pool, each play picks 15 via stepConfig)
   - **Architecture**: Each unit exports `stepConfig` for difficulty-ordered random selection; `QuizScreen._pickByStep()` ensures varied yet progressive playthroughs
+- Phase 0.3 (**complete**): M1-14〜M1-16 question data (8 units), worlds.js v4.0 (33 worlds), event configuration for all Phase 0.3 worlds
+  - **All 33 units implemented**: M1-01〜M1-16b (700+ questions pool)
+  - **Phase 0.3 worlds**: world_14a〜16b with full event rotation (omikuji/three_paths/monster/treasure); world_16b includes phase_complete
 
-**Future Phases**: Phase 0.3 adds M1-14〜M1-16 (8 units, already scaffolded in units.js) and begins M2. Phase 1 adds Web Audio, house building, skins, Memory Isle, and DLC.
+**Future Phases**: Phase 1 adds Web Audio, house building, skins, Memory Isle, and DLC. Phase 2 begins Grade 2 math (M2 series).
 
 ## Key Files for Common Tasks
 
