@@ -51,11 +51,24 @@ function shuffle(arr) {
   return a;
 }
 
-/** GameStore からランダムな問題を1問取得 */
+/**
+ * GameStore からランダムな問題を1問取得
+ * - type:'clock' は時計SVGを表示できないためスキップ
+ * - distractorPool 形式も choices に変換して返す
+ */
 function pickQuestion() {
   const questions = GameStore.getState('currentSession.questions') || [];
-  if (questions.length === 0) return null;
-  return questions[Math.floor(Math.random() * questions.length)];
+  // clock 問題は除外（モーダル内で時計SVGを表示できないため）
+  const eligible = questions.filter(q => q.type !== 'clock');
+  if (eligible.length === 0) return null;
+  const q = eligible[Math.floor(Math.random() * eligible.length)];
+
+  // distractorPool 形式 → choices 配列に変換（3択）
+  if (q.distractorPool != null && !q.choices) {
+    const pool = shuffle(q.distractorPool).slice(0, 3);
+    return { ...q, choices: shuffle([String(q.correctAnswer), ...pool]) };
+  }
+  return q;
 }
 
 /**
@@ -173,8 +186,8 @@ class ThreePathsEvent {
       ? `style="background: ${path.bgColor};"`
       : '';
 
-    // 選択肢をシャッフル
-    const shuffled = shuffle(question.choices);
+    // 選択肢をシャッフル（choices が未定義の場合は空配列でフォールバック）
+    const shuffled = shuffle(question.choices ?? []);
 
     return `
       <div class="paths-modal paths-question-phase" ${bgStyle}>

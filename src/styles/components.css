@@ -789,7 +789,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.55);
   z-index: var(--z-modal);
   /* デフォルト: 非表示 */
   visibility: hidden;
