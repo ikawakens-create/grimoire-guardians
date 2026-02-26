@@ -1,6 +1,6 @@
 /**
  * worlds.js - Grimoire Guardians
- * ワールド定義データ（Phase 0.1 + Phase 0.2）
+ * ワールド定義データ（Phase 0.1 + Phase 0.2 + Phase 0.3）
  *
  * 日本文教出版の教科書単元に基づく。
  * 各ワールドは本棚画面に表示される1枚のカードに対応する。
@@ -14,13 +14,18 @@
  *   - world_7〜10cにイベントを追加
  *   - orderを全体で振り直し（合計25ワールド）
  *
+ * Phase 0.3 更新（2026-02-26）:
+ *   - world_13 にイベント追加
+ *   - world_14a〜16b のイベント設定（合計33ワールド）
+ *
  * ロック解除順:
  *   Phase 0.1: world_1 → 2 → 3 → 4 → 5 → 5b → 6 → 6b
  *   Phase 0.2: world_7 → 8a → 8b → 8c → 9 → 10a → 10b → 10c → 10d
- *              → 11a → 11b → 11c → 11d → 12a → 12b → 12c
+ *              → 11a → 11b → 11c → 11d → 12a → 12b → 12c → 13
+ *   Phase 0.3: world_14a → 14b → 14c → 14d → 15a → 15b → 16a → 16b
  *
- * @version 3.0
- * @date 2026-02-24
+ * @version 4.0
+ * @date 2026-02-26
  */
 
 /**
@@ -577,7 +582,7 @@ export const WORLDS = [
   },
 
   // ============================================================
-  // world_13: M1-13 かたちあそび（スタブ）
+  // world_13: M1-13 かたちあそび（Phase 0.2 追加）
   // ============================================================
   {
     id: 'world_13',
@@ -593,7 +598,9 @@ export const WORLDS = [
     theme: { gradient: 'linear-gradient(135deg, #e1eec3, #f05053)' },
     order: 25,
     freeToPlay: false,
-    events: []
+    events: [
+      { triggerAt: 8, type: 'treasure' }
+    ]
   },
 
   // ============================================================
@@ -616,7 +623,9 @@ export const WORLDS = [
     theme: { gradient: 'linear-gradient(135deg, #74b9ff, #0984e3)' },
     order: 26,
     freeToPlay: false,
-    events: []
+    events: [
+      { triggerAt: 8, type: 'omikuji' }
+    ]
   },
 
   // world_14b: M1-14b かずの じゅんばん と だいしょう
@@ -635,7 +644,9 @@ export const WORLDS = [
     theme: { gradient: 'linear-gradient(135deg, #55efc4, #00b894)' },
     order: 27,
     freeToPlay: false,
-    events: []
+    events: [
+      { triggerAt: 8, type: 'three_paths' }
+    ]
   },
 
   // world_14c: M1-14c おおきい かず の たしざん
@@ -654,7 +665,9 @@ export const WORLDS = [
     theme: { gradient: 'linear-gradient(135deg, #fdcb6e, #e17055)' },
     order: 28,
     freeToPlay: false,
-    events: []
+    events: [
+      { triggerAt: 10, type: 'monster' }
+    ]
   },
 
   // world_14d: M1-14d おおきい かず の ひきざん
@@ -673,7 +686,9 @@ export const WORLDS = [
     theme: { gradient: 'linear-gradient(135deg, #fd79a8, #e84393)' },
     order: 29,
     freeToPlay: false,
-    events: []
+    events: [
+      { triggerAt: 10, type: 'treasure' }
+    ]
   },
 
   // world_15a: M1-15a なんじ なんぷん（〜30ぷん）
@@ -692,7 +707,9 @@ export const WORLDS = [
     theme: { gradient: 'linear-gradient(135deg, #a29bfe, #6c5ce7)' },
     order: 30,
     freeToPlay: false,
-    events: []
+    events: [
+      { triggerAt: 8, type: 'omikuji' }
+    ]
   },
 
   // world_15b: M1-15b なんじ なんぷん（31ぷん〜）
@@ -711,7 +728,9 @@ export const WORLDS = [
     theme: { gradient: 'linear-gradient(135deg, #81ecec, #00cec9)' },
     order: 31,
     freeToPlay: false,
-    events: []
+    events: [
+      { triggerAt: 10, type: 'three_paths' }
+    ]
   },
 
   // world_16a: M1-16a ずを つかって（たしざん 文章題）
@@ -730,10 +749,12 @@ export const WORLDS = [
     theme: { gradient: 'linear-gradient(135deg, #ffeaa7, #fdcb6e)' },
     order: 32,
     freeToPlay: false,
-    events: []
+    events: [
+      { triggerAt: 10, type: 'monster' }
+    ]
   },
 
-  // world_16b: M1-16b ずを つかって（ひきざん 文章題）
+  // world_16b: M1-16b ずを つかって（ひきざん 文章題）Phase 0.3 最終
   // ============================================================
   {
     id: 'world_16b',
@@ -749,7 +770,10 @@ export const WORLDS = [
     theme: { gradient: 'linear-gradient(135deg, #fab1a0, #e17055)' },
     order: 33,
     freeToPlay: false,
-    events: []
+    events: [
+      { triggerAt: 10, type: 'treasure' },
+      { triggerAt: -1, type: 'phase_complete' }
+    ]
   }
 ];
 
