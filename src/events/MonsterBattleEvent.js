@@ -52,8 +52,17 @@ function shuffle(arr) {
 
 function pickQuestion() {
   const questions = GameStore.getState('currentSession.questions') || [];
-  if (questions.length === 0) return null;
-  return questions[Math.floor(Math.random() * questions.length)];
+  // clock 問題は除外（モーダル内で時計SVGを表示できないため）
+  const eligible = questions.filter(q => q.type !== 'clock');
+  if (eligible.length === 0) return null;
+  const q = eligible[Math.floor(Math.random() * eligible.length)];
+
+  // distractorPool 形式 → choices 配列に変換（3択）
+  if (q.distractorPool != null && !q.choices) {
+    const pool = shuffle(q.distractorPool).slice(0, 3);
+    return { ...q, choices: shuffle([String(q.correctAnswer), ...pool]) };
+  }
+  return q;
 }
 
 function pickDrop(isRare) {
@@ -130,7 +139,7 @@ class MonsterBattleEvent {
       return;
     }
 
-    const shuffled = shuffle(question.choices);
+    const shuffled = shuffle(question.choices ?? []);
 
     layer.innerHTML = `
       <div class="monster-modal monster-battle-phase">
