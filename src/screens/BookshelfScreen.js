@@ -17,6 +17,7 @@ import { SoundManager, SoundType } from '../core/SoundManager.js';
 import BookCard from '../components/BookCard.js';
 import WORLDS from '../data/worlds.js';
 import InventoryScreen from './InventoryScreen.js';
+import MemoryIsleScreen from './MemoryIsleScreen.js';
 
 /**
  * BookshelfScreen クラス
@@ -165,6 +166,26 @@ class BookshelfScreen {
     // 右側バッジ群
     const rightGroup = document.createElement('div');
     rightGroup.className = 'bookshelf-header-right';
+
+    // きおくのいせきボタン
+    const memoryBtn = document.createElement('button');
+    memoryBtn.type = 'button';
+    memoryBtn.className = 'button button-small bookshelf-memory-btn';
+    // バッジ：シルエット（clearCount>0 かつ未コレクト）の数を表示
+    const clearCounts = GameStore.getState('memory.clearCounts') ?? {};
+    const collected   = GameStore.getState('memory.collected') ?? [];
+    const nearlyReady = Object.entries(clearCounts).filter(([wId, cnt]) => {
+      const mon = /** @type {any} */ (window.__MONSTERS_BY_WORLD?.[wId]);
+      return cnt > 0 && cnt < 3 && !collected.includes(mon?.id ?? '');
+    }).length;
+    const badgeHTML = nearlyReady > 0
+      ? `<span class="memory-badge-dot"></span>`
+      : '';
+    memoryBtn.innerHTML = `🏛️ いせき${badgeHTML}`;
+    memoryBtn.addEventListener('click', () => {
+      new MemoryIsleScreen().open();
+    });
+    rightGroup.appendChild(memoryBtn);
 
     // もちものボタン
     const inventoryBtn = document.createElement('button');
