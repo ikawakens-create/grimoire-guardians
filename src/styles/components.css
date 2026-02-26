@@ -1611,6 +1611,208 @@
 }
 
 /* ==========================================================================
+   Inventory Screen（もちもの画面）
+   ========================================================================== */
+
+/* オーバーレイ背景 */
+.inventory-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: var(--z-modal);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-normal);
+}
+
+.inventory-overlay--visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* モーダル本体 */
+.inventory-modal {
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-large);
+  box-shadow: var(--shadow-large);
+  width: min(520px, 95vw);
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: event-modal-enter 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ヘッダー */
+.inventory-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.inventory-title {
+  font-size: var(--font-size-lg);
+  font-weight: 800;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.inventory-total {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.inventory-close-btn {
+  background: none;
+  border: none;
+  font-size: var(--font-size-lg);
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: var(--border-radius-small);
+  line-height: 1;
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.inventory-close-btn:hover {
+  color: var(--color-danger);
+  background: rgba(231, 76, 60, 0.08);
+}
+
+/* タブ */
+.inventory-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.inventory-tab-btn {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.inventory-tab-btn--active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+/* グリッド */
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* アイテムカード */
+.inventory-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--spacing-sm) var(--spacing-xs);
+  background: var(--bg-primary);
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius);
+  text-align: center;
+  transition: transform var(--transition-fast);
+}
+
+.inventory-item:not(.inventory-item--empty):hover {
+  transform: translateY(-2px);
+}
+
+/* 未入手は薄くグレーアウト */
+.inventory-item--empty {
+  opacity: 0.4;
+  filter: grayscale(0.5);
+}
+
+/* レアリティ枠色 */
+.inventory-item--uncommon  { border-color: #4A90E2; }
+.inventory-item--rare      { border-color: #FFD700; box-shadow: 0 0 6px rgba(255, 215, 0, 0.3); }
+.inventory-item--super_rare {
+  border-color: #C850C0;
+  box-shadow: 0 0 8px rgba(200, 80, 192, 0.35);
+  background: linear-gradient(160deg, #fff 0%, #fdf4ff 100%);
+}
+
+/* アイコン（絵文字 ↔ 画像切り替え方式）
+   絵文字を下に表示し、img が正常ロードされたら上から覆う。
+   ロード失敗時は onerror で img を非表示にして絵文字が見える。
+   → assets/icons/materials/{id}.png を置くだけで画像に切り替わる */
+.material-icon-wrap {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.material-emoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.material-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.inventory-item-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
+  width: 100%;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.inventory-item-count {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.inventory-item-count--has {
+  color: var(--text-primary);
+}
+
+/* 本棚ヘッダーの もちもの ボタン */
+.bookshelf-inventory-btn {
+  background: linear-gradient(135deg, #a78bfa, #818cf8);
+  color: var(--text-light);
+  white-space: nowrap;
+}
+
+.bookshelf-inventory-btn:hover {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+}
+
+/* ==========================================================================
    Phase Complete Overlay（全ワールドクリア演出）
    ========================================================================== */
 
