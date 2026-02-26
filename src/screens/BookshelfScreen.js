@@ -16,6 +16,7 @@ import { Config } from '../core/Config.js';
 import { SoundManager, SoundType } from '../core/SoundManager.js';
 import BookCard from '../components/BookCard.js';
 import WORLDS from '../data/worlds.js';
+import InventoryScreen from './InventoryScreen.js';
 
 /**
  * BookshelfScreen クラス
@@ -164,6 +165,16 @@ class BookshelfScreen {
     // 右側バッジ群
     const rightGroup = document.createElement('div');
     rightGroup.className = 'bookshelf-header-right';
+
+    // もちものボタン
+    const inventoryBtn = document.createElement('button');
+    inventoryBtn.type = 'button';
+    inventoryBtn.className = 'button button-small bookshelf-inventory-btn';
+    inventoryBtn.textContent = '🎒 もちもの';
+    inventoryBtn.addEventListener('click', () => {
+      new InventoryScreen().open();
+    });
+    rightGroup.appendChild(inventoryBtn);
 
     // ストリークバッジ
     const streak = GameStore.getState('player.streak') || 1;
