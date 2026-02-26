@@ -2827,3 +2827,520 @@
   background: linear-gradient(135deg, #b347ff, #7c1ad1);
   transform: translateY(-1px);
 }
+
+/* ==========================================================================
+   House System v2 — 全景ビュー・解放演出・合成屋
+   ========================================================================== */
+
+/* ── 全景ビュー（House Overview） ── */
+.house-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 8px;
+}
+
+.overview-floor-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255,215,0,0.3), transparent);
+  margin: 0;
+}
+
+.overview-section {
+  padding: 10px 12px;
+  border-radius: 12px;
+  transition: background 0.2s;
+}
+.overview-section.unlocked {
+  cursor: pointer;
+  background: rgba(255,255,255,0.04);
+}
+.overview-section.unlocked:hover,
+.overview-section.unlocked:focus {
+  background: rgba(255,215,0,0.08);
+  outline: none;
+}
+.overview-section.locked {
+  opacity: 0.5;
+}
+
+.overview-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.overview-icon  { font-size: 1.2rem; }
+.overview-label { font-size: 0.9rem; font-weight: 700; color: rgba(255,255,255,0.9); }
+.overview-tap-hint { margin-left: auto; font-size: 0.7rem; color: rgba(255,215,0,0.6); }
+.overview-lock-badge {
+  margin-left: auto;
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.06);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.overview-items-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  min-height: 28px;
+  padding-left: 28px;
+}
+.overview-item-chip {
+  font-size: 1.4rem;
+  animation: pop-in 0.3s ease;
+}
+.overview-empty-chip {
+  width: 28px;
+  height: 28px;
+  background: rgba(255,255,255,0.05);
+  border: 1px dashed rgba(255,255,255,0.2);
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.25);
+}
+.overview-empty-hint {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.35);
+  padding-top: 4px;
+}
+
+.overview-silhouette {
+  display: flex;
+  gap: 6px;
+  padding-left: 28px;
+}
+.silhouette-dot {
+  width: 28px;
+  height: 24px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 6px;
+}
+
+/* 庭+外観行 */
+.overview-garden-row .overview-section-header { margin-bottom: 4px; }
+.overview-exterior-preview {
+  width: 80px;
+  height: 54px;
+  border-radius: 8px;
+  overflow: hidden;
+  float: left;
+  margin-right: 10px;
+  background: rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.overview-house-thumb { width: 100%; height: 100%; object-fit: cover; }
+.overview-house-fallback { font-size: 2.2rem; }
+.overview-garden-decos { font-size: 1.4rem; line-height: 1.6; padding-top: 4px; }
+
+/* ── セクション詳細ビュー ── */
+.section-detail-view { display: flex; flex-direction: column; height: 100%; }
+.section-detail-content { flex: 1; overflow-y: auto; padding: 8px; }
+
+/* ── フッター ── */
+.house-footer {
+  background: rgba(0,0,0,0.35);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
+}
+.house-next-hint {
+  text-align: center;
+  font-size: 0.72rem;
+  color: rgba(255,215,0,0.75);
+  padding: 4px 8px 6px;
+}
+
+/* ── セクション解放祝福演出 ── */
+.house-celebration-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.house-celebration-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+.house-celebration-overlay.fade-out { opacity: 0; }
+
+.celebration-card {
+  background: linear-gradient(145deg, #2a1045, #3d1a6e);
+  border: 2px solid rgba(255,215,0,0.6);
+  border-radius: 24px;
+  padding: 32px 28px;
+  text-align: center;
+  max-width: 280px;
+  box-shadow: 0 0 40px rgba(255,215,0,0.3), 0 8px 40px rgba(0,0,0,0.6);
+  animation: celebrate-pop 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+.milestone-card { border-color: rgba(157,78,221,0.7); }
+
+@keyframes celebrate-pop {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.celebration-burst {
+  font-size: 3.5rem;
+  animation: spin-burst 0.8s ease;
+  display: block;
+  margin-bottom: 8px;
+}
+@keyframes spin-burst {
+  0%   { transform: scale(0) rotate(-180deg); }
+  70%  { transform: scale(1.3) rotate(20deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.celebration-title {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #ffd700;
+  text-shadow: 0 0 16px rgba(255,215,0,0.6);
+  margin: 0 0 8px;
+}
+.celebration-body {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.9);
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+.celebration-sub {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.4);
+  margin: 0;
+}
+
+/* ── 合成屋画面（CraftsmanScreen） ── */
+.craftsman-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: linear-gradient(160deg, #12062a 0%, #1f0d40 60%, #12062a 100%);
+  color: #fff;
+  overflow: hidden;
+}
+
+/* ヘッダー */
+.craftsman-header {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  gap: 8px;
+  background: rgba(0,0,0,0.3);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  flex-shrink: 0;
+}
+.craft-mat-row { display: flex; gap: 5px; flex-wrap: wrap; flex: 1; }
+.craft-back-btn { white-space: nowrap; }
+
+/* NPC選択タブ */
+.npc-selector {
+  display: flex;
+  gap: 0;
+  flex-shrink: 0;
+  border-bottom: 2px solid rgba(255,255,255,0.08);
+}
+.npc-tab-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: rgba(255,255,255,0.04);
+  color: rgba(255,255,255,0.5);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+.npc-tab-btn.active {
+  background: var(--npc-bg, rgba(200,121,65,0.15));
+  color: var(--npc-color, #c87941);
+  border-bottom: 2px solid var(--npc-color, #c87941);
+}
+.npc-tab-btn.locked { cursor: default; }
+.coming-soon-badge {
+  display: inline-block;
+  font-size: 0.55rem;
+  background: rgba(212,121,200,0.3);
+  color: #f8a5f0;
+  padding: 1px 5px;
+  border-radius: 6px;
+  margin-left: 4px;
+}
+
+/* NPCパネル */
+.npc-panel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  flex-shrink: 0;
+}
+.npc-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 2px solid var(--npc-color, #c87941);
+}
+.npc-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.npc-emoji-fallback { font-size: 2rem; }
+
+.npc-speech { flex: 1; min-width: 0; }
+.npc-name-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+.npc-bubble {
+  background: rgba(255,255,255,0.08);
+  border-radius: 0 12px 12px 12px;
+  padding: 7px 10px;
+  position: relative;
+}
+.npc-bubble::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -8px;
+  border: 5px solid transparent;
+  border-right-color: rgba(255,255,255,0.08);
+}
+.npc-dialogue {
+  font-size: 0.82rem;
+  line-height: 1.4;
+  margin: 0;
+  color: rgba(255,255,255,0.9);
+}
+
+/* カテゴリータブ */
+.craft-category-tabs {
+  display: flex;
+  gap: 5px;
+  padding: 6px 10px;
+  overflow-x: auto;
+  flex-shrink: 0;
+  scrollbar-width: none;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.craft-category-tabs::-webkit-scrollbar { display: none; }
+
+.craft-cat-btn {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border: 1.5px solid rgba(255,255,255,0.15);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.6);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.craft-cat-btn.active {
+  border-color: var(--npc-color, #c87941);
+  background: rgba(200,121,65,0.2);
+  color: var(--npc-color, #c87941);
+}
+
+/* アイテムリスト */
+.craftsman-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.craft-item-list {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 8px;
+  overflow-y: auto;
+  align-content: start;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.15) transparent;
+}
+.craft-empty { color: rgba(255,255,255,0.35); font-size: 0.8rem; padding: 16px; }
+
+.craft-item-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px 4px 6px;
+  background: rgba(255,255,255,0.05);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+}
+.craft-item-card:hover, .craft-item-card:focus {
+  border-color: var(--npc-color, #c87941);
+  background: rgba(200,121,65,0.1);
+  outline: none;
+}
+.craft-item-card.selected {
+  border-color: #ffd700;
+  background: rgba(255,215,0,0.1);
+  box-shadow: 0 0 10px rgba(255,215,0,0.3);
+}
+.craft-item-card.item-crafted   { border-color: rgba(80,200,120,0.5); }
+.craft-item-card.item-craftable { border-color: rgba(255,200,0,0.5); }
+.craft-item-card.item-section-locked { opacity: 0.4; }
+.craft-item-card.item-free      { border-color: rgba(100,200,255,0.4); }
+
+/* glow-pulse: クラフト可能アイテムを光らせる */
+@keyframes glow-pulse-anim {
+  0%, 100% { box-shadow: 0 0 6px rgba(255,215,0,0.3); }
+  50%       { box-shadow: 0 0 18px rgba(255,215,0,0.7); }
+}
+.glow-pulse { animation: glow-pulse-anim 1.8s ease-in-out infinite; }
+
+.craft-item-img {
+  width: 52px; height: 52px;
+  display: flex; align-items: center; justify-content: center;
+}
+.craft-item-img img { width: 100%; height: 100%; object-fit: contain; }
+
+.craft-item-name {
+  font-size: 0.62rem;
+  color: rgba(255,255,255,0.85);
+  text-align: center;
+  margin: 0;
+  line-height: 1.2;
+  word-break: break-all;
+}
+
+.craft-badge {
+  display: inline-block;
+  font-size: 0.56rem;
+  padding: 1px 5px;
+  border-radius: 8px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badge-crafted   { background: rgba(80,200,120,0.3); color: #7deda7; }
+.badge-free      { background: rgba(100,200,255,0.25); color: #a0d8ff; }
+.badge-craftable { background: rgba(255,215,0,0.3); color: #ffd700; }
+.badge-missing   { background: rgba(220,60,60,0.2); color: #ffaaaa; font-size: 0.52rem; }
+.badge-section   { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.4); }
+
+/* 詳細パネル */
+.craft-detail-panel {
+  flex-shrink: 0;
+  padding: 10px 12px;
+  background: rgba(0,0,0,0.45);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.detail-header { display: flex; align-items: center; gap: 10px; }
+.detail-big-emoji { font-size: 2rem; }
+.detail-name   { font-size: 0.95rem; font-weight: 700; margin: 0; }
+.detail-rarity { font-size: 0.7rem; margin: 2px 0 0; }
+.detail-rarity.rarity-rare       { color: #c77dff; }
+.detail-rarity.rarity-super_rare { color: #ffd700; }
+
+.detail-recipe-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.recipe-chip {
+  font-size: 0.78rem;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.07);
+}
+.recipe-chip.ok { color: #7deda7; }
+.recipe-chip.ng { color: #ff9999; }
+.detail-recipe-free { font-size: 0.8rem; color: #7deda7; margin: 0; }
+
+/* クラフト中アニメーション */
+.crafting-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  z-index: 1500;
+}
+.crafting-hammer {
+  font-size: 4rem;
+  animation: hammer-swing 0.4s ease-in-out infinite alternate;
+  transform-origin: bottom center;
+}
+@keyframes hammer-swing {
+  from { transform: rotate(-30deg); }
+  to   { transform: rotate(30deg); }
+}
+.crafting-text  { font-size: 1rem; font-weight: 700; color: rgba(255,255,255,0.8); }
+.crafting-sparks {
+  font-size: 1.2rem;
+  animation: sparks-float 0.6s ease-in-out infinite alternate;
+  letter-spacing: 4px;
+}
+@keyframes sparks-float {
+  from { transform: translateY(0); opacity: 0.7; }
+  to   { transform: translateY(-8px); opacity: 1; }
+}
+
+/* テイラーロック画面 */
+.tailor-locked {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 20px;
+  text-align: center;
+  flex: 1;
+}
+.tailor-locked-icon  { font-size: 3.5rem; }
+.tailor-locked-title { font-size: 1.1rem; font-weight: 700; color: rgba(255,255,255,0.85); margin: 0; }
+.tailor-locked-body  { font-size: 0.85rem; color: rgba(255,255,255,0.6); margin: 0; line-height: 1.6; }
+.tailor-preview-items { font-size: 2rem; letter-spacing: 8px; }
+
+/* 合成屋ボタン（ブックシェルフ） */
+.bookshelf-craftsman-btn {
+  background: linear-gradient(135deg, #c87941, #8b5a2b);
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.bookshelf-craftsman-btn:hover {
+  background: linear-gradient(135deg, #e0954e, #a06535);
+  transform: translateY(-1px);
+}
+
+/* ── アニメーション ── */
+@keyframes pop-in {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}

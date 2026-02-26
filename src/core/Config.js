@@ -169,24 +169,67 @@ export const Config = {
   // 家ビルドシステム設定
   HOUSE: {
     // セクション解放に必要なクリア済みワールド数
+    // ★改訂: 4→6→8→12（前半に集中して達成感を連続させる）
     SECTION_UNLOCK_WORLDS: {
       floor1:   0,   // 最初から解放
       garden:   4,   // 世界4クリア後
-      exterior: 8,   // 世界8クリア後
-      floor2:   12,  // 世界12クリア後
-      floor3:   16,  // 世界16クリア後
+      exterior: 6,   // 世界6クリア後（★8→6に前倒し）
+      floor2:   8,   // 世界8クリア後（★12→8に前倒し）
+      floor3:   12,  // 世界12クリア後（★16→12に前倒し）
       tower:    33,  // 全ワールドクリア後
     },
 
-    // 各セクションのスロット数
+    // 各セクションのスロット数（基本値）
     SECTION_SLOTS: {
-      floor1_furniture:   8,   // 1階家具スロット
-      garden_deco:        8,   // 庭デコスロット
-      garden_monsters:    3,   // 庭モンスタースロット
-      floor2_furniture:   8,   // 2階家具スロット
-      floor3_furniture:   6,   // 3階特殊スロット
-      tower_deco:         4,   // 塔デコスロット
+      floor1_furniture:   8,
+      garden_deco:        8,
+      garden_monsters:    3,
+      floor2_furniture:   8,
+      floor3_furniture:   6,
+      tower_deco:         4,
     },
+
+    // ★マイルストーンシステム（World 12〜33の「何も起きない」を解消）
+    // type: 'celebrate' | 'auto_craft' | 'slot_expand'
+    MILESTONES: [
+      {
+        id: 'milestone_w02',
+        worlds: 2,
+        type: 'auto_craft',
+        itemId: 'bed_wood',
+        message: '職人マイスターから\nきのベッドのプレゼント！🎁',
+      },
+      {
+        id: 'milestone_w16',
+        worlds: 16,
+        type: 'slot_expand',
+        target: 'garden_extra',
+        amount: 4,
+        message: 'にわが広くなった！\nデコスロット＋4🌸',
+      },
+      {
+        id: 'milestone_w20',
+        worlds: 20,
+        type: 'auto_craft',
+        itemId: 'wallpaper_stars',
+        message: 'ほしもようのかべがみを\nゲット！✨',
+      },
+      {
+        id: 'milestone_w24',
+        worlds: 24,
+        type: 'slot_expand',
+        target: 'floor1_extra',
+        amount: 4,
+        message: '1かいが広くなった！\nかぐスロット＋4🏠',
+      },
+      {
+        id: 'milestone_w28',
+        worlds: 28,
+        type: 'auto_craft',
+        itemId: 'crystal_ball',
+        message: 'とうへの道が見えてきた！\nすいしょうだまをゲット✨',
+      },
+    ],
 
     // セクション解放演出時間（ms）
     SECTION_UNLOCK_ANIM_DURATION: 2000,

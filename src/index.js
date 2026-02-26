@@ -23,6 +23,7 @@ import QuizScreen from './screens/QuizScreen.js';
 import ResultScreen from './screens/ResultScreen.js';
 import { HouseScreen } from './screens/HouseScreen.js';
 import { HouseBuildScreen } from './screens/HouseBuildScreen.js';
+import { CraftsmanScreen } from './screens/CraftsmanScreen.js';
 
 /**
  * アプリケーション初期化
@@ -93,6 +94,7 @@ let _activeScreen = null;
 /** 家ビルド画面インスタンス（show/hide方式のためモジュール外で保持） */
 let _houseScreen = null;
 let _houseBuildScreen = null;
+let _craftsmanScreen = null;
 
 /**
  * ゲーム画面を表示する
@@ -112,17 +114,23 @@ function showGameScreen() {
     showBookshelf(gameScreen);
   }
 
-  // 家ビルド画面へのグローバルルーター
-  // HouseScreen/HouseBuildScreen が setState('app.currentScreen', 'house') した際に遷移
+  // 家ビルド・合成屋のグローバルルーター
   GameStore.subscribe((state, path) => {
     if (path !== 'app.currentScreen') return;
     const screen = GameStore.getState('app.currentScreen');
     if (screen === 'house') {
       _houseBuildScreen?.hide?.();
+      _craftsmanScreen?.hide?.();
       showHouse(gameScreen);
     } else if (screen === 'house_build') {
       _houseScreen?.hide?.();
       showHouseBuild(gameScreen);
+    } else if (screen === 'craftsman') {
+      showCraftsman(gameScreen);
+    } else if (screen === 'bookshelf') {
+      _houseScreen?.hide?.();
+      _houseBuildScreen?.hide?.();
+      _craftsmanScreen?.hide?.();
     }
   });
 }
@@ -287,6 +295,19 @@ function showHouseBuild(gameScreen) {
     _houseBuildScreen = new HouseBuildScreen();
   }
   _houseBuildScreen.show(gameScreen);
+}
+
+/**
+ * CraftsmanScreen（合成屋）を描画する
+ * @param {HTMLElement} gameScreen
+ */
+function showCraftsman(gameScreen) {
+  _houseScreen?.hide?.();
+  _houseBuildScreen?.hide?.();
+  if (!_craftsmanScreen) {
+    _craftsmanScreen = new CraftsmanScreen();
+  }
+  _craftsmanScreen.show(gameScreen);
 }
 
 /**

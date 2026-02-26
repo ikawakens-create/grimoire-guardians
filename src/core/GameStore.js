@@ -158,6 +158,15 @@ export class GameStore {
       // クラフト済みアイテムIDの配列（実績・コレクション率計算用）
       crafted: [],
 
+      // マイルストーン達成済みID一覧（重複発火防止）
+      triggeredMilestones: [],
+
+      // ボーナススロット（マイルストーンで拡張）
+      bonusSlots: {
+        garden_extra: 0,
+        floor1_extra:  0,
+      },
+
       // 最終更新日時
       lastUpdated: null,
     }
@@ -381,6 +390,8 @@ export class GameStore {
           decorations: [null, null, null, null],
         },
         crafted: [],
+        triggeredMilestones: [],
+        bonusSlots: { garden_extra: 0, floor1_extra: 0 },
         lastUpdated: null,
       }
     };

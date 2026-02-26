@@ -197,6 +197,16 @@ class BookshelfScreen {
         GameStore.setState('app.currentScreen', 'house');
       });
       rightGroup.appendChild(houseBtn);
+
+      // 合成屋ボタン
+      const craftsmanBtn = document.createElement('button');
+      craftsmanBtn.type = 'button';
+      craftsmanBtn.className = 'button button-small bookshelf-craftsman-btn';
+      craftsmanBtn.innerHTML = '🔨 ごしょくにん';
+      craftsmanBtn.addEventListener('click', () => {
+        GameStore.setState('app.currentScreen', 'craftsman');
+      });
+      rightGroup.appendChild(craftsmanBtn);
     }
 
     // もちものボタン

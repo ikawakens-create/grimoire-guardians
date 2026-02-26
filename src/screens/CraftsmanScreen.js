@@ -1,0 +1,569 @@
+/**
+ * CraftsmanScreen.js - Grimoire Guardians
+ * 合成屋（ものづくりのいえ）画面
+ *
+ * NPCキャラクターが素材を受け取ってアイテムを作ってくれる演出つきクラフト画面。
+ *
+ * キャラクター:
+ *   🔨 マイスター（ドワーフの合成師）- 家パーツ・家具・庭デコ担当
+ *   ✂️  テイラー（仕立て屋のうさぎ）- スキン担当（将来実装・現在は予告のみ）
+ *
+ * 今後のスキン実装に向けてアーキテクチャを分離済み:
+ *   - NPC選択タブ（MEISTER / TAILOR）
+ *   - TAILOR は ENABLE_SKINS フラグで解放
+ *
+ * @version 1.0
+ * @date 2026-02-26
+ */
+
+import { GameStore } from '../core/GameStore.js';
+import { Config } from '../core/Config.js';
+import Logger from '../core/Logger.js';
+import { HouseManager } from '../core/HouseManager.js';
+import {
+  getItemById,
+  RARITY,
+  EXTERIOR_STYLES,
+  WALLPAPER_ITEMS,
+  FLOOR_ITEMS,
+  FURNITURE_ITEMS_FLOOR1,
+  FURNITURE_ITEMS_FLOOR2,
+  FURNITURE_ITEMS_FLOOR3,
+  GARDEN_ITEMS,
+  EXTERIOR_DECO_ITEMS,
+  TOWER_ITEMS,
+} from '../data/houseItems.js';
+
+// ─────────────────────────────────────────────
+// NPC定義
+// ─────────────────────────────────────────────
+const NPC = {
+  MEISTER: 'meister',
+  TAILOR:  'tailor',
+};
+
+const NPC_DATA = {
+  meister: {
+    id:       'meister',
+    name:     'マイスター',
+    title:    'ドワーフの合成師',
+    emoji:    '🔨',
+    image:    'assets/npcs/meister.png',
+    color:    '#c87941',
+    bgColor:  'rgba(200,121,65,0.15)',
+    locked:   false,
+    // ランダムセリフ（場面ごと）
+    dialogues: {
+      idle: [
+        'やあ！なにをつくるかね？',
+        '素材をもってきてくれ！なんでも作るぞ！',
+        'ドワーフのうでをなめるなよ！',
+        '今日もいい仕事をしようではないか！',
+        '素材があれば、どんなものでも！',
+      ],
+      craftSuccess: [
+        'できたぞ！いい出来だ！',
+        'ほれ、完成じゃ！どうじゃ？',
+        'わしの腕は本物だろう？',
+        'これでお前の家が豪華になるな！',
+        '素晴らしい出来栄えじゃ！',
+      ],
+      craftFail: [
+        '素材が足りないのう…',
+        'もっと素材を集めてきてくれ！',
+        '材料がなければ作れないぞ！',
+      ],
+      alreadyCrafted: [
+        'それはもう作ったじゃろう！',
+        'すでに持っておるぞ？',
+      ],
+    },
+  },
+  tailor: {
+    id:       'tailor',
+    name:     'テイラー',
+    title:    'うさぎの仕立て屋',
+    emoji:    '✂️',
+    image:    'assets/npcs/tailor.png',
+    color:    '#d479c8',
+    bgColor:  'rgba(212,121,200,0.15)',
+    locked:   true, // ENABLE_SKINS で解放
+    dialogues: {
+      idle: [
+        'もうすぐ準備ができるわ、待っててね！',
+        'スキンの世界へようこそ…まだ準備中だけど！',
+      ],
+    },
+  },
+};
+
+// カテゴリー定義（マイスターが担当）
+const MEISTER_CATEGORIES = [
+  { id: 'furniture', label: '🪑 かぐ',     items: () => [...FURNITURE_ITEMS_FLOOR1, ...FURNITURE_ITEMS_FLOOR2, ...FURNITURE_ITEMS_FLOOR3] },
+  { id: 'garden',    label: '🌸 にわデコ', items: () => GARDEN_ITEMS },
+  { id: 'exterior',  label: '🏠 いえのかたち', items: () => EXTERIOR_STYLES.filter(s => s.recipe) },
+  { id: 'deco',      label: '🎨 そとかざり', items: () => EXTERIOR_DECO_ITEMS },
+  { id: 'wallfloor', label: '🖼️ かべ・ゆか', items: () => [...WALLPAPER_ITEMS.filter(w => w.recipe), ...FLOOR_ITEMS.filter(f => f.recipe)] },
+  { id: 'tower',     label: '🌟 とうのかざり', items: () => TOWER_ITEMS.filter(t => t.recipe) },
+];
+
+const RARITY_LABEL = {
+  [RARITY.COMMON]:     'コモン',
+  [RARITY.UNCOMMON]:   'アンコモン',
+  [RARITY.RARE]:       'レア ⭐',
+  [RARITY.SUPER_RARE]: 'ちょうレア！✨',
+};
+
+const MATERIAL_EMOJI = {
+  wood: '🪵', stone: '🪨', brick: '🧱', gem: '💎',
+  star_fragment: '✨', cloth: '🧶', paint: '🎨',
+  crown: '👑', cape: '🧣', magic_orb: '🔮',
+};
+
+export class CraftsmanScreen {
+  constructor() {
+    this._container = null;
+    this._npc = NPC.MEISTER;
+    this._category = 'furniture';
+    this._selectedItem = null;   // 選択中アイテムID
+    this._isCrafting = false;    // クラフトアニメ中フラグ
+    this._dialogue = '';
+    this._unsubscribe = null;
+  }
+
+  // ─────────────────────────────────────────────
+  // ライフサイクル
+  // ─────────────────────────────────────────────
+
+  show(container) {
+    this._container = container;
+
+    // 配置モードで呼ばれた場合
+    const mode = GameStore.getState('app.craftsmanMode');
+    if (mode === 'place') {
+      // 配置ターゲットに合わせてカテゴリーを設定
+      const target = GameStore.getState('app.craftsmanTarget');
+      if (target?.type === 'garden_deco') this._category = 'garden';
+      else if (target?.type === 'tower_deco') this._category = 'tower';
+      else this._category = 'furniture';
+    }
+
+    this._dialogue = this._getDialogue('idle');
+    this._render();
+    Logger.info('[CraftsmanScreen] 表示: npc=' + this._npc);
+  }
+
+  hide() {
+    if (this._unsubscribe) { this._unsubscribe(); this._unsubscribe = null; }
+    GameStore.setState('app.craftsmanMode', null);
+    GameStore.setState('app.craftsmanTarget', null);
+    if (this._container) this._container.innerHTML = '';
+  }
+
+  // ─────────────────────────────────────────────
+  // レンダリング
+  // ─────────────────────────────────────────────
+
+  _render() {
+    if (!this._container) return;
+
+    const materials = GameStore.getState('inventory.materials') || {};
+    const house = GameStore.getState('house');
+    const npcData = NPC_DATA[this._npc];
+
+    this._container.innerHTML = `
+      <div class="craftsman-screen" style="--npc-color:${npcData.color};--npc-bg:${npcData.bgColor}">
+
+        ${this._renderHeader(materials)}
+        ${this._renderNpcSelector()}
+        ${this._renderNpcPanel(npcData)}
+
+        ${this._npc === NPC.TAILOR
+          ? this._renderTailorLocked()
+          : `
+            ${this._renderCategoryTabs()}
+            <div class="craftsman-content">
+              <div class="craft-item-list">${this._renderItemList(materials, house)}</div>
+              ${this._selectedItem ? this._renderDetailPanel(this._selectedItem, materials, house) : ''}
+            </div>
+          `
+        }
+
+        ${this._isCrafting ? this._renderCraftingAnimation() : ''}
+      </div>
+    `;
+
+    this._bindEvents();
+  }
+
+  _renderHeader(materials) {
+    const matChips = ['wood','stone','brick','gem','star_fragment']
+      .map(id => `<span class="mat-chip">${MATERIAL_EMOJI[id]}${materials[id]||0}</span>`)
+      .join('');
+    return `
+      <div class="craftsman-header">
+        <button class="btn-icon craft-back-btn">← いえへ</button>
+        <div class="craft-mat-row">${matChips}</div>
+      </div>
+    `;
+  }
+
+  _renderNpcSelector() {
+    const tailorLocked = !Config.FEATURES.ENABLE_SKINS;
+    return `
+      <div class="npc-selector">
+        <button class="npc-tab-btn ${this._npc === NPC.MEISTER ? 'active' : ''}" data-npc="meister">
+          ${NPC_DATA.meister.emoji} ${NPC_DATA.meister.name}
+        </button>
+        <button class="npc-tab-btn ${this._npc === NPC.TAILOR ? 'active' : ''} ${tailorLocked ? 'locked' : ''}"
+                data-npc="tailor">
+          ${NPC_DATA.tailor.emoji} ${NPC_DATA.tailor.name}
+          ${tailorLocked ? '<span class="coming-soon-badge">もうすぐ！</span>' : ''}
+        </button>
+      </div>
+    `;
+  }
+
+  _renderNpcPanel(npcData) {
+    return `
+      <div class="npc-panel" style="background:${npcData.bgColor}">
+        <div class="npc-avatar">
+          <img src="${npcData.image}" alt="${npcData.name}"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="npc-emoji-fallback" style="display:none">${npcData.emoji}</div>
+        </div>
+        <div class="npc-speech">
+          <div class="npc-name-badge" style="color:${npcData.color}">${npcData.name}</div>
+          <div class="npc-bubble">
+            <p class="npc-dialogue">${this._dialogue}</p>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  _renderTailorLocked() {
+    return `
+      <div class="tailor-locked">
+        <div class="tailor-locked-icon">✂️</div>
+        <p class="tailor-locked-title">スキン屋さん、じゅんびちゅう！</p>
+        <p class="tailor-locked-body">
+          もうすぐ、キャラクターのふくや<br>アクセサリーが作れるようになるよ！<br>
+          <small>（Phase 1-E で実装予定）</small>
+        </p>
+        <div class="tailor-preview-items">
+          <span>👑</span><span>🧣</span><span>🔮</span><span>🧶</span><span>🎨</span>
+        </div>
+      </div>
+    `;
+  }
+
+  _renderCategoryTabs() {
+    const tabs = MEISTER_CATEGORIES.map(cat => `
+      <button class="craft-cat-btn ${this._category === cat.id ? 'active' : ''}" data-cat="${cat.id}">
+        ${cat.label}
+      </button>
+    `).join('');
+    return `<div class="craft-category-tabs">${tabs}</div>`;
+  }
+
+  _renderItemList(materials, house) {
+    const cat = MEISTER_CATEGORIES.find(c => c.id === this._category);
+    if (!cat) return '<p class="craft-empty">カテゴリーなし</p>';
+
+    const items = cat.items();
+    if (!items.length) return '<p class="craft-empty">アイテムがありません</p>';
+
+    const crafted = house.crafted || [];
+
+    return items.map(item => {
+      const isCrafted = crafted.includes(item.id);
+      const isFree    = !item.recipe;
+      const { craftable, missing } = HouseManager.checkCraftable(item.id);
+      const isSelected = this._selectedItem === item.id;
+      const sectionUnlocked = HouseManager.isSectionUnlocked(item.section);
+
+      let statusClass = 'item-locked';
+      let badge = '';
+
+      if (isCrafted) {
+        statusClass = 'item-crafted';
+        badge = '<span class="craft-badge badge-crafted">✓ もってる</span>';
+      } else if (!sectionUnlocked) {
+        statusClass = 'item-section-locked';
+        badge = '<span class="craft-badge badge-section">🔒 あとで</span>';
+      } else if (isFree) {
+        statusClass = 'item-free';
+        badge = '<span class="craft-badge badge-free">むりょう</span>';
+      } else if (craftable) {
+        statusClass = 'item-craftable glow-pulse';
+        badge = '<span class="craft-badge badge-craftable">✨ つくれる！</span>';
+      } else {
+        const missingStr = Object.entries(missing)
+          .map(([m, n]) => `${MATERIAL_EMOJI[m]}×${n}`)
+          .join(' ');
+        badge = `<span class="craft-badge badge-missing">あと ${missingStr}</span>`;
+      }
+
+      return `
+        <div class="craft-item-card ${statusClass} ${isSelected ? 'selected' : ''}"
+             data-item-id="${item.id}" role="button" tabindex="0">
+          <div class="craft-item-img">
+            ${item.image
+              ? `<img src="${item.image}" alt="${item.name}"
+                      onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+                 <span style="display:none;font-size:2rem">${item.imageFallback}</span>`
+              : `<span style="font-size:2rem">${item.imageFallback}</span>`
+            }
+          </div>
+          <p class="craft-item-name">${item.name}</p>
+          ${badge}
+        </div>
+      `;
+    }).join('');
+  }
+
+  _renderDetailPanel(itemId, materials, house) {
+    const item = getItemById(itemId);
+    if (!item) return '';
+
+    const crafted = house.crafted || [];
+    const isCrafted = crafted.includes(item.id);
+    const isFree = !item.recipe;
+    const { craftable, missing } = HouseManager.checkCraftable(item.id);
+    const sectionUnlocked = HouseManager.isSectionUnlocked(item.section);
+
+    // レシピ行
+    let recipeHtml = '';
+    if (isFree) {
+      recipeHtml = `<p class="detail-recipe-free">🎁 むりょうでつかえます！</p>`;
+    } else if (item.recipe) {
+      const rows = Object.entries(item.recipe).map(([mat, req]) => {
+        const have = materials[mat] || 0;
+        const ok   = have >= req;
+        return `<span class="recipe-chip ${ok ? 'ok' : 'ng'}">${MATERIAL_EMOJI[mat]} ${have}/${req}</span>`;
+      }).join('');
+      recipeHtml = `<div class="detail-recipe-row">${rows}</div>`;
+    }
+
+    // アクションボタン
+    let actionBtn = '';
+    if (!sectionUnlocked) {
+      actionBtn = `<button class="btn btn-large btn-secondary" disabled>🔒 まだ解放されていません</button>`;
+    } else if (isCrafted || isFree) {
+      actionBtn = `
+        <button class="btn btn-large btn-success craft-place-btn" data-item-id="${item.id}">
+          ✅ いえにかざる
+        </button>
+      `;
+    } else if (craftable) {
+      actionBtn = `
+        <button class="btn btn-large btn-warning craft-do-btn" data-item-id="${item.id}">
+          🔨 つくる！
+        </button>
+      `;
+    } else {
+      const missingStr = Object.entries(missing)
+        .map(([m, n]) => `${MATERIAL_EMOJI[m]}あと${n}`)
+        .join('、');
+      actionBtn = `
+        <button class="btn btn-large btn-secondary" disabled>
+          素材が足りない… (${missingStr})
+        </button>
+      `;
+    }
+
+    return `
+      <div class="craft-detail-panel">
+        <div class="detail-header">
+          <span class="detail-big-emoji">${item.imageFallback}</span>
+          <div class="detail-info">
+            <p class="detail-name">${item.name}</p>
+            <p class="detail-rarity rarity-${item.rarity}">${RARITY_LABEL[item.rarity] || item.rarity}</p>
+          </div>
+        </div>
+        ${recipeHtml}
+        ${actionBtn}
+      </div>
+    `;
+  }
+
+  // クラフト中アニメーション（ハンマー演出）
+  _renderCraftingAnimation() {
+    return `
+      <div class="crafting-overlay">
+        <div class="crafting-hammer">🔨</div>
+        <p class="crafting-text">せいさくちゅう…</p>
+        <div class="crafting-sparks">✨ ⭐ 💫 ✨</div>
+      </div>
+    `;
+  }
+
+  // ─────────────────────────────────────────────
+  // セリフ取得
+  // ─────────────────────────────────────────────
+
+  _getDialogue(scene) {
+    const npcData = NPC_DATA[this._npc];
+    const lines = npcData.dialogues[scene] || npcData.dialogues.idle;
+    return lines[Math.floor(Math.random() * lines.length)];
+  }
+
+  // ─────────────────────────────────────────────
+  // イベントバインド
+  // ─────────────────────────────────────────────
+
+  _bindEvents() {
+    if (!this._container) return;
+
+    // もどるボタン
+    this._container.querySelector('.craft-back-btn')?.addEventListener('click', () => {
+      GameStore.setState('app.currentScreen', 'house');
+    });
+
+    // NPC切替タブ
+    this._container.querySelectorAll('.npc-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('locked') && !Config.FEATURES.ENABLE_SKINS) {
+          // スキン未実装のため切替だけ許可（予告表示のため）
+        }
+        this._npc = btn.dataset.npc;
+        this._selectedItem = null;
+        this._dialogue = this._getDialogue('idle');
+        this._render();
+      });
+    });
+
+    // カテゴリータブ
+    this._container.querySelectorAll('.craft-cat-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        this._category = btn.dataset.cat;
+        this._selectedItem = null;
+        this._render();
+      });
+    });
+
+    // アイテムカードタップ
+    this._container.querySelectorAll('.craft-item-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.dataset.itemId;
+        this._selectedItem = this._selectedItem === id ? null : id;
+        this._render();
+      });
+    });
+
+    // 🔨 つくる！ボタン
+    this._container.querySelector('.craft-do-btn')?.addEventListener('click', () => {
+      const id = this._container.querySelector('.craft-do-btn')?.dataset.itemId;
+      if (id) this._doCraft(id);
+    });
+
+    // ✅ かざるボタン
+    this._container.querySelector('.craft-place-btn')?.addEventListener('click', () => {
+      const id = this._container.querySelector('.craft-place-btn')?.dataset.itemId;
+      if (id) this._doPlace(id);
+    });
+  }
+
+  // ─────────────────────────────────────────────
+  // クラフト処理（ハンマー演出つき）
+  // ─────────────────────────────────────────────
+
+  _doCraft(itemId) {
+    if (this._isCrafting) return;
+    this._isCrafting = true;
+    this._render();
+
+    // クラフトアニメーション（Config.HOUSE.CRAFT_ANIM_DURATIONms）
+    const duration = Config.HOUSE?.CRAFT_ANIM_DURATION || 1200;
+
+    setTimeout(() => {
+      this._isCrafting = false;
+      const result = HouseManager.craft(itemId);
+
+      if (result.success) {
+        this._dialogue = this._getDialogue('craftSuccess');
+      } else if (result.reason?.includes('済み')) {
+        this._dialogue = this._getDialogue('alreadyCrafted');
+      } else {
+        this._dialogue = this._getDialogue('craftFail');
+      }
+
+      this._render();
+      Logger.info(`[CraftsmanScreen] クラフト: ${itemId} → ${result.success}`);
+    }, duration);
+  }
+
+  // ─────────────────────────────────────────────
+  // 配置処理（HouseManagerに委譲）
+  // ─────────────────────────────────────────────
+
+  _doPlace(itemId) {
+    const item = getItemById(itemId);
+    if (!item) return;
+
+    const target = GameStore.getState('app.craftsmanTarget');
+    let placed = false;
+    let message = '';
+
+    if (this._category === 'furniture' || item.section?.startsWith('floor')) {
+      const floor = target?.floor || item.section || 'floor1';
+      const furniture = [...(GameStore.getState(`house.${floor}.furniture`) || [])];
+      const emptyIdx = target?.slot !== undefined
+        ? target.slot
+        : furniture.findIndex(s => s === null);
+      if (emptyIdx >= 0) {
+        placed = HouseManager.setFurniture(floor, emptyIdx, itemId);
+        message = placed ? `${floor}のかぐにおきました！` : 'スロットがいっぱいです';
+      } else {
+        message = 'スロットがいっぱいです';
+      }
+    } else if (this._category === 'garden') {
+      const decos = [...(GameStore.getState('house.garden.decorations') || [])];
+      const emptyIdx = target?.slot !== undefined
+        ? target.slot
+        : decos.findIndex(s => s === null);
+      if (emptyIdx >= 0) {
+        placed = HouseManager.setGardenDeco(emptyIdx, itemId);
+        message = placed ? 'にわにおきました！🌸' : '庭スロットがいっぱいです';
+      } else {
+        message = '庭スロットがいっぱいです';
+      }
+    } else if (this._category === 'exterior') {
+      placed = HouseManager.setExteriorStyle(itemId);
+      message = placed ? 'いえのスタイルをかえました！🏠' : '変更できませんでした';
+    } else if (this._category === 'deco') {
+      if (item.slot) {
+        placed = HouseManager.setExteriorDeco(item.slot, itemId);
+        message = placed ? 'そとにかざりました！' : '外観装飾に失敗しました';
+      }
+    } else if (this._category === 'wallfloor') {
+      const floor = target?.floor || 'floor1';
+      if (item.id.startsWith('wallpaper')) {
+        placed = HouseManager.setFloor1Wallpaper(itemId);
+        message = placed ? 'かべがみをかえました！' : '変更できませんでした';
+      } else {
+        placed = HouseManager.setFloor1Floor(itemId);
+        message = placed ? 'ゆかをかえました！' : '変更できませんでした';
+      }
+    } else if (this._category === 'tower') {
+      const decos = [...(GameStore.getState('house.tower.decorations') || [])];
+      const emptyIdx = decos.findIndex(s => s === null);
+      if (emptyIdx >= 0) {
+        placed = HouseManager.setTowerDeco(emptyIdx, itemId);
+        message = placed ? 'とうにかざりました！✨' : '失敗しました';
+      }
+    }
+
+    if (placed) {
+      this._dialogue = message || this._getDialogue('craftSuccess');
+      GameStore.setState('app.craftsmanTarget', null);
+    } else {
+      this._dialogue = message || this._getDialogue('craftFail');
+    }
+
+    this._render();
+  }
+}
+
+export default CraftsmanScreen;
