@@ -97,6 +97,69 @@ export class GameStore {
       clearCounts: {},
       /** コレクト済みモンスターID配列 ['mon_01', 'mon_03', ...] */
       collected: [],
+    },
+
+    // 家ビルドシステム（Phase 1-D）
+    house: {
+      // セクション解放状態
+      sections: {
+        floor1:   true,   // 最初から解放
+        garden:   false,
+        exterior: false,
+        floor2:   false,
+        floor3:   false,
+        tower:    false,
+      },
+
+      // 外観プリセットスタイルID
+      exteriorStyle: 'default',
+
+      // 外観装飾スロット（exterior解放後）
+      exteriorDeco: {
+        banner:    null,
+        signboard: null,
+        chimney:   null,
+        roofDeco:  null,
+      },
+
+      // 庭
+      garden: {
+        path: 'path_grass',
+        decorations: [null, null, null, null, null, null, null, null],
+        monsters:    [null, null, null],
+      },
+
+      // 1階
+      floor1: {
+        wallpaper: null,
+        floor:     null,
+        furniture: [null, null, null, null, null, null, null, null],
+      },
+
+      // 2階（floor2解放後のみ使用）
+      floor2: {
+        wallpaper: null,
+        floor:     null,
+        furniture: [null, null, null, null, null, null, null, null],
+      },
+
+      // 3階（floor3解放後のみ使用）
+      floor3: {
+        wallpaper: null,
+        floor:     null,
+        furniture: [null, null, null, null, null, null],
+      },
+
+      // 屋上の塔（tower解放後のみ使用）
+      tower: {
+        decorations: [null, null, null, null],
+      },
+
+      // クラフト済みアイテムIDの配列（実績・コレクション率計算用）
+      crafted: [],
+
+      // 最終更新日時
+      lastUpdated: null,
     }
   };
 
@@ -277,6 +340,48 @@ export class GameStore {
       memory: {
         clearCounts: {},
         collected: [],
+      },
+      house: {
+        sections: {
+          floor1:   true,
+          garden:   false,
+          exterior: false,
+          floor2:   false,
+          floor3:   false,
+          tower:    false,
+        },
+        exteriorStyle: 'default',
+        exteriorDeco: {
+          banner:    null,
+          signboard: null,
+          chimney:   null,
+          roofDeco:  null,
+        },
+        garden: {
+          path: 'path_grass',
+          decorations: [null, null, null, null, null, null, null, null],
+          monsters:    [null, null, null],
+        },
+        floor1: {
+          wallpaper: null,
+          floor:     null,
+          furniture: [null, null, null, null, null, null, null, null],
+        },
+        floor2: {
+          wallpaper: null,
+          floor:     null,
+          furniture: [null, null, null, null, null, null, null, null],
+        },
+        floor3: {
+          wallpaper: null,
+          floor:     null,
+          furniture: [null, null, null, null, null, null],
+        },
+        tower: {
+          decorations: [null, null, null, null],
+        },
+        crafted: [],
+        lastUpdated: null,
       }
     };
 

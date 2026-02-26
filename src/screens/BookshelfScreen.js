@@ -187,6 +187,18 @@ class BookshelfScreen {
     });
     rightGroup.appendChild(memoryBtn);
 
+    // 家ビルドボタン
+    if (Config.FEATURES.ENABLE_HOUSE_BUILD) {
+      const houseBtn = document.createElement('button');
+      houseBtn.type = 'button';
+      houseBtn.className = 'button button-small bookshelf-house-btn';
+      houseBtn.innerHTML = '🏠 いえ';
+      houseBtn.addEventListener('click', () => {
+        GameStore.setState('app.currentScreen', 'house');
+      });
+      rightGroup.appendChild(houseBtn);
+    }
+
     // もちものボタン
     const inventoryBtn = document.createElement('button');
     inventoryBtn.type = 'button';

@@ -21,6 +21,8 @@ import WelcomeScreen from './screens/WelcomeScreen.js';
 import BookshelfScreen from './screens/BookshelfScreen.js';
 import QuizScreen from './screens/QuizScreen.js';
 import ResultScreen from './screens/ResultScreen.js';
+import { HouseScreen } from './screens/HouseScreen.js';
+import { HouseBuildScreen } from './screens/HouseBuildScreen.js';
 
 /**
  * アプリケーション初期化
@@ -88,6 +90,10 @@ function hideLoadingScreen() {
 /** 現在アクティブな画面インスタンスを保持 */
 let _activeScreen = null;
 
+/** 家ビルド画面インスタンス（show/hide方式のためモジュール外で保持） */
+let _houseScreen = null;
+let _houseBuildScreen = null;
+
 /**
  * ゲーム画面を表示する
  * 初回プレイヤー（createdAt === null）は WelcomeScreen を表示する
@@ -105,6 +111,20 @@ function showGameScreen() {
   } else {
     showBookshelf(gameScreen);
   }
+
+  // 家ビルド画面へのグローバルルーター
+  // HouseScreen/HouseBuildScreen が setState('app.currentScreen', 'house') した際に遷移
+  GameStore.subscribe((state, path) => {
+    if (path !== 'app.currentScreen') return;
+    const screen = GameStore.getState('app.currentScreen');
+    if (screen === 'house') {
+      _houseBuildScreen?.hide?.();
+      showHouse(gameScreen);
+    } else if (screen === 'house_build') {
+      _houseScreen?.hide?.();
+      showHouseBuild(gameScreen);
+    }
+  });
 }
 
 /**
@@ -241,6 +261,32 @@ function showResult(gameScreen, quizResult, worldData) {
   if (Config.IS_DEBUG) {
     window.GG._screen = result;
   }
+}
+
+/**
+ * HouseScreen を描画する
+ * @param {HTMLElement} gameScreen
+ */
+function showHouse(gameScreen) {
+  if (_activeScreen) {
+    _activeScreen.destroy?.();
+    _activeScreen = null;
+  }
+  if (!_houseScreen) {
+    _houseScreen = new HouseScreen();
+  }
+  _houseScreen.show(gameScreen);
+}
+
+/**
+ * HouseBuildScreen を描画する
+ * @param {HTMLElement} gameScreen
+ */
+function showHouseBuild(gameScreen) {
+  if (!_houseBuildScreen) {
+    _houseBuildScreen = new HouseBuildScreen();
+  }
+  _houseBuildScreen.show(gameScreen);
 }
 
 /**

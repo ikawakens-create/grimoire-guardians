@@ -2291,3 +2291,539 @@
 .monster-get-exit {
   animation: monster-get-out 0.5s ease forwards;
 }
+
+/* ==========================================================================
+   House Build System — HouseScreen & HouseBuildScreen
+   ========================================================================== */
+
+/* ── 共通レイアウト ── */
+.house-screen,
+.house-build-screen {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(160deg, #1a0a2e 0%, #2d1b5c 60%, #1a0a2e 100%);
+  color: var(--text-light, #fff);
+  overflow: hidden;
+}
+
+/* ── ヘッダー ── */
+.house-header,
+.build-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.07);
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+.house-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffd700;
+  text-shadow: 0 0 12px rgba(255,215,0,0.5);
+  margin: 0;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+.btn-icon:hover { background: rgba(255,255,255,0.15); }
+
+/* ── セクションタブ ── */
+.house-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 8px 10px 0;
+  overflow-x: auto;
+  flex-shrink: 0;
+  scrollbar-width: none;
+}
+.house-tabs::-webkit-scrollbar { display: none; }
+
+.house-tab-btn {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 20px;
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.7);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.house-tab-btn.active {
+  border-color: #ffd700;
+  background: rgba(255,215,0,0.2);
+  color: #ffd700;
+  text-shadow: 0 0 8px rgba(255,215,0,0.6);
+}
+.house-tab-btn.locked {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── メインビューエリア ── */
+.house-view-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.2) transparent;
+}
+
+/* ── 外観ビュー ── */
+.house-exterior-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.house-exterior-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+.house-exterior-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.house-exterior-fallback {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+  background: rgba(255,255,255,0.05);
+  border-radius: 16px;
+}
+.house-style-name {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.7);
+  margin: 0;
+}
+.exterior-deco-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.exterior-deco-badge {
+  position: absolute;
+  font-size: 1.5rem;
+}
+.exterior-deco-banner   { top: 6px; right: 10px; }
+.exterior-deco-signboard { bottom: 12px; left: 12px; }
+.exterior-deco-chimney  { top: 10px; left: 20px; }
+.exterior-deco-roofDeco { top: 4px; left: 50%; transform: translateX(-50%); }
+
+/* ── 庭ビュー ── */
+.house-garden-view {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.garden-deco-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.house-garden-slot {
+  aspect-ratio: 1;
+  background: rgba(255,255,255,0.07);
+  border: 2px dashed rgba(255,255,255,0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.house-garden-slot:hover {
+  border-color: #ffd700;
+  background: rgba(255,215,0,0.1);
+}
+.house-garden-slot img { width: 80%; height: 80%; object-fit: contain; }
+.slot-fallback { font-size: 2rem; }
+.slot-empty-icon { font-size: 1.4rem; color: rgba(255,255,255,0.3); }
+
+.garden-monster-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+}
+.garden-monster-label { font-size: 0.75rem; color: rgba(255,255,255,0.5); white-space: nowrap; }
+.house-monster-slot {
+  width: 56px;
+  height: 56px;
+  background: rgba(157,78,221,0.2);
+  border: 2px dashed rgba(157,78,221,0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* ── 室内ビュー ── */
+.house-floor-view {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.room-bg-info {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.room-wallpaper-badge,
+.room-floor-badge {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.room-wallpaper-badge:hover,
+.room-floor-badge:hover { background: rgba(255,255,255,0.2); }
+
+.house-furniture-grid {
+  display: grid;
+  gap: 8px;
+}
+.house-furniture-grid.grid-4col { grid-template-columns: repeat(4, 1fr); }
+.house-furniture-grid.grid-3col { grid-template-columns: repeat(3, 1fr); }
+
+.house-furniture-slot {
+  aspect-ratio: 1;
+  background: rgba(255,255,255,0.06);
+  border: 2px dashed rgba(255,255,255,0.18);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+}
+.house-furniture-slot:hover {
+  border-color: #ffd700;
+  background: rgba(255,215,0,0.08);
+}
+.house-furniture-slot.special {
+  border-color: rgba(157,78,221,0.5);
+  background: rgba(157,78,221,0.1);
+}
+.house-furniture-slot img { width: 75%; height: 75%; object-fit: contain; }
+
+/* ── 塔ビュー ── */
+.house-tower-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.tower-star-bg { font-size: 3rem; animation: float 3s ease-in-out infinite; }
+.house-tower-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  width: 100%;
+  max-width: 300px;
+}
+.house-tower-slot {
+  aspect-ratio: 1;
+  background: rgba(255,215,0,0.1);
+  border: 2px solid rgba(255,215,0,0.4);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.house-tower-slot:hover {
+  background: rgba(255,215,0,0.25);
+  transform: scale(1.04);
+}
+.tower-item-emoji { font-size: 2.5rem; }
+.tower-legend-text { font-size: 1rem; color: #ffd700; font-weight: 700; margin: 0; }
+
+/* ── ロック中セクション ── */
+.house-section-locked {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 32px 16px;
+  text-align: center;
+}
+.lock-icon { font-size: 3rem; }
+.lock-title { font-size: 1rem; font-weight: 700; color: rgba(255,255,255,0.8); margin: 0; }
+.lock-hint  { font-size: 0.85rem; color: rgba(255,255,255,0.6); margin: 0; }
+.lock-progress-bar {
+  width: 200px;
+  height: 10px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.lock-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #9d4edd, #ffd700);
+  border-radius: 999px;
+  transition: width 0.5s ease;
+}
+.lock-progress-text { font-size: 0.75rem; color: rgba(255,255,255,0.5); margin: 0; }
+
+/* ── コレクションバー ── */
+.house-collection-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: rgba(0,0,0,0.3);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
+}
+.collection-label { font-size: 0.75rem; color: rgba(255,255,255,0.6); white-space: nowrap; }
+.collection-progress {
+  flex: 1;
+  height: 8px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.collection-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #9d4edd, #ffd700);
+  border-radius: 999px;
+  transition: width 0.6s ease;
+}
+.collection-count { font-size: 0.75rem; color: rgba(255,255,255,0.7); white-space: nowrap; }
+
+/* ── 次セクションヒント ── */
+.house-next-section-hint {
+  text-align: center;
+  font-size: 0.75rem;
+  color: rgba(255,215,0,0.7);
+  padding: 4px 8px;
+  background: rgba(255,215,0,0.07);
+  border-top: 1px solid rgba(255,215,0,0.15);
+  flex-shrink: 0;
+}
+
+/* ── HouseBuildScreen ── */
+.build-materials-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.mat-chip {
+  font-size: 0.75rem;
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 2px 7px;
+}
+
+.build-category-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 8px 10px 0;
+  overflow-x: auto;
+  flex-shrink: 0;
+  scrollbar-width: none;
+}
+.build-cat-btn {
+  flex-shrink: 0;
+  padding: 5px 14px;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  border-radius: 16px;
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.65);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.build-cat-btn.active {
+  border-color: #9d4edd;
+  background: rgba(157,78,221,0.25);
+  color: #e0aaff;
+}
+
+.build-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.build-item-list {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 10px;
+  overflow-y: auto;
+  align-content: start;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.2) transparent;
+}
+.build-empty { color: rgba(255,255,255,0.4); font-size: 0.85rem; padding: 16px; }
+
+/* アイテムカード */
+.build-item-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px;
+  background: rgba(255,255,255,0.06);
+  border: 2px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+}
+.build-item-card:hover, .build-item-card:focus {
+  border-color: #ffd700;
+  background: rgba(255,215,0,0.1);
+  outline: none;
+}
+.build-item-card.selected {
+  border-color: #9d4edd;
+  background: rgba(157,78,221,0.2);
+  box-shadow: 0 0 12px rgba(157,78,221,0.4);
+}
+.build-item-card.item-craftable { border-color: rgba(255,215,0,0.5); }
+.build-item-card.item-crafted   { border-color: rgba(80,200,120,0.5); }
+.build-item-card.item-locked    { opacity: 0.55; }
+
+/* レアリティ枠 */
+.rarity-uncommon   { border-color: rgba(80,200,255,0.4) !important; }
+.rarity-rare       { border-color: rgba(157,78,221,0.6) !important; }
+.rarity-super-rare { border-color: rgba(255,215,0,0.7) !important;
+                     box-shadow: 0 0 8px rgba(255,215,0,0.3); }
+
+.item-img-wrapper {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.item-img-wrapper img { width: 100%; height: 100%; object-fit: contain; }
+.item-fallback { font-size: 2.2rem; }
+
+.item-info { text-align: center; width: 100%; }
+.item-name {
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.85);
+  margin: 0 0 2px;
+  line-height: 1.2;
+  word-break: break-all;
+}
+
+.item-badge {
+  display: inline-block;
+  font-size: 0.6rem;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.badge-crafted   { background: rgba(80,200,120,0.3); color: #7deda7; }
+.badge-free      { background: rgba(100,200,255,0.3); color: #a0d8ff; }
+.badge-craftable { background: rgba(255,215,0,0.3); color: #ffd700; }
+.badge-locked    { background: rgba(255,80,80,0.2); color: #ff9999; font-size: 0.55rem; }
+
+/* アイテム詳細パネル */
+.item-detail-panel {
+  flex-shrink: 0;
+  background: rgba(0,0,0,0.5);
+  border-top: 1px solid rgba(255,255,255,0.12);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.item-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.detail-emoji  { font-size: 2rem; }
+.detail-name   { font-size: 0.95rem; font-weight: 700; margin: 0; }
+.detail-rarity { font-size: 0.7rem; margin: 2px 0 0; }
+.detail-rarity.rarity-rare       { color: #c77dff; }
+.detail-rarity.rarity-super-rare { color: #ffd700; }
+
+.item-recipe {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.recipe-row {
+  font-size: 0.8rem;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.08);
+}
+.recipe-row.ok  { color: #7deda7; }
+.recipe-row.ng  { color: #ff9999; }
+.item-recipe-free { font-size: 0.8rem; color: #7deda7; margin: 0; }
+
+/* クラフト結果トースト */
+.craft-result-toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 24px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  z-index: 1000;
+  animation: slideUp 0.3s ease;
+  pointer-events: none;
+}
+.toast-success { background: rgba(80,200,120,0.9); color: #fff; }
+.toast-error   { background: rgba(220,60,60,0.9); color: #fff; }
+
+/* ブックシェルフの家ボタン */
+.bookshelf-house-btn {
+  background: linear-gradient(135deg, #9d4edd, #6a0dad);
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.bookshelf-house-btn:hover {
+  background: linear-gradient(135deg, #b347ff, #7c1ad1);
+  transform: translateY(-1px);
+}

@@ -158,12 +158,41 @@ export const Config = {
     ENABLE_INVENTORY: true,         // インベントリ
     ENABLE_LICENSE: true,           // ライセンス管理
     ENABLE_DATA_MIGRATION: true,    // データ移行
-    
-    // Phase 1以降の機能（Phase 0では無効）
-    ENABLE_HOUSE_BUILD: false,
+
+    // Phase 1以降の機能
+    ENABLE_HOUSE_BUILD: true,       // 家ビルドシステム（Phase 1-D）
     ENABLE_SKINS: false,
     ENABLE_MEMORY_ISLE: false,
     ENABLE_DLC: false
+  },
+
+  // 家ビルドシステム設定
+  HOUSE: {
+    // セクション解放に必要なクリア済みワールド数
+    SECTION_UNLOCK_WORLDS: {
+      floor1:   0,   // 最初から解放
+      garden:   4,   // 世界4クリア後
+      exterior: 8,   // 世界8クリア後
+      floor2:   12,  // 世界12クリア後
+      floor3:   16,  // 世界16クリア後
+      tower:    33,  // 全ワールドクリア後
+    },
+
+    // 各セクションのスロット数
+    SECTION_SLOTS: {
+      floor1_furniture:   8,   // 1階家具スロット
+      garden_deco:        8,   // 庭デコスロット
+      garden_monsters:    3,   // 庭モンスタースロット
+      floor2_furniture:   8,   // 2階家具スロット
+      floor3_furniture:   6,   // 3階特殊スロット
+      tower_deco:         4,   // 塔デコスロット
+    },
+
+    // セクション解放演出時間（ms）
+    SECTION_UNLOCK_ANIM_DURATION: 2000,
+
+    // クラフトアニメ時間（ms）
+    CRAFT_ANIM_DURATION: 1200,
   }
 };
 
