@@ -5,11 +5,11 @@
  * バージョン番号を上げるだけで古いキャッシュが自動削除される。
  * 将来的に音声ファイルなどを追加する際は ASSETS 配列に追記すること。
  *
- * @version 1.0.0
- * @date 2026-02-23
+ * @version 1.4.0
+ * @date 2026-02-26
  */
 
-const SW_VERSION   = '1.3.0';
+const SW_VERSION   = '1.4.0';
 const CACHE_NAME   = `grimoire-${SW_VERSION}`;
 
 /** キャッシュ対象ファイル（静的アセット） */
