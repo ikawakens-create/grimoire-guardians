@@ -977,9 +977,9 @@
   align-items: center;
   gap: 12px;
   padding: 20px 16px;
-  background: var(--color-surface);
+  background: var(--bg-secondary);
   border-radius: var(--border-radius-large);
-  box-shadow: var(--shadow-xl);
+  box-shadow: var(--shadow-large);
   width: min(480px, 92vw);
   max-height: 90vh;
   overflow-y: auto;
@@ -995,7 +995,7 @@
 
 .paths-subtitle {
   font-size: 0.9rem;
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
   text-align: center;
   margin: 0;
 }
@@ -1021,8 +1021,8 @@
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  background: var(--color-background);
-  border: 2px solid var(--color-border);
+  background: var(--bg-primary);
+  border: 2px solid var(--border-color);
   border-radius: var(--border-radius);
   cursor: pointer;
   transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
@@ -1033,7 +1033,7 @@
 .path-choice-btn:hover:not(:disabled),
 .path-choice-btn:focus:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-medium);
   border-color: var(--color-primary);
 }
 
@@ -1066,12 +1066,12 @@
 .path-name {
   font-size: 1rem;
   font-weight: 700;
-  color: var(--color-text);
+  color: var(--text-primary);
 }
 
 .path-hint {
   font-size: 0.78rem;
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
   margin-left: auto;
 }
 
@@ -1086,7 +1086,7 @@
   gap: 8px;
   font-size: 1rem;
   font-weight: 700;
-  color: var(--color-text);
+  color: var(--text-primary);
 }
 
 .paths-path-icon {
@@ -1101,9 +1101,9 @@
   font-size: 1.15rem;
   font-weight: 700;
   text-align: center;
-  color: var(--color-text);
+  color: var(--text-primary);
   padding: 10px;
-  background: var(--color-background);
+  background: var(--bg-primary);
   border-radius: var(--border-radius);
   width: 100%;
 }
@@ -1117,8 +1117,8 @@
 
 .path-answer-btn {
   padding: 12px 8px;
-  background: var(--color-background);
-  border: 2px solid var(--color-border);
+  background: var(--bg-primary);
+  border: 2px solid var(--border-color);
   border-radius: var(--border-radius);
   font-size: 1.05rem;
   font-weight: 600;
@@ -1140,7 +1140,7 @@
 
 .path-answer-wrong {
   background: var(--color-error-light, #fee2e2) !important;
-  border-color: var(--color-error) !important;
+  border-color: var(--color-danger) !important;
 }
 
 .paths-feedback {
@@ -1152,7 +1152,7 @@
 }
 
 .paths-feedback-correct { color: var(--color-success); }
-.paths-feedback-wrong   { color: var(--color-error); }
+.paths-feedback-wrong   { color: var(--color-danger); }
 
 /* Paths Result Phase */
 .paths-result-phase { gap: 12px; }
@@ -1166,7 +1166,7 @@
   font-size: 1.05rem;
   font-weight: 700;
   text-align: center;
-  color: var(--color-text);
+  color: var(--text-primary);
 }
 
 .paths-drop-item {
@@ -1337,9 +1337,9 @@
   align-items: center;
   gap: 14px;
   padding: 24px 20px;
-  background: var(--color-surface);
+  background: var(--bg-secondary);
   border-radius: var(--border-radius-large);
-  box-shadow: var(--shadow-xl);
+  box-shadow: var(--shadow-large);
   width: min(400px, 90vw);
   animation: event-modal-enter 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -1353,7 +1353,7 @@
 
 .treasure-subtitle {
   font-size: 0.9rem;
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
   text-align: center;
   margin: 0;
 }
@@ -1395,16 +1395,16 @@
   gap: 8px;
   font-size: 1rem;
   font-weight: 700;
-  color: var(--color-text);
+  color: var(--text-primary);
 }
 
 .treasure-question-text {
   font-size: 1.15rem;
   font-weight: 700;
   text-align: center;
-  color: var(--color-text);
+  color: var(--text-primary);
   padding: 10px;
-  background: var(--color-background);
+  background: var(--bg-primary);
   border-radius: var(--border-radius);
   width: 100%;
 }
@@ -1418,8 +1418,8 @@
 
 .treasure-answer-btn {
   padding: 12px 8px;
-  background: var(--color-background);
-  border: 2px solid var(--color-border);
+  background: var(--bg-primary);
+  border: 2px solid var(--border-color);
   border-radius: var(--border-radius);
   font-size: 1.05rem;
   font-weight: 600;
@@ -1441,7 +1441,7 @@
 
 .treasure-answer-wrong {
   background: var(--color-error-light, #fee2e2) !important;
-  border-color: var(--color-error) !important;
+  border-color: var(--color-danger) !important;
 }
 
 .treasure-feedback {
@@ -1453,7 +1453,7 @@
 }
 
 .treasure-feedback-correct { color: var(--color-success); }
-.treasure-feedback-wrong   { color: var(--color-error); }
+.treasure-feedback-wrong   { color: var(--color-danger); }
 
 /* Treasure Result Phase */
 .treasure-result-phase { gap: 12px; }
@@ -1467,12 +1467,12 @@
   font-size: 1.05rem;
   font-weight: 800;
   text-align: center;
-  color: var(--color-text);
+  color: var(--text-primary);
 }
 
 .treasure-result-sub {
   font-size: 0.85rem;
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
   text-align: center;
   margin: 0;
 }
