@@ -20,6 +20,7 @@ import { Config } from '../core/Config.js';
 import { SoundManager, SoundType } from '../core/SoundManager.js';
 import HapticFeedback from '../utils/HapticFeedback.js';
 import WORLDS, { getWorldById } from '../data/worlds.js';
+import { getMonsterByWorldId } from '../data/memory-monsters.js';
 
 // ─────────────────────────────────────────
 // 定数
@@ -105,6 +106,8 @@ class ResultScreen {
     this._el = null;
     /** @type {Array<{id: string, count: number}>} */
     this._drops = [];
+    /** @type {import('../data/memory-monsters.js').MonsterDef|null} */
+    this._newlyCollectedMonster = null;
   }
 
   // ─────────────────────────────────────────
@@ -368,10 +371,42 @@ class ResultScreen {
       correctAnswers: (stats.correctAnswers || 0) + correctCount
     });
 
+    // きおくのいせき：クリア回数を更新してモンスターGET判定
+    if (cleared && worldId) {
+      this._newlyCollectedMonster = this._updateMonsterClearCount(worldId);
+    }
+
     // 非同期でセーブ（エラーは握りつぶさない）
     SaveManager.save().catch(err => {
       Logger.error('[ResultScreen] セーブ失敗:', err);
     });
+  }
+
+  /**
+   * きおくのいせき: worldId のクリア回数を+1し、3回達成でモンスターをコレクトする
+   * @param {string} worldId
+   * @returns {import('../data/memory-monsters.js').MonsterDef|null} 新たにコレクトしたモンスター（なければ null）
+   */
+  _updateMonsterClearCount(worldId) {
+    const monster = getMonsterByWorldId(worldId);
+    if (!monster) return null;
+
+    const clearCounts = GameStore.getState('memory.clearCounts') ?? {};
+    const collected   = GameStore.getState('memory.collected') ?? [];
+
+    // すでにコレクト済みならスキップ
+    if (collected.includes(monster.id)) return null;
+
+    const newCount = (clearCounts[worldId] ?? 0) + 1;
+    GameStore.setState('memory.clearCounts', { ...clearCounts, [worldId]: newCount });
+
+    if (newCount >= 3) {
+      GameStore.setState('memory.collected', [...collected, monster.id]);
+      Logger.info(`[ResultScreen] 🎉 モンスターGET: ${monster.name} (${monster.id})`);
+      return monster;
+    }
+
+    return null;
   }
 
   // ─────────────────────────────────────────
@@ -398,10 +433,46 @@ class ResultScreen {
       btns.classList.add('result-buttons-visible');
     }
 
-    // ④ 全ワールドクリア判定（phase_complete）
+    // ④ モンスターGET演出
+    if (this._newlyCollectedMonster) {
+      await this._animateMonsterGet(this._newlyCollectedMonster);
+    }
+
+    // ⑤ 全ワールドクリア判定（phase_complete）
     if (cleared) {
       this._checkPhaseComplete();
     }
+  }
+
+  /**
+   * モンスターGET時のバナー演出
+   * @param {import('../data/memory-monsters.js').MonsterDef} monster
+   * @returns {Promise<void>}
+   */
+  _animateMonsterGet(monster) {
+    return new Promise((resolve) => {
+      const banner = document.createElement('div');
+      banner.className = 'result-monster-get';
+      banner.innerHTML = `
+        <div class="monster-get-inner">
+          <div class="monster-get-emoji">${monster.emoji}</div>
+          <div class="monster-get-text">
+            <div class="monster-get-label">モンスターを GET！</div>
+            <div class="monster-get-name">${monster.name}</div>
+            <div class="monster-get-sub">🏛️ いせきの ずかんに のったよ！</div>
+          </div>
+        </div>
+      `;
+      if (this._el) this._el.appendChild(banner);
+
+      HapticFeedback.medium();
+
+      // 3秒後に消える
+      setTimeout(() => {
+        banner.classList.add('monster-get-exit');
+        setTimeout(() => { banner.remove(); resolve(); }, 500);
+      }, 3000);
+    });
   }
 
   /**

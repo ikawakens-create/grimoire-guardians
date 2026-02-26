@@ -66,6 +66,7 @@ class SaveManagerClass {
       player: state.player,
       progress: state.progress,
       inventory: state.inventory,
+      memory: state.memory,
       savedAt: new Date().toISOString(),
       version: Config.APP_VERSION
     };
@@ -218,6 +219,12 @@ class SaveManagerClass {
       GameStore.setState('inventory', {
         ...GameStore.getState('inventory'),
         ...saveData.inventory
+      });
+    }
+    if (saveData.memory) {
+      GameStore.setState('memory', {
+        ...GameStore.getState('memory'),
+        ...saveData.memory
       });
     }
 

@@ -1866,3 +1866,428 @@
   letter-spacing: 0.3em;
   animation: pulse 1.2s ease-in-out infinite;
 }
+
+/* ══════════════════════════════════════════════════════
+   きおくのいせき（Memory Isle）
+   ══════════════════════════════════════════════════════ */
+
+/* ── ブックシェルフ遺跡ボタン ── */
+.bookshelf-memory-btn {
+  position: relative;
+  background: linear-gradient(135deg, #2d1b69, #4a2c8a);
+  color: #e0cfff;
+  border: 1px solid #7c4dbd;
+}
+.bookshelf-memory-btn:hover,
+.bookshelf-memory-btn:active {
+  background: linear-gradient(135deg, #3d2b79, #5a3c9a);
+}
+.memory-badge-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #f7b731;
+  border-radius: 50%;
+  margin-left: 4px;
+  vertical-align: middle;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+/* ── オーバーレイ ── */
+.memory-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 5, 30, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal, 1000);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.memory-overlay-visible {
+  opacity: 1;
+}
+
+/* ── モーダル本体 ── */
+.memory-modal {
+  background: linear-gradient(160deg, #12082e 0%, #1e0f45 60%, #0d1a3a 100%);
+  border: 1px solid #5a3a9a;
+  border-radius: 20px;
+  width: min(92vw, 560px);
+  max-height: 82vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(100, 50, 200, 0.5), 0 0 80px rgba(100, 50, 200, 0.15);
+}
+
+/* ── ヘッダー ── */
+.memory-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid rgba(120, 70, 220, 0.3);
+  flex-shrink: 0;
+}
+.memory-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #c9a8ff;
+  flex: 1;
+}
+.memory-count-badge {
+  font-size: 0.8rem;
+  background: rgba(120, 70, 220, 0.3);
+  color: #e0cfff;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(160, 100, 255, 0.4);
+}
+.memory-close-btn {
+  background: transparent;
+  border: none;
+  color: #9a7acc;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+.memory-close-btn:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+/* ── タブ ── */
+.memory-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 8px 12px 0;
+  flex-shrink: 0;
+}
+.memory-tab {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(120, 70, 220, 0.25);
+  border-radius: 10px 10px 0 0;
+  color: #9a7acc;
+  font-size: 0.72rem;
+  padding: 6px 4px 5px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  text-align: center;
+  line-height: 1.3;
+}
+.memory-tab-active {
+  background: rgba(120, 70, 220, 0.35);
+  border-color: rgba(160, 100, 255, 0.6);
+  color: #ddc8ff;
+  font-weight: 700;
+}
+.memory-tab-locked {
+  opacity: 0.45;
+  cursor: default;
+}
+.memory-tab-name {
+  display: block;
+}
+.memory-tab-count {
+  display: block;
+  font-size: 0.65rem;
+  opacity: 0.8;
+}
+
+/* ── レイヤー名 ── */
+.memory-layer-name {
+  text-align: center;
+  color: #b090ee;
+  font-size: 0.82rem;
+  padding: 6px 12px 4px;
+  flex-shrink: 0;
+}
+
+/* ── モンスターグリッド ── */
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  padding: 8px 12px 12px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* ── モンスターカード ── */
+.memory-card {
+  aspect-ratio: 1;
+  border-radius: 12px;
+  border: 1px solid rgba(120, 70, 220, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  padding: 6px 4px 4px;
+  transition: transform 0.15s, box-shadow 0.15s;
+  position: relative;
+  overflow: hidden;
+}
+.memory-card:active {
+  transform: scale(0.93);
+}
+
+/* コレクト済み */
+.memory-card-collected {
+  background: linear-gradient(135deg, #1e0f45, #2d1b69);
+  border-color: rgba(180, 130, 255, 0.6);
+  box-shadow: 0 0 10px rgba(140, 80, 255, 0.3);
+}
+
+/* シルエット（プレイ済み・未コレクト） */
+.memory-card-silhouette {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(100, 60, 180, 0.25);
+}
+
+/* ロック（未プレイ） */
+.memory-card-locked {
+  background: rgba(0,0,0,0.3);
+  border-color: rgba(80, 50, 130, 0.2);
+  cursor: default;
+}
+
+/* レジェンダリー輝き */
+.memory-card-legendary.memory-card-collected {
+  border-color: #f7b731;
+  box-shadow: 0 0 14px rgba(247, 183, 49, 0.4);
+}
+
+/* ── カード内アイコン ── */
+.memory-icon-wrap {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.memory-card-silhouette .memory-icon-wrap,
+.memory-card-locked .memory-icon-wrap {
+  filter: grayscale(1) brightness(0.35);
+}
+.memory-emoji {
+  font-size: 1.7rem;
+  line-height: 1;
+}
+.memory-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ── カード名・ヒント ── */
+.memory-card-name {
+  font-size: 0.55rem;
+  color: #c8aaf0;
+  text-align: center;
+  word-break: keep-all;
+  line-height: 1.2;
+}
+.memory-card-name-hint {
+  color: #8060b0;
+  font-size: 0.6rem;
+}
+.memory-card-name-unknown {
+  color: #5a3a7a;
+}
+
+/* ── 進捗ドット ── */
+.memory-card-progress {
+  display: flex;
+  gap: 3px;
+}
+.memory-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(120, 70, 220, 0.25);
+  border: 1px solid rgba(120, 70, 220, 0.4);
+}
+.memory-dot-filled {
+  background: #9d4edd;
+  border-color: #c77dff;
+  box-shadow: 0 0 4px rgba(157, 78, 221, 0.6);
+}
+
+/* ── 詳細パネル ── */
+.memory-detail {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 5, 30, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 10;
+}
+.memory-detail[hidden] {
+  display: none;
+}
+.memory-modal {
+  position: relative;
+}
+.memory-detail-inner {
+  background: linear-gradient(160deg, #1a0a38 0%, #2a1555 100%);
+  border: 1px solid rgba(160, 100, 255, 0.5);
+  border-radius: 16px;
+  padding: 20px 18px 18px;
+  width: 100%;
+  max-width: 280px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 0 30px rgba(120, 60, 200, 0.4);
+}
+.memory-detail-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: #9a7acc;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.memory-detail-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 10px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.memory-detail-icon-shadow {
+  filter: grayscale(1) brightness(0.3);
+}
+.memory-detail-icon-collected {
+  animation: float 3s ease-in-out infinite;
+}
+.memory-detail-emoji {
+  font-size: 3.2rem;
+}
+.memory-detail-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.memory-detail-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ddc8ff;
+  margin-bottom: 6px;
+}
+.memory-detail-name-unknown {
+  color: #5a3a7a;
+}
+.memory-detail-rarity {
+  display: inline-block;
+  font-size: 0.72rem;
+  padding: 2px 10px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+.memory-rarity-common    { background: rgba(100,160,80,0.3);  color: #90e060; border: 1px solid #60b040; }
+.memory-rarity-uncommon  { background: rgba(60,120,200,0.3);  color: #80c0ff; border: 1px solid #4090e0; }
+.memory-rarity-rare      { background: rgba(140,60,220,0.3);  color: #c080ff; border: 1px solid #9040d0; }
+.memory-rarity-legendary { background: rgba(220,160,40,0.3);  color: #f7b731; border: 1px solid #c09020; }
+.memory-detail-flavor {
+  font-size: 0.78rem;
+  color: #c0a8e8;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+.memory-detail-hint {
+  font-size: 0.8rem;
+  color: #9070c0;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+.memory-detail-hint strong {
+  color: #c090ff;
+}
+.memory-detail-actions {
+  display: flex;
+  justify-content: center;
+}
+.memory-btn-house {
+  background: rgba(60, 120, 80, 0.3);
+  border: 1px solid rgba(80, 160, 100, 0.5);
+  color: #90d8a0;
+}
+
+/* ── トースト通知 ── */
+.memory-toast {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(20, 10, 50, 0.95);
+  border: 1px solid rgba(140, 90, 230, 0.5);
+  color: #ddc8ff;
+  font-size: 0.82rem;
+  padding: 8px 18px;
+  border-radius: 20px;
+  white-space: nowrap;
+  z-index: 20;
+  animation: slideUp 0.3s ease;
+  pointer-events: none;
+}
+
+/* ── リザルト画面：モンスターGETバナー ── */
+.result-monster-get {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #1a0a38, #3a1a70);
+  border: 2px solid #9d4edd;
+  border-radius: 16px;
+  padding: 12px 20px;
+  box-shadow: 0 0 20px rgba(157, 78, 221, 0.5);
+  animation: monster-get-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 50;
+  white-space: nowrap;
+}
+.monster-get-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.monster-get-emoji {
+  font-size: 2.2rem;
+  animation: bounce 0.6s ease infinite alternate;
+}
+.monster-get-label {
+  font-size: 0.7rem;
+  color: #9d4edd;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.monster-get-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ddc8ff;
+}
+.monster-get-sub {
+  font-size: 0.72rem;
+  color: #9a7acc;
+}
+.monster-get-exit {
+  animation: monster-get-out 0.5s ease forwards;
+}

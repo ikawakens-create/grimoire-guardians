@@ -627,3 +627,32 @@
 .phase-complete-exit {
   pointer-events: none;
 }
+
+/* ══════════════════════════════════════════════════════
+   きおくのいせき アニメーション
+   ══════════════════════════════════════════════════════ */
+
+/* モンスターGETバナー：入場 */
+@keyframes monster-get-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(20px) scale(0.85); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+
+/* モンスターGETバナー：退場 */
+@keyframes monster-get-out {
+  from { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateX(-50%) translateY(-16px) scale(0.9); }
+}
+
+/* トースト：スライドアップ */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(12px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* モンスター図鑑カード：コレクト時のキラキラ */
+@keyframes memory-collect-sparkle {
+  0%   { box-shadow: 0 0 0 rgba(157, 78, 221, 0); }
+  50%  { box-shadow: 0 0 24px rgba(157, 78, 221, 0.8); }
+  100% { box-shadow: 0 0 10px rgba(157, 78, 221, 0.3); }
+}

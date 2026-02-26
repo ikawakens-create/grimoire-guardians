@@ -89,6 +89,14 @@ export class GameStore {
         activatedAt: null
       },
       dlc: {}
+    },
+
+    // きおくのいせき（モンスターコレクション）
+    memory: {
+      /** worldId → クリア回数 { 'world_1': 2, ... } */
+      clearCounts: {},
+      /** コレクト済みモンスターID配列 ['mon_01', 'mon_03', ...] */
+      collected: [],
     }
   };
 
@@ -265,6 +273,10 @@ export class GameStore {
           activatedAt: null
         },
         dlc: {}
+      },
+      memory: {
+        clearCounts: {},
+        collected: [],
       }
     };
 
