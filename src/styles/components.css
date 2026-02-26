@@ -1194,9 +1194,10 @@
   align-items: center;
   gap: 14px;
   padding: 24px 20px;
-  background: var(--color-surface);
+  background: #ffffff;
+  border: 3px solid var(--color-danger);
   border-radius: var(--border-radius-large);
-  box-shadow: var(--shadow-xl);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   width: min(400px, 90vw);
   animation: event-modal-enter 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -1204,7 +1205,7 @@
 .monster-title {
   font-size: 1.2rem;
   font-weight: 800;
-  color: var(--color-error);
+  color: var(--color-danger);
   text-align: center;
 }
 
@@ -1228,7 +1229,7 @@
 }
 
 .monster-icon-small {
-  font-size: 2rem;
+  font-size: 2.8rem;
   line-height: 1;
 }
 
@@ -1239,9 +1240,9 @@
   font-size: 1.15rem;
   font-weight: 700;
   text-align: center;
-  color: var(--color-text);
+  color: var(--text-primary);
   padding: 10px;
-  background: var(--color-background);
+  background: var(--bg-primary);
   border-radius: var(--border-radius);
   width: 100%;
 }
@@ -1255,30 +1256,34 @@
 
 .monster-answer-btn {
   padding: 12px 8px;
-  background: var(--color-background);
-  border: 2px solid var(--color-border);
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
   border-radius: var(--border-radius);
   font-size: 1.05rem;
   font-weight: 600;
+  color: var(--text-primary);
   cursor: pointer;
-  transition: transform var(--transition-fast), border-color var(--transition-fast);
+  transition: transform var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
 }
 
 .monster-answer-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  border-color: var(--color-error);
+  border-color: var(--color-danger);
+  background: #fff5f5;
 }
 
 .monster-answer-btn:disabled { cursor: not-allowed; }
 
 .monster-answer-correct {
-  background: var(--color-success-light, #d1fae5) !important;
+  background: #d1fae5 !important;
   border-color: var(--color-success) !important;
+  color: var(--text-primary) !important;
 }
 
 .monster-answer-wrong {
-  background: var(--color-error-light, #fee2e2) !important;
-  border-color: var(--color-error) !important;
+  background: #fee2e2 !important;
+  border-color: var(--color-danger) !important;
+  color: var(--text-primary) !important;
 }
 
 .monster-feedback {
@@ -1290,7 +1295,7 @@
 }
 
 .monster-feedback-correct { color: var(--color-success); }
-.monster-feedback-wrong   { color: var(--color-error); }
+.monster-feedback-wrong   { color: var(--color-danger); }
 
 /* Monster Result Phase */
 .monster-result-phase { gap: 12px; }
@@ -1299,7 +1304,7 @@
   font-size: 1.1rem;
   font-weight: 800;
   text-align: center;
-  color: var(--color-text);
+  color: var(--text-primary);
 }
 
 .monster-result-icon {
