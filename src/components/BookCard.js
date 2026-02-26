@@ -309,11 +309,10 @@ class BookCard {
       this._initProgressBar(card);
     });
 
-    if (this.data.locked) return;
-
     let isActivating = false;
 
     const handleActivation = (e) => {
+      if (this.data.locked) return;
       if (isActivating) {
         Logger.debug('[BookCard] Click ignored (debouncing)');
         return;

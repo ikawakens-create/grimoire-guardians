@@ -41,6 +41,14 @@ export class HapticFeedback {
   }
 
   /**
+   * 中程度のタップ感（選択・決定など）
+   * @param {number} [duration=50] - バイブレーション時間(ms)
+   */
+  static medium(duration = 50) {
+    this._vibrate(duration);
+  }
+
+  /**
    * 不正解時のフィードバック（重みのあるパターン）
    * 振動100ms → 無振動50ms → 振動100ms
    */
