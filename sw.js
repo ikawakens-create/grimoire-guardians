@@ -9,7 +9,7 @@
  * @date 2026-02-26
  */
 
-const SW_VERSION   = '1.6.0';
+const SW_VERSION   = '1.9.0';
 const CACHE_NAME   = `grimoire-${SW_VERSION}`;
 
 /** キャッシュ対象ファイル（静的アセット） */
@@ -30,6 +30,18 @@ const ASSETS = [
   './src/screens/ResultScreen.js',
   './src/screens/InventoryScreen.js',
   './src/screens/MemoryIsleScreen.js',
+  './src/screens/HouseScreen.js',
+  './src/screens/HouseBuildScreen.js',
+  './src/screens/CraftsmanScreen.js',
+  './src/core/HouseManager.js',
+  './src/data/houseItems.js',
+  // Phase 1-E 街のシステム
+  './src/core/TownManager.js',
+  './src/screens/TownScreen.js',
+  './src/screens/GrimoireLibraryScreen.js',
+  './src/screens/ShopScreen.js',
+  './src/screens/GuildScreen.js',
+  './src/screens/FarmScreen.js',
   './src/data/memory-monsters.js',
   './src/components/BookCard.js',
   './src/components/ProgressBar.js',

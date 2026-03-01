@@ -187,6 +187,18 @@ class BookshelfScreen {
     });
     rightGroup.appendChild(memoryBtn);
 
+    // まちボタン（いえ・合成屋等のハブ）
+    if (Config.FEATURES.ENABLE_HOUSE_BUILD) {
+      const townBtn = document.createElement('button');
+      townBtn.type = 'button';
+      townBtn.className = 'button button-small bookshelf-town-btn';
+      townBtn.innerHTML = '🏘️ まち';
+      townBtn.addEventListener('click', () => {
+        GameStore.setState('app.currentScreen', 'town');
+      });
+      rightGroup.appendChild(townBtn);
+    }
+
     // もちものボタン
     const inventoryBtn = document.createElement('button');
     inventoryBtn.type = 'button';

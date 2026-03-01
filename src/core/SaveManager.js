@@ -67,6 +67,8 @@ class SaveManagerClass {
       progress: state.progress,
       inventory: state.inventory,
       memory: state.memory,
+      house: state.house,
+      town: state.town,
       savedAt: new Date().toISOString(),
       version: Config.APP_VERSION
     };
@@ -225,6 +227,18 @@ class SaveManagerClass {
       GameStore.setState('memory', {
         ...GameStore.getState('memory'),
         ...saveData.memory
+      });
+    }
+    if (saveData.house) {
+      GameStore.setState('house', {
+        ...GameStore.getState('house'),
+        ...saveData.house
+      });
+    }
+    if (saveData.town) {
+      GameStore.setState('town', {
+        ...GameStore.getState('town'),
+        ...saveData.town
       });
     }
 

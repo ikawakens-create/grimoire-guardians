@@ -21,6 +21,15 @@ import WelcomeScreen from './screens/WelcomeScreen.js';
 import BookshelfScreen from './screens/BookshelfScreen.js';
 import QuizScreen from './screens/QuizScreen.js';
 import ResultScreen from './screens/ResultScreen.js';
+import { HouseScreen } from './screens/HouseScreen.js';
+import { HouseBuildScreen } from './screens/HouseBuildScreen.js';
+import { CraftsmanScreen } from './screens/CraftsmanScreen.js';
+import { TownScreen } from './screens/TownScreen.js';
+import { GrimoireLibraryScreen } from './screens/GrimoireLibraryScreen.js';
+import { ShopScreen } from './screens/ShopScreen.js';
+import { GuildScreen } from './screens/GuildScreen.js';
+import { FarmScreen } from './screens/FarmScreen.js';
+import { TownManager } from './core/TownManager.js';
 
 /**
  * アプリケーション初期化
@@ -88,6 +97,17 @@ function hideLoadingScreen() {
 /** 現在アクティブな画面インスタンスを保持 */
 let _activeScreen = null;
 
+/** 家ビルド画面インスタンス（show/hide方式のためモジュール外で保持） */
+let _houseScreen = null;
+let _houseBuildScreen = null;
+let _craftsmanScreen = null;
+/** 街のシステム画面インスタンス */
+let _townScreen = null;
+let _libraryScreen = null;
+let _shopScreen = null;
+let _guildScreen = null;
+let _farmScreen = null;
+
 /**
  * ゲーム画面を表示する
  * 初回プレイヤー（createdAt === null）は WelcomeScreen を表示する
@@ -105,6 +125,52 @@ function showGameScreen() {
   } else {
     showBookshelf(gameScreen);
   }
+
+  // グローバルルーター（家・街システム）
+  GameStore.subscribe((state, path) => {
+    if (path !== 'app.currentScreen') return;
+    const screen = GameStore.getState('app.currentScreen');
+
+    // 全サブ画面を隠すヘルパー
+    const hideAll = () => {
+      _houseScreen?.hide?.();
+      _houseBuildScreen?.hide?.();
+      _craftsmanScreen?.hide?.();
+      _townScreen?.hide?.();
+      _libraryScreen?.hide?.();
+      _shopScreen?.hide?.();
+      _guildScreen?.hide?.();
+      _farmScreen?.hide?.();
+    };
+
+    if (screen === 'house') {
+      hideAll();
+      showHouse(gameScreen);
+    } else if (screen === 'house_build') {
+      hideAll();
+      showHouseBuild(gameScreen);
+    } else if (screen === 'craftsman') {
+      hideAll();
+      showCraftsman(gameScreen);
+    } else if (screen === 'town') {
+      hideAll();
+      showTown(gameScreen);
+    } else if (screen === 'library') {
+      hideAll();
+      showLibrary(gameScreen);
+    } else if (screen === 'shop') {
+      hideAll();
+      showShop(gameScreen);
+    } else if (screen === 'guild') {
+      hideAll();
+      showGuild(gameScreen);
+    } else if (screen === 'farm') {
+      hideAll();
+      showFarm(gameScreen);
+    } else if (screen === 'bookshelf') {
+      hideAll();
+    }
+  });
 }
 
 /**
@@ -216,6 +282,9 @@ function showResult(gameScreen, quizResult, worldData) {
 
   GameStore.setState('app.currentScreen', 'result');
 
+  // 農場カウンタ更新・施設解放チェック
+  TownManager.onQuizCompleted();
+
   // クリアしたかどうかを判定（ブックシェルフのアニメーション用）
   const cleared = quizResult.percentage >= Config.GAME.CLEAR_THRESHOLD;
   const clearedWorldId = cleared ? quizResult.worldId || worldData.id : null;
@@ -241,6 +310,71 @@ function showResult(gameScreen, quizResult, worldData) {
   if (Config.IS_DEBUG) {
     window.GG._screen = result;
   }
+}
+
+/**
+ * HouseScreen を描画する
+ * @param {HTMLElement} gameScreen
+ */
+function showHouse(gameScreen) {
+  if (_activeScreen) {
+    _activeScreen.destroy?.();
+    _activeScreen = null;
+  }
+  if (!_houseScreen) {
+    _houseScreen = new HouseScreen();
+  }
+  _houseScreen.show(gameScreen);
+}
+
+/**
+ * HouseBuildScreen を描画する
+ * @param {HTMLElement} gameScreen
+ */
+function showHouseBuild(gameScreen) {
+  if (!_houseBuildScreen) {
+    _houseBuildScreen = new HouseBuildScreen();
+  }
+  _houseBuildScreen.show(gameScreen);
+}
+
+/**
+ * CraftsmanScreen（合成屋）を描画する
+ * @param {HTMLElement} gameScreen
+ */
+function showCraftsman(gameScreen) {
+  if (!_craftsmanScreen) _craftsmanScreen = new CraftsmanScreen();
+  _craftsmanScreen.show(gameScreen);
+}
+
+/** TownScreen（街ハブ）を描画する */
+function showTown(gameScreen) {
+  if (!_townScreen) _townScreen = new TownScreen();
+  _townScreen.show(gameScreen);
+}
+
+/** GrimoireLibraryScreen（魔導書庫）を描画する */
+function showLibrary(gameScreen) {
+  if (!_libraryScreen) _libraryScreen = new GrimoireLibraryScreen();
+  _libraryScreen.show(gameScreen);
+}
+
+/** ShopScreen（商店）を描画する */
+function showShop(gameScreen) {
+  if (!_shopScreen) _shopScreen = new ShopScreen();
+  _shopScreen.show(gameScreen);
+}
+
+/** GuildScreen（ギルド）を描画する */
+function showGuild(gameScreen) {
+  if (!_guildScreen) _guildScreen = new GuildScreen();
+  _guildScreen.show(gameScreen);
+}
+
+/** FarmScreen（魔法農場）を描画する */
+function showFarm(gameScreen) {
+  if (!_farmScreen) _farmScreen = new FarmScreen();
+  _farmScreen.show(gameScreen);
 }
 
 /**
