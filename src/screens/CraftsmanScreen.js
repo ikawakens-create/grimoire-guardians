@@ -20,6 +20,7 @@ import { GameStore } from '../core/GameStore.js';
 import { Config } from '../core/Config.js';
 import Logger from '../core/Logger.js';
 import { HouseManager } from '../core/HouseManager.js';
+import { TownManager } from '../core/TownManager.js';
 import {
   getItemById,
   RARITY,
@@ -120,15 +121,23 @@ const MATERIAL_EMOJI = {
   crown: '👑', cape: '🧣', magic_orb: '🔮',
 };
 
+// メインタブ定義
+const MAIN_TABS = [
+  { id: 'craft',   label: '🔨 つくる' },
+  { id: 'upgrade', label: '⬆️ しせつ強化' },
+];
+
 export class CraftsmanScreen {
   constructor() {
     this._container = null;
     this._npc = NPC.MEISTER;
+    this._mainTab = 'craft';       // 'craft' | 'upgrade'
     this._category = 'furniture';
     this._selectedItem = null;   // 選択中アイテムID
     this._isCrafting = false;    // クラフトアニメ中フラグ
     this._dialogue = '';
     this._unsubscribe = null;
+    this._upgradeMsg = null;     // アップグレード結果メッセージ
   }
 
   // ─────────────────────────────────────────────
@@ -178,15 +187,26 @@ export class CraftsmanScreen {
         ${this._renderNpcSelector()}
         ${this._renderNpcPanel(npcData)}
 
-        ${this._npc === NPC.TAILOR
-          ? this._renderTailorLocked()
-          : `
-            ${this._renderCategoryTabs()}
-            <div class="craftsman-content">
-              <div class="craft-item-list">${this._renderItemList(materials, house)}</div>
-              ${this._selectedItem ? this._renderDetailPanel(this._selectedItem, materials, house) : ''}
-            </div>
-          `
+        <!-- メインタブ（つくる / 施設強化） -->
+        <div class="craft-main-tabs">
+          ${MAIN_TABS.map(t => `
+            <button class="craft-main-tab-btn ${this._mainTab === t.id ? 'active' : ''}" data-main-tab="${t.id}">
+              ${t.label}
+            </button>
+          `).join('')}
+        </div>
+
+        ${this._mainTab === 'upgrade'
+          ? this._renderUpgradeTab()
+          : this._npc === NPC.TAILOR
+            ? this._renderTailorLocked()
+            : `
+              ${this._renderCategoryTabs()}
+              <div class="craftsman-content">
+                <div class="craft-item-list">${this._renderItemList(materials, house)}</div>
+                ${this._selectedItem ? this._renderDetailPanel(this._selectedItem, materials, house) : ''}
+              </div>
+            `
         }
 
         ${this._isCrafting ? this._renderCraftingAnimation() : ''}
@@ -388,6 +408,73 @@ export class CraftsmanScreen {
     `;
   }
 
+  // ─────────────────────────────────────────────
+  // 施設強化タブ
+  // ─────────────────────────────────────────────
+
+  _renderUpgradeTab() {
+    const buildings = TownManager.getAllBuildingStates();
+    const maxAllowed = TownManager.getMaxAllowedLevel();
+    const msg = this._upgradeMsg
+      ? `<div class="upgrade-result-msg">${this._upgradeMsg}</div>` : '';
+
+    const rows = buildings.map(state => {
+      const { config, level, isUnlocked, canUpgrade, canAfford, cost, missing, nextPerk, maxAllowed: stateMax } = state;
+      const maxLevel = Config.TOWN.MAX_BUILDING_LEVEL;
+      const isHub    = config.isUpgradeHub;
+
+      let actionHtml = '';
+      if (!isUnlocked) {
+        actionHtml = `<span class="upgrade-status locked">🔒 ${state.worldsLeft}ワールド後</span>`;
+      } else if (level >= maxLevel) {
+        actionHtml = `<span class="upgrade-status max">✨ MAX</span>`;
+      } else if (!isHub && level >= maxAllowed) {
+        actionHtml = `<span class="upgrade-status hub-lock">合成屋をLv${level+1}に！</span>`;
+      } else if (!canAfford) {
+        const missingStr = Object.entries(missing)
+          .map(([m, n]) => `${MATERIAL_EMOJI[m]}×${n}`).join(' ');
+        actionHtml = `<span class="upgrade-status no-mat">${missingStr}</span>`;
+      } else {
+        const costStr = Object.entries(cost)
+          .map(([m, n]) => `${MATERIAL_EMOJI[m]}×${n}`).join(' ');
+        actionHtml = `
+          <button class="btn btn-small btn-warning upgrade-do-btn" data-building="${config.id}">
+            ⬆️ ${costStr}
+          </button>
+        `;
+      }
+
+      return `
+        <div class="upgrade-row ${isUnlocked ? '' : 'locked'}">
+          <div class="upgrade-row-left">
+            <span class="upgrade-emoji">${config.emoji}</span>
+            <div class="upgrade-info">
+              <p class="upgrade-name">${config.name}</p>
+              ${isUnlocked && level < maxLevel && nextPerk
+                ? `<p class="upgrade-perk">次: ${nextPerk}</p>` : ''}
+            </div>
+          </div>
+          <div class="upgrade-row-right">
+            <span class="upgrade-lv">Lv${Math.max(1, level)}</span>
+            ${actionHtml}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="upgrade-tab">
+        ${msg}
+        <p class="upgrade-hint">
+          🔨 合成屋のレベルが上がると、他の施設もレベルアップできるよ！
+        </p>
+        <div class="upgrade-list">
+          ${rows}
+        </div>
+      </div>
+    `;
+  }
+
   // クラフト中アニメーション（ハンマー演出）
   _renderCraftingAnimation() {
     return `
@@ -416,9 +503,34 @@ export class CraftsmanScreen {
   _bindEvents() {
     if (!this._container) return;
 
-    // もどるボタン
+    // もどるボタン（街へ）
     this._container.querySelector('.craft-back-btn')?.addEventListener('click', () => {
-      GameStore.setState('app.currentScreen', 'house');
+      GameStore.setState('app.currentScreen', 'town');
+    });
+
+    // メインタブ切替
+    this._container.querySelectorAll('.craft-main-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        this._mainTab    = btn.dataset.mainTab;
+        this._upgradeMsg = null;
+        this._selectedItem = null;
+        this._render();
+      });
+    });
+
+    // 施設アップグレードボタン
+    this._container.querySelectorAll('.upgrade-do-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const buildingId = btn.dataset.building;
+        const result = TownManager.upgrade(buildingId);
+        this._upgradeMsg = result.success
+          ? `✅ ${Config.TOWN.BUILDINGS.find(b => b.id === buildingId)?.name} を Lv${result.newLevel} にした！`
+          : `❌ ${result.reason}`;
+        this._dialogue = result.success
+          ? this._getDialogue('craftSuccess')
+          : this._getDialogue('craftFail');
+        this._render();
+      });
     });
 
     // NPC切替タブ

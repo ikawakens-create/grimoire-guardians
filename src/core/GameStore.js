@@ -169,6 +169,28 @@ export class GameStore {
 
       // 最終更新日時
       lastUpdated: null,
+    },
+
+    // 街のシステム（Phase 1-E）
+    town: {
+      // 施設レベル（0=ロック中 / 1以上=解放済み）
+      buildings: {
+        craftsman: { level: 1 },
+        library:   { level: 1 },
+        shop:      { level: 0 },
+        guild:     { level: 0 },
+        farm:      { level: 0 },
+      },
+      // 商店状態
+      shop: {
+        dailyFreeClaimedDate: null,  // 'YYYY-MM-DD'
+      },
+      // 農場状態
+      farm: {
+        // 各プロット: null | { seed, plantedQuizTotal, readyQuizTotal }
+        plots: [],
+        quizTotal: 0,  // 累計クイズ完了数（収穫判定用）
+      },
     }
   };
 
@@ -393,6 +415,17 @@ export class GameStore {
         triggeredMilestones: [],
         bonusSlots: { garden_extra: 0, floor1_extra: 0 },
         lastUpdated: null,
+      },
+      town: {
+        buildings: {
+          craftsman: { level: 1 },
+          library:   { level: 1 },
+          shop:      { level: 0 },
+          guild:     { level: 0 },
+          farm:      { level: 0 },
+        },
+        shop: { dailyFreeClaimedDate: null },
+        farm: { plots: [], quizTotal: 0 },
       }
     };
 

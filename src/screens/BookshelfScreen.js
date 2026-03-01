@@ -187,26 +187,16 @@ class BookshelfScreen {
     });
     rightGroup.appendChild(memoryBtn);
 
-    // 家ビルドボタン
+    // まちボタン（いえ・合成屋等のハブ）
     if (Config.FEATURES.ENABLE_HOUSE_BUILD) {
-      const houseBtn = document.createElement('button');
-      houseBtn.type = 'button';
-      houseBtn.className = 'button button-small bookshelf-house-btn';
-      houseBtn.innerHTML = '🏠 いえ';
-      houseBtn.addEventListener('click', () => {
-        GameStore.setState('app.currentScreen', 'house');
+      const townBtn = document.createElement('button');
+      townBtn.type = 'button';
+      townBtn.className = 'button button-small bookshelf-town-btn';
+      townBtn.innerHTML = '🏘️ まち';
+      townBtn.addEventListener('click', () => {
+        GameStore.setState('app.currentScreen', 'town');
       });
-      rightGroup.appendChild(houseBtn);
-
-      // 合成屋ボタン
-      const craftsmanBtn = document.createElement('button');
-      craftsmanBtn.type = 'button';
-      craftsmanBtn.className = 'button button-small bookshelf-craftsman-btn';
-      craftsmanBtn.innerHTML = '🔨 ごしょくにん';
-      craftsmanBtn.addEventListener('click', () => {
-        GameStore.setState('app.currentScreen', 'craftsman');
-      });
-      rightGroup.appendChild(craftsmanBtn);
+      rightGroup.appendChild(townBtn);
     }
 
     // もちものボタン
