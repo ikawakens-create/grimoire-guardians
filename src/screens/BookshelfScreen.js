@@ -15,6 +15,7 @@ import { GameStore } from '../core/GameStore.js';
 import { Config } from '../core/Config.js';
 import { SoundManager, SoundType } from '../core/SoundManager.js';
 import BookCard from '../components/BookCard.js';
+import { CharacterAvatar } from '../components/CharacterAvatar.js';
 import WORLDS from '../data/worlds.js';
 import InventoryScreen from './InventoryScreen.js';
 import MemoryIsleScreen from './MemoryIsleScreen.js';
@@ -163,6 +164,14 @@ class BookshelfScreen {
     playerInfo.className = 'bookshelf-player';
     playerInfo.textContent = `${playerName} さん`;
 
+    // キャラクターアバター（小）
+    const avatar = new CharacterAvatar('sm').render();
+    avatar.style.cursor = 'pointer';
+    avatar.title = 'スキンをかえる';
+    avatar.addEventListener('click', () => {
+      GameStore.setState('app.currentScreen', 'craftsman');
+    });
+
     // 右側バッジ群
     const rightGroup = document.createElement('div');
     rightGroup.className = 'bookshelf-header-right';
@@ -236,6 +245,7 @@ class BookshelfScreen {
 
     header.appendChild(title);
     header.appendChild(playerInfo);
+    header.appendChild(avatar);
     header.appendChild(rightGroup);
 
     return header;
