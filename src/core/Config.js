@@ -161,9 +161,19 @@ export const Config = {
 
     // Phase 1以降の機能
     ENABLE_HOUSE_BUILD: true,       // 家ビルドシステム（Phase 1-D）
-    ENABLE_SKINS: false,
+    ENABLE_SKINS: true,             // スキンシステム（Phase 1-F）
     ENABLE_MEMORY_ISLE: false,
     ENABLE_DLC: false
+  },
+
+  // ─── スキンシステム（Phase 1-F） ──────────────────────────────────────
+  SKIN: {
+    // 宝箱からかけらが落ちる確率
+    FRAGMENT_DROP_RATE: 0.15,
+    // かけら N 枚で解放
+    FRAGMENTS_NEEDED: 3,
+    // テイラー解放に必要な合成屋レベル
+    TAILOR_UNLOCK_LEVEL: 2,
   },
 
   // 家ビルドシステム設定
@@ -350,5 +360,6 @@ Object.freeze(Config.TOWN);
 Object.freeze(Config.TOWN.UPGRADE_COSTS);
 Object.freeze(Config.TOWN.SHOP);
 Object.freeze(Config.TOWN.FARM);
+Object.freeze(Config.SKIN);
 
 export default Config;

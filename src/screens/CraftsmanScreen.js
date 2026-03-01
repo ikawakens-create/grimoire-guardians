@@ -21,6 +21,15 @@ import { Config } from '../core/Config.js';
 import Logger from '../core/Logger.js';
 import { HouseManager } from '../core/HouseManager.js';
 import { TownManager } from '../core/TownManager.js';
+import { SkinManager } from '../core/SkinManager.js';
+import {
+  COLLECTIBLE_SKINS,
+  SKIN_CATEGORY,
+  SKIN_OBTAIN,
+  FRAGMENTS_NEEDED,
+  RARITY_LABEL as SKIN_RARITY_LABEL,
+  getObtainHint,
+} from '../data/skinItems.js';
 import {
   getItemById,
   RARITY,
@@ -127,6 +136,14 @@ const MAIN_TABS = [
   { id: 'upgrade', label: '⬆️ しせつ強化' },
 ];
 
+// スキンカテゴリータブ（テイラー担当）
+const TAILOR_CATEGORIES = [
+  { id: 'cool',   label: '⚔️ つよい系' },
+  { id: 'cute',   label: '🌸 かわいい系' },
+  { id: 'funny',  label: '😄 おもしろ系' },
+  { id: 'secret', label: '🌟 ひみつ系' },
+];
+
 export class CraftsmanScreen {
   constructor() {
     this._container = null;
@@ -138,6 +155,10 @@ export class CraftsmanScreen {
     this._dialogue = '';
     this._unsubscribe = null;
     this._upgradeMsg = null;     // アップグレード結果メッセージ
+    // テイラータブ用
+    this._skinCategory = 'cool'; // 現在のスキンカテゴリー
+    this._selectedSkin = null;   // 選択中スキンID
+    this._craftMsg = null;       // クラフト結果メッセージ
   }
 
   // ─────────────────────────────────────────────
@@ -199,7 +220,9 @@ export class CraftsmanScreen {
         ${this._mainTab === 'upgrade'
           ? this._renderUpgradeTab()
           : this._npc === NPC.TAILOR
-            ? this._renderTailorLocked()
+            ? (Config.FEATURES.ENABLE_SKINS && (GameStore.getState('town.buildings.craftsman.level') || 1) >= Config.SKIN.TAILOR_UNLOCK_LEVEL
+                ? this._renderTailorTab()
+                : this._renderTailorLocked())
             : `
               ${this._renderCategoryTabs()}
               <div class="craftsman-content">
@@ -269,11 +292,159 @@ export class CraftsmanScreen {
         <p class="tailor-locked-title">スキン屋さん、じゅんびちゅう！</p>
         <p class="tailor-locked-body">
           もうすぐ、キャラクターのふくや<br>アクセサリーが作れるようになるよ！<br>
-          <small>（Phase 1-E で実装予定）</small>
+          <small>（合成屋をLv${Config.SKIN.TAILOR_UNLOCK_LEVEL}にしよう！）</small>
         </p>
         <div class="tailor-preview-items">
           <span>👑</span><span>🧣</span><span>🔮</span><span>🧶</span><span>🎨</span>
         </div>
+      </div>
+    `;
+  }
+
+  // ─────────────────────────────────────────────
+  // テイラー（スキン）タブ
+  // ─────────────────────────────────────────────
+
+  _renderTailorTab() {
+    const stats   = SkinManager.getCollectionStats();
+    const msgHtml = this._craftMsg
+      ? `<div class="tailor-craft-msg">${this._craftMsg}</div>` : '';
+
+    // カテゴリータブ
+    const catTabs = TAILOR_CATEGORIES.map(c => `
+      <button class="craft-cat-btn ${this._skinCategory === c.id ? 'active' : ''}"
+              data-skin-cat="${c.id}">${c.label}</button>
+    `).join('');
+
+    // スキンカード一覧
+    const skinsInCat = COLLECTIBLE_SKINS.filter(s => s.category === this._skinCategory);
+    const skinCards  = skinsInCat.map(skin => {
+      const unlocked = SkinManager.isUnlocked(skin.id);
+      const equipped = SkinManager.getCurrentSkinId() === skin.id;
+      const frags    = SkinManager.getFragmentCount(skin.id);
+      const { craftable } = (skin.obtain.method === SKIN_OBTAIN.CRAFT)
+        ? SkinManager.canCraft(skin.id)
+        : { craftable: false };
+
+      let statusClass = 'skin-locked';
+      let badge = '';
+      if (equipped) {
+        statusClass = 'skin-equipped';
+        badge = '<span class="skin-badge badge-equipped">✓ そうびちゅう</span>';
+      } else if (unlocked) {
+        statusClass = 'skin-unlocked';
+        badge = '<span class="skin-badge badge-unlocked">✓ もってる</span>';
+      } else if (craftable) {
+        statusClass = 'skin-craftable glow-pulse';
+        badge = '<span class="skin-badge badge-craftable">✨ つくれる！</span>';
+      } else if (skin.obtain.method === SKIN_OBTAIN.FRAGMENT && frags > 0) {
+        statusClass = 'skin-fragment-progress';
+        badge = `<span class="skin-badge badge-frag">💎${frags}/${FRAGMENTS_NEEDED}</span>`;
+      }
+
+      return `
+        <div class="craft-item-card ${statusClass} ${this._selectedSkin === skin.id ? 'selected' : ''}"
+             data-skin-id="${skin.id}" role="button" tabindex="0">
+          <div class="craft-item-img">
+            <img src="${skin.image}" alt="${skin.name}"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+            <span style="display:none;font-size:2.5rem">${skin.emoji}</span>
+          </div>
+          <p class="craft-item-name">${skin.name}</p>
+          ${badge}
+        </div>
+      `;
+    }).join('') || '<p class="craft-empty">スキンがありません</p>';
+
+    // 詳細パネル
+    const detailHtml = this._selectedSkin
+      ? this._renderSkinDetail(this._selectedSkin)
+      : '';
+
+    return `
+      <div class="tailor-tab">
+        ${msgHtml}
+        <div class="tailor-stats">
+          🎭 コレクション: ${stats.unlocked}/${stats.total} (${stats.completion}%)
+        </div>
+        <div class="craft-category-tabs">${catTabs}</div>
+        <div class="craftsman-content">
+          <div class="craft-item-list">${skinCards}</div>
+          ${detailHtml}
+        </div>
+      </div>
+    `;
+  }
+
+  _renderSkinDetail(skinId) {
+    const skin     = COLLECTIBLE_SKINS.find(s => s.id === skinId);
+    if (!skin) return '';
+
+    const unlocked = SkinManager.isUnlocked(skin.id);
+    const equipped = SkinManager.getCurrentSkinId() === skin.id;
+    const frags    = SkinManager.getFragmentCount(skin.id);
+
+    let actionBtn = '';
+
+    if (equipped) {
+      actionBtn = `<button class="btn btn-large btn-secondary" disabled>✓ そうびちゅう</button>`;
+    } else if (unlocked) {
+      actionBtn = `
+        <button class="btn btn-large btn-success tailor-equip-btn" data-skin-id="${skin.id}">
+          👗 きがえる！
+        </button>
+      `;
+    } else if (skin.obtain.method === SKIN_OBTAIN.CRAFT) {
+      const { craftable, missing } = SkinManager.canCraft(skin.id);
+      const materials = GameStore.getState('inventory.materials') || {};
+      const recipe    = skin.obtain.recipe || {};
+      const MOJI = { wood:'🪵',stone:'🪨',brick:'🧱',gem:'💎',star_fragment:'✨',cloth:'🧶',paint:'🎨',crown:'👑',cape:'🧣',magic_orb:'🔮' };
+      const recipeHtml = Object.entries(recipe).map(([m, req]) => {
+        const have = materials[m] || 0;
+        return `<span class="recipe-chip ${have >= req ? 'ok' : 'ng'}">${MOJI[m]} ${have}/${req}</span>`;
+      }).join('');
+      if (craftable) {
+        actionBtn = `
+          <div class="detail-recipe-row">${recipeHtml}</div>
+          <button class="btn btn-large btn-warning tailor-craft-btn" data-skin-id="${skin.id}">
+            ✂️ つくる！
+          </button>
+        `;
+      } else {
+        actionBtn = `
+          <div class="detail-recipe-row">${recipeHtml}</div>
+          <button class="btn btn-large btn-secondary" disabled>素材が足りない…</button>
+        `;
+      }
+    } else if (skin.obtain.method === SKIN_OBTAIN.FRAGMENT) {
+      actionBtn = `
+        <div class="skin-frag-row">
+          ${'💎'.repeat(frags)}${'🔘'.repeat(Math.max(0, FRAGMENTS_NEEDED - frags))}
+          <span class="frag-count">${frags}/${FRAGMENTS_NEEDED}</span>
+        </div>
+        <button class="btn btn-large btn-secondary" disabled>
+          宝箱からかけらを集めよう！
+        </button>
+      `;
+    } else {
+      actionBtn = `
+        <button class="btn btn-large btn-secondary" disabled>
+          ${getObtainHint(skin)}
+        </button>
+      `;
+    }
+
+    return `
+      <div class="craft-detail-panel">
+        <div class="detail-header">
+          <span class="detail-big-emoji">${skin.emoji}</span>
+          <div class="detail-info">
+            <p class="detail-name">${skin.name}</p>
+            <p class="detail-rarity rarity-${skin.rarity}">${SKIN_RARITY_LABEL[skin.rarity] || ''}</p>
+          </div>
+        </div>
+        <p class="detail-obtain-hint">${getObtainHint(skin)}</p>
+        ${actionBtn}
       </div>
     `;
   }
@@ -574,6 +745,51 @@ export class CraftsmanScreen {
     this._container.querySelector('.craft-place-btn')?.addEventListener('click', () => {
       const id = this._container.querySelector('.craft-place-btn')?.dataset.itemId;
       if (id) this._doPlace(id);
+    });
+
+    // ──────────── テイラータブ ────────────
+
+    // スキンカテゴリータブ切替
+    this._container.querySelectorAll('[data-skin-cat]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        this._skinCategory = btn.dataset.skinCat;
+        this._selectedSkin = null;
+        this._craftMsg     = null;
+        this._render();
+      });
+    });
+
+    // スキンカードタップ（詳細表示）
+    this._container.querySelectorAll('[data-skin-id]').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.dataset.skinId;
+        this._selectedSkin = this._selectedSkin === id ? null : id;
+        this._craftMsg     = null;
+        this._render();
+      });
+    });
+
+    // スキンクラフトボタン
+    this._container.querySelector('.tailor-craft-btn')?.addEventListener('click', () => {
+      const id = this._container.querySelector('.tailor-craft-btn')?.dataset.skinId;
+      if (!id) return;
+      const result = SkinManager.craft(id);
+      this._craftMsg = result.success
+        ? `✨ ${COLLECTIBLE_SKINS.find(s => s.id === id)?.name}をゲット！`
+        : `❌ ${result.reason}`;
+      this._dialogue = result.success
+        ? this._getDialogue('craftSuccess')
+        : this._getDialogue('craftFail');
+      this._render();
+    });
+
+    // スキン装備ボタン
+    this._container.querySelector('.tailor-equip-btn')?.addEventListener('click', () => {
+      const id = this._container.querySelector('.tailor-equip-btn')?.dataset.skinId;
+      if (!id) return;
+      SkinManager.equip(id);
+      this._craftMsg = '👗 きがえたよ！';
+      this._render();
     });
   }
 

@@ -19,6 +19,7 @@ import { SaveManager } from '../core/SaveManager.js';
 import { Config } from '../core/Config.js';
 import { SoundManager, SoundType } from '../core/SoundManager.js';
 import HapticFeedback from '../utils/HapticFeedback.js';
+import { CharacterAvatar } from '../components/CharacterAvatar.js';
 import WORLDS, { getWorldById } from '../data/worlds.js';
 import { getMonsterByWorldId } from '../data/memory-monsters.js';
 
@@ -133,6 +134,12 @@ class ResultScreen {
     this._el = el;
     this._container.appendChild(el);
 
+    // アバターを DOM スロットに挿入
+    const avatarSlot = el.querySelector('#result-avatar-slot');
+    if (avatarSlot && this._avatar) {
+      avatarSlot.appendChild(this._avatar.render());
+    }
+
     // 進捗・インベントリを更新してセーブ
     this._persistResult(cleared);
 
@@ -233,6 +240,12 @@ class ResultScreen {
     const worldDef  = getWorldById(GameStore.getState('currentSession.worldId'));
     const worldTitle = worldDef ? worldDef.title : 'クイズ';
 
+    // キャラクターアバター（感情つき）
+    const emotion = this._result.percentage >= 0.9 ? 'happy'
+                  : this._result.percentage >= Config.GAME.CLEAR_THRESHOLD ? 'normal'
+                  : 'sad';
+    this._avatar = new CharacterAvatar('lg', emotion);
+
     // ラベルバッジ
     const clearBadge  = cleared
       ? '<div class="result-clear-badge">🎉 クリア！</div>'
@@ -275,6 +288,9 @@ class ResultScreen {
           ${clearBadge}
           ${effortBadge}
         </div>
+
+        <!-- キャラクターアバター -->
+        <div class="result-avatar-slot" id="result-avatar-slot"></div>
 
         <!-- 星評価 -->
         <div class="result-stars" id="result-stars">

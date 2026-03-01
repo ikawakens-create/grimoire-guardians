@@ -30,6 +30,7 @@ import { ShopScreen } from './screens/ShopScreen.js';
 import { GuildScreen } from './screens/GuildScreen.js';
 import { FarmScreen } from './screens/FarmScreen.js';
 import { TownManager } from './core/TownManager.js';
+import { SkinManager } from './core/SkinManager.js';
 
 /**
  * アプリケーション初期化
@@ -58,6 +59,14 @@ async function init() {
     // 4. EventManager 初期化（#event-layer DOM 取得）
     Logger.info('[Init] Initializing event manager...');
     EventManager.init();
+
+    // 4.5. スキン解放チェック（ログイン時）
+    if (Config.FEATURES.ENABLE_SKINS) {
+      const streakUnlocked = SkinManager.checkStreakUnlocks();
+      if (streakUnlocked.length) {
+        Logger.info('[Init] Streak skins unlocked:', streakUnlocked);
+      }
+    }
 
     // 5. 初期化完了
     GameStore.setState('app.isInitialized', true);
@@ -284,6 +293,11 @@ function showResult(gameScreen, quizResult, worldData) {
 
   // 農場カウンタ更新・施設解放チェック
   TownManager.onQuizCompleted();
+
+  // スキンマイルストーン解放チェック
+  if (Config.FEATURES.ENABLE_SKINS) {
+    SkinManager.checkMilestoneUnlocks();
+  }
 
   // クリアしたかどうかを判定（ブックシェルフのアニメーション用）
   const cleared = quizResult.percentage >= Config.GAME.CLEAR_THRESHOLD;

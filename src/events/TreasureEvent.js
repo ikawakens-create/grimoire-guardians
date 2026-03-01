@@ -15,6 +15,7 @@ import { GameStore } from '../core/GameStore.js';
 import { SoundManager, SoundType } from '../core/SoundManager.js';
 import HapticFeedback from '../utils/HapticFeedback.js';
 import Logger from '../core/Logger.js';
+import { SkinManager } from '../core/SkinManager.js';
 
 // ─────────────────────────────────────────
 // 定数
@@ -235,10 +236,13 @@ class TreasureEvent {
     let dropId  = null;
     let dropCnt = 1;
 
+    let fragmentResult = null;
     if (isCorrect) {
       dropId  = pickDrop(isMimic);  // ミミックはレア確定
       dropCnt = isMimic ? 2 : 1;
       GameStore.addMaterial(dropId, dropCnt);
+      // スキンかけら抽選（15%）
+      fragmentResult = SkinManager.rollForFragment();
     }
 
     const titleText = isMimic
@@ -254,6 +258,11 @@ class TreasureEvent {
         <span>${EMOJI_MAP[dropId] || '📦'}</span>
         <span>${NAME_MAP[dropId] || dropId} ×${dropCnt}</span>
       </div>
+      ${fragmentResult?.dropped ? `
+        <div class="treasure-drop-item treasure-skin-frag">
+          <span>💎</span>
+          <span>スキンのかけら！ (${fragmentResult.combined ? '✨ 解放！' : `${SkinManager.getFragmentCount(fragmentResult.skinId)}/3`})</span>
+        </div>` : ''}
     ` : '';
 
     layer.innerHTML = `

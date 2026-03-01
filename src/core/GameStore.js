@@ -36,7 +36,13 @@ export class GameStore {
       /** 連続プレイ日数 */
       streak: 1,
       /** ストリーク最終更新日（Date.toDateString()形式） */
-      streakLastDate: null
+      streakLastDate: null,
+      /** 現在装備中スキンID */
+      currentSkin: 'default',
+      /** 解放済みスキンID配列 */
+      unlockedSkins: ['default'],
+      /** スキンのかけら所持数 { skinId: count } */
+      skinFragments: {}
     },
 
     // 進捗情報
@@ -322,7 +328,10 @@ export class GameStore {
         createdAt: new Date().toISOString(),
         lastPlayedAt: new Date().toISOString(),
         streak: 1,
-        streakLastDate: null
+        streakLastDate: null,
+        currentSkin: 'default',
+        unlockedSkins: ['default'],
+        skinFragments: {}
       },
       progress: {
         subject: Config.GAME.SUBJECT,
