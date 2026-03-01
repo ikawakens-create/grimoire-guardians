@@ -656,3 +656,383 @@
   50%  { box-shadow: 0 0 24px rgba(157, 78, 221, 0.8); }
   100% { box-shadow: 0 0 10px rgba(157, 78, 221, 0.3); }
 }
+
+/* ══════════════════════════════════════════════════════
+   家ビルド v3.1 — 装飾レイヤー アニメーション
+   各スタイルの装飾オーバーレイに適用するCSSクラス
+   ══════════════════════════════════════════════════════ */
+
+/* ─── 共通：装飾レイヤーの基本スタイル ─────────────── */
+.house-deco-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: inherit;
+  z-index: 10;
+}
+
+/* ─── もく（木）: 蔓がゆれる ─────────────────────── */
+@keyframes deco-wood-sway {
+  0%, 100% { transform: rotate(-2deg) translateX(0); }
+  50%      { transform: rotate(2deg) translateX(4px); }
+}
+.deco-wood::before, .deco-wood::after {
+  content: '🍃';
+  position: absolute;
+  font-size: 1.4rem;
+  animation: deco-wood-sway 3s ease-in-out infinite;
+  will-change: transform;
+}
+.deco-wood::before { top: 15%; left: 8%; animation-delay: 0s; }
+.deco-wood::after  { top: 40%; right: 8%; animation-delay: 1.5s; }
+
+/* ─── いし（石）: ルーン文字がパルス ─────────────── */
+@keyframes deco-stone-glow {
+  0%, 100% { opacity: 0.3; text-shadow: none; }
+  50%      { opacity: 1;   text-shadow: 0 0 12px rgba(180, 200, 255, 0.9); }
+}
+.deco-stone::before {
+  content: '✦';
+  position: absolute;
+  font-size: 1.8rem;
+  color: #a0b4d0;
+  animation: deco-stone-glow 2.5s ease-in-out infinite;
+  top: 20%; left: 50%; transform: translateX(-50%);
+  will-change: opacity, text-shadow;
+}
+
+/* ─── れんが: ランタンが揺れる ─────────────────────── */
+@keyframes deco-brick-lantern {
+  0%, 100% { transform: rotate(-8deg); }
+  50%      { transform: rotate(8deg); }
+}
+.deco-brick::before, .deco-brick::after {
+  content: '🏮';
+  position: absolute;
+  font-size: 1.3rem;
+  animation: deco-brick-lantern 2s ease-in-out infinite;
+  transform-origin: top center;
+  will-change: transform;
+}
+.deco-brick::before { top: 10%; left: 15%; animation-delay: 0s; }
+.deco-brick::after  { top: 10%; right: 15%; animation-delay: 1s; }
+
+/* ─── たけ（竹）: 提灯が揺れる ─────────────────────── */
+@keyframes deco-bamboo-swing {
+  0%, 100% { transform: rotate(-10deg) scale(1); }
+  50%      { transform: rotate(10deg) scale(1.05); }
+}
+.deco-bamboo::before {
+  content: '🏮';
+  position: absolute;
+  font-size: 1.6rem;
+  top: 8%; left: 50%; transform: translateX(-50%);
+  animation: deco-bamboo-swing 1.8s ease-in-out infinite;
+  transform-origin: top center;
+  will-change: transform;
+}
+
+/* ─── もり（森）: 妖精の光がふわふわ ───────────────── */
+@keyframes deco-forest-float {
+  0%   { transform: translateY(0) translateX(0); opacity: 0.6; }
+  33%  { transform: translateY(-8px) translateX(6px); opacity: 1; }
+  66%  { transform: translateY(-4px) translateX(-4px); opacity: 0.8; }
+  100% { transform: translateY(0) translateX(0); opacity: 0.6; }
+}
+.deco-forest::before, .deco-forest::after {
+  content: '✨';
+  position: absolute;
+  font-size: 0.9rem;
+  animation: deco-forest-float 3s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+.deco-forest::before { top: 25%; left: 20%; animation-delay: 0s; }
+.deco-forest::after  { top: 55%; right: 25%; animation-delay: 1.5s; }
+
+/* ─── こおり（氷）: 氷柱がゆらゆら ─────────────────── */
+@keyframes deco-ice-sway {
+  0%, 100% { transform: scaleY(1) translateX(0); }
+  50%      { transform: scaleY(1.05) translateX(2px); }
+}
+@keyframes deco-ice-sparkle {
+  0%, 100% { opacity: 0.5; filter: brightness(1); }
+  50%      { opacity: 1;   filter: brightness(1.5) drop-shadow(0 0 6px #a8d8ff); }
+}
+.deco-ice::before {
+  content: '❄️';
+  position: absolute;
+  font-size: 1.5rem;
+  top: 5%; left: 50%; transform: translateX(-50%);
+  animation: deco-ice-sparkle 2s ease-in-out infinite;
+  will-change: opacity, filter;
+}
+.deco-ice::after {
+  content: '❄️';
+  position: absolute;
+  font-size: 0.9rem;
+  bottom: 12%; right: 10%;
+  animation: deco-ice-sway 2.5s ease-in-out infinite;
+  animation-delay: 0.7s;
+  will-change: transform;
+}
+
+/* ─── さくら: 花びらが落ちる ────────────────────────── */
+@keyframes deco-sakura-fall {
+  0%   { transform: translateY(-10%) translateX(0) rotate(0deg); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.8; }
+  100% { transform: translateY(110%) translateX(30px) rotate(360deg); opacity: 0; }
+}
+.deco-sakura::before, .deco-sakura::after {
+  content: '🌸';
+  position: absolute;
+  font-size: 1.1rem;
+  animation: deco-sakura-fall 4s linear infinite;
+  will-change: transform, opacity;
+}
+.deco-sakura::before { left: 20%; animation-delay: 0s; animation-duration: 3.5s; }
+.deco-sakura::after  { left: 65%; animation-delay: 1.8s; animation-duration: 4.5s; }
+
+/* ─── おかし（キャンディ）: ぽよぽよ ───────────────── */
+@keyframes deco-candy-bounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-6px) scale(1.1); }
+}
+.deco-candy::before, .deco-candy::after {
+  content: '🍭';
+  position: absolute;
+  font-size: 1.4rem;
+  animation: deco-candy-bounce 1.5s ease-in-out infinite;
+  will-change: transform;
+}
+.deco-candy::before { top: 10%; left: 10%; animation-delay: 0s; }
+.deco-candy::after  { top: 10%; right: 10%; animation-delay: 0.75s; }
+
+/* ─── ほのお（炎）: 炎がゆらめく ───────────────────── */
+@keyframes deco-flame-flick {
+  0%, 100% { transform: scaleY(1) skewX(0deg); filter: brightness(1); }
+  25%      { transform: scaleY(1.1) skewX(-3deg); filter: brightness(1.2); }
+  75%      { transform: scaleY(0.95) skewX(3deg); filter: brightness(0.9); }
+}
+.deco-flame::before, .deco-flame::after {
+  content: '🔥';
+  position: absolute;
+  font-size: 1.6rem;
+  transform-origin: bottom center;
+  animation: deco-flame-flick 0.8s ease-in-out infinite;
+  will-change: transform, filter;
+}
+.deco-flame::before { bottom: 15%; left: 10%; animation-delay: 0s; }
+.deco-flame::after  { bottom: 15%; right: 10%; animation-delay: 0.4s; }
+
+/* ─── うみ（海）: 泡がぷくぷく ─────────────────────── */
+@keyframes deco-sea-bubble {
+  0%   { transform: translateY(0) scale(0.8); opacity: 0; }
+  20%  { opacity: 0.8; }
+  80%  { opacity: 0.6; }
+  100% { transform: translateY(-60px) scale(1.2); opacity: 0; }
+}
+.deco-sea::before, .deco-sea::after {
+  content: '🫧';
+  position: absolute;
+  font-size: 1rem;
+  animation: deco-sea-bubble 3s ease-in infinite;
+  will-change: transform, opacity;
+}
+.deco-sea::before { bottom: 20%; left: 25%; animation-delay: 0s; }
+.deco-sea::after  { bottom: 20%; right: 25%; animation-delay: 1.5s; }
+
+/* ─── くろのしろ（黒城）: 煙がゆらゆら ─────────────── */
+@keyframes deco-black-smoke {
+  0%   { transform: translateY(0) scale(1); opacity: 0.7; }
+  50%  { transform: translateY(-12px) scale(1.3); opacity: 0.4; }
+  100% { transform: translateY(-24px) scale(1.6); opacity: 0; }
+}
+.deco-black::before {
+  content: '💜';
+  position: absolute;
+  font-size: 1rem;
+  top: 20%; left: 50%; transform: translateX(-50%);
+  animation: deco-black-smoke 2.5s ease-out infinite;
+  will-change: transform, opacity;
+}
+
+/* ─── かみなり（雷）: 雷フラッシュ ─────────────────── */
+@keyframes deco-thunder-arc {
+  0%, 90%, 100% { opacity: 0; }
+  5%, 8%        { opacity: 1; filter: drop-shadow(0 0 8px #ffe);  }
+  6%            { opacity: 0.4; }
+}
+.deco-thunder::before {
+  content: '⚡';
+  position: absolute;
+  font-size: 2rem;
+  top: 5%; left: 50%; transform: translateX(-50%);
+  animation: deco-thunder-arc 3s linear infinite;
+  will-change: opacity, filter;
+}
+
+/* ─── つき（月）: 月光がゆっくり揺れる ─────────────── */
+@keyframes deco-moon-glow {
+  0%, 100% { opacity: 0.6; filter: drop-shadow(0 0 4px #b3aee0); }
+  50%      { opacity: 1;   filter: drop-shadow(0 0 14px #d0c8ff); }
+}
+.deco-moon::before {
+  content: '🌙';
+  position: absolute;
+  font-size: 1.6rem;
+  top: 8%; right: 10%;
+  animation: deco-moon-glow 4s ease-in-out infinite;
+  will-change: opacity, filter;
+}
+
+/* ─── ほうせき（宝石）: レインボープリズム ──────────── */
+@keyframes deco-jewel-shine {
+  0%   { filter: hue-rotate(0deg) brightness(1.2); }
+  100% { filter: hue-rotate(360deg) brightness(1.4); }
+}
+.deco-jewel::before {
+  content: '💎';
+  position: absolute;
+  font-size: 1.5rem;
+  top: 10%; left: 50%; transform: translateX(-50%);
+  animation: deco-jewel-shine 2s linear infinite;
+  will-change: filter;
+}
+
+/* ─── ほしのしろ（星の城）: 星が軌道を描く ─────────── */
+@keyframes deco-star-orbit {
+  0%   { transform: rotate(0deg) translateX(28px) rotate(0deg); opacity: 1; }
+  100% { transform: rotate(360deg) translateX(28px) rotate(-360deg); opacity: 0.7; }
+}
+@keyframes deco-star-aurora {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+.deco-star::before, .deco-star::after {
+  content: '⭐';
+  position: absolute;
+  font-size: 1rem;
+  top: 50%; left: 50%;
+  animation: deco-star-orbit 4s linear infinite;
+  will-change: transform;
+}
+.deco-star::after {
+  font-size: 0.7rem;
+  animation-duration: 3s;
+  animation-direction: reverse;
+  animation-delay: 1.5s;
+}
+
+/* ══════════════════════════════════════════════════════
+   家ビルド v3.1 — フルセットボーナス エフェクト
+   ══════════════════════════════════════════════════════ */
+
+/* 2レイヤー一致: 小さなグロー */
+@keyframes fullset-glow-small {
+  0%, 100% { box-shadow: 0 0 8px rgba(255, 220, 50, 0.4); }
+  50%      { box-shadow: 0 0 18px rgba(255, 220, 50, 0.8); }
+}
+.house-fullset-glow-small {
+  animation: fullset-glow-small 2s ease-in-out infinite;
+}
+
+/* 4レイヤー一致: 中オーラ */
+@keyframes fullset-aura-medium {
+  0%, 100% { box-shadow: 0 0 16px rgba(255, 180, 0, 0.5), 0 0 32px rgba(255, 200, 50, 0.2); }
+  50%      { box-shadow: 0 0 28px rgba(255, 180, 0, 0.9), 0 0 56px rgba(255, 200, 50, 0.4); }
+}
+.house-fullset-aura-medium {
+  animation: fullset-aura-medium 1.8s ease-in-out infinite;
+}
+
+/* 5レイヤー一致: 大オーラ */
+@keyframes fullset-aura-large {
+  0%   { box-shadow: 0 0 20px rgba(255, 220, 0, 0.6), 0 0 40px rgba(255, 150, 0, 0.3); }
+  50%  { box-shadow: 0 0 40px rgba(255, 220, 0, 1),   0 0 80px rgba(255, 150, 0, 0.6); }
+  100% { box-shadow: 0 0 20px rgba(255, 220, 0, 0.6), 0 0 40px rgba(255, 150, 0, 0.3); }
+}
+.house-fullset-aura-large {
+  animation: fullset-aura-large 1.5s ease-in-out infinite;
+}
+
+/* 6レイヤー完全一致: マスター（虹オーラ） */
+@keyframes fullset-master {
+  0%   { box-shadow: 0 0 30px rgba(255, 0, 128, 0.7),   0 0 60px rgba(255, 200, 0, 0.4); filter: hue-rotate(0deg); }
+  50%  { box-shadow: 0 0 50px rgba(0, 200, 255, 0.9),   0 0 100px rgba(150, 0, 255, 0.5); filter: hue-rotate(180deg); }
+  100% { box-shadow: 0 0 30px rgba(255, 0, 128, 0.7),   0 0 60px rgba(255, 200, 0, 0.4); filter: hue-rotate(360deg); }
+}
+.house-fullset-master {
+  animation: fullset-master 2s ease-in-out infinite;
+  will-change: box-shadow, filter;
+}
+
+/* フルセットバッジアニメーション */
+@keyframes fullset-badge-pop {
+  0%   { transform: scale(0) rotate(-10deg); opacity: 0; }
+  60%  { transform: scale(1.15) rotate(3deg); opacity: 1; }
+  80%  { transform: scale(0.95) rotate(-1deg); }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+.house-fullset-badge {
+  animation: fullset-badge-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  display: inline-block;
+}
+
+/* ══════════════════════════════════════════════════════
+   家ビルド v3.1 — 写真機能 (PhotoScreen) エフェクト
+   ══════════════════════════════════════════════════════ */
+
+/* キャラクターポーズ */
+.pose-cool {
+  transform: scale(1) rotate(-5deg);
+  filter: contrast(1.1) brightness(1.05);
+}
+.pose-banzai {
+  transform: translateY(-8px) scale(1.05);
+  animation: pose-banzai-bounce 0.6s ease-out;
+}
+@keyframes pose-banzai-bounce {
+  0%   { transform: translateY(0) scale(1); }
+  40%  { transform: translateY(-14px) scale(1.08); }
+  70%  { transform: translateY(-6px) scale(1.03); }
+  100% { transform: translateY(-8px) scale(1.05); }
+}
+.pose-bow {
+  transform: rotate(25deg) translateY(8px);
+  transform-origin: top center;
+}
+
+/* カメラシャッター演出 */
+@keyframes photo-shutter {
+  0%   { opacity: 0; }
+  15%  { opacity: 0.9; }
+  40%  { opacity: 0.7; }
+  100% { opacity: 0; }
+}
+.photo-shutter-flash {
+  position: fixed;
+  inset: 0;
+  background: white;
+  z-index: 9999;
+  pointer-events: none;
+  animation: photo-shutter 0.4s ease-out forwards;
+}
+
+/* スタンプ配置アニメーション */
+@keyframes stamp-place {
+  0%   { transform: scale(2) rotate(-15deg); opacity: 0; }
+  60%  { transform: scale(0.9) rotate(5deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+.photo-stamp {
+  position: absolute;
+  cursor: pointer;
+  user-select: none;
+  animation: stamp-place 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  touch-action: none;
+  will-change: transform;
+  font-size: 2rem;
+  line-height: 1;
+}

@@ -1,59 +1,55 @@
 /**
  * HouseScreen.js - Grimoire Guardians
- * 家ビルドシステム メイン画面
+ * 家ビルドシステム メイン画面 v3.1
  *
- * ★ v2.0 改訂点:
- *  - デフォルト表示を「全景ビュー（家全体が見える）」に変更
- *  - セクション解放時に祝福アニメーションモーダルを表示
- *  - マイルストーン達成時の演出
- *  - 各セクションをタップすると詳細ビューに切替
+ * 変更点（v2→v3.1）:
+ *  - 全景ビューを「レイヤースタイル合成」表示に刷新
+ *  - 装飾レイヤー（oーバーレイ）の CSS アニメーション適用
+ *  - フルセットボーナス（2〜6レイヤー一致）の段階演出
+ *  - コンボ名バッジ表示
+ *  - 📷 マイハウス写真館ボタン追加
+ *  - セクション解放＋スタイル解放の祝福モーダル統合
  *
- * @version 2.0
- * @date 2026-02-26
+ * @version 3.1
+ * @date 2026-03-01
  */
 
 import { GameStore } from '../core/GameStore.js';
 import { Config } from '../core/Config.js';
 import Logger from '../core/Logger.js';
 import { HouseManager } from '../core/HouseManager.js';
-import { getItemById, HOUSE_SECTION } from '../data/houseItems.js';
+import { getItemById } from '../data/houseItems.js';
+import { getStyleById } from '../data/styleItems.js';
 
 // ビューモード
 const VIEW = {
-  OVERVIEW: 'overview',   // ★ 全景ビュー（デフォルト）
-  EXTERIOR: 'exterior',
-  GARDEN:   'garden',
-  FLOOR1:   'floor1',
-  FLOOR2:   'floor2',
-  FLOOR3:   'floor3',
-  TOWER:    'tower',
+  OVERVIEW:   'overview',
+  GARDEN:     'garden',
+  FLOOR1:     'floor1',
+  FLOOR2:     'floor2',
+  FLOOR3:     'floor3',
+  TOWER:      'tower',
+  DECORATION: 'decoration',
 };
 
-const SECTION_LABELS = {
-  exterior: 'そとがわ',
-  garden:   'にわ',
-  floor1:   '1かい',
-  floor2:   '2かい',
-  floor3:   '3かい',
-  tower:    'とう',
+const LAYER_LABELS = {
+  garden:     'にわ・どだい',
+  floor1:     '1かい',
+  floor2:     '2かい',
+  floor3:     '3かい',
+  tower:      'てっぺん',
+  decoration: 'そうしょく',
 };
 
-// セクションのアイコン（全景ビューで使う）
-const SECTION_ICONS = {
-  tower:    '🌟',
-  floor3:   '✨',
-  floor2:   '📚',
-  floor1:   '🏠',
-  exterior: '🎨',
-  garden:   '🌸',
-};
+/** レイヤー表示順（全景：上から下） */
+const LAYER_ORDER_TOP = ['tower', 'floor3', 'floor2', 'floor1', 'garden'];
 
 export class HouseScreen {
   constructor() {
     this._view = VIEW.OVERVIEW;
     this._container = null;
     this._unsubscribe = null;
-    this._celebrationQueue = []; // 解放演出キュー
+    this._celebrationQueue = [];
   }
 
   // ─────────────────────────────────────────────
@@ -64,12 +60,17 @@ export class HouseScreen {
     this._container = container;
     this._view = VIEW.OVERVIEW;
 
-    // ワールドクリア後のセクション解放＋マイルストーンチェック
+    // セクション解放チェック
     const { newSections, newMilestones } = HouseManager.checkProgressUnlocks();
-    if (newSections.length > 0 || newMilestones.length > 0) {
+
+    // スタイル解放チェック（v3.1追加）
+    const newStyles = HouseManager.checkAndUnlockStyles();
+
+    if (newSections.length > 0 || newMilestones.length > 0 || newStyles.length > 0) {
       this._celebrationQueue = [
         ...newSections.map(s => ({ type: 'section', sectionId: s })),
         ...newMilestones.map(m => ({ type: 'milestone', milestone: m })),
+        ...newStyles.map(sid => ({ type: 'style', styleId: sid })),
       ];
     }
 
@@ -81,12 +82,11 @@ export class HouseScreen {
       }
     });
 
-    // 解放演出があれば少し待ってから表示
     if (this._celebrationQueue.length > 0) {
       setTimeout(() => this._showNextCelebration(), 600);
     }
 
-    Logger.info('[HouseScreen] v2 表示');
+    Logger.info('[HouseScreen] v3.1 表示');
   }
 
   hide() {
@@ -106,17 +106,15 @@ export class HouseScreen {
     overlay.className = 'house-celebration-overlay';
 
     if (item.type === 'section') {
-      const label = SECTION_LABELS[item.sectionId] || item.sectionId;
-      const icon  = SECTION_ICONS[item.sectionId] || '🎉';
+      const label = LAYER_LABELS[item.sectionId] || item.sectionId;
       overlay.innerHTML = `
         <div class="celebration-card">
-          <div class="celebration-burst">${icon}</div>
+          <div class="celebration-burst">🎊</div>
           <h2 class="celebration-title">かいほう！</h2>
           <p class="celebration-body">「<strong>${label}</strong>」が<br>あたらしく解放されました！</p>
-          <p class="celebration-sub">タップしてかくにん</p>
-        </div>
-      `;
-    } else {
+          <p class="celebration-sub">タップしてとじる</p>
+        </div>`;
+    } else if (item.type === 'milestone') {
       const m = item.milestone;
       overlay.innerHTML = `
         <div class="celebration-card milestone-card">
@@ -124,8 +122,17 @@ export class HouseScreen {
           <h2 class="celebration-title">マイルストーン！</h2>
           <p class="celebration-body">${m.message.replace(/\n/g, '<br>')}</p>
           <p class="celebration-sub">タップしてとじる</p>
-        </div>
-      `;
+        </div>`;
+    } else if (item.type === 'style') {
+      const style = getStyleById(item.styleId);
+      overlay.innerHTML = `
+        <div class="celebration-card style-unlock-card">
+          <div class="celebration-burst" style="font-size:3rem">${style?.emoji || '🏠'}</div>
+          <h2 class="celebration-title">スタイル解放！</h2>
+          <p class="celebration-body">「<strong>${style?.name || item.styleId}</strong>」を<br>つかえるようになった！</p>
+          <p class="celebration-tier">${this._tierLabel(style?.tier)}</p>
+          <p class="celebration-sub">タップしてとじる</p>
+        </div>`;
     }
 
     overlay.addEventListener('click', () => {
@@ -139,8 +146,12 @@ export class HouseScreen {
     });
 
     this._container.appendChild(overlay);
-    // アニメーション開始
     requestAnimationFrame(() => overlay.classList.add('active'));
+  }
+
+  _tierLabel(tier) {
+    const labels = { basic: '🟤 ベーシック', special: '🔵 スペシャル', legend: '🟣 レジェンド' };
+    return labels[tier] || '';
   }
 
   // ─────────────────────────────────────────────
@@ -150,22 +161,27 @@ export class HouseScreen {
   _render() {
     if (!this._container) return;
     const house = GameStore.getState('house');
-    const collection = HouseManager.getCollectionRate();
+    const { matchCount, comboName, bonus } = HouseManager.getFullsetBonus();
+    const collection  = HouseManager.getCollectionRate();
     const nextSection = HouseManager.getNextSectionToUnlock();
     const nextMilestone = HouseManager.getNextMilestone();
+
+    // フルセットボーナスクラス
+    const bonusClass = bonus ? `house-fullset-${bonus.effect.replace(/_/g, '-')}` : '';
 
     this._container.innerHTML = `
       <div class="house-screen">
         ${this._renderHeader()}
         <div class="house-view-area">
           ${this._view === VIEW.OVERVIEW
-            ? this._renderOverview(house)
+            ? this._renderOverview(house, comboName, bonus, bonusClass)
             : this._renderSectionDetail(house)
           }
         </div>
-        ${this._renderFooter(collection, nextSection, nextMilestone)}
+        ${this._renderFooter(collection, nextSection, nextMilestone, matchCount, comboName)}
       </div>
     `;
+
     this._bindEvents();
   }
 
@@ -177,124 +193,133 @@ export class HouseScreen {
           ${isOverview ? '←' : '🏠'}
         </button>
         <h2 class="house-title">🏠 グリモアのいえ</h2>
-        <button class="btn btn-small btn-warning house-craft-btn">
-          🔨 ごしょくにん
-        </button>
+        <div class="house-header-actions">
+          <button class="btn-icon house-photo-btn" aria-label="しゃしんをとる" title="マイハウス写真館">
+            📷
+          </button>
+          <button class="btn btn-small btn-warning house-craft-btn">
+            🎨 スタイル
+          </button>
+        </div>
       </div>
     `;
   }
 
-  // ★ 全景ビュー（メインの見せ場）
-  // 家を縦方向に積み上げた「ジオラマ」的UI
-  _renderOverview(house) {
-    const sections = house.sections;
+  // ─── 全景ビュー（v3.1 刷新） ─────────────────
 
-    // 上から下へ: tower → floor3 → floor2 → floor1 → garden(+exterior)
-    const sectionOrder = ['tower', 'floor3', 'floor2', 'floor1', 'garden'];
+  _renderOverview(house, comboName, bonus, bonusClass) {
+    const sections   = house.sections || {};
+    const layerStyles = house.layerStyles || {};
+    const cleared    = HouseManager._getClearedWorldCount();
 
-    const rows = sectionOrder.map(id => {
-      const unlocked = sections[id];
-      const icon = SECTION_ICONS[id] || '🏠';
-      const label = SECTION_LABELS[id] || id;
-
-      if (id === 'garden') {
-        // 庭は外観スタイル＋庭デコを合わせて表示
-        return this._renderOverviewGardenRow(house, unlocked);
-      }
-
-      if (!unlocked) {
-        const condition = Config.HOUSE.SECTION_UNLOCK_WORLDS[id] || '?';
-        const cleared = HouseManager._getClearedWorldCount();
-        const remaining = Math.max(0, condition - cleared);
-        return `
-          <div class="overview-section locked" data-section="${id}">
-            <div class="overview-section-header">
-              <span class="overview-icon">${icon}</span>
-              <span class="overview-label">${label}</span>
-              <span class="overview-lock-badge">🔒 あと${remaining}ワールド</span>
-            </div>
-            <div class="overview-silhouette">
-              ${Array(4).fill('<span class="silhouette-dot"></span>').join('')}
-            </div>
-          </div>
-        `;
-      }
-
-      // 解放済み: 配置されたアイテムのアイコンを並べる
-      const floorData = house[id] || {};
-      const furniture = floorData.furniture || [];
-      const itemIcons = furniture
-        .filter(Boolean)
-        .slice(0, 6)
-        .map(itemId => {
-          const item = getItemById(itemId);
-          return item ? `<span class="overview-item-chip" title="${item.name}">${item.imageFallback}</span>` : '';
-        }).join('');
-      const emptyCount = Math.max(0, 4 - furniture.filter(Boolean).length);
-      const emptyChips = Array(Math.min(emptyCount, 4)).fill('<span class="overview-empty-chip">＋</span>').join('');
-
-      return `
-        <div class="overview-section unlocked" data-section="${id}" role="button" tabindex="0">
-          <div class="overview-section-header">
-            <span class="overview-icon">${icon}</span>
-            <span class="overview-label">${label}</span>
-            <span class="overview-tap-hint">→ くわしく</span>
-          </div>
-          <div class="overview-items-row">
-            ${itemIcons || emptyChips || '<span class="overview-empty-hint">かぐをおこう！</span>'}
-          </div>
-        </div>
-      `;
+    // レイヤーを上から下へ積み上げ
+    const rows = LAYER_ORDER_TOP.map(id => {
+      return this._renderLayerRow(id, sections, layerStyles, cleared, house);
     });
 
+    // 装飾レイヤー（オーバーレイ）
+    const decoRow = this._renderDecoLayer(sections, layerStyles, cleared);
+
     return `
-      <div class="house-overview">
-        ${rows.join('<div class="overview-floor-divider"></div>')}
+      <div class="house-overview ${bonusClass}" id="house-overview-root">
+        <!-- コンボ名バッジ -->
+        ${comboName ? `
+          <div class="house-combo-badge house-fullset-badge">
+            ✨ ${comboName}
+          </div>
+        ` : ''}
+
+        <!-- レイヤー積み上げ -->
+        <div class="house-layers-stack">
+          ${rows.join('')}
+        </div>
+
+        <!-- 装飾レイヤー（全体オーバーレイ） -->
+        ${decoRow}
       </div>
     `;
   }
 
-  _renderOverviewGardenRow(house, unlocked) {
+  _renderLayerRow(id, sections, layerStyles, cleared, house) {
+    const unlocked = id === 'floor1' || sections[id];
+    const unlockAt = Config.HOUSE.SECTION_UNLOCK_WORLDS[id] || 0;
+    const remaining = Math.max(0, unlockAt - cleared);
+
     if (!unlocked) {
-      const condition = Config.HOUSE.SECTION_UNLOCK_WORLDS.garden || 4;
-      const cleared = HouseManager._getClearedWorldCount();
-      const remaining = Math.max(0, condition - cleared);
       return `
-        <div class="overview-section locked overview-garden-row" data-section="garden">
-          <div class="overview-section-header">
-            <span class="overview-icon">🌸</span>
-            <span class="overview-label">にわ</span>
-            <span class="overview-lock-badge">🔒 あと${remaining}ワールド</span>
+        <div class="house-layer-row locked" data-section="${id}">
+          <div class="layer-row-inner">
+            <span class="layer-lock">🔒</span>
+            <span class="layer-name">${LAYER_LABELS[id]}</span>
+            <span class="layer-unlock-hint">あと${remaining}ワールドで解放！</span>
           </div>
         </div>
       `;
     }
 
-    // 外観画像 + 庭デコ
-    const exteriorItem = getItemById(house.exteriorStyle);
-    const decos = (house.garden.decorations || []).filter(Boolean).slice(0, 5)
-      .map(id => { const it = getItemById(id); return it ? it.imageFallback : ''; }).join(' ');
+    const styleId = layerStyles[id] || 'style_wood';
+    const style   = getStyleById(styleId);
+    const emoji   = style?.layerEmoji?.[id] || style?.emoji || '🏠';
+    const color   = style?.color || '#a0522d';
+    const colorDk = style?.colorDark || '#6b3a1f';
+
+    // 内部アイテムチップ（家具など）
+    const floorData = house[id] || {};
+    const furniture = (floorData.furniture || []).filter(Boolean).slice(0, 4);
+    const itemChips = furniture.map(itemId => {
+      const item = getItemById(itemId);
+      return item ? `<span class="overview-item-chip" title="${item.name}">${item.imageFallback}</span>` : '';
+    }).join('');
 
     return `
-      <div class="overview-section unlocked overview-garden-row" data-section="garden" role="button" tabindex="0">
-        <div class="overview-exterior-preview">
-          ${exteriorItem?.image
-            ? `<img src="${exteriorItem.image}" alt="${exteriorItem.name}" class="overview-house-thumb"
-                    onerror="this.style.display='none';this.nextElementSibling.style.display='block'">`
-            : ''
-          }
-          <div class="overview-house-fallback" ${exteriorItem?.image ? 'style="display:none"' : ''}>
-            ${exteriorItem?.imageFallback || '🏕️'}
+      <div class="house-layer-row unlocked" data-section="${id}"
+           style="background: linear-gradient(135deg, ${color}, ${colorDk});"
+           role="button" tabindex="0">
+        <div class="layer-row-left">
+          <span class="layer-style-emoji">${emoji}</span>
+          <div class="layer-info">
+            <span class="layer-name">${LAYER_LABELS[id]}</span>
+            <span class="layer-style-name">${style?.name || ''}</span>
           </div>
         </div>
-        <div class="overview-garden-decos">
-          ${decos || '<span class="overview-empty-hint">🌸 にわにおこう！</span>'}
+        <div class="layer-row-right">
+          ${itemChips || `<span class="layer-empty-hint">→ くわしく</span>`}
+          <button class="layer-style-btn" data-section="${id}" title="スタイルをかえる">🎨</button>
         </div>
       </div>
     `;
   }
 
-  // セクション詳細ビュー（タブ切替後）
+  _renderDecoLayer(sections, layerStyles, cleared) {
+    const unlocked = sections.exterior;
+    const unlockAt = Config.HOUSE.SECTION_UNLOCK_WORLDS.exterior || 13;
+
+    if (!unlocked) {
+      const remaining = Math.max(0, unlockAt - cleared);
+      return `
+        <div class="house-deco-overlay-row locked">
+          <span class="deco-lock">🔒 そうしょくレイヤー あと${remaining}ワールドで解放！</span>
+        </div>
+      `;
+    }
+
+    const styleId = layerStyles.decoration;
+    const style   = getStyleById(styleId);
+
+    return `
+      <div class="house-deco-overlay-row unlocked" data-section="decoration" role="button">
+        <div class="deco-overlay-preview ${style?.decoAnimClass || ''}">
+          <span class="deco-emoji">${style?.emoji || '✨'}</span>
+          <span class="deco-label">そうしょく: ${style?.name || '（なし）'}</span>
+          <span class="deco-desc">${style?.decoDesc || 'スタイルをえらぼう！'}</span>
+          <button class="layer-style-btn" data-section="decoration">🎨</button>
+        </div>
+      </div>
+    `;
+  }
+
+  // ─── セクション詳細ビュー ─────────────────────
+
   _renderSectionDetail(house) {
     return `
       <div class="section-detail-view">
@@ -307,67 +332,52 @@ export class HouseScreen {
   }
 
   _renderSectionTabs(house) {
-    const order = ['exterior', 'garden', 'floor1', 'floor2', 'floor3', 'tower'];
-    const tabs = order
-      .filter(id => !(id === 'exterior' && !house.sections.garden))
-      .map(id => {
-        const unlocked = house.sections[id];
-        const active = this._view === id;
-        return `
-          <button class="house-tab-btn ${active ? 'active' : ''} ${!unlocked ? 'locked' : ''}"
-                  data-section="${id}" ${!unlocked ? 'disabled' : ''}>
-            ${!unlocked ? '🔒 ' : ''}${SECTION_LABELS[id] || id}
-          </button>
-        `;
-      }).join('');
+    const order = ['garden', 'floor1', 'floor2', 'floor3', 'tower', 'decoration'];
+    const tabs = order.map(id => {
+      const unlocked = id === 'floor1' || house.sections[id];
+      const active   = this._view === id;
+      return `
+        <button class="house-tab-btn ${active ? 'active' : ''} ${!unlocked ? 'locked' : ''}"
+                data-section="${id}" ${!unlocked ? 'disabled' : ''}>
+          ${!unlocked ? '🔒 ' : ''}${LAYER_LABELS[id] || id}
+        </button>
+      `;
+    }).join('');
     return `<div class="house-tabs">${tabs}</div>`;
   }
 
   _renderCurrentSection(house) {
     switch (this._view) {
-      case VIEW.EXTERIOR: return this._renderExteriorSection(house);
-      case VIEW.GARDEN:   return this._renderGardenSection(house);
-      case VIEW.FLOOR1:   return this._renderFloorSection(house, 'floor1');
-      case VIEW.FLOOR2:   return this._renderFloorSection(house, 'floor2');
-      case VIEW.FLOOR3:   return this._renderFloorSection(house, 'floor3', true);
-      case VIEW.TOWER:    return this._renderTowerSection(house);
-      default:            return '';
+      case VIEW.DECORATION: return this._renderDecoSection(house);
+      case VIEW.GARDEN:     return this._renderGardenSection(house);
+      case VIEW.FLOOR1:     return this._renderFloorSection(house, 'floor1');
+      case VIEW.FLOOR2:     return this._renderFloorSection(house, 'floor2');
+      case VIEW.FLOOR3:     return this._renderFloorSection(house, 'floor3', true);
+      case VIEW.TOWER:      return this._renderTowerSection(house);
+      default:              return '';
     }
   }
 
-  _renderExteriorSection(house) {
-    const styleItem = getItemById(house.exteriorStyle) || { name: 'テント', imageFallback: '🏕️', image: null };
+  _renderDecoSection(house) {
+    const styleId = house.layerStyles?.decoration;
+    const style   = getStyleById(styleId);
     return `
-      <div class="house-exterior-view">
-        <div class="house-exterior-wrapper">
-          ${styleItem.image
-            ? `<img src="${styleItem.image}" alt="${styleItem.name}" class="house-exterior-img"
-                    onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
-            : ''
-          }
-          <div class="house-exterior-fallback" ${styleItem.image ? 'style="display:none"' : ''}>
-            ${styleItem.imageFallback}
-          </div>
+      <div class="house-deco-detail-view">
+        <div class="deco-preview-big ${style?.decoAnimClass || ''}">
+          <span style="font-size:4rem">${style?.emoji || '✨'}</span>
+          <p class="deco-name">${style?.name || 'そうしょくなし'}</p>
+          <p class="deco-desc-detail">${style?.decoDesc || 'スタイルをえらんでそうしょくをつけよう！'}</p>
         </div>
-        <p class="house-style-name">${styleItem.name}</p>
-        ${house.sections.exterior ? this._renderExteriorDecos(house.exteriorDeco) : ''}
+        <button class="btn btn-large btn-warning house-craft-btn">
+          🎨 スタイルをかえる
+        </button>
       </div>
     `;
   }
 
-  _renderExteriorDecos(deco) {
-    const badges = Object.entries(deco)
-      .filter(([, id]) => id)
-      .map(([slot, id]) => {
-        const item = getItemById(id);
-        return item ? `<span class="ext-deco-chip" title="${item.name}">${item.imageFallback}</span>` : '';
-      }).join('');
-    return badges ? `<div class="exterior-deco-chips">${badges}</div>` : '';
-  }
-
   _renderGardenSection(house) {
     const count = HouseManager.getGardenSlotCount();
-    const decos = [...(house.garden.decorations || [])];
+    const decos = [...(house.garden?.decorations || [])];
     while (decos.length < count) decos.push(null);
 
     const slots = decos.slice(0, count).map((id, i) => {
@@ -381,7 +391,7 @@ export class HouseScreen {
         </div>`;
     }).join('');
 
-    const monsterSlots = (house.garden.monsters || [null,null,null]).map((id, i) => `
+    const monsterSlots = (house.garden?.monsters || [null,null,null]).map((id, i) => `
       <div class="house-monster-slot" data-slot="${i}" data-type="garden_monster">
         ${id ? `<span style="font-size:1.5rem">👾</span>` : `<span class="slot-empty-icon">🐾</span>`}
       </div>`).join('');
@@ -396,19 +406,25 @@ export class HouseScreen {
   }
 
   _renderFloorSection(house, key, isSpecial = false) {
-    const data = house[key] || {};
-    const count = key === 'floor1' ? HouseManager.getFloor1SlotCount() : (Config.HOUSE.SECTION_SLOTS[`${key}_furniture`] || 8);
+    const data  = house[key] || {};
+    const count = key === 'floor1'
+      ? HouseManager.getFloor1SlotCount()
+      : (Config.HOUSE.SECTION_SLOTS[`${key}_furniture`] || 8);
     const furniture = [...(data.furniture || [])];
     while (furniture.length < count) furniture.push(null);
 
     const wp = data.wallpaper ? getItemById(data.wallpaper) : null;
-    const fl = data.floor ? getItemById(data.floor) : null;
+    const fl = data.floor     ? getItemById(data.floor)     : null;
 
     const slots = furniture.slice(0, count).map((id, i) => {
       const item = id ? getItemById(id) : null;
       return `
-        <div class="house-furniture-slot${isSpecial ? ' special' : ''}" data-slot="${i}" data-floor="${key}" data-type="furniture">
-          ${item ? `<span class="slot-fallback">${item.imageFallback}</span>` : `<span class="slot-empty-icon">＋</span>`}
+        <div class="house-furniture-slot${isSpecial ? ' special' : ''}"
+             data-slot="${i}" data-floor="${key}" data-type="furniture">
+          ${item
+            ? `<span class="slot-fallback">${item.imageFallback}</span>`
+            : `<span class="slot-empty-icon">＋</span>`
+          }
         </div>`;
     }).join('');
 
@@ -431,7 +447,10 @@ export class HouseScreen {
       const item = id ? getItemById(id) : null;
       return `
         <div class="house-tower-slot" data-slot="${i}" data-type="tower_deco">
-          ${item ? `<span class="tower-item-emoji">${item.imageFallback}</span>` : `<span class="slot-empty-icon">✦</span>`}
+          ${item
+            ? `<span class="tower-item-emoji">${item.imageFallback}</span>`
+            : `<span class="slot-empty-icon">✦</span>`
+          }
         </div>`;
     }).join('');
 
@@ -447,19 +466,29 @@ export class HouseScreen {
   // フッター
   // ─────────────────────────────────────────────
 
-  _renderFooter(collection, nextSection, nextMilestone) {
+  _renderFooter(collection, nextSection, nextMilestone, matchCount, comboName) {
     const pct = collection.total > 0
       ? Math.min(100, Math.floor((collection.crafted / collection.total) * 100))
       : 0;
 
-    // 次のイベントヒント（セクション解放 or マイルストーン、近い方を優先）
-    let hintHtml = '';
+    // ヒント
     const hints = [];
-    if (nextSection) hints.push({ remaining: nextSection.remaining, text: `あと${nextSection.remaining}ワールドで「${SECTION_LABELS[nextSection.sectionId]}」解放！` });
-    if (nextMilestone) hints.push({ remaining: nextMilestone.remaining, text: `あと${nextMilestone.remaining}ワールドでサプライズ！🎁` });
-    hints.sort((a, b) => a.remaining - b.remaining);
-    if (hints.length > 0) {
-      hintHtml = `<div class="house-next-hint">✨ ${hints[0].text}</div>`;
+    if (nextSection)   hints.push({ r: nextSection.remaining,   text: `あと${nextSection.remaining}ワールドで「${LAYER_LABELS[nextSection.sectionId] || nextSection.sectionId}」解放！` });
+    if (nextMilestone) hints.push({ r: nextMilestone.remaining, text: `あと${nextMilestone.remaining}ワールドでサプライズ！🎁` });
+    hints.sort((a, b) => a.r - b.r);
+    const hintHtml = hints.length > 0 ? `<div class="house-next-hint">✨ ${hints[0].text}</div>` : '';
+
+    // フルセット状況
+    let fullsetHtml = '';
+    if (matchCount >= 2) {
+      const bonuses = Config.HOUSE.FULLSET_BONUSES || [];
+      const next = bonuses.find(b => b.layers > matchCount);
+      fullsetHtml = `
+        <div class="house-fullset-status">
+          ${matchCount}レイヤー一致！
+          ${next ? `あと${next.layers - matchCount}で次の演出` : '🏆 MAXボーナス！'}
+        </div>
+      `;
     }
 
     return `
@@ -471,6 +500,7 @@ export class HouseScreen {
           </div>
           <span class="collection-count">${collection.crafted}/${collection.total}</span>
         </div>
+        ${fullsetHtml}
         ${hintHtml}
       </div>`;
   }
@@ -492,16 +522,42 @@ export class HouseScreen {
       }
     });
 
-    // 合成屋ボタン
-    this._container.querySelector('.house-craft-btn')?.addEventListener('click', () => {
-      GameStore.setState('app.currentScreen', 'craftsman');
+    // 📷 写真館
+    this._container.querySelector('.house-photo-btn')?.addEventListener('click', () => {
+      GameStore.setState('app.currentScreen', 'photo');
     });
 
-    // 全景ビューのセクションをタップ → 詳細へ
-    this._container.querySelectorAll('.overview-section.unlocked').forEach(el => {
-      el.addEventListener('click', () => {
+    // スタイル変更ボタン（合成屋→スタイルタブへ）
+    this._container.querySelector('.house-craft-btn')?.addEventListener('click', () => {
+      GameStore.setState('app.currentScreen', 'house_build');
+      GameStore.setState('app.houseBuildMode', 'style');
+    });
+
+    // 全景：レイヤー行タップ → 詳細へ
+    this._container.querySelectorAll('.house-layer-row.unlocked').forEach(el => {
+      el.addEventListener('click', (e) => {
+        // 🎨ボタンへのバブルアップは除外
+        if (e.target.closest('.layer-style-btn')) return;
         this._view = el.dataset.section;
         this._render();
+      });
+    });
+
+    // 装飾レイヤー行タップ
+    this._container.querySelector('.house-deco-overlay-row.unlocked')?.addEventListener('click', (e) => {
+      if (e.target.closest('.layer-style-btn')) return;
+      this._view = VIEW.DECORATION;
+      this._render();
+    });
+
+    // 🎨ボタン → スタイル選択画面へ（該当レイヤーを引き継ぐ）
+    this._container.querySelectorAll('.layer-style-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const section = btn.dataset.section;
+        GameStore.setState('app.currentScreen', 'house_build');
+        GameStore.setState('app.houseBuildMode', 'style');
+        GameStore.setState('app.styleTargetLayer', section);
       });
     });
 
@@ -519,8 +575,8 @@ export class HouseScreen {
         GameStore.setState('app.currentScreen', 'craftsman');
         GameStore.setState('app.craftsmanMode', 'place');
         GameStore.setState('app.craftsmanTarget', {
-          type: slot.dataset.type,
-          slot: parseInt(slot.dataset.slot ?? '0', 10),
+          type:  slot.dataset.type,
+          slot:  parseInt(slot.dataset.slot ?? '0', 10),
           floor: slot.dataset.floor || this._view,
         });
       });

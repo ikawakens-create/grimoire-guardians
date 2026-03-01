@@ -178,16 +178,99 @@ export const Config = {
 
   // 家ビルドシステム設定
   HOUSE: {
-    // セクション解放に必要なクリア済みワールド数
-    // ★改訂: 4→6→8→12（前半に集中して達成感を連続させる）
+    // ─── v3.1 解放ロードマップ ───────────────────────────────────────
+    // セクション（レイヤー）解放に必要なクリア済みワールド数
+    // World 7→庭、11→2階、13→装飾、19→3階、33→てっぺん
     SECTION_UNLOCK_WORLDS: {
-      floor1:   0,   // 最初から解放
-      garden:   4,   // 世界4クリア後
-      exterior: 6,   // 世界6クリア後（★8→6に前倒し）
-      floor2:   8,   // 世界8クリア後（★12→8に前倒し）
-      floor3:   12,  // 世界12クリア後（★16→12に前倒し）
-      tower:    33,  // 全ワールドクリア後
+      floor1:    0,   // 最初から解放
+      garden:    7,   // 庭・土台レイヤー（World 7後）
+      floor2:    11,  // 2階レイヤー（World 11後）
+      exterior:  13,  // 装飾レイヤー・オーバーレイ（World 13後）
+      floor3:    19,  // 3階レイヤー（World 19後）
+      tower:     33,  // てっぺん（全ワールドクリア後）
     },
+
+    // スタイル解放に必要なクリア済みワールド数（15種）
+    STYLE_UNLOCK_WORLDS: {
+      style_wood:    0,   // もくのいえ（初期装備）
+      style_stone:   3,   // いしのいえ
+      style_brick:   5,   // れんがのいえ
+      style_bamboo:  9,   // たけのいえ
+      style_forest:  11,  // もりのいえ
+      style_ice:     15,  // こおりのいえ
+      style_sakura:  17,  // さくらのいえ
+      style_candy:   19,  // おかしのいえ
+      style_flame:   21,  // ほのおのいえ
+      style_sea:     23,  // うみのいえ
+      style_black:   25,  // くろのしろ
+      style_thunder: 27,  // かみなりのいえ
+      style_moon:    29,  // つきのやかた
+      style_jewel:   31,  // ほうせきのやかた
+      style_star:    33,  // ほしのしろ（全クリ報酬）
+    },
+
+    // フルセットボーナス段階（一致レイヤー数 → 演出）
+    FULLSET_BONUSES: [
+      { layers: 2, effect: 'glow_small',  label: null },
+      { layers: 3, effect: 'badge',       label: 'のいえ' },   // 「〇〇のいえ」バッジ
+      { layers: 4, effect: 'aura_medium', label: null },
+      { layers: 5, effect: 'aura_large',  label: null },
+      { layers: 6, effect: 'master',      label: 'マスター！', dropBonus: true },
+    ],
+
+    // コンボ名テーブル（特定組み合わせで表示）
+    COMBO_NAMES: [
+      // 全フロア同一スタイル
+      { match: 'all', style: 'style_wood',    name: 'もりのまほうし！' },
+      { match: 'all', style: 'style_stone',   name: 'いしのまもり！' },
+      { match: 'all', style: 'style_brick',   name: 'まちのけんちくし！' },
+      { match: 'all', style: 'style_bamboo',  name: 'たけのせんし！' },
+      { match: 'all', style: 'style_forest',  name: 'もりのぬし！' },
+      { match: 'all', style: 'style_ice',     name: 'ふゆのまほうし！' },
+      { match: 'all', style: 'style_sakura',  name: 'さくらのひめ！' },
+      { match: 'all', style: 'style_candy',   name: 'おかしのくに！' },
+      { match: 'all', style: 'style_flame',   name: 'えんおうのしろ！' },
+      { match: 'all', style: 'style_sea',     name: 'うみのおう！' },
+      { match: 'all', style: 'style_black',   name: 'やみのしろ！' },
+      { match: 'all', style: 'style_thunder', name: 'らいじんのいかり！' },
+      { match: 'all', style: 'style_moon',    name: 'つきのみこ！' },
+      { match: 'all', style: 'style_jewel',   name: 'ほうせきのていおう！' },
+      { match: 'all', style: 'style_star',    name: 'ほしのおう！' },
+      // 特殊組み合わせ（2種混合）
+      { match: 'mix', styles: ['style_flame', 'style_black'],  name: 'まおうのおしろ！' },
+      { match: 'mix', styles: ['style_candy', 'style_sakura'], name: 'はるのおかしやさん！' },
+      { match: 'mix', styles: ['style_ice',   'style_star'],   name: 'こおりのほし！' },
+      { match: 'mix', styles: ['style_sea',   'style_moon'],   name: 'つきのうみ！' },
+      { match: 'mix', styles: ['style_bamboo','style_forest'], name: 'もりのにんじゃ！' },
+      // ランダムバラバラ（全部違う）
+      { match: 'chaos', name: 'カオスビルダー！' },
+    ],
+
+    // 写真フレーム定義（8種）
+    PHOTO_FRAMES: [
+      { id: 'frame_simple', name: 'シンプル',     emoji: '⬜', color: '#ffffff', unlockAt: 'initial' },
+      { id: 'frame_wood',   name: 'もくのふち',   emoji: '🌿', color: '#8B6914', unlockAt: 'style_wood' },
+      { id: 'frame_ice',    name: 'こおりのふち', emoji: '❄️', color: '#74b9ff', unlockAt: 'style_ice' },
+      { id: 'frame_sakura', name: 'さくらのふち', emoji: '🌸', color: '#fd79a8', unlockAt: 'style_sakura' },
+      { id: 'frame_flame',  name: 'ほのおのふち', emoji: '🔥', color: '#e17055', unlockAt: 'style_flame' },
+      { id: 'frame_star',   name: 'ほしのふち',   emoji: '⭐', color: '#f9ca24', unlockAt: 'style_star' },
+      { id: 'frame_sea',    name: 'うみのふち',   emoji: '🌊', color: '#0984e3', unlockAt: 'style_sea' },
+      { id: 'frame_moon',   name: 'つきのふち',   emoji: '🌙', color: '#6c5ce7', unlockAt: 'style_moon' },
+    ],
+
+    // スタンプ定義（15種、宝箱ドロップで増える）
+    PHOTO_STAMPS: [
+      '⭐', '💎', '🔮', '🪄', '🏆', '✨', '🎉', '👑',
+      '🔥', '❄️', '🌸', '🍭', '⚡', '🌙', '🌊',
+    ],
+
+    // キャラポーズ定義（4種、CSSで表現）
+    PHOTO_POSES: [
+      { id: 'normal',  label: 'ふつう',    emoji: '😊', css: '' },
+      { id: 'cool',    label: 'ドヤ！',    emoji: '🏆', css: 'pose-cool' },
+      { id: 'banzai',  label: 'バンザイ！', emoji: '🙌', css: 'pose-banzai' },
+      { id: 'bow',     label: 'おじぎ',    emoji: '🙇', css: 'pose-bow' },
+    ],
 
     // 各セクションのスロット数（基本値）
     SECTION_SLOTS: {

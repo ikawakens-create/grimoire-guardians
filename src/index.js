@@ -23,6 +23,7 @@ import QuizScreen from './screens/QuizScreen.js';
 import ResultScreen from './screens/ResultScreen.js';
 import { HouseScreen } from './screens/HouseScreen.js';
 import { HouseBuildScreen } from './screens/HouseBuildScreen.js';
+import { PhotoScreen } from './screens/PhotoScreen.js';
 import { CraftsmanScreen } from './screens/CraftsmanScreen.js';
 import { TownScreen } from './screens/TownScreen.js';
 import { GrimoireLibraryScreen } from './screens/GrimoireLibraryScreen.js';
@@ -109,6 +110,7 @@ let _activeScreen = null;
 /** 家ビルド画面インスタンス（show/hide方式のためモジュール外で保持） */
 let _houseScreen = null;
 let _houseBuildScreen = null;
+let _photoScreen = null;
 let _craftsmanScreen = null;
 /** 街のシステム画面インスタンス */
 let _townScreen = null;
@@ -144,6 +146,7 @@ function showGameScreen() {
     const hideAll = () => {
       _houseScreen?.hide?.();
       _houseBuildScreen?.hide?.();
+      _photoScreen?.hide?.();
       _craftsmanScreen?.hide?.();
       _townScreen?.hide?.();
       _libraryScreen?.hide?.();
@@ -155,6 +158,9 @@ function showGameScreen() {
     if (screen === 'house') {
       hideAll();
       showHouse(gameScreen);
+    } else if (screen === 'photo') {
+      hideAll();
+      showPhoto(gameScreen);
     } else if (screen === 'house_build') {
       hideAll();
       showHouseBuild(gameScreen);
@@ -339,6 +345,16 @@ function showHouse(gameScreen) {
     _houseScreen = new HouseScreen();
   }
   _houseScreen.show(gameScreen);
+}
+
+/**
+ * PhotoScreen（マイハウス写真館）を描画する
+ * @param {HTMLElement} gameScreen
+ */
+function showPhoto(gameScreen) {
+  if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
+  if (!_photoScreen) _photoScreen = new PhotoScreen();
+  _photoScreen.show(gameScreen);
 }
 
 /**

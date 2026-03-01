@@ -18,6 +18,7 @@ import {
   HOUSE_SECTION,
   TOTAL_CRAFTABLE_ITEMS,
 } from '../data/houseItems.js';
+import { getStyleById, HOUSE_STYLES } from '../data/styleItems.js';
 
 /**
  * HouseManager
@@ -374,6 +375,204 @@ export class HouseManager {
     }
     GameStore.setState('house.sections.tower', true);
     Logger.info('[House] 全ワールドクリア！塔解放＋トロフィー付与');
+  }
+
+  // ─────────────────────────────────────────────
+  // v3.1 スタイルシステム
+  // ─────────────────────────────────────────────
+
+  /**
+   * クリア数に応じてスタイルを解放チェック
+   * @returns {string[]} 新たに解放されたスタイルID配列
+   */
+  static checkAndUnlockStyles() {
+    const clearedCount = this._getClearedWorldCount();
+    const unlocked = [...(GameStore.getState('house.unlockedStyles') || ['style_wood'])];
+    const newlyUnlocked = [];
+
+    for (const style of HOUSE_STYLES) {
+      if (!unlocked.includes(style.id) && clearedCount >= style.unlockWorld) {
+        unlocked.push(style.id);
+        newlyUnlocked.push(style.id);
+        Logger.info(`[House] スタイル解放: ${style.id} (${style.name})`);
+      }
+    }
+
+    if (newlyUnlocked.length > 0) {
+      GameStore.setState('house.unlockedStyles', unlocked);
+      // フォトフレーム解放チェックも同時に行う
+      this.checkPhotoFrameUnlocks();
+    }
+
+    return newlyUnlocked;
+  }
+
+  /**
+   * レイヤーにスタイルを設定
+   * @param {string} layerId - 'garden'|'floor1'|'floor2'|'floor3'|'tower'|'decoration'
+   * @param {string} styleId - スタイルID
+   * @returns {boolean}
+   */
+  static setLayerStyle(layerId, styleId) {
+    const unlockedStyles = GameStore.getState('house.unlockedStyles') || [];
+    if (!unlockedStyles.includes(styleId)) {
+      Logger.warn(`[House] スタイル未解放: ${styleId}`);
+      return false;
+    }
+
+    const validLayers = ['garden', 'floor1', 'floor2', 'floor3', 'tower', 'decoration'];
+    if (!validLayers.includes(layerId)) {
+      Logger.warn(`[House] 無効なレイヤー: ${layerId}`);
+      return false;
+    }
+
+    // 装飾レイヤーはexterior解放後のみ
+    if (layerId === 'decoration' && !GameStore.getState('house.sections.exterior')) {
+      Logger.warn('[House] 装飾レイヤーは未解放');
+      return false;
+    }
+
+    GameStore.setState(`house.layerStyles.${layerId}`, styleId);
+    GameStore.setState('house.lastUpdated', new Date().toISOString());
+    Logger.info(`[House] レイヤースタイル設定: ${layerId} → ${styleId}`);
+    return true;
+  }
+
+  /**
+   * 解放済みスタイル一覧を取得
+   * @returns {Object[]} スタイル定義の配列
+   */
+  static getUnlockedStyles() {
+    const ids = GameStore.getState('house.unlockedStyles') || ['style_wood'];
+    return HOUSE_STYLES.filter(s => ids.includes(s.id));
+  }
+
+  /**
+   * フルセットボーナスを計算
+   * 何レイヤーが同一スタイルかを数えて演出を返す
+   * @returns {{ matchCount: number, matchStyle: string|null, comboName: string|null, bonus: Object|null }}
+   */
+  static getFullsetBonus() {
+    const house = GameStore.getState('house');
+    const sections = house.sections || {};
+    const layerStyles = house.layerStyles || {};
+
+    // 解放済みレイヤーの選択スタイルを集める
+    const activeLayers = [];
+    if (sections.garden)    activeLayers.push(layerStyles.garden    || 'style_wood');
+    activeLayers.push(layerStyles.floor1 || 'style_wood'); // floor1は常に解放
+    if (sections.floor2)    activeLayers.push(layerStyles.floor2    || 'style_wood');
+    if (sections.floor3)    activeLayers.push(layerStyles.floor3    || 'style_wood');
+    if (sections.tower)     activeLayers.push(layerStyles.tower     || 'style_wood');
+    if (sections.exterior)  activeLayers.push(layerStyles.decoration|| null);
+
+    // null（装飾未選択）を除く
+    const validLayers = activeLayers.filter(Boolean);
+    if (validLayers.length === 0) return { matchCount: 0, matchStyle: null, comboName: null, bonus: null };
+
+    // スタイル出現カウント
+    const counts = {};
+    for (const s of validLayers) {
+      counts[s] = (counts[s] || 0) + 1;
+    }
+
+    // 最多スタイル
+    const topStyle = Object.entries(counts).sort(([,a],[,b]) => b - a)[0];
+    const matchCount = topStyle[1];
+    const matchStyle = topStyle[0];
+
+    // ボーナステーブル参照
+    const bonuses = Config.HOUSE.FULLSET_BONUSES || [];
+    const bonus = [...bonuses].reverse().find(b => matchCount >= b.layers) || null;
+
+    // コンボ名決定
+    const comboName = this.getComboName(validLayers);
+
+    return { matchCount, matchStyle, comboName, bonus };
+  }
+
+  /**
+   * コンボ名を取得
+   * @param {string[]} styleIds - 現在の有効レイヤースタイルID配列
+   * @returns {string|null}
+   */
+  static getComboName(styleIds) {
+    if (!styleIds || styleIds.length === 0) return null;
+    const combos = Config.HOUSE.COMBO_NAMES || [];
+
+    // 全部同じ → allマッチ
+    const allSame = styleIds.every(s => s === styleIds[0]);
+    if (allSame) {
+      const found = combos.find(c => c.match === 'all' && c.style === styleIds[0]);
+      if (found) return found.name;
+    }
+
+    // 2種混合 → mixマッチ
+    const unique = [...new Set(styleIds)];
+    for (const combo of combos.filter(c => c.match === 'mix')) {
+      const matched = combo.styles.every(s => unique.includes(s));
+      if (matched) return combo.name;
+    }
+
+    // 全部バラバラ（全ユニーク） → chaos
+    if (unique.length === styleIds.length && styleIds.length >= 4) {
+      const chaos = combos.find(c => c.match === 'chaos');
+      if (chaos) return chaos.name;
+    }
+
+    return null;
+  }
+
+  /**
+   * 解放済みスタイルに応じてフォトフレームを解放
+   * @returns {string[]} 新たに解放されたフレームID配列
+   */
+  static checkPhotoFrameUnlocks() {
+    const unlockedStyles = GameStore.getState('house.unlockedStyles') || [];
+    const unlockedFrames = [...(GameStore.getState('house.photo.unlockedFrames') || ['frame_simple'])];
+    const frames = Config.HOUSE.PHOTO_FRAMES || [];
+    const newlyUnlocked = [];
+
+    for (const frame of frames) {
+      if (unlockedFrames.includes(frame.id)) continue;
+      if (frame.unlockAt === 'initial') continue;
+      if (unlockedStyles.includes(frame.unlockAt)) {
+        unlockedFrames.push(frame.id);
+        newlyUnlocked.push(frame.id);
+        Logger.info(`[House] フォトフレーム解放: ${frame.id}`);
+      }
+    }
+
+    if (newlyUnlocked.length > 0) {
+      GameStore.setState('house.photo.unlockedFrames', unlockedFrames);
+    }
+
+    return newlyUnlocked;
+  }
+
+  /**
+   * スタンプをドロップ（宝箱イベント時に呼ぶ）
+   * @returns {string|null} ドロップしたスタンプ絵文字
+   */
+  static dropRandomStamp() {
+    const allStamps = Config.HOUSE.PHOTO_STAMPS || [];
+    const owned = GameStore.getState('house.photo.unlockedStamps') || [];
+    const available = allStamps.filter(s => !owned.includes(s));
+    if (available.length === 0) return null;
+
+    const stamp = available[Math.floor(Math.random() * available.length)];
+    GameStore.setState('house.photo.unlockedStamps', [...owned, stamp]);
+    Logger.info(`[House] スタンプドロップ: ${stamp}`);
+    return stamp;
+  }
+
+  /**
+   * 写真設定を更新
+   * @param {'currentFrame'|'currentPose'|'stampPlacements'} key
+   * @param {*} value
+   */
+  static setPhotoSetting(key, value) {
+    GameStore.setState(`house.photo.${key}`, value);
   }
 
   // ─────────────────────────────────────────────

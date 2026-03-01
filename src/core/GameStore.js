@@ -105,18 +105,43 @@ export class GameStore {
       collected: [],
     },
 
-    // 家ビルドシステム（Phase 1-D）
+    // 家ビルドシステム（Phase 1-D / v3.1）
     house: {
-      // セクション解放状態
+      // セクション（レイヤー）解放状態
+      // v3.1 解放タイミング: garden=7, floor2=11, exterior=13, floor3=19, tower=33
       sections: {
-        floor1:   true,   // 最初から解放
-        garden:   false,
-        exterior: false,
-        floor2:   false,
-        floor3:   false,
-        tower:    false,
+        floor1:    true,   // 最初から解放
+        garden:    false,
+        floor2:    false,
+        exterior:  false,  // 装飾レイヤー（オーバーレイ）
+        floor3:    false,
+        tower:     false,
       },
 
+      // ─── v3.1 スタイルシステム ───────────────────────────
+      // 解放済みスタイルID配列（クリア数に応じて増える）
+      unlockedStyles: ['style_wood'],
+
+      // レイヤーごとの選択中スタイル
+      layerStyles: {
+        garden:     'style_wood',
+        floor1:     'style_wood',
+        floor2:     'style_wood',
+        floor3:     'style_wood',
+        tower:      'style_wood',
+        decoration: null,          // 装飾レイヤー（解放後に選択可）
+      },
+
+      // ─── 写真機能 ─────────────────────────────────────────
+      photo: {
+        unlockedFrames:  ['frame_simple'],  // 解放済みフレームID
+        unlockedStamps:  [],                // ドロップで増えるスタンプ（絵文字配列）
+        currentFrame:    'frame_simple',
+        currentPose:     'normal',
+        stampPlacements: [],  // [{ emoji, x, y }] 最後の写真のスタンプ配置
+      },
+
+      // 後方互換（既存アイテムクラフト・配置システム用）
       // 外観プリセットスタイルID
       exteriorStyle: 'default',
 
