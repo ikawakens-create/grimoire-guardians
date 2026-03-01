@@ -1,10 +1,15 @@
 /**
  * HouseBuildScreen.js - Grimoire Guardians
- * 家ビルドシステム 編集・クラフト画面
- * アイテムのクラフト・配置・スタイル変更UIを提供
+ * 家ビルドシステム 編集・クラフト・スタイル変更画面 v3.1
  *
- * @version 1.0
- * @date 2026-02-26
+ * v3.1 変更点:
+ *  - スタイル選択タブ追加（全レイヤー独立選択）
+ *  - プレビューモード（素材を使う前に見た目を確認）
+ *  - スタイルカテゴリーがデフォルト表示になるルーティング対応
+ *  - 装飾レイヤーのスタイル選択対応
+ *
+ * @version 3.1
+ * @date 2026-03-01
  */
 
 import { GameStore } from '../core/GameStore.js';
@@ -12,10 +17,6 @@ import Logger from '../core/Logger.js';
 import { HouseManager } from '../core/HouseManager.js';
 import {
   getItemById,
-  getItemsBySection,
-  canCraft,
-  getMissingMaterials,
-  HOUSE_SECTION,
   EXTERIOR_STYLES,
   WALLPAPER_ITEMS,
   FLOOR_ITEMS,
@@ -27,22 +28,16 @@ import {
   TOWER_ITEMS,
   RARITY,
 } from '../data/houseItems.js';
+import { HOUSE_STYLES, getStyleById } from '../data/styleItems.js';
 
 // 素材絵文字マップ
 const MATERIAL_EMOJI = {
-  wood:          '🪵',
-  stone:         '🪨',
-  brick:         '🧱',
-  gem:           '💎',
-  star_fragment: '✨',
-  cloth:         '🧶',
-  paint:         '🎨',
-  crown:         '👑',
-  cape:          '🧣',
-  magic_orb:     '🔮',
+  wood: '🪵', stone: '🪨', brick: '🧱', gem: '💎',
+  star_fragment: '✨', cloth: '🧶', paint: '🎨',
+  crown: '👑', cape: '🧣', magic_orb: '🔮',
 };
 
-// レアリティ色
+// レアリティ色クラス
 const RARITY_CLASS = {
   [RARITY.COMMON]:     'rarity-common',
   [RARITY.UNCOMMON]:   'rarity-uncommon',
@@ -50,41 +45,54 @@ const RARITY_CLASS = {
   [RARITY.SUPER_RARE]: 'rarity-super-rare',
 };
 
-// カテゴリー定義（モードごとに表示するタブ）
+/** スタイル対象レイヤー一覧 */
+const STYLE_LAYERS = [
+  { id: 'garden',     label: 'にわ' },
+  { id: 'floor1',     label: '1かい' },
+  { id: 'floor2',     label: '2かい' },
+  { id: 'floor3',     label: '3かい' },
+  { id: 'tower',      label: 'てっぺん' },
+  { id: 'decoration', label: 'そうしょく' },
+];
+
+/** アイテムカテゴリー定義 */
 const MODE_CATEGORIES = {
-  exterior: [
-    { id: 'style',    label: 'スタイル',   items: () => EXTERIOR_STYLES },
-    { id: 'deco',     label: 'かざり',     items: () => EXTERIOR_DECO_ITEMS },
+  style: [
+    { id: 'style', label: 'スタイル', items: () => [] }, // 動的に生成
   ],
   garden: [
-    { id: 'garden',   label: 'デコ',       items: () => GARDEN_ITEMS },
+    { id: 'garden', label: 'デコ', items: () => GARDEN_ITEMS },
   ],
   floor1: [
-    { id: 'furniture', label: 'かぐ',      items: () => FURNITURE_ITEMS_FLOOR1 },
-    { id: 'wallpaper', label: 'かべがみ',   items: () => WALLPAPER_ITEMS },
-    { id: 'floor',     label: 'ゆか',       items: () => FLOOR_ITEMS },
+    { id: 'furniture', label: 'かぐ',    items: () => FURNITURE_ITEMS_FLOOR1 },
+    { id: 'wallpaper', label: 'かべがみ', items: () => WALLPAPER_ITEMS },
+    { id: 'floor',     label: 'ゆか',     items: () => FLOOR_ITEMS },
   ],
   floor2: [
-    { id: 'furniture', label: 'かぐ',      items: () => FURNITURE_ITEMS_FLOOR2 },
-    { id: 'wallpaper', label: 'かべがみ',   items: () => WALLPAPER_ITEMS },
-    { id: 'floor',     label: 'ゆか',       items: () => FLOOR_ITEMS },
+    { id: 'furniture', label: 'かぐ',    items: () => FURNITURE_ITEMS_FLOOR2 },
+    { id: 'wallpaper', label: 'かべがみ', items: () => WALLPAPER_ITEMS },
+    { id: 'floor',     label: 'ゆか',     items: () => FLOOR_ITEMS },
   ],
   floor3: [
-    { id: 'furniture', label: 'かぐ',      items: () => FURNITURE_ITEMS_FLOOR3 },
+    { id: 'furniture', label: 'かぐ', items: () => FURNITURE_ITEMS_FLOOR3 },
   ],
   tower: [
-    { id: 'tower',    label: 'かざり',     items: () => TOWER_ITEMS },
+    { id: 'tower', label: 'かざり', items: () => TOWER_ITEMS },
   ],
 };
 
 export class HouseBuildScreen {
   constructor() {
-    this._container = null;
-    this._mode = 'floor1';          // どのセクションを編集中か
-    this._category = 'furniture';   // どのカテゴリーを表示中か
-    this._editTarget = null;        // { type, slot, floor } | null
-    this._selectedItem = null;      // 選択中アイテムID
-    this._craftResult = null;       // { success, message } 最後のクラフト結果
+    this._container  = null;
+    this._mode       = 'style';      // 編集モード
+    this._category   = 'style';     // アイテムカテゴリー
+    this._editTarget = null;
+    this._selectedItem = null;
+    this._craftResult  = null;
+
+    // スタイル選択関連
+    this._styleTargetLayer = 'floor1';  // どのレイヤーのスタイルを選ぶか
+    this._previewStyle     = null;      // プレビュー中のスタイルID（null = 適用前）
     this._unsubscribe = null;
   }
 
@@ -95,29 +103,34 @@ export class HouseBuildScreen {
   show(container) {
     this._container = container;
 
-    // HouseScreen からの引継ぎ
-    this._mode = GameStore.getState('app.houseBuildMode') || 'floor1';
+    this._mode       = GameStore.getState('app.houseBuildMode') || 'style';
     this._editTarget = GameStore.getState('app.houseEditTarget') || null;
 
-    // モードに合わせてデフォルトカテゴリーを設定
-    const cats = MODE_CATEGORIES[this._mode] || MODE_CATEGORIES.floor1;
-    this._category = cats[0]?.id || 'furniture';
+    // スタイル対象レイヤーを引き継ぐ
+    const targetLayer = GameStore.getState('app.styleTargetLayer');
+    if (targetLayer) {
+      this._styleTargetLayer = targetLayer;
+    }
 
+    // カテゴリーをモードに応じて初期化
+    if (this._mode === 'style') {
+      this._category = 'style';
+    } else {
+      const cats = MODE_CATEGORIES[this._mode] || MODE_CATEGORIES.floor1;
+      this._category = cats[0]?.id || 'furniture';
+    }
+
+    this._previewStyle = null;
     this._render();
-    Logger.info('[HouseBuildScreen] 表示: mode=' + this._mode);
+    Logger.info('[HouseBuildScreen] v3.1 表示: mode=' + this._mode);
   }
 
   hide() {
-    if (this._unsubscribe) {
-      this._unsubscribe();
-      this._unsubscribe = null;
-    }
-    // 引継ぎ状態をクリア
+    if (this._unsubscribe) { this._unsubscribe(); this._unsubscribe = null; }
     GameStore.setState('app.houseBuildMode', null);
     GameStore.setState('app.houseEditTarget', null);
-    if (this._container) {
-      this._container.innerHTML = '';
-    }
+    GameStore.setState('app.styleTargetLayer', null);
+    if (this._container) this._container.innerHTML = '';
   }
 
   // ─────────────────────────────────────────────
@@ -126,21 +139,16 @@ export class HouseBuildScreen {
 
   _render() {
     if (!this._container) return;
-
     const materials = GameStore.getState('inventory.materials') || {};
-    const house = GameStore.getState('house');
-    const categories = MODE_CATEGORIES[this._mode] || [];
+    const house     = GameStore.getState('house');
 
     this._container.innerHTML = `
       <div class="house-build-screen">
         ${this._renderHeader(materials)}
-        ${this._renderCategoryTabs(categories)}
-        <div class="build-content">
-          <div class="build-item-list">
-            ${this._renderItemList(materials, house)}
-          </div>
-          ${this._selectedItem ? this._renderItemDetail(this._selectedItem, materials, house) : ''}
-        </div>
+        ${this._mode === 'style'
+          ? this._renderStyleMode(house)
+          : this._renderItemMode(materials, house)
+        }
         ${this._craftResult ? this._renderCraftResult() : ''}
       </div>
     `;
@@ -149,7 +157,6 @@ export class HouseBuildScreen {
   }
 
   _renderHeader(materials) {
-    // 所持素材の簡易表示（家ビルド用素材のみ）
     const matDisplay = ['wood','stone','brick','gem','star_fragment']
       .map(id => `<span class="mat-chip">${MATERIAL_EMOJI[id]}${materials[id] || 0}</span>`)
       .join('');
@@ -157,42 +164,201 @@ export class HouseBuildScreen {
     return `
       <div class="build-header">
         <button class="btn-icon build-back-btn" aria-label="もどる">←</button>
+        <div class="build-header-center">
+          ${this._mode === 'style' ? '🎨 スタイルえらび' : '🔨 かぐとかざり'}
+        </div>
         <div class="build-materials-row">${matDisplay}</div>
-        <button class="btn btn-small btn-success build-save-btn">💾 ほぞん</button>
+      </div>
+    `;
+  }
+
+  // ─── スタイル選択モード ────────────────────────
+
+  _renderStyleMode(house) {
+    const sections      = house.sections || {};
+    const layerStyles   = house.layerStyles || {};
+    const unlockedStyles = house.unlockedStyles || ['style_wood'];
+
+    // レイヤータブ（解放済みのみ）
+    const layerTabs = STYLE_LAYERS.map(l => {
+      const unlocked = l.id === 'floor1' || sections[l.id] ||
+        (l.id === 'decoration' && sections.exterior);
+      if (!unlocked) return '';
+      const active = this._styleTargetLayer === l.id;
+      return `
+        <button class="style-layer-tab ${active ? 'active' : ''}"
+                data-layer="${l.id}">
+          ${l.label}
+        </button>
+      `;
+    }).join('');
+
+    // 現在適用中スタイル
+    const currentStyleId = layerStyles[this._styleTargetLayer] || 'style_wood';
+    const currentStyle   = getStyleById(currentStyleId);
+
+    // プレビュー中スタイル（あれば上書き表示）
+    const previewStyleId = this._previewStyle || currentStyleId;
+    const previewStyle   = getStyleById(previewStyleId);
+
+    // スタイルカード一覧
+    const styleCards = HOUSE_STYLES.map(style => {
+      const owned   = unlockedStyles.includes(style.id);
+      const active  = style.id === previewStyleId;
+      const isCurrent = style.id === currentStyleId;
+      const tierLabel = { basic: 'ベーシック', special: 'スペシャル', legend: 'レジェンド' };
+      return `
+        <div class="style-card ${active ? 'selected' : ''} ${!owned ? 'style-locked' : ''}
+             style-tier-${style.tier}"
+             data-style-id="${style.id}"
+             style="--style-color:${style.color}; --style-dark:${style.colorDark};"
+             role="button" tabindex="${owned ? '0' : '-1'}">
+          <div class="style-card-preview" style="background:linear-gradient(135deg, ${style.color}, ${style.colorDark})">
+            <span class="style-card-emoji">${style.layerEmoji?.[this._styleTargetLayer] || style.emoji}</span>
+            ${isCurrent && !active ? '<span class="style-current-badge">いま</span>' : ''}
+            ${active ? '<span class="style-selected-badge">✓</span>' : ''}
+          </div>
+          <div class="style-card-info">
+            <span class="style-card-name">${style.name}</span>
+            <span class="style-card-tier">${!owned ? `🔒 W${style.unlockWorld}〜` : tierLabel[style.tier] || ''}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // プレビューエリア（家の全景ミニプレビュー）
+    const previewHtml = this._renderStylePreview(house, previewStyle, previewStyleId);
+
+    return `
+      <div class="style-mode-layout">
+
+        <!-- プレビューエリア -->
+        <div class="style-preview-area">
+          ${previewHtml}
+          <div class="style-preview-label">
+            ${previewStyle ? `${previewStyle.emoji} ${previewStyle.name}` : ''}
+            ${this._previewStyle ? '<span class="preview-badge">プレビュー</span>' : ''}
+          </div>
+        </div>
+
+        <!-- レイヤータブ -->
+        <div class="style-layer-tabs">
+          ${layerTabs}
+        </div>
+
+        <!-- スタイルグリッド -->
+        <div class="style-card-grid">
+          ${styleCards}
+        </div>
+
+        <!-- 適用・キャンセルボタン -->
+        ${this._previewStyle ? `
+          <div class="style-apply-row">
+            <button class="btn btn-large btn-success style-apply-btn">
+              ✅ これにする！
+            </button>
+            <button class="btn btn-large btn-secondary style-cancel-btn">
+              やめる
+            </button>
+          </div>
+        ` : ''}
+
+      </div>
+    `;
+  }
+
+  /** ミニプレビュー: 現在の家 + previewStyle を反映したレイヤー */
+  _renderStylePreview(house, previewStyle, previewStyleId) {
+    const sections    = house.sections || {};
+    const layerStyles = { ...house.layerStyles || {} };
+    // プレビュー対象レイヤーだけ上書き
+    if (previewStyle) {
+      layerStyles[this._styleTargetLayer] = previewStyleId;
+    }
+
+    const layerOrder = ['garden', 'floor1', 'floor2', 'floor3', 'tower'].filter(id =>
+      id === 'floor1' || sections[id]
+    );
+
+    const layers = layerOrder.map(id => {
+      const sid   = layerStyles[id] || 'style_wood';
+      const style = getStyleById(sid);
+      const emoji = style?.layerEmoji?.[id] || style?.emoji || '🏠';
+      const color = style?.color || '#a0522d';
+      const colorDk = style?.colorDark || '#6b3a1f';
+      const isTarget = id === this._styleTargetLayer;
+      return `
+        <div class="preview-layer ${isTarget ? 'preview-layer-target' : ''}"
+             style="background:linear-gradient(135deg, ${color}, ${colorDk})">
+          <span class="preview-layer-emoji">${emoji}</span>
+        </div>
+      `;
+    }).reverse();
+
+    // 装飾オーバーレイ
+    let decoOverlay = '';
+    if (sections.exterior) {
+      const decoId  = layerStyles.decoration;
+      const decStyle = decoId ? getStyleById(decoId) : null;
+      const isDecoTarget = this._styleTargetLayer === 'decoration';
+      if (decStyle || isDecoTarget) {
+        decoOverlay = `
+          <div class="preview-deco-overlay ${decStyle?.decoAnimClass || ''} ${isDecoTarget ? 'preview-layer-target' : ''}">
+            ${decStyle?.emoji || '✨'}
+          </div>
+        `;
+      }
+    }
+
+    return `
+      <div class="style-preview-house">
+        ${layers.join('')}
+        ${decoOverlay}
+      </div>
+    `;
+  }
+
+  // ─── アイテムモード（既存） ───────────────────
+
+  _renderItemMode(materials, house) {
+    const categories = MODE_CATEGORIES[this._mode] || [];
+    return `
+      <div class="item-mode-layout">
+        ${this._renderCategoryTabs(categories)}
+        <div class="build-content">
+          <div class="build-item-list">
+            ${this._renderItemList(materials, house)}
+          </div>
+          ${this._selectedItem ? this._renderItemDetail(this._selectedItem, materials, house) : ''}
+        </div>
       </div>
     `;
   }
 
   _renderCategoryTabs(categories) {
     const tabs = categories.map(cat => `
-      <button
-        class="build-cat-btn ${this._category === cat.id ? 'active' : ''}"
-        data-cat="${cat.id}"
-      >
+      <button class="build-cat-btn ${this._category === cat.id ? 'active' : ''}"
+              data-cat="${cat.id}">
         ${cat.label}
       </button>
     `).join('');
-
     return `<div class="build-category-tabs">${tabs}</div>`;
   }
 
   _renderItemList(materials, house) {
     const cat = (MODE_CATEGORIES[this._mode] || []).find(c => c.id === this._category);
     if (!cat) return '<p class="build-empty">カテゴリーがありません</p>';
-
     const items = cat.items();
-    if (!items || items.length === 0) return '<p class="build-empty">アイテムがありません</p>';
+    if (!items || !items.length) return '<p class="build-empty">アイテムがありません</p>';
 
     const crafted = house.crafted || [];
-
     return items.map(item => {
-      const isCrafted = crafted.includes(item.id);
+      const isCrafted   = crafted.includes(item.id);
       const { craftable, missing } = HouseManager.checkCraftable(item.id);
-      const isSelected = this._selectedItem === item.id;
-      const isDefault = !item.recipe; // 無料アイテム
+      const isSelected  = this._selectedItem === item.id;
+      const isDefault   = !item.recipe;
 
-      let statusClass = '';
-      let statusBadge = '';
+      let statusClass = '', statusBadge = '';
       if (isCrafted) {
         statusClass = 'item-crafted';
         statusBadge = '<span class="item-badge badge-crafted">✓ もってる</span>';
@@ -204,19 +370,14 @@ export class HouseBuildScreen {
         statusBadge = '<span class="item-badge badge-craftable">✨ つくれる！</span>';
       } else {
         statusClass = 'item-locked';
-        // 不足分を表示
         const missingStr = Object.entries(missing)
-          .map(([m, n]) => `${MATERIAL_EMOJI[m]}×${n}`)
-          .join(' ');
+          .map(([m, n]) => `${MATERIAL_EMOJI[m]}×${n}`).join(' ');
         statusBadge = `<span class="item-badge badge-locked">あと ${missingStr}</span>`;
       }
 
       return `
         <div class="build-item-card ${statusClass} ${isSelected ? 'selected' : ''} ${RARITY_CLASS[item.rarity] || ''}"
-             data-item-id="${item.id}"
-             role="button"
-             tabindex="0"
-             aria-label="${item.name}">
+             data-item-id="${item.id}" role="button" tabindex="0">
           <div class="item-img-wrapper">
             ${item.image
               ? `<img src="${item.image}" alt="${item.name}"
@@ -237,53 +398,35 @@ export class HouseBuildScreen {
   _renderItemDetail(itemId, materials, house) {
     const item = getItemById(itemId);
     if (!item) return '';
-
-    const crafted = house.crafted || [];
+    const crafted   = house.crafted || [];
     const isCrafted = crafted.includes(item.id);
     const isDefault = !item.recipe;
     const { craftable, missing } = HouseManager.checkCraftable(item.id);
 
-    // レシピ表示
     let recipeHtml = '';
     if (item.recipe) {
-      const recipeRows = Object.entries(item.recipe).map(([mat, req]) => {
+      const rows = Object.entries(item.recipe).map(([mat, req]) => {
         const have = materials[mat] || 0;
-        const ok = have >= req;
-        return `
-          <span class="recipe-row ${ok ? 'ok' : 'ng'}">
-            ${MATERIAL_EMOJI[mat]} ${have}/${req}
-          </span>
-        `;
+        return `<span class="recipe-row ${have >= req ? 'ok' : 'ng'}">${MATERIAL_EMOJI[mat]} ${have}/${req}</span>`;
       }).join('');
-      recipeHtml = `<div class="item-recipe">${recipeRows}</div>`;
+      recipeHtml = `<div class="item-recipe">${rows}</div>`;
     } else {
       recipeHtml = `<p class="item-recipe-free">むりょうでつかえます！</p>`;
     }
 
-    // アクションボタン
+    const rarityLabels = {
+      [RARITY.COMMON]: 'コモン', [RARITY.UNCOMMON]: 'アンコモン',
+      [RARITY.RARE]: 'レア', [RARITY.SUPER_RARE]: 'ちょうレア！',
+    };
+
     let actionBtn = '';
     if (isCrafted || isDefault) {
-      // 配置ボタン
-      actionBtn = `
-        <button class="btn btn-large btn-success build-place-btn" data-item-id="${item.id}">
-          ✅ このへやにかざる
-        </button>
-      `;
+      actionBtn = `<button class="btn btn-large btn-success build-place-btn" data-item-id="${item.id}">✅ このへやにかざる</button>`;
     } else if (craftable) {
-      actionBtn = `
-        <button class="btn btn-large btn-warning build-craft-btn" data-item-id="${item.id}">
-          🔨 つくる！
-        </button>
-      `;
+      actionBtn = `<button class="btn btn-large btn-warning build-craft-btn" data-item-id="${item.id}">🔨 つくる！</button>`;
     } else {
-      const missingStr = Object.entries(missing)
-        .map(([m, n]) => `${MATERIAL_EMOJI[m]}あと${n}`)
-        .join('、');
-      actionBtn = `
-        <button class="btn btn-large btn-secondary" disabled>
-          素材が足りない… (${missingStr})
-        </button>
-      `;
+      const ms = Object.entries(missing).map(([m,n]) => `${MATERIAL_EMOJI[m]}あと${n}`).join('、');
+      actionBtn = `<button class="btn btn-large btn-secondary" disabled>素材が足りない… (${ms})</button>`;
     }
 
     return `
@@ -292,7 +435,7 @@ export class HouseBuildScreen {
           <span class="detail-emoji">${item.imageFallback}</span>
           <div>
             <p class="detail-name">${item.name}</p>
-            <p class="detail-rarity ${RARITY_CLASS[item.rarity] || ''}">${this._rarityLabel(item.rarity)}</p>
+            <p class="detail-rarity ${RARITY_CLASS[item.rarity] || ''}">${rarityLabels[item.rarity] || ''}</p>
           </div>
         </div>
         ${recipeHtml}
@@ -304,21 +447,10 @@ export class HouseBuildScreen {
   _renderCraftResult() {
     const { success, message } = this._craftResult;
     return `
-      <div class="craft-result-toast ${success ? 'toast-success' : 'toast-error'}"
-           role="alert" aria-live="polite">
+      <div class="craft-result-toast ${success ? 'toast-success' : 'toast-error'}" role="alert">
         ${success ? '✨ ' : '❌ '}${message}
       </div>
     `;
-  }
-
-  _rarityLabel(rarity) {
-    const labels = {
-      [RARITY.COMMON]:     'コモン',
-      [RARITY.UNCOMMON]:   'アンコモン',
-      [RARITY.RARE]:       'レア',
-      [RARITY.SUPER_RARE]: 'ちょうレア！',
-    };
-    return labels[rarity] || rarity;
   }
 
   // ─────────────────────────────────────────────
@@ -328,63 +460,92 @@ export class HouseBuildScreen {
   _bindEvents() {
     if (!this._container) return;
 
-    // もどるボタン
-    const backBtn = this._container.querySelector('.build-back-btn');
-    if (backBtn) {
-      backBtn.addEventListener('click', () => {
-        GameStore.setState('app.currentScreen', 'house');
-      });
-    }
+    // もどる
+    this._container.querySelector('.build-back-btn')?.addEventListener('click', () => {
+      GameStore.setState('app.currentScreen', 'house');
+    });
 
-    // 保存ボタン（状態はリアルタイム保存済みなので表示のみ）
-    const saveBtn = this._container.querySelector('.build-save-btn');
-    if (saveBtn) {
-      saveBtn.addEventListener('click', () => {
-        this._craftResult = { success: true, message: 'ほぞんしました！' };
-        this._render();
-        setTimeout(() => {
-          this._craftResult = null;
+    // ─── スタイルモード ───────────────────────
+    if (this._mode === 'style') {
+      // レイヤータブ切替
+      this._container.querySelectorAll('.style-layer-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this._styleTargetLayer = btn.dataset.layer;
+          this._previewStyle = null;
           this._render();
-        }, 2000);
+        });
       });
-    }
 
-    // カテゴリータブ
-    const catBtns = this._container.querySelectorAll('.build-cat-btn');
-    catBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        this._category = btn.dataset.cat;
-        this._selectedItem = null;
+      // スタイルカード選択（プレビュー）
+      this._container.querySelectorAll('.style-card:not(.style-locked)').forEach(card => {
+        card.addEventListener('click', () => {
+          const sid = card.dataset.styleId;
+          if (this._previewStyle === sid) {
+            // もう一度タップしたら適用
+            this._applyStyle(sid);
+          } else {
+            this._previewStyle = sid;
+            this._render();
+          }
+        });
+      });
+
+      // 適用ボタン
+      this._container.querySelector('.style-apply-btn')?.addEventListener('click', () => {
+        if (this._previewStyle) {
+          this._applyStyle(this._previewStyle);
+        }
+      });
+
+      // キャンセルボタン
+      this._container.querySelector('.style-cancel-btn')?.addEventListener('click', () => {
+        this._previewStyle = null;
         this._render();
       });
-    });
 
-    // アイテムカードタップ → 詳細パネル表示
-    const itemCards = this._container.querySelectorAll('.build-item-card');
-    itemCards.forEach(card => {
-      card.addEventListener('click', () => {
-        const id = card.dataset.itemId;
-        this._selectedItem = this._selectedItem === id ? null : id;
-        this._render();
+    } else {
+      // ─── アイテムモード ───────────────────────
+      this._container.querySelectorAll('.build-cat-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this._category = btn.dataset.cat;
+          this._selectedItem = null;
+          this._render();
+        });
       });
-    });
 
-    // クラフトボタン
-    const craftBtn = this._container.querySelector('.build-craft-btn');
-    if (craftBtn) {
-      craftBtn.addEventListener('click', () => {
-        const itemId = craftBtn.dataset.itemId;
-        this._doCraft(itemId);
+      this._container.querySelectorAll('.build-item-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const id = card.dataset.itemId;
+          this._selectedItem = this._selectedItem === id ? null : id;
+          this._render();
+        });
+      });
+
+      this._container.querySelector('.build-craft-btn')?.addEventListener('click', () => {
+        this._doCraft(this._container.querySelector('.build-craft-btn').dataset.itemId);
+      });
+
+      this._container.querySelector('.build-place-btn')?.addEventListener('click', () => {
+        this._doPlace(this._container.querySelector('.build-place-btn').dataset.itemId);
       });
     }
+  }
 
-    // 配置ボタン
-    const placeBtn = this._container.querySelector('.build-place-btn');
-    if (placeBtn) {
-      placeBtn.addEventListener('click', () => {
-        const itemId = placeBtn.dataset.itemId;
-        this._doPlace(itemId);
-      });
+  // ─────────────────────────────────────────────
+  // スタイル適用
+  // ─────────────────────────────────────────────
+
+  _applyStyle(styleId) {
+    const ok = HouseManager.setLayerStyle(this._styleTargetLayer, styleId);
+    if (ok) {
+      this._previewStyle = null;
+      this._craftResult = { success: true, message: `スタイルをかえた！🎨` };
+      this._render();
+      setTimeout(() => { this._craftResult = null; this._render(); }, 2000);
+    } else {
+      this._craftResult = { success: false, message: 'スタイルをかえられませんでした' };
+      this._render();
+      setTimeout(() => { this._craftResult = null; this._render(); }, 2000);
     }
   }
 
@@ -394,25 +555,11 @@ export class HouseBuildScreen {
 
   _doCraft(itemId) {
     const result = HouseManager.craft(itemId);
-    if (result.success) {
-      this._craftResult = {
-        success: true,
-        message: `✨ クラフト成功！`,
-      };
-      Logger.info(`[HouseBuildScreen] クラフト: ${itemId}`);
-    } else {
-      this._craftResult = {
-        success: false,
-        message: result.reason || 'クラフトできませんでした',
-      };
-    }
+    this._craftResult = result.success
+      ? { success: true,  message: '✨ クラフト成功！' }
+      : { success: false, message: result.reason || 'クラフトできませんでした' };
     this._render();
-
-    // トースト自動非表示
-    setTimeout(() => {
-      this._craftResult = null;
-      this._render();
-    }, 2500);
+    setTimeout(() => { this._craftResult = null; this._render(); }, 2500);
   }
 
   // ─────────────────────────────────────────────
@@ -420,89 +567,49 @@ export class HouseBuildScreen {
   // ─────────────────────────────────────────────
 
   _doPlace(itemId) {
-    const item = getItemById(itemId);
+    const item   = getItemById(itemId);
     if (!item) return;
-
     let placed = false;
     const target = this._editTarget;
 
-    if (this._category === 'style') {
-      // 外観スタイル変更
-      placed = HouseManager.setExteriorStyle(itemId);
-
-    } else if (this._category === 'wallpaper') {
+    if (this._category === 'wallpaper') {
       const floor = target?.floor || this._mode;
       if (floor === 'floor1') placed = HouseManager.setFloor1Wallpaper(itemId);
-      else if (floor === 'floor2') {
-        GameStore.setState('house.floor2.wallpaper', itemId);
-        placed = true;
-      } else if (floor === 'floor3') {
-        GameStore.setState('house.floor3.wallpaper', itemId);
-        placed = true;
-      }
+      else { GameStore.setState(`house.${floor}.wallpaper`, itemId); placed = true; }
 
     } else if (this._category === 'floor') {
       const floor = target?.floor || this._mode;
       if (floor === 'floor1') placed = HouseManager.setFloor1Floor(itemId);
-      else if (floor === 'floor2') {
-        GameStore.setState('house.floor2.floor', itemId);
-        placed = true;
-      } else if (floor === 'floor3') {
-        GameStore.setState('house.floor3.floor', itemId);
-        placed = true;
-      }
+      else { GameStore.setState(`house.${floor}.floor`, itemId); placed = true; }
 
     } else if (this._category === 'furniture') {
       const floor = target?.floor || this._mode;
-      // 空きスロットに自動配置
       const furniture = [...(GameStore.getState(`house.${floor}.furniture`) || [])];
-      const emptyIdx = target?.slot !== undefined ? target.slot : furniture.findIndex(s => s === null);
-      if (emptyIdx >= 0) {
-        placed = HouseManager.setFurniture(floor, emptyIdx, itemId);
-      } else {
-        this._craftResult = { success: false, message: 'スロットがいっぱいです' };
-        this._render();
-        return;
-      }
+      const idx = target?.slot !== undefined ? target.slot : furniture.findIndex(s => s === null);
+      if (idx >= 0) { placed = HouseManager.setFurniture(floor, idx, itemId); }
+      else { this._craftResult = { success: false, message: 'スロットがいっぱいです' }; this._render(); return; }
 
     } else if (this._category === 'garden') {
-      const furniture = [...(GameStore.getState('house.garden.decorations') || [])];
-      const emptyIdx = target?.slot !== undefined ? target.slot : furniture.findIndex(s => s === null);
-      if (emptyIdx >= 0) {
-        placed = HouseManager.setGardenDeco(emptyIdx, itemId);
-      } else {
-        this._craftResult = { success: false, message: 'スロットがいっぱいです' };
-        this._render();
-        return;
-      }
+      const decos = [...(GameStore.getState('house.garden.decorations') || [])];
+      const idx = target?.slot !== undefined ? target.slot : decos.findIndex(s => s === null);
+      if (idx >= 0) { placed = HouseManager.setGardenDeco(idx, itemId); }
+      else { this._craftResult = { success: false, message: 'スロットがいっぱいです' }; this._render(); return; }
 
     } else if (this._category === 'deco') {
-      // 外観装飾 slotはアイテムのslotプロパティを使う
-      const decoItem = getItemById(itemId);
-      if (decoItem?.slot) {
-        placed = HouseManager.setExteriorDeco(decoItem.slot, itemId);
-      }
+      if (item?.slot) placed = HouseManager.setExteriorDeco(item.slot, itemId);
 
     } else if (this._category === 'tower') {
       const decos = [...(GameStore.getState('house.tower.decorations') || [])];
-      const emptyIdx = target?.slot !== undefined ? target.slot : decos.findIndex(s => s === null);
-      if (emptyIdx >= 0) {
-        placed = HouseManager.setTowerDeco(emptyIdx, itemId);
-      }
+      const idx = target?.slot !== undefined ? target.slot : decos.findIndex(s => s === null);
+      if (idx >= 0) placed = HouseManager.setTowerDeco(idx, itemId);
     }
 
-    if (placed) {
-      this._craftResult = { success: true, message: 'かざりました！🏠' };
-      this._editTarget = null;
-    } else {
-      this._craftResult = { success: false, message: 'おけませんでした' };
-    }
-
+    this._craftResult = placed
+      ? { success: true,  message: 'かざりました！🏠' }
+      : { success: false, message: 'おけませんでした' };
+    this._editTarget = null;
     this._render();
-    setTimeout(() => {
-      this._craftResult = null;
-      this._render();
-    }, 2000);
+    setTimeout(() => { this._craftResult = null; this._render(); }, 2000);
   }
 }
 
