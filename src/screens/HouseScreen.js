@@ -247,34 +247,58 @@ export class HouseScreen {
   }
 
   /**
-   * ビジュアル家画像パネルを描画する
-   * 各レイヤーの style_wood / style_ice 等の layerImages PNG を縦積みで表示。
-   * 画像が未配置のスタイルは何も表示しない（絵文字バーが代替として機能する）。
+   * ビジュアル家パネルを描画する（CSSスプライット方式）
    *
-   * @param {Object} sections   - セクション解放状態
+   * スプライトシート1枚（512×2064px, 6行等分）を
+   * CSSの background-position で切り取り表示する。
+   * 物理スライス不要 — ユーザーは spritesheet.png を1枚置くだけでよい。
+   *
+   * スプライト座標定義（縦2064px ÷ 6行 = 344px/行）:
+   *   tower  = ROW1+ROW2 結合  Y:0    H:688  (bgSize 100% 300%, bgPos 0% 0%)
+   *   floor3 = ROW3            Y:688  H:344  (bgSize 100% 600%, bgPos 0% 40%)
+   *   floor2 = ROW4            Y:1032 H:344  (bgSize 100% 600%, bgPos 0% 60%)
+   *   floor1 = ROW5            Y:1376 H:344  (bgSize 100% 600%, bgPos 0% 80%)
+   *   garden = ROW6            Y:1720 H:344  (bgSize 100% 600%, bgPos 0% 100%)
+   *
+   * background-position の計算:
+   *   p = Y / (スプライト高 − レイヤー高) × 100%
+   *
+   * @param {Object} sections    - セクション解放状態
    * @param {Object} layerStyles - レイヤーIDごとのスタイルID
    * @returns {string} HTML文字列
    */
   _renderVisualHouse(sections, layerStyles) {
-    const imgs = LAYER_ORDER_TOP.map(id => {
+    // レイヤーごとのCSS切り取りパラメータ
+    const SPRITE_SPEC = {
+      tower:  { aspectW: 512, aspectH: 688, bgSize: '100% 300%', bgPos: '0% 0%'   },
+      floor3: { aspectW: 512, aspectH: 344, bgSize: '100% 600%', bgPos: '0% 40%'  },
+      floor2: { aspectW: 512, aspectH: 344, bgSize: '100% 600%', bgPos: '0% 60%'  },
+      floor1: { aspectW: 512, aspectH: 344, bgSize: '100% 600%', bgPos: '0% 80%'  },
+      garden: { aspectW: 512, aspectH: 344, bgSize: '100% 600%', bgPos: '0% 100%' },
+    };
+
+    const layers = LAYER_ORDER_TOP.map(id => {
       const isUnlocked = id === 'floor1' || sections[id];
       if (!isUnlocked) return '';
 
       const styleId = layerStyles[id] || 'style_wood';
       const style   = getStyleById(styleId);
-      const imgPath = style?.layerImages?.[id];
-      if (!imgPath) return '';
+      const sheet   = style?.spritesheet;
+      if (!sheet) return '';
 
-      return `<img class="house-visual-img" src="${imgPath}" alt="${id}" loading="lazy"
-                   onerror="this.closest('.house-visual-panel')?.remove()">`;
+      const { aspectW, aspectH, bgSize, bgPos } = SPRITE_SPEC[id];
+      return `<div class="house-sprite-layer"
+                   data-layer="${id}"
+                   style="aspect-ratio:${aspectW}/${aspectH};background-image:url('${sheet}');background-size:${bgSize};background-position:${bgPos};"
+              ></div>`;
     }).filter(Boolean);
 
-    if (imgs.length === 0) return '';
+    if (layers.length === 0) return '';
 
     return `
       <div class="house-visual-panel">
         <div class="house-visual-stack">
-          ${imgs.join('')}
+          ${layers.join('')}
         </div>
       </div>
     `;

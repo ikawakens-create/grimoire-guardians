@@ -1,22 +1,18 @@
-スプライトシートスライス配置ガイド — style_wood (もくのいえ)
-================================================================
+画像配置ガイド — style_wood (もくのいえ)
+=========================================
 
-スプライトシート（Gemini生成: 512×2064px, 6等分ROW）をここに配置してください。
+■ 必要なファイルは1枚だけ！
 
-■ 必要ファイル一覧（5枚）:
+  spritesheet.png  — Gemini生成の縦長スプライトシート（512×2064px, 6行）
+                     を「そのまま」このフォルダに置くだけでOK。
+                     スライス（切り分け）は不要です。
 
-  tower.png   — ROW1+ROW2を結合: Y:0    高さ:688px  (屋根+4階壁)
-  floor3.png  — ROW3:            Y:688  高さ:344px  (3階壁)
-  floor2.png  — ROW4:            Y:1032 高さ:344px  (2階壁)
-  floor1.png  — ROW5:            Y:1376 高さ:344px  (1階壁・ドア付き)
-  garden.png  — ROW6:            Y:1720 高さ:344px  (庭・柵)
+■ CSSが自動的に各行を切り取って表示します:
 
-■ ImageMagickでスライスする場合:
+  tower  (ROW1+ROW2): Y:0    H:688  → 屋根 + 4階壁
+  floor3 (ROW3)     : Y:688  H:344  → 3階壁
+  floor2 (ROW4)     : Y:1032 H:344  → 2階壁
+  floor1 (ROW5)     : Y:1376 H:344  → 1階壁（ドア付き）
+  garden (ROW6)     : Y:1720 H:344  → 庭・柵
 
-  convert spritesheet.png -crop 512x688+0+0    tower.png
-  convert spritesheet.png -crop 512x344+0+688  floor3.png
-  convert spritesheet.png -crop 512x344+0+1032 floor2.png
-  convert spritesheet.png -crop 512x344+0+1376 floor1.png
-  convert spritesheet.png -crop 512x344+0+1720 garden.png
-
-■ 幅はすべて 512px で統一すること。
+■ Geminiから保存するファイル名を必ず「spritesheet.png」にしてください。

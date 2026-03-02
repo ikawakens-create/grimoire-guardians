@@ -100,18 +100,9 @@ const ASSETS = [
   './src/styles/layout.css',
   './src/styles/components.css',
   './src/styles/effects.css',
-  // 家ビジュアル画像 — style_wood
-  './assets/houses/style_wood/tower.png',
-  './assets/houses/style_wood/floor3.png',
-  './assets/houses/style_wood/floor2.png',
-  './assets/houses/style_wood/floor1.png',
-  './assets/houses/style_wood/garden.png',
-  // 家ビジュアル画像 — style_ice
-  './assets/houses/style_ice/tower.png',
-  './assets/houses/style_ice/floor3.png',
-  './assets/houses/style_ice/floor2.png',
-  './assets/houses/style_ice/floor1.png',
-  './assets/houses/style_ice/garden.png',
+  // 家ビジュアル画像（スプライトシート1枚/スタイル）
+  './assets/houses/style_wood/spritesheet.png',
+  './assets/houses/style_ice/spritesheet.png',
 ];
 
 // ─── インストール ──────────────────────────────────────────
