@@ -48,6 +48,7 @@ export class HouseScreen {
   constructor() {
     this._view = VIEW.OVERVIEW;
     this._container = null;
+    this._element = null;
     this._unsubscribe = null;
     this._celebrationQueue = [];
   }
@@ -91,7 +92,7 @@ export class HouseScreen {
 
   hide() {
     if (this._unsubscribe) { this._unsubscribe(); this._unsubscribe = null; }
-    if (this._container) this._container.innerHTML = '';
+    if (this._element) { this._element.remove(); this._element = null; }
   }
 
   // ─────────────────────────────────────────────
@@ -169,7 +170,9 @@ export class HouseScreen {
     // フルセットボーナスクラス
     const bonusClass = bonus ? `house-fullset-${bonus.effect.replace(/_/g, '-')}` : '';
 
-    this._container.innerHTML = `
+    if (this._element) this._element.remove();
+    const _tmp = document.createElement('div');
+    _tmp.innerHTML = `
       <div class="house-screen">
         ${this._renderHeader()}
         <div class="house-view-area">
@@ -181,6 +184,8 @@ export class HouseScreen {
         ${this._renderFooter(collection, nextSection, nextMilestone, matchCount, comboName)}
       </div>
     `;
+    this._element = _tmp.firstElementChild;
+    this._container.appendChild(this._element);
 
     this._bindEvents();
   }

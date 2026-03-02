@@ -29,6 +29,7 @@ const LAYER_LABELS = {
 export class PhotoScreen {
   constructor() {
     this._container = null;
+    this._element = null;
     this._unsubscribe = null;
     /** 配置済みスタンプ [{ emoji, x, y, id }] */
     this._stamps = [];
@@ -55,7 +56,7 @@ export class PhotoScreen {
   hide() {
     if (this._unsubscribe) { this._unsubscribe(); this._unsubscribe = null; }
     this._saveStampPlacements();
-    if (this._container) this._container.innerHTML = '';
+    if (this._element) { this._element.remove(); this._element = null; }
   }
 
   // ─────────────────────────────────────────────
@@ -75,7 +76,9 @@ export class PhotoScreen {
     const unlockedFrames = photo.unlockedFrames || ['frame_simple'];
     const unlockedStamps = photo.unlockedStamps || [];
 
-    this._container.innerHTML = `
+    if (this._element) this._element.remove();
+    const _tmp = document.createElement('div');
+    _tmp.innerHTML = `
       <div class="photo-screen">
 
         ${this._renderHeader()}
@@ -151,6 +154,8 @@ export class PhotoScreen {
 
       </div>
     `;
+    this._element = _tmp.firstElementChild;
+    this._container.appendChild(this._element);
 
     this._bindEvents();
     this._restoreStampDOM();

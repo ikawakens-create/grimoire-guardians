@@ -84,6 +84,7 @@ const MODE_CATEGORIES = {
 export class HouseBuildScreen {
   constructor() {
     this._container  = null;
+    this._element    = null;
     this._mode       = 'style';      // 編集モード
     this._category   = 'style';     // アイテムカテゴリー
     this._editTarget = null;
@@ -130,7 +131,7 @@ export class HouseBuildScreen {
     GameStore.setState('app.houseBuildMode', null);
     GameStore.setState('app.houseEditTarget', null);
     GameStore.setState('app.styleTargetLayer', null);
-    if (this._container) this._container.innerHTML = '';
+    if (this._element) { this._element.remove(); this._element = null; }
   }
 
   // ─────────────────────────────────────────────
@@ -139,10 +140,12 @@ export class HouseBuildScreen {
 
   _render() {
     if (!this._container) return;
+    if (this._element) this._element.remove();
     const materials = GameStore.getState('inventory.materials') || {};
     const house     = GameStore.getState('house');
 
-    this._container.innerHTML = `
+    const _tmp = document.createElement('div');
+    _tmp.innerHTML = `
       <div class="house-build-screen">
         ${this._renderHeader(materials)}
         ${this._mode === 'style'
@@ -152,6 +155,8 @@ export class HouseBuildScreen {
         ${this._craftResult ? this._renderCraftResult() : ''}
       </div>
     `;
+    this._element = _tmp.firstElementChild;
+    this._container.appendChild(this._element);
 
     this._bindEvents();
   }
