@@ -56,6 +56,14 @@ export const HOUSE_STYLES = [
       garden: '🌿', floor1: '🪵', floor2: '🏠',
       floor3: '🌲', tower: '🌳', decoration: '🍃',
     },
+    // スプライトシートからスライスしたレイヤー画像
+    layerImages: {
+      garden: 'assets/houses/style_wood/garden.png',
+      floor1: 'assets/houses/style_wood/floor1.png',
+      floor2: 'assets/houses/style_wood/floor2.png',
+      floor3: 'assets/houses/style_wood/floor3.png',
+      tower:  'assets/houses/style_wood/tower.png',
+    },
   },
   {
     id: 'style_stone',
@@ -136,6 +144,14 @@ export const HOUSE_STYLES = [
     layerEmoji: {
       garden: '❄️', floor1: '🏔️', floor2: '💎',
       floor3: '🧊', tower: '☃️', decoration: '❄️',
+    },
+    // スプライトシートからスライスしたレイヤー画像
+    layerImages: {
+      garden: 'assets/houses/style_ice/garden.png',
+      floor1: 'assets/houses/style_ice/floor1.png',
+      floor2: 'assets/houses/style_ice/floor2.png',
+      floor3: 'assets/houses/style_ice/floor3.png',
+      tower:  'assets/houses/style_ice/tower.png',
     },
   },
   {

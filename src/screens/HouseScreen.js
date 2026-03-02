@@ -220,6 +220,9 @@ export class HouseScreen {
     // 装飾レイヤー（オーバーレイ）
     const decoRow = this._renderDecoLayer(sections, layerStyles, cleared);
 
+    // ビジュアル家画像パネル（PNG画像がある場合のみ表示）
+    const visualPanel = this._renderVisualHouse(sections, layerStyles);
+
     return `
       <div class="house-overview ${bonusClass}" id="house-overview-root">
         <!-- コンボ名バッジ -->
@@ -229,6 +232,9 @@ export class HouseScreen {
           </div>
         ` : ''}
 
+        <!-- ビジュアル家パネル -->
+        ${visualPanel}
+
         <!-- レイヤー積み上げ -->
         <div class="house-layers-stack">
           ${rows.join('')}
@@ -236,6 +242,40 @@ export class HouseScreen {
 
         <!-- 装飾レイヤー（全体オーバーレイ） -->
         ${decoRow}
+      </div>
+    `;
+  }
+
+  /**
+   * ビジュアル家画像パネルを描画する
+   * 各レイヤーの style_wood / style_ice 等の layerImages PNG を縦積みで表示。
+   * 画像が未配置のスタイルは何も表示しない（絵文字バーが代替として機能する）。
+   *
+   * @param {Object} sections   - セクション解放状態
+   * @param {Object} layerStyles - レイヤーIDごとのスタイルID
+   * @returns {string} HTML文字列
+   */
+  _renderVisualHouse(sections, layerStyles) {
+    const imgs = LAYER_ORDER_TOP.map(id => {
+      const isUnlocked = id === 'floor1' || sections[id];
+      if (!isUnlocked) return '';
+
+      const styleId = layerStyles[id] || 'style_wood';
+      const style   = getStyleById(styleId);
+      const imgPath = style?.layerImages?.[id];
+      if (!imgPath) return '';
+
+      return `<img class="house-visual-img" src="${imgPath}" alt="${id}" loading="lazy"
+                   onerror="this.closest('.house-visual-panel')?.remove()">`;
+    }).filter(Boolean);
+
+    if (imgs.length === 0) return '';
+
+    return `
+      <div class="house-visual-panel">
+        <div class="house-visual-stack">
+          ${imgs.join('')}
+        </div>
       </div>
     `;
   }
