@@ -3875,10 +3875,9 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
 
-.house-visual-img {
+.house-sprite-layer {
   display: block;
   width: 100%;
-  /* img間の隙間をなくす */
-  line-height: 0;
-  font-size: 0;
+  background-repeat: no-repeat;
+  /* background-size / background-position はインラインで各レイヤーごとに指定 */
 }
