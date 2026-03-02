@@ -3846,3 +3846,30 @@
   border-radius: 8px;
   padding: 4px 8px;
 }
+
+/* ─────────────────────────────────────────────────────────
+   家ビジュアルパネル（HouseScreen overview スプライト表示）
+   ───────────────────────────────────────────────────────── */
+
+.house-visual-panel {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 4px;
+}
+
+.house-visual-stack {
+  display: flex;
+  flex-direction: column;
+  width: 160px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.house-visual-img {
+  display: block;
+  width: 100%;
+  /* img間の隙間をなくす */
+  line-height: 0;
+  font-size: 0;
+}
