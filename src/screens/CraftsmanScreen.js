@@ -147,6 +147,7 @@ const TAILOR_CATEGORIES = [
 export class CraftsmanScreen {
   constructor() {
     this._container = null;
+    this._element = null;
     this._npc = NPC.MEISTER;
     this._mainTab = 'craft';       // 'craft' | 'upgrade'
     this._category = 'furniture';
@@ -187,7 +188,7 @@ export class CraftsmanScreen {
     if (this._unsubscribe) { this._unsubscribe(); this._unsubscribe = null; }
     GameStore.setState('app.craftsmanMode', null);
     GameStore.setState('app.craftsmanTarget', null);
-    if (this._container) this._container.innerHTML = '';
+    if (this._element) { this._element.remove(); this._element = null; }
   }
 
   // ─────────────────────────────────────────────
@@ -196,12 +197,14 @@ export class CraftsmanScreen {
 
   _render() {
     if (!this._container) return;
+    if (this._element) this._element.remove();
 
     const materials = GameStore.getState('inventory.materials') || {};
     const house = GameStore.getState('house');
     const npcData = NPC_DATA[this._npc];
 
-    this._container.innerHTML = `
+    const _tmp = document.createElement('div');
+    _tmp.innerHTML = `
       <div class="craftsman-screen" style="--npc-color:${npcData.color};--npc-bg:${npcData.bgColor}">
 
         ${this._renderHeader(materials)}
@@ -235,6 +238,8 @@ export class CraftsmanScreen {
         ${this._isCrafting ? this._renderCraftingAnimation() : ''}
       </div>
     `;
+    this._element = _tmp.firstElementChild;
+    this._container.appendChild(this._element);
 
     this._bindEvents();
   }
