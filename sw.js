@@ -9,7 +9,7 @@
  * @date 2026-02-26
  */
 
-const SW_VERSION   = '2.0.0';
+const SW_VERSION   = '2.1.0';
 const CACHE_NAME   = `grimoire-${SW_VERSION}`;
 
 /** キャッシュ対象ファイル（静的アセット） */
@@ -103,6 +103,19 @@ const ASSETS = [
   // 家ビジュアル画像（スプライトシート1枚/スタイル）
   './assets/houses/style_wood/spritesheet.png',
   './assets/houses/style_ice/spritesheet.png',
+  './assets/houses/style_stone/spritesheet.png',
+  './assets/houses/style_brick/spritesheet.png',
+  './assets/houses/style_bamboo/spritesheet.png',
+  './assets/houses/style_forest/spritesheet.png',
+  './assets/houses/style_sakura/spritesheet.png',
+  './assets/houses/style_candy/spritesheet.png',
+  './assets/houses/style_flame/spritesheet.png',
+  './assets/houses/style_sea/spritesheet.png',
+  './assets/houses/style_black/spritesheet.png',
+  './assets/houses/style_thunder/spritesheet.png',
+  './assets/houses/style_moon/spritesheet.png',
+  './assets/houses/style_jewel/spritesheet.png',
+  './assets/houses/style_star/spritesheet.png',
 ];
 
 // ─── インストール ──────────────────────────────────────────
