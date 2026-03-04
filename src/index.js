@@ -184,6 +184,10 @@ function showGameScreen() {
       showFarm(gameScreen);
     } else if (screen === 'bookshelf') {
       hideAll();
+      // まち等のサブ画面から戻ってきた場合はブックシェルフを再描画
+      if (!_activeScreen) {
+        showBookshelf(gameScreen);
+      }
     }
   });
 }
@@ -379,6 +383,7 @@ function showCraftsman(gameScreen) {
 
 /** TownScreen（街ハブ）を描画する */
 function showTown(gameScreen) {
+  if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
   if (!_townScreen) _townScreen = new TownScreen();
   _townScreen.show(gameScreen);
 }
