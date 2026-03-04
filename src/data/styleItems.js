@@ -74,6 +74,7 @@ export const HOUSE_STYLES = [
       garden: '🪨', floor1: '🏛️', floor2: '⬜',
       floor3: '🗿', tower: '🪨', decoration: '✦',
     },
+    spritesheet: 'assets/houses/style_stone/spritesheet.png',
   },
   {
     id: 'style_brick',
@@ -90,6 +91,7 @@ export const HOUSE_STYLES = [
       garden: '🧱', floor1: '🏘️', floor2: '🚪',
       floor3: '🏗️', tower: '🧱', decoration: '🏮',
     },
+    spritesheet: 'assets/houses/style_brick/spritesheet.png',
   },
   {
     id: 'style_bamboo',
@@ -106,6 +108,7 @@ export const HOUSE_STYLES = [
       garden: '🎋', floor1: '🏯', floor2: '⛩️',
       floor3: '🪭', tower: '🎐', decoration: '🏮',
     },
+    spritesheet: 'assets/houses/style_bamboo/spritesheet.png',
   },
   {
     id: 'style_forest',
@@ -122,6 +125,7 @@ export const HOUSE_STYLES = [
       garden: '🍄', floor1: '🌲', floor2: '🌿',
       floor3: '🌳', tower: '🦋', decoration: '✨',
     },
+    spritesheet: 'assets/houses/style_forest/spritesheet.png',
   },
   // ─── スペシャル（中盤） ────────────────────────────
   {
@@ -157,6 +161,7 @@ export const HOUSE_STYLES = [
       garden: '🌸', floor1: '🏡', floor2: '🌺',
       floor3: '🌷', tower: '🌸', decoration: '🌸',
     },
+    spritesheet: 'assets/houses/style_sakura/spritesheet.png',
   },
   {
     id: 'style_candy',
@@ -173,6 +178,7 @@ export const HOUSE_STYLES = [
       garden: '🍬', floor1: '🍭', floor2: '🎂',
       floor3: '🍩', tower: '🍫', decoration: '🍭',
     },
+    spritesheet: 'assets/houses/style_candy/spritesheet.png',
   },
   {
     id: 'style_flame',
@@ -189,6 +195,7 @@ export const HOUSE_STYLES = [
       garden: '🔥', floor1: '🌋', floor2: '🔥',
       floor3: '💥', tower: '🕯️', decoration: '🔥',
     },
+    spritesheet: 'assets/houses/style_flame/spritesheet.png',
   },
   {
     id: 'style_sea',
@@ -205,6 +212,7 @@ export const HOUSE_STYLES = [
       garden: '🐚', floor1: '🏖️', floor2: '🌊',
       floor3: '🐠', tower: '⚓', decoration: '🫧',
     },
+    spritesheet: 'assets/houses/style_sea/spritesheet.png',
   },
   // ─── レジェンド（後半・超希少） ────────────────────
   {
@@ -222,6 +230,7 @@ export const HOUSE_STYLES = [
       garden: '⚔️', floor1: '🏯', floor2: '🗡️',
       floor3: '💀', tower: '🔮', decoration: '💜',
     },
+    spritesheet: 'assets/houses/style_black/spritesheet.png',
   },
   {
     id: 'style_thunder',
@@ -238,6 +247,7 @@ export const HOUSE_STYLES = [
       garden: '⚡', floor1: '🌩️', floor2: '⚡',
       floor3: '🌪️', tower: '☁️', decoration: '⚡',
     },
+    spritesheet: 'assets/houses/style_thunder/spritesheet.png',
   },
   {
     id: 'style_moon',
@@ -254,6 +264,7 @@ export const HOUSE_STYLES = [
       garden: '🌙', floor1: '🌌', floor2: '🌕',
       floor3: '✨', tower: '🌙', decoration: '🌟',
     },
+    spritesheet: 'assets/houses/style_moon/spritesheet.png',
   },
   {
     id: 'style_jewel',
@@ -270,6 +281,7 @@ export const HOUSE_STYLES = [
       garden: '💎', floor1: '💍', floor2: '💠',
       floor3: '🔷', tower: '💎', decoration: '🌈',
     },
+    spritesheet: 'assets/houses/style_jewel/spritesheet.png',
   },
   {
     id: 'style_star',
@@ -286,6 +298,7 @@ export const HOUSE_STYLES = [
       garden: '⭐', floor1: '🌠', floor2: '🌟',
       floor3: '✨', tower: '🏆', decoration: '🌌',
     },
+    spritesheet: 'assets/houses/style_star/spritesheet.png',
   },
 ];
 
