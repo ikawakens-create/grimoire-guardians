@@ -138,9 +138,10 @@ function showGameScreen() {
   }
 
   // グローバルルーター（家・街システム）
-  GameStore.subscribe((state, path) => {
+  // notifyObservers は observer(path, newValue, oldValue) で呼ぶため第1引数が path
+  GameStore.subscribe((path, newValue) => {
     if (path !== 'app.currentScreen') return;
-    const screen = GameStore.getState('app.currentScreen');
+    const screen = newValue;
 
     // 全サブ画面を隠すヘルパー
     const hideAll = () => {
