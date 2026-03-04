@@ -229,8 +229,6 @@ function showBookshelf(gameScreen, newlyClearedWorldId = null) {
     _activeScreen = null;
   }
 
-  GameStore.setState('app.currentScreen', 'bookshelf');
-
   const bookshelf = new BookshelfScreen(
     gameScreen,
     (worldData) => {
@@ -242,6 +240,8 @@ function showBookshelf(gameScreen, newlyClearedWorldId = null) {
 
   bookshelf.render();
   _activeScreen = bookshelf;
+  // _activeScreen をセットしてからサブスクライバーを発火させることで二重描画を防ぐ
+  GameStore.setState('app.currentScreen', 'bookshelf');
 
   if (Config.IS_DEBUG) {
     window.GG._screen = bookshelf;
