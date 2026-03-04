@@ -335,11 +335,13 @@ export const Config = {
   TOWN: {
     // 施設定義レジストリ（拡張は配列末尾に追加するだけでOK）
     BUILDINGS: [
-      { id: 'craftsman', name: '合成屋',    emoji: '🔨', screen: 'craftsman', unlockWorlds: 0,  isUpgradeHub: true },
-      { id: 'library',   name: '魔導書庫',  emoji: '🏛️', screen: 'library',   unlockWorlds: 0  },
-      { id: 'shop',      name: '商店',      emoji: '🛒', screen: 'shop',      unlockWorlds: 5  },
-      { id: 'guild',     name: 'ギルド',    emoji: '⚔️', screen: 'guild',     unlockWorlds: 10 },
-      { id: 'farm',      name: '魔法農場',  emoji: '🌱', screen: 'farm',      unlockWorlds: 8  },
+      { id: 'craftsman',  name: '合成屋',    emoji: '🔨', screen: 'craftsman',  unlockWorlds: 0,  isUpgradeHub: true },
+      { id: 'library',    name: '魔導書庫',  emoji: '🏛️', screen: 'library',    unlockWorlds: 0  },
+      { id: 'house_build',name: 'いえをつくる', emoji: '🏠', screen: 'house_build', unlockWorlds: 0  },
+      { id: 'house',      name: 'マイハウス', emoji: '🏡', screen: 'house',      unlockWorlds: 0  },
+      { id: 'shop',       name: '商店',      emoji: '🛒', screen: 'shop',       unlockWorlds: 5  },
+      { id: 'guild',      name: 'ギルド',    emoji: '⚔️', screen: 'guild',      unlockWorlds: 10 },
+      { id: 'farm',       name: '魔法農場',  emoji: '🌱', screen: 'farm',       unlockWorlds: 8  },
     ],
 
     MAX_BUILDING_LEVEL: 5,
