@@ -16,7 +16,6 @@
  */
 
 import { GameStore } from '../core/GameStore.js';
-import { Config } from '../core/Config.js';
 import Logger from '../core/Logger.js';
 import { TownManager } from '../core/TownManager.js';
 
@@ -99,8 +98,7 @@ export class TownScreen {
     if (!this._container) return;
     if (this._element) this._element.remove();
 
-    const materials  = GameStore.getState('inventory.materials') || {};
-    const buildings  = TownManager.getAllBuildingStates();
+    const materials    = GameStore.getState('inventory.materials') || {};
     const isFirstVisit = !localStorage.getItem('gg_town_visited');
 
     const el = document.createElement('div');
@@ -111,7 +109,7 @@ export class TownScreen {
 
         <!-- SVGプレースホルダー（画像なし時の常時表示） -->
         <div class="town-svg-bg" aria-hidden="true">
-          ${this._renderTownSVG(buildings)}
+          ${this._renderTownSVG()}
         </div>
 
         <!-- 実画像（あれば上書き） -->
@@ -128,7 +126,7 @@ export class TownScreen {
         </div>
 
         <!-- タップ可能なホットスポット -->
-        ${HOTSPOTS.map(h => this._renderHotspot(h, buildings, isFirstVisit)).join('')}
+        ${HOTSPOTS.map(h => this._renderHotspot(h, isFirstVisit)).join('')}
 
       </div>
 
@@ -156,7 +154,7 @@ export class TownScreen {
   }
 
   /** 街全景のSVGプレースホルダー */
-  _renderTownSVG(buildings) {
+  _renderTownSVG() {
     return `
       <svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg"
            width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
@@ -259,13 +257,9 @@ export class TownScreen {
   }
 
   /** ホットスポットボタンのHTML */
-  _renderHotspot(hotspot, buildings, isFirstVisit) {
-    // house_build はつねに解放済み扱い
-    const bState = hotspot.alwaysUnlocked
-      ? { isUnlocked: true, level: 1 }
-      : buildings.find(b => b.config.id === hotspot.id) || { isUnlocked: false };
-
-    if (!bState.isUnlocked) return '';
+  _renderHotspot(hotspot, isFirstVisit) {
+    // 現バージョンの HOTSPOTS はすべて alwaysUnlocked: true
+    if (!hotspot.alwaysUnlocked) return '';
 
     const isFirst = isFirstVisit && hotspot.isMain;
     const { left, top, width, height } = hotspot.pos;

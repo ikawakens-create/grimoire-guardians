@@ -76,6 +76,7 @@ export class HouseBuildScreen {
     this._tab           = 'style';          // 'style' | 'garden'
     this._selectedLayer = 'floor1';         // 現在選択中のレイヤー
     this._craftResult   = null;             // { success, message }
+    this._toastTimer    = null;             // トースト自動消去タイマー（競合防止）
     this._unsubscribe   = null;
   }
 
@@ -96,11 +97,20 @@ export class HouseBuildScreen {
     this._tab         = 'style';
     this._craftResult = null;
     this._render();
+
+    // インベントリ・家の状態変化で素材バー・スタイルカードを再描画
+    this._unsubscribe = GameStore.subscribe((state, path) => {
+      if (path && (path.startsWith('inventory') || path.startsWith('house'))) {
+        this._render();
+      }
+    });
+
     Logger.info('[HouseBuildScreen] v4.0 表示: layer=' + this._selectedLayer);
   }
 
   hide() {
     if (this._unsubscribe) { this._unsubscribe(); this._unsubscribe = null; }
+    if (this._toastTimer)  { clearTimeout(this._toastTimer); this._toastTimer = null; }
     GameStore.setState('app.houseBuildMode',   null);
     GameStore.setState('app.houseEditTarget',  null);
     GameStore.setState('app.styleTargetLayer', null);
@@ -309,9 +319,9 @@ export class HouseBuildScreen {
     const layerLabel = STYLE_LAYERS.find(l => l.id === this._selectedLayer)?.label || '';
 
     const cards = HOUSE_STYLES.map(style => {
-      const owned   = unlockedStyles.includes(style.id);
-      const isCurrent = style.id === currentStyleId;
-      const unlockAt  = Config.HOUSE.STYLE_UNLOCK_WORLDS?.[style.id] ?? 0;
+      const owned      = unlockedStyles.includes(style.id);
+      const isCurrent  = style.id === currentStyleId;
+      const unlockAt   = Config.HOUSE.STYLE_UNLOCK_WORLDS?.[style.id] ?? 0;
       const worldsLeft = Math.max(0, unlockAt - clearedWorlds);
 
       return `
@@ -322,7 +332,7 @@ export class HouseBuildScreen {
           <div class="sc-preview" style="background:linear-gradient(135deg,${style.color},${style.colorDark})">
             <span class="sc-emoji">${style.layerEmoji?.[this._selectedLayer] || style.emoji}</span>
             ${isCurrent ? '<span class="sc-badge-now">いま</span>' : ''}
-            ${!owned   ? `<span class="sc-badge-lock">🔒 W${unlockAt}〜</span>` : ''}
+            ${!owned ? `<span class="sc-badge-lock">🔒 あと${worldsLeft}W</span>` : ''}
           </div>
           <div class="sc-info">
             <span class="sc-name">${style.name}</span>
@@ -346,6 +356,20 @@ export class HouseBuildScreen {
   // ─────────────────────────────────────────────
 
   _renderGardenOptions(materials, house) {
+    // にわセクションがロック中の場合は子供向けメッセージを表示
+    if (!house.sections?.garden) {
+      const clearedWorlds = HouseManager._getClearedWorldCount?.() ?? 0;
+      const needed  = Config.HOUSE.SECTION_UNLOCK_WORLDS?.garden ?? 7;
+      const left    = Math.max(0, needed - clearedWorlds);
+      return `
+        <div class="garden-locked-banner">
+          <span class="garden-locked-emoji">🌱</span>
+          <p class="garden-locked-title">にわはまだひらいていないよ！</p>
+          <p class="garden-locked-hint">あと <strong>${left}ワールド</strong> クリアしたらひらくよ！</p>
+        </div>
+      `;
+    }
+
     const crafted = house.crafted || [];
 
     const cards = GARDEN_ITEMS.map(item => {
@@ -477,7 +501,9 @@ export class HouseBuildScreen {
       this._craftResult = { success: false, message: '❌ かえられませんでした' };
     }
     this._render();
-    setTimeout(() => { this._craftResult = null; this._render(); }, 2000);
+    // 前のタイマーをキャンセルしてから新しくセット（連打しても競合しない）
+    clearTimeout(this._toastTimer);
+    this._toastTimer = setTimeout(() => { this._craftResult = null; this._render(); }, 2000);
   }
 
   // ─────────────────────────────────────────────
@@ -499,7 +525,8 @@ export class HouseBuildScreen {
       };
     }
     this._render();
-    setTimeout(() => { this._craftResult = null; this._render(); }, 2500);
+    clearTimeout(this._toastTimer);
+    this._toastTimer = setTimeout(() => { this._craftResult = null; this._render(); }, 2500);
   }
 }
 
