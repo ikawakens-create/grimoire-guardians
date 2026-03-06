@@ -53,55 +53,63 @@ export class GuildScreen {
     const dialogue   = GUILD_MASTER_DIALOGUES[Math.floor(Math.random() * GUILD_MASTER_DIALOGUES.length)];
 
     const el = document.createElement('div');
-    el.className = 'guild-screen';
+    el.className = 'guild-screen facility-screen';
+    el.style.cssText = '--fac-color:#4a6fa5;--fac-bg:#f0f4ff';
     el.innerHTML = `
-      <div class="guild-bg" style="background-image:url('assets/town/guild_bg.png')"></div>
-
-      <div class="guild-header">
-        <button class="btn-icon guild-back-btn">← まち</button>
-        <h1 class="guild-title">⚔️ ギルド</h1>
-        <span class="guild-lv-badge">Lv${guildLevel}</span>
+      <!-- ヘッダー -->
+      <div class="guild-header facility-header">
+        <button class="btn-icon guild-back-btn" style="color:#fff">← まち</button>
+        <h1 class="guild-title facility-title">⚔️ ギルド</h1>
+        <span class="guild-lv-badge facility-lv-badge">Lv${guildLevel}</span>
       </div>
 
-      <!-- ギルドマスター -->
-      <div class="guild-npc-row">
-        <div class="guild-npc-avatar">
-          <img src="${npcCfg?.image || ''}" alt="ギルドマスター"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <div class="npc-emoji-fallback" style="display:none">⚔️</div>
-        </div>
-        <div class="npc-bubble guild-bubble">
-          <p class="npc-dialogue">${dialogue}</p>
-        </div>
-      </div>
+      <!-- 2カラム本体 -->
+      <div class="facility-body">
 
-      <!-- 工事中バナー -->
-      <div class="guild-construction">
-        <div class="construction-icon">🚧</div>
-        <p class="construction-title">クエストシステム、じゅんびちゅう！</p>
-        <p class="construction-body">
-          まもなく、たくさんのクエストが登場するぞ！<br>
-          修行を続けて、その日に備えよ。
-        </p>
-      </div>
-
-      <!-- 予告クエスト一覧 -->
-      <div class="guild-preview">
-        <h2 class="guild-preview-title">📋 もうすぐ来るクエスト（よこく）</h2>
-        <div class="guild-quest-list">
-          ${PREVIEW_QUESTS.map(q => `
-            <div class="guild-quest-row preview">
-              <span class="quest-emoji">${q.emoji}</span>
-              <div class="quest-info">
-                <p class="quest-name">${q.name}</p>
-                <p class="quest-diff">${q.diff}</p>
-              </div>
-              <div class="quest-reward">
-                <span class="reward-label">ほうしゅう</span>
-                <span class="reward-value">${q.reward}</span>
-              </div>
+        <!-- 左: ギルドマスター -->
+        <aside class="facility-left">
+          <div class="facility-npc-wrap">
+            <div class="facility-npc-avatar">
+              <img src="${npcCfg?.image || ''}" alt="ギルドマスター"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="npc-emoji-fallback" style="display:none">⚔️</div>
             </div>
-          `).join('')}
+            <p class="facility-npc-name">ギルドマスター</p>
+          </div>
+          <div class="facility-bubble">${dialogue}</div>
+        </aside>
+
+        <!-- 右: クエスト -->
+        <div class="facility-right" style="overflow-y:auto">
+          <!-- 工事中バナー -->
+          <div class="guild-construction">
+            <div class="construction-icon">🚧</div>
+            <p class="construction-title">クエストシステム、じゅんびちゅう！</p>
+            <p class="construction-body">
+              まもなく、たくさんのクエストが登場するぞ！<br>
+              修行を続けて、その日に備えよ。
+            </p>
+          </div>
+
+          <!-- 予告クエスト一覧 -->
+          <div class="guild-preview">
+            <h2 class="guild-preview-title">📋 もうすぐ来るクエスト（よこく）</h2>
+            <div class="guild-quest-list">
+              ${PREVIEW_QUESTS.map(q => `
+                <div class="guild-quest-row preview">
+                  <span class="quest-emoji">${q.emoji}</span>
+                  <div class="quest-info">
+                    <p class="quest-name">${q.name}</p>
+                    <p class="quest-diff">${q.diff}</p>
+                  </div>
+                  <div class="quest-reward">
+                    <span class="reward-label">ほうしゅう</span>
+                    <span class="reward-value">${q.reward}</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
         </div>
       </div>
     `;

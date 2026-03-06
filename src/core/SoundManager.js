@@ -3,15 +3,15 @@
  * サウンド管理システム
  *
  * 現在の実装：Web Audio API による合成音（音声ファイル不要）
- * 差し替え方針：将来ファイルベースに移行する場合は _SYNTH_CONFIGS を削除し
+ * 差し替え方針：将来ファイルベースに移行する場合は _SYNTH_CONFIGS / _BGM_CONFIGS を削除し
  *               playSFX / playBGM の実装部分（"── 合成音再生 ──"以降）を
  *               Audio/HTMLAudioElement ベースに置き換えるだけでよい。
  *
  * iOS 制約：最初のユーザー操作（タップ）後に AudioContext を resume する。
  *           _unlock() がその役割を担う。
  *
- * @version 2.0
- * @date 2026-02-23
+ * @version 2.1
+ * @date 2026-03-06
  */
 
 import { Config } from './Config.js';
@@ -121,6 +121,66 @@ const _SYNTH_CONFIGS = {
 };
 
 // ─────────────────────────────────────────────────
+// BGM 合成音の設定テーブル
+// ─────────────────────────────────────────────────
+// notes: SFX と同じ形式の配列。loopDuration: ループ間隔（秒）
+// 将来ファイルに差し替える場合はこのテーブルごと削除してよい。
+// ─────────────────────────────────────────────────
+const _BGM_CONFIGS = {
+  // タイトル画面: ゆっくり・夢幻的なCペンタトニック（sine）
+  [SoundType.BGM_TITLE]: {
+    notes: [
+      { freq: 261.63, type: 'sine', duration: 0.8, gain: 0.18, delay: 0.0 }, // ド C4
+      { freq: 329.63, type: 'sine', duration: 0.8, gain: 0.18, delay: 0.8 }, // ミ E4
+      { freq: 392.00, type: 'sine', duration: 0.8, gain: 0.18, delay: 1.6 }, // ソ G4
+      { freq: 440.00, type: 'sine', duration: 0.8, gain: 0.18, delay: 2.4 }, // ラ A4
+      { freq: 392.00, type: 'sine', duration: 0.8, gain: 0.18, delay: 3.2 }, // ソ G4
+      { freq: 329.63, type: 'sine', duration: 0.8, gain: 0.18, delay: 4.0 }, // ミ E4
+      { freq: 261.63, type: 'sine', duration: 1.2, gain: 0.18, delay: 4.8 }, // ド C4（長め）
+    ],
+    loopDuration: 6.2,
+  },
+  // 本棚画面: ほんわか・好奇心（triangle）
+  [SoundType.BGM_BOOKSHELF]: {
+    notes: [
+      { freq: 523.25, type: 'triangle', duration: 0.5, gain: 0.15, delay: 0.0 }, // ド C5
+      { freq: 587.33, type: 'triangle', duration: 0.5, gain: 0.15, delay: 0.5 }, // レ D5
+      { freq: 659.25, type: 'triangle', duration: 0.5, gain: 0.15, delay: 1.0 }, // ミ E5
+      { freq: 783.99, type: 'triangle', duration: 0.5, gain: 0.15, delay: 1.5 }, // ソ G5
+      { freq: 659.25, type: 'triangle', duration: 0.5, gain: 0.15, delay: 2.0 }, // ミ E5
+      { freq: 587.33, type: 'triangle', duration: 0.5, gain: 0.15, delay: 2.5 }, // レ D5
+      { freq: 523.25, type: 'triangle', duration: 1.0, gain: 0.15, delay: 3.0 }, // ド C5（長め）
+    ],
+    loopDuration: 4.2,
+  },
+  // クイズ画面: 軽快・集中（triangle）
+  [SoundType.BGM_QUIZ]: {
+    notes: [
+      { freq: 659.25, type: 'triangle', duration: 0.22, gain: 0.13, delay: 0.0  }, // ミ E5
+      { freq: 783.99, type: 'triangle', duration: 0.22, gain: 0.13, delay: 0.3  }, // ソ G5
+      { freq: 880.00, type: 'triangle', duration: 0.22, gain: 0.13, delay: 0.6  }, // ラ A5
+      { freq: 783.99, type: 'triangle', duration: 0.22, gain: 0.13, delay: 0.9  }, // ソ G5
+      { freq: 659.25, type: 'triangle', duration: 0.22, gain: 0.13, delay: 1.2  }, // ミ E5
+      { freq: 523.25, type: 'triangle', duration: 0.45, gain: 0.15, delay: 1.5  }, // ド C5（長め）
+    ],
+    loopDuration: 2.1,
+  },
+  // ボス画面: 緊張感・Aマイナー（sawtooth）
+  [SoundType.BGM_BOSS]: {
+    notes: [
+      { freq: 220.00, type: 'sawtooth', duration: 0.35, gain: 0.12, delay: 0.0  }, // ラ A3
+      { freq: 261.63, type: 'sawtooth', duration: 0.35, gain: 0.12, delay: 0.45 }, // ド C4
+      { freq: 329.63, type: 'sawtooth', duration: 0.35, gain: 0.12, delay: 0.9  }, // ミ E4
+      { freq: 392.00, type: 'sawtooth', duration: 0.45, gain: 0.14, delay: 1.35 }, // ソ G4
+      { freq: 329.63, type: 'sawtooth', duration: 0.35, gain: 0.12, delay: 1.85 }, // ミ E4
+      { freq: 261.63, type: 'sawtooth', duration: 0.35, gain: 0.12, delay: 2.3  }, // ド C4
+      { freq: 220.00, type: 'sawtooth', duration: 0.8,  gain: 0.14, delay: 2.75 }, // ラ A3（長め）
+    ],
+    loopDuration: 3.7,
+  },
+};
+
+// ─────────────────────────────────────────────────
 // SoundManager クラス
 // ─────────────────────────────────────────────────
 export class SoundManager {
@@ -134,6 +194,8 @@ export class SoundManager {
   static _audioContext  = null;
   /** @type {boolean} iOS 対策: ユーザー操作後に true になる */
   static _unlocked      = false;
+  /** @type {number|null} BGM ループ用タイマー ID */
+  static _bgmLoopTimer  = null;
 
   static sounds    = new Map();
   static currentBGM = null;
@@ -188,11 +250,13 @@ export class SoundManager {
    * 将来ファイルベースに差し替える場合はこのメソッドを置き換える。
    * @private
    * @param {Array<{freq:number, type:string, duration:number, gain:number, delay:number}>} notes
+   * @param {'sfx'|'bgm'} [volumeType='sfx'] - 音量チャンネル
    */
-  static _playTone(notes) {
+  static _playTone(notes, volumeType = 'sfx') {
     if (!this._audioContext || !this._unlocked) return;
     const ctx = this._audioContext;
     const now = ctx.currentTime;
+    const channelVolume = volumeType === 'bgm' ? this.bgmVolume : this.sfxVolume;
 
     notes.forEach(({ freq, type, duration, gain, delay }) => {
       try {
@@ -205,7 +269,7 @@ export class SoundManager {
         osc.type = type;
         osc.frequency.setValueAtTime(freq, now + delay);
 
-        const vol = gain * this.sfxVolume * this.masterVolume;
+        const vol = gain * channelVolume * this.masterVolume;
         gainNode.gain.setValueAtTime(0, now + delay);
         gainNode.gain.linearRampToValueAtTime(vol, now + delay + 0.01);
         gainNode.gain.exponentialRampToValueAtTime(0.0001, now + delay + duration);
@@ -242,25 +306,55 @@ export class SoundManager {
   }
 
   /**
-   * BGM を再生する（現フェーズでは合成音未対応。将来ファイルで実装）
-   * @param {string} bgmType
-   * @param {Object} [options]
+   * BGM を再生する（合成音ループ）
+   * 将来ファイルベースに移行する場合はこのメソッドを置き換える。
+   * @param {string} bgmType - SoundType.BGM_* 定数
    */
-  static playBGM(bgmType, options = {}) {
+  static playBGM(bgmType) {
     if (!Config.UI.ENABLE_SOUND || this.isMuted) return;
     if (this.currentBGM === bgmType) return;
+    this.stopBGM();
     this.currentBGM = bgmType;
-    Logger.debug('[Sound] BGM:', bgmType, '(file-based BGM: future implementation)');
+    Logger.debug('[Sound] BGM start:', bgmType);
+    this._scheduleBGMLoop(bgmType);
+  }
+
+  /**
+   * BGM をループ再生し続けるスケジューラー
+   * @private
+   * @param {string} bgmType
+   */
+  static _scheduleBGMLoop(bgmType) {
+    const config = _BGM_CONFIGS[bgmType];
+    if (!config) {
+      Logger.debug('[Sound] No BGM config for:', bgmType);
+      return;
+    }
+    // AudioContext が未ロックの場合は短いポーリングで待つ
+    if (!this._audioContext || !this._unlocked) {
+      this._bgmLoopTimer = setTimeout(() => {
+        if (this.currentBGM === bgmType) this._scheduleBGMLoop(bgmType);
+      }, 500);
+      return;
+    }
+    this._playTone(config.notes, 'bgm');
+    this._bgmLoopTimer = setTimeout(() => {
+      if (this.currentBGM === bgmType) this._scheduleBGMLoop(bgmType);
+    }, config.loopDuration * 1000);
   }
 
   /** BGM を停止する */
-  static stopBGM(options = {}) {
+  static stopBGM() {
+    if (this._bgmLoopTimer !== null) {
+      clearTimeout(this._bgmLoopTimer);
+      this._bgmLoopTimer = null;
+    }
     this.currentBGM = null;
   }
 
   /** 全サウンドを停止する */
   static stopAll() {
-    this.currentBGM = null;
+    this.stopBGM();
   }
 
   /**
