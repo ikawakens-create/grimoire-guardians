@@ -15,9 +15,11 @@
  * @date 2026-03-05
  */
 
+import { Config } from '../core/Config.js';
 import { GameStore } from '../core/GameStore.js';
 import Logger from '../core/Logger.js';
 import { TownManager } from '../core/TownManager.js';
+import MemoryIsleScreen from './MemoryIsleScreen.js';
 
 // 素材絵文字
 const MATERIAL_EMOJI = {
@@ -60,12 +62,18 @@ const HOTSPOTS = [
     alwaysUnlocked: true,
     isMain: false,
   },
+  {
+    id: 'memory_isle',
+    label: '🏝️ きおくのいせき',
+    sublabel: 'モンスターをあつめよう',
+    screen: 'memory_isle',
+    // 右側エリア（元ロックゾーン）
+    pos: { left: '82%', top: '35%', width: '16%', height: '55%' },
+    alwaysUnlocked: true,
+    isMain: false,
+  },
 ];
 
-// ロック施設の霧エフェクト表示エリア（タップ不可）
-const LOCKED_ZONE = {
-  pos: { left: '82%', top: '35%', width: '16%', height: '55%' },
-};
 
 export class TownScreen {
   constructor() {
@@ -118,14 +126,7 @@ export class TownScreen {
              alt=""
              onerror="this.style.display='none'">
 
-        <!-- ロック施設の霧エリア -->
-        <div class="town-locked-fog"
-             style="left:${LOCKED_ZONE.pos.left};top:${LOCKED_ZONE.pos.top};width:${LOCKED_ZONE.pos.width};height:${LOCKED_ZONE.pos.height}">
-          <span class="town-lock-icon">🔒</span>
-          <span class="town-lock-text">もっとすすめたら<br>ひらくよ！</span>
-        </div>
-
-        <!-- タップ可能なホットスポット -->
+<!-- タップ可能なホットスポット -->
         ${HOTSPOTS.map(h => this._renderHotspot(h, isFirstVisit)).join('')}
 
       </div>
@@ -613,10 +614,17 @@ export class TownScreen {
     this._element.querySelectorAll('.town-hotspot-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const screen = btn.dataset.screen;
-        if (screen) {
-          this.hide();
-          GameStore.setState('app.currentScreen', screen);
+        if (!screen) return;
+
+        // きおくのいせきはモーダル方式で開く（画面遷移しない）
+        if (screen === 'memory_isle' && Config.FEATURES.ENABLE_MEMORY_ISLE) {
+          const memoryScreen = new MemoryIsleScreen();
+          memoryScreen.open();
+          return;
         }
+
+        this.hide();
+        GameStore.setState('app.currentScreen', screen);
       });
     });
   }

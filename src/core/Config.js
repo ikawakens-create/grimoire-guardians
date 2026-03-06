@@ -9,8 +9,8 @@
 export const Config = {
   // アプリ情報
   APP_NAME: 'Grimoire Guardians',
-  APP_VERSION: '0.1.0',
-  APP_PHASE: 'Phase 0.1',
+  APP_VERSION: '1.0.0',
+  APP_PHASE: 'Phase 1',
   
   // 開発/本番環境
   IS_DEVELOPMENT: true,  // TODO: 本番時はfalseに
@@ -162,7 +162,7 @@ export const Config = {
     // Phase 1以降の機能
     ENABLE_HOUSE_BUILD: true,       // 家ビルドシステム（Phase 1-D）
     ENABLE_SKINS: true,             // スキンシステム（Phase 1-F）
-    ENABLE_MEMORY_ISLE: false,
+    ENABLE_MEMORY_ISLE: true,
     ENABLE_DLC: false
   },
 
