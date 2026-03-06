@@ -126,7 +126,7 @@ export class TownScreen {
              alt=""
              onerror="this.style.display='none'">
 
-<!-- タップ可能なホットスポット -->
+        <!-- タップ可能なホットスポット -->
         ${HOTSPOTS.map(h => this._renderHotspot(h, isFirstVisit)).join('')}
 
       </div>
