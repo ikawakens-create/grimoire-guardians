@@ -87,61 +87,70 @@ export class ShopScreen {
     const npcCfg      = Config.TOWN.NPCS.find(n => n.id === 'tanuki_merchant');
 
     const el = document.createElement('div');
-    el.className = 'shop-screen';
+    el.className = 'shop-screen facility-screen';
+    el.style.cssText = '--fac-color:#d97706;--fac-bg:#fffaed';
     el.innerHTML = `
-      <div class="shop-bg" style="background-image:url('assets/town/shop_bg.png')"></div>
-
-      <div class="shop-header">
-        <button class="btn-icon shop-back-btn">← まち</button>
-        <h1 class="shop-title">🛒 しょうてん</h1>
-        <span class="shop-lv-badge">Lv${shopLevel}</span>
+      <!-- ヘッダー -->
+      <div class="shop-header facility-header">
+        <button class="btn-icon shop-back-btn" style="color:#fff">← まち</button>
+        <h1 class="shop-title facility-title">🛒 しょうてん</h1>
+        <span class="shop-lv-badge facility-lv-badge">Lv${shopLevel}</span>
       </div>
 
-      <!-- タヌキ商人 -->
-      <div class="shop-npc-row">
-        <div class="shop-npc-avatar">
-          <img src="${npcCfg?.image || ''}" alt="タヌキ商人"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <div class="npc-emoji-fallback" style="display:none">🦝</div>
-        </div>
-        <div class="npc-bubble shop-bubble">
-          <p class="npc-dialogue" id="shop-dialogue">${this._dialogue}</p>
-        </div>
-      </div>
+      <!-- 2カラム本体 -->
+      <div class="facility-body">
 
-      <!-- 所持素材ミニ表示 -->
-      <div class="shop-mat-row">
-        ${['wood','stone','brick','gem','star_fragment']
-          .map(m => `<span class="mat-chip">${MATERIAL_EMOJI[m]}${materials[m]||0}</span>`)
-          .join('')}
-      </div>
+        <!-- 左: タヌキ商人 -->
+        <aside class="facility-left">
+          <div class="facility-npc-wrap">
+            <div class="facility-npc-avatar">
+              <img src="${npcCfg?.image || ''}" alt="タヌキ商人"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="npc-emoji-fallback" style="display:none">🦝</div>
+            </div>
+            <p class="facility-npc-name">タヌキ商人</p>
+          </div>
+          <div class="facility-bubble">
+            <p id="shop-dialogue">${this._dialogue}</p>
+          </div>
+          <div class="facility-mat-chips">
+            ${['wood','stone','brick','gem','star_fragment']
+              .map(m => `<span class="mat-chip">${MATERIAL_EMOJI[m]}${materials[m]||0}</span>`)
+              .join('')}
+          </div>
+        </aside>
 
-      <!-- 日替わり無料アイテム -->
-      <div class="shop-section">
-        <h2 class="shop-section-title">🎁 きょうの むりょうアイテム</h2>
-        ${freeItem
-          ? `<div class="shop-free-item">
-               <span class="free-item-emoji">${MATERIAL_EMOJI[freeItem]}</span>
-               <span class="free-item-name">${MATERIAL_NAME[freeItem] || freeItem} ×1</span>
-               <button class="btn btn-large btn-success shop-claim-btn" data-item="${freeItem}">
-                 うけとる！
-               </button>
-             </div>`
-          : `<div class="shop-free-claimed">
-               <p>✅ きょうはもううけとりました</p>
-               <p class="shop-reset-hint">（毎日あさ0時にリセット）</p>
-             </div>`
-        }
-      </div>
+        <!-- 右: コンテンツ -->
+        <div class="facility-right" style="overflow-y:auto">
 
-      <!-- 素材トレード -->
-      <div class="shop-section">
-        <h2 class="shop-section-title">🔄 こうかん</h2>
-        <div class="shop-trades">
-          ${trades.length
-            ? trades.map((t, i) => this._renderTrade(t, i, materials)).join('')
-            : `<p class="shop-empty">もうすこしでこうかんできるよ！</p>`
-          }
+          <!-- 日替わり無料アイテム -->
+          <div class="shop-section">
+            <h2 class="shop-section-title">🎁 きょうの むりょうアイテム</h2>
+            ${freeItem
+              ? `<div class="shop-free-item">
+                   <span class="free-item-emoji">${MATERIAL_EMOJI[freeItem]}</span>
+                   <span class="free-item-name">${MATERIAL_NAME[freeItem] || freeItem} ×1</span>
+                   <button class="btn btn-large btn-success shop-claim-btn" data-item="${freeItem}">
+                     うけとる！
+                   </button>
+                 </div>`
+              : `<div class="shop-free-claimed">
+                   <p>✅ きょうはもううけとりました</p>
+                   <p class="shop-reset-hint">（毎日あさ0時にリセット）</p>
+                 </div>`
+            }
+          </div>
+
+          <!-- 素材トレード -->
+          <div class="shop-section">
+            <h2 class="shop-section-title">🔄 こうかん</h2>
+            <div class="shop-trades">
+              ${trades.length
+                ? trades.map((t, i) => this._renderTrade(t, i, materials)).join('')
+                : `<p class="shop-empty">もうすこしでこうかんできるよ！</p>`
+              }
+            </div>
+          </div>
         </div>
       </div>
     `;

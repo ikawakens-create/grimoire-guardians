@@ -105,47 +105,51 @@ export class GrimoireLibraryScreen {
     const contentCfg  = Config.TOWN.LEVEL_PERKS.library;
 
     const el = document.createElement('div');
-    el.className = 'library-screen';
+    el.className = 'library-screen facility-screen';
+    el.style.cssText = '--fac-color:#6c3fd6;--fac-bg:#f0eeff';
     el.innerHTML = `
-      <div class="library-bg" style="background-image:url('assets/town/library_bg.png')"></div>
-
-      <div class="library-header">
-        <button class="btn-icon library-back-btn">← まち</button>
-        <h1 class="library-title">🏛️ まどうしょこ</h1>
-        <span class="library-lv-badge">Lv${libLevel}</span>
+      <!-- ヘッダー -->
+      <div class="library-header facility-header">
+        <button class="btn-icon library-back-btn" style="color:#fff">← まち</button>
+        <h1 class="library-title facility-title">🏛️ まどうしょこ</h1>
+        <span class="library-lv-badge facility-lv-badge">Lv${libLevel}</span>
       </div>
 
-      <!-- フクロウ先生 -->
-      <div class="library-npc-row">
-        <div class="library-npc-avatar">
-          <img src="${npcCfg?.image || ''}" alt="フクロウ先生"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <div class="npc-emoji-fallback" style="display:none">🦉</div>
-        </div>
-        <div class="npc-bubble library-bubble">
-          <p class="npc-dialogue">${this._dialogue}</p>
+      <!-- 2カラム本体 -->
+      <div class="facility-body">
+
+        <!-- 左: フクロウ先生 -->
+        <aside class="facility-left">
+          <div class="facility-npc-wrap">
+            <div class="facility-npc-avatar">
+              <img src="${npcCfg?.image || ''}" alt="フクロウ先生"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="npc-emoji-fallback" style="display:none">🦉</div>
+            </div>
+            <p class="facility-npc-name">フクロウ先生</p>
+          </div>
+          <div class="facility-bubble">${this._dialogue}</div>
+          <div class="library-progress-hint">
+            📖 ${clearedUnits.length} / ${WORLDS.length} さつ
+          </div>
+          ${libLevel >= 3
+            ? `<button class="btn library-secret-btn" style="font-size:0.8rem;padding:8px 10px">🔮 ひみつのしょさい</button>`
+            : ''}
+        </aside>
+
+        <!-- 右: 本棚 + スペルカード -->
+        <div class="facility-right">
+          <div class="library-shelf-area">
+            <div class="library-bookshelf">
+              ${this._renderBooks(clearedUnits, libLevel)}
+            </div>
+          </div>
+          <!-- スペルカード（選択中の本の詳細） -->
+          ${this._selectedBook && libLevel >= 2
+            ? this._renderSpellCard(this._selectedBook)
+            : ''}
         </div>
       </div>
-
-      <!-- 本棚 -->
-      <div class="library-shelf-area">
-        <div class="library-progress-hint">
-          📖 ${clearedUnits.length} / ${WORLDS.length} さつクリア
-        </div>
-        <div class="library-bookshelf">
-          ${this._renderBooks(clearedUnits, libLevel)}
-        </div>
-      </div>
-
-      <!-- スペルカード（選択中の本の詳細） -->
-      ${this._selectedBook && libLevel >= 2
-        ? this._renderSpellCard(this._selectedBook)
-        : ''}
-
-      <!-- Lv3: 秘密の書斎ボタン -->
-      ${libLevel >= 3
-        ? `<button class="btn library-secret-btn">🔮 ひみつのしょさい</button>`
-        : ''}
     `;
 
     this._container.appendChild(el);

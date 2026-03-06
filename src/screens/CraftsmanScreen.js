@@ -203,37 +203,58 @@ export class CraftsmanScreen {
     const house = GameStore.getState('house');
     const npcData = NPC_DATA[this._npc];
 
+    const rightContent = this._mainTab === 'upgrade'
+      ? this._renderUpgradeTab()
+      : this._npc === NPC.TAILOR
+        ? (Config.FEATURES.ENABLE_SKINS && (GameStore.getState('town.buildings.craftsman.level') || 1) >= Config.SKIN.TAILOR_UNLOCK_LEVEL
+            ? this._renderTailorTab()
+            : this._renderTailorLocked())
+        : `
+          ${this._renderCategoryTabs()}
+          <div class="craftsman-content">
+            <div class="craft-item-list">${this._renderItemList(materials, house)}</div>
+            ${this._selectedItem ? this._renderDetailPanel(this._selectedItem, materials, house) : ''}
+          </div>
+        `;
+
     const _tmp = document.createElement('div');
     _tmp.innerHTML = `
-      <div class="craftsman-screen" style="--npc-color:${npcData.color};--npc-bg:${npcData.bgColor}">
+      <div class="craftsman-screen facility-screen"
+           style="--fac-color:${npcData.color};--fac-bg:#fff5e6;--npc-color:${npcData.color};--npc-bg:${npcData.bgColor}">
 
+        <!-- ヘッダー -->
         ${this._renderHeader(materials)}
-        ${this._renderNpcSelector()}
-        ${this._renderNpcPanel(npcData)}
 
-        <!-- メインタブ（つくる / 施設強化） -->
-        <div class="craft-main-tabs">
-          ${MAIN_TABS.map(t => `
-            <button class="craft-main-tab-btn ${this._mainTab === t.id ? 'active' : ''}" data-main-tab="${t.id}">
-              ${t.label}
-            </button>
-          `).join('')}
+        <!-- 2カラム本体 -->
+        <div class="facility-body">
+
+          <!-- 左: NPC -->
+          <aside class="facility-left craftsman-left">
+            <!-- NPC切り替えタブ -->
+            ${this._renderNpcSelector()}
+            <!-- NPC アバター + ふきだし -->
+            ${this._renderNpcPanel(npcData)}
+            <!-- 素材チップ -->
+            <div class="facility-mat-chips">
+              ${['wood','stone','brick','gem','star_fragment']
+                .map(id => `<span class="mat-chip">${MATERIAL_EMOJI[id]}${materials[id]||0}</span>`)
+                .join('')}
+            </div>
+          </aside>
+
+          <!-- 右: コンテンツ -->
+          <div class="facility-right">
+            <!-- メインタブ（つくる / 施設強化） -->
+            <div class="craft-main-tabs">
+              ${MAIN_TABS.map(t => `
+                <button class="craft-main-tab-btn ${this._mainTab === t.id ? 'active' : ''}" data-main-tab="${t.id}">
+                  ${t.label}
+                </button>
+              `).join('')}
+            </div>
+            ${rightContent}
+          </div>
         </div>
-
-        ${this._mainTab === 'upgrade'
-          ? this._renderUpgradeTab()
-          : this._npc === NPC.TAILOR
-            ? (Config.FEATURES.ENABLE_SKINS && (GameStore.getState('town.buildings.craftsman.level') || 1) >= Config.SKIN.TAILOR_UNLOCK_LEVEL
-                ? this._renderTailorTab()
-                : this._renderTailorLocked())
-            : `
-              ${this._renderCategoryTabs()}
-              <div class="craftsman-content">
-                <div class="craft-item-list">${this._renderItemList(materials, house)}</div>
-                ${this._selectedItem ? this._renderDetailPanel(this._selectedItem, materials, house) : ''}
-              </div>
-            `
-        }
 
         ${this._isCrafting ? this._renderCraftingAnimation() : ''}
       </div>
@@ -244,14 +265,11 @@ export class CraftsmanScreen {
     this._bindEvents();
   }
 
-  _renderHeader(materials) {
-    const matChips = ['wood','stone','brick','gem','star_fragment']
-      .map(id => `<span class="mat-chip">${MATERIAL_EMOJI[id]}${materials[id]||0}</span>`)
-      .join('');
+  _renderHeader(_materials) {
     return `
-      <div class="craftsman-header">
-        <button class="btn-icon craft-back-btn">← いえへ</button>
-        <div class="craft-mat-row">${matChips}</div>
+      <div class="craftsman-header facility-header">
+        <button class="btn-icon craft-back-btn" style="color:#fff">← いえへ</button>
+        <h1 class="facility-title">🔨 ものづくりのいえ</h1>
       </div>
     `;
   }
@@ -274,17 +292,17 @@ export class CraftsmanScreen {
 
   _renderNpcPanel(npcData) {
     return `
-      <div class="npc-panel" style="background:${npcData.bgColor}">
-        <div class="npc-avatar">
-          <img src="${npcData.image}" alt="${npcData.name}"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <div class="npc-emoji-fallback" style="display:none">${npcData.emoji}</div>
-        </div>
-        <div class="npc-speech">
-          <div class="npc-name-badge" style="color:${npcData.color}">${npcData.name}</div>
-          <div class="npc-bubble">
-            <p class="npc-dialogue">${this._dialogue}</p>
+      <div class="npc-panel">
+        <div class="facility-npc-wrap">
+          <div class="npc-avatar facility-npc-avatar">
+            <img src="${npcData.image}" alt="${npcData.name}"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="npc-emoji-fallback" style="display:none">${npcData.emoji}</div>
           </div>
+          <p class="npc-name-badge" style="color:${npcData.color}">${npcData.name}</p>
+        </div>
+        <div class="npc-bubble facility-bubble">
+          <p class="npc-dialogue">${this._dialogue}</p>
         </div>
       </div>
     `;

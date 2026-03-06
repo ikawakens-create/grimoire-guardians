@@ -71,42 +71,49 @@ export class FarmScreen {
     const harvestN   = Config.TOWN.FARM.HARVEST_QUIZ_COUNT;
 
     const el = document.createElement('div');
-    el.className = 'farm-screen';
+    el.className = 'farm-screen facility-screen';
+    el.style.cssText = '--fac-color:#38a169;--fac-bg:#f0fff4';
     el.innerHTML = `
-      <div class="farm-bg" style="background-image:url('assets/town/farm_bg.png')"></div>
-
-      <div class="farm-header">
-        <button class="btn-icon farm-back-btn">← まち</button>
-        <h1 class="farm-title">🌱 まほうのうじょう</h1>
-        <span class="farm-lv-badge">Lv${farmLevel}</span>
+      <!-- ヘッダー -->
+      <div class="farm-header facility-header">
+        <button class="btn-icon farm-back-btn" style="color:#fff">← まち</button>
+        <h1 class="farm-title facility-title">🌱 まほうのうじょう</h1>
+        <span class="farm-lv-badge facility-lv-badge">Lv${farmLevel}</span>
       </div>
 
-      <!-- 説明 -->
-      <div class="farm-hint">
-        <p>🌟 たねをまいて、クイズを<strong>${harvestN}もん</strong>こたえると しゅうかくできるよ！</p>
-        <p class="farm-quiz-count">いままでのクイズ: <strong>${quizTotal}もん</strong></p>
-      </div>
+      <!-- 2カラム本体 -->
+      <div class="facility-body">
 
-      <!-- 収穫結果 -->
-      ${this._resultMsg
-        ? `<div class="farm-result-msg">${this._resultMsg}</div>`
-        : ''}
+        <!-- 左: ガイド + 素材 -->
+        <aside class="facility-left">
+          <div class="facility-npc-wrap">
+            <div class="facility-npc-avatar">🧑‍🌾</div>
+            <p class="facility-npc-name">のうじょう</p>
+          </div>
+          <div class="facility-bubble">
+            <p>🌟 たねをまいて、クイズを<strong>${harvestN}もん</strong>こたえると しゅうかくできるよ！</p>
+            <p class="farm-quiz-count" style="margin-top:6px">これまで: <strong>${quizTotal}もん</strong></p>
+          </div>
+          <div class="facility-mat-chips">
+            ${PLANTABLE.map(m =>
+              `<span class="mat-chip">${MATERIAL_EMOJI[m]}${materials[m]||0}</span>`
+            ).join('')}
+          </div>
+        </aside>
 
-      <!-- 農場プロット -->
-      <div class="farm-plots">
-        ${plotStates.map(p => this._renderPlot(p)).join('')}
-      </div>
-
-      <!-- 種選択ピッカー -->
-      ${this._showSeedPicker
-        ? this._renderSeedPicker(materials)
-        : ''}
-
-      <!-- 所持素材 -->
-      <div class="farm-mat-row">
-        ${PLANTABLE.map(m =>
-          `<span class="mat-chip">${MATERIAL_EMOJI[m]}${materials[m]||0}</span>`
-        ).join('')}
+        <!-- 右: 農場プロット -->
+        <div class="facility-right" style="position:relative">
+          ${this._resultMsg
+            ? `<div class="farm-result-msg">${this._resultMsg}</div>`
+            : ''}
+          <div class="farm-plots">
+            ${plotStates.map(p => this._renderPlot(p)).join('')}
+          </div>
+          <!-- 種選択ピッカー -->
+          ${this._showSeedPicker
+            ? this._renderSeedPicker(materials)
+            : ''}
+        </div>
       </div>
     `;
 
