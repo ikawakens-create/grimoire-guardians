@@ -1,5 +1,29 @@
 # CLAUDE.md - Grimoire Guardians
 
+## Claude への基本指示
+
+以下のルールは **すべての作業で必ず守ること**。
+
+| # | ルール | 詳細 |
+|---|--------|------|
+| 1 | **プラン作成時はコードを書かない** | 設計・計画フェーズではファイル変更・コード出力禁止。承認後に実装する |
+| 2 | **並列処理は原則しない** | API使用量節約のため、Agent を同時起動しない。直列で順番に実行する |
+| 3 | **コードは差分のみ表示** | 変更箇所だけ出力し、ファイル全体は書かない（Edit ツール優先） |
+| 4 | **専門用語は極力使わない** | 技術用語を使う場合は必ずひと言で説明を添える |
+| 5 | **他AIへの指示は一括コピー形式で出力** | 別AIに渡す指示は下記フォーマットで1ブロックにまとめる |
+
+### ルール5 — 他AI指示の出力フォーマット
+
+他のAI（ChatGPT・Gemini等）へ渡す指示を出すときは、必ず以下の形式で出力する：
+
+~~~
+```
+【ここにコピペ用の指示を全文記載】
+```
+~~~
+
+---
+
 ## Project Overview
 
 **Grimoire Guardians** (グリモア・ガーディアンズ) is an educational math game PWA targeting Japanese elementary school students (grades 1-6). Players progress through quiz-based worlds, collecting materials and building a customizable house in a town. The app is landscape-only and touch-optimized.
