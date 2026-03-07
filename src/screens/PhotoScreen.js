@@ -15,6 +15,7 @@ import { GameStore } from '../core/GameStore.js';
 import { Config } from '../core/Config.js';
 import Logger from '../core/Logger.js';
 import { HouseManager } from '../core/HouseManager.js';
+import { SkinManager } from '../core/SkinManager.js';
 import { getStyleById } from '../data/styleItems.js';
 
 /** レイヤー表示順（下から上） */
@@ -217,8 +218,9 @@ export class PhotoScreen {
 
     // キャラクター
     const playerName = GameStore.getState('player.name') || 'プレイヤー';
-    const skinId     = GameStore.getState('player.currentSkin') || 'default';
-    const charEmoji  = '🧙';
+    const currentSkin = SkinManager.getCurrentSkin();
+    const skinId      = currentSkin.id;
+    const charEmoji   = currentSkin.emoji || '🧙';
 
     // 統計テキスト
     const worlds    = GameStore.getState('progress.worlds') || {};
@@ -246,7 +248,7 @@ export class PhotoScreen {
           <div class="photo-character-wrap ${pose?.css || ''}" aria-label="キャラクター ${pose?.label}">
             <div class="photo-character-inner">
               <div class="photo-char-sprite">${charEmoji}</div>
-              <div class="photo-char-skin-label">${skinId === 'default' ? '' : skinId}</div>
+              <div class="photo-char-skin-label">${skinId === 'default' ? '' : currentSkin.name}</div>
             </div>
           </div>
 

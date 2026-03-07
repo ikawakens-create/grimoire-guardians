@@ -66,6 +66,8 @@ async function init() {
       const streakUnlocked = SkinManager.checkStreakUnlocks();
       if (streakUnlocked.length) {
         Logger.info('[Init] Streak skins unlocked:', streakUnlocked);
+        // 画面表示後に通知（遅延して表示）
+        setTimeout(() => showSkinUnlocked(streakUnlocked), 1200);
       }
     }
 
@@ -308,7 +310,11 @@ function showResult(gameScreen, quizResult, worldData) {
 
   // スキンマイルストーン解放チェック
   if (Config.FEATURES.ENABLE_SKINS) {
-    SkinManager.checkMilestoneUnlocks();
+    const milestoneUnlocked = SkinManager.checkMilestoneUnlocks();
+    if (milestoneUnlocked.length) {
+      Logger.info('[App] Milestone skins unlocked:', milestoneUnlocked);
+      setTimeout(() => showSkinUnlocked(milestoneUnlocked), 800);
+    }
   }
 
   // クリアしたかどうかを判定（ブックシェルフのアニメーション用）
@@ -412,6 +418,34 @@ function showGuild(gameScreen) {
 function showFarm(gameScreen) {
   if (!_farmScreen) _farmScreen = new FarmScreen();
   _farmScreen.show(gameScreen);
+}
+
+/**
+ * スキン解放通知をトーストで表示する
+ * 複数ある場合は順番に表示（1.5秒間隔）
+ * @param {string[]} skinIds - 新しく解放されたスキンIDの配列
+ */
+function showSkinUnlocked(skinIds) {
+  const toast   = document.getElementById('skin-toast');
+  const message = document.getElementById('skin-toast-message');
+  if (!toast || !message) return;
+
+  const allSkins = SkinManager.getAllSkins();
+  let delay = 0;
+
+  for (const id of skinIds) {
+    const skin = allSkins.find(s => s.id === id);
+    if (!skin) continue;
+
+    setTimeout(() => {
+      message.textContent = `${skin.emoji} あたらしいスキン「${skin.name}」がかいほうされたよ！`;
+      toast.classList.remove('hidden');
+      clearTimeout(toast._hideTimer);
+      toast._hideTimer = setTimeout(() => toast.classList.add('hidden'), 3500);
+    }, delay);
+
+    delay += 1500;
+  }
 }
 
 /**

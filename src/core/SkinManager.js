@@ -107,7 +107,7 @@ export class SkinManager {
 
     // 合成屋レベルチェック
     const craftsmanLevel = GameStore.getState('town.buildings.craftsman.level') || 1;
-    const requiredLevel  = skin.obtain.craftsmanLevel || 1;
+    const requiredLevel  = skin.obtain.tailorLevel || 1;
     if (craftsmanLevel < requiredLevel) {
       return {
         craftable: false,
@@ -233,7 +233,7 @@ export class SkinManager {
 
     const streakSkins = COLLECTIBLE_SKINS.filter(s => s.obtain.method === SKIN_OBTAIN.STREAK);
     for (const skin of streakSkins) {
-      if (!this.isUnlocked(skin.id) && streak >= skin.obtain.days) {
+      if (!this.isUnlocked(skin.id) && streak >= skin.obtain.streakDays) {
         this._unlock(skin.id);
         newlyUnlocked.push(skin.id);
         Logger.info(`[SkinManager] ストリーク解放: ${skin.id} (${streak}日)`);
@@ -258,7 +258,7 @@ export class SkinManager {
     const milestoneSkins = COLLECTIBLE_SKINS.filter(s => s.obtain.method === SKIN_OBTAIN.MILESTONE);
     for (const skin of milestoneSkins) {
       if (this.isUnlocked(skin.id)) continue;
-      if (this._checkMilestoneCondition(skin.obtain.condition)) {
+      if (this._checkMilestoneCondition(skin.obtain.milestoneId)) {
         this._unlock(skin.id);
         newlyUnlocked.push(skin.id);
         Logger.info(`[SkinManager] マイルストーン解放: ${skin.id} (${skin.obtain.condition})`);
