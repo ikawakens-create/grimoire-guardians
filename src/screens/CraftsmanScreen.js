@@ -33,15 +33,7 @@ import {
 import {
   getItemById,
   RARITY,
-  EXTERIOR_STYLES,
-  WALLPAPER_ITEMS,
-  FLOOR_ITEMS,
-  FURNITURE_ITEMS_FLOOR1,
-  FURNITURE_ITEMS_FLOOR2,
-  FURNITURE_ITEMS_FLOOR3,
   GARDEN_ITEMS,
-  EXTERIOR_DECO_ITEMS,
-  TOWER_ITEMS,
 } from '../data/houseItems.js';
 
 // ─────────────────────────────────────────────
@@ -107,14 +99,9 @@ const NPC_DATA = {
   },
 };
 
-// カテゴリー定義（マイスターが担当）
+// カテゴリー定義（現在 HouseBuildScreen で配置できるのは庭デコのみ）
 const MEISTER_CATEGORIES = [
-  { id: 'furniture', label: '🪑 かぐ',     items: () => [...FURNITURE_ITEMS_FLOOR1, ...FURNITURE_ITEMS_FLOOR2, ...FURNITURE_ITEMS_FLOOR3] },
-  { id: 'garden',    label: '🌸 にわデコ', items: () => GARDEN_ITEMS },
-  { id: 'exterior',  label: '🏠 いえのかたち', items: () => EXTERIOR_STYLES.filter(s => s.recipe) },
-  { id: 'deco',      label: '🎨 そとかざり', items: () => EXTERIOR_DECO_ITEMS },
-  { id: 'wallfloor', label: '🖼️ かべ・ゆか', items: () => [...WALLPAPER_ITEMS.filter(w => w.recipe), ...FLOOR_ITEMS.filter(f => f.recipe)] },
-  { id: 'tower',     label: '🌟 とうのかざり', items: () => TOWER_ITEMS.filter(t => t.recipe) },
+  { id: 'garden', label: '🌸 にわデコ', items: () => GARDEN_ITEMS },
 ];
 
 const RARITY_LABEL = {
@@ -150,7 +137,7 @@ export class CraftsmanScreen {
     this._element = null;
     this._npc = NPC.MEISTER;
     this._mainTab = 'craft';       // 'craft' | 'upgrade'
-    this._category = 'furniture';
+    this._category = 'garden';
     this._selectedItem = null;   // 選択中アイテムID
     this._isCrafting = false;    // クラフトアニメ中フラグ
     this._dialogue = '';
@@ -172,11 +159,7 @@ export class CraftsmanScreen {
     // 配置モードで呼ばれた場合
     const mode = GameStore.getState('app.craftsmanMode');
     if (mode === 'place') {
-      // 配置ターゲットに合わせてカテゴリーを設定
-      const target = GameStore.getState('app.craftsmanTarget');
-      if (target?.type === 'garden_deco') this._category = 'garden';
-      else if (target?.type === 'tower_deco') this._category = 'tower';
-      else this._category = 'furniture';
+      this._category = 'garden';
     }
 
     this._dialogue = this._getDialogue('idle');
