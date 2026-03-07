@@ -399,6 +399,7 @@ export class QuizScreen {
     const total = this._questions.length;
 
     Logger.debug(`[QuizScreen] Showing Q${displayNum}/${total}: ${q.id}`);
+    SoundManager.playSFX(SoundType.QUESTION_APPEAR);
 
     // カウンター更新
     this._el.querySelector('.quiz-counter').textContent = `${displayNum} / ${total}`;

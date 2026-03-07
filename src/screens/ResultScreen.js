@@ -435,6 +435,11 @@ class ResultScreen {
    * @param {boolean} cleared
    */
   async _playAnimations(stars, cleared) {
+    // クリア時は WORLD_CLEAR SE を最初に鳴らす
+    if (cleared) {
+      SoundManager.playSFX(SoundType.WORLD_CLEAR);
+    }
+
     // ① 星を順番にポップさせる
     await this._animateStars(stars);
 
@@ -560,6 +565,8 @@ class ResultScreen {
 
       let delay = 0;
 
+      const RARE_MATERIALS = new Set(['gem', 'star_fragment', 'magic_orb', 'crown', 'cape']);
+
       this._drops.forEach(({ id, count }) => {
         setTimeout(() => {
           const item = document.createElement('div');
@@ -571,6 +578,9 @@ class ResultScreen {
           `;
           list.appendChild(item);
           HapticFeedback.light();
+          if (RARE_MATERIALS.has(id)) {
+            SoundManager.playSFX(SoundType.RARE_DROP);
+          }
         }, delay);
         delay += 400;
       });
