@@ -85,7 +85,6 @@ class WelcomeScreen {
       if (input) input.focus();
     }, 500);
 
-
     Logger.info('[WelcomeScreen] Rendered');
     return this;
   }
