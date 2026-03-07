@@ -370,7 +370,7 @@ class ResultScreen {
         cleared: cleared || existing.cleared || false,
         score: correctCount,
         maxScore: total,
-        percentage: this._result.percentage,
+        percentage: Math.round(this._result.percentage * 100),
         lastPlayedAt: new Date().toISOString()
       });
     }
