@@ -4640,3 +4640,41 @@
   color: #ffe88a;
   font-size: 1.05rem;
 }
+
+/* ==========================================================================
+   ミュートボタン（全画面共通・固定表示）
+   ========================================================================== */
+
+.mute-btn {
+  position: fixed;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  z-index: var(--z-ui);
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  color: white;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mute-btn:active {
+  transform: scale(0.9);
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.mute-btn.is-muted {
+  background: rgba(180, 0, 0, 0.45);
+}
+
+.mute-btn.hidden {
+  display: none;
+}
