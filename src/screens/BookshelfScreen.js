@@ -124,6 +124,9 @@ class BookshelfScreen {
     this.cards.forEach(card => card.destroy());
     this.cards = [];
 
+    // BGM 停止
+    SoundManager.stopBGM();
+
     // GameStore 購読を解除
     if (this._unsubscribe) {
       this._unsubscribe();

@@ -13,6 +13,7 @@
 
 import Logger from './Logger.js';
 import { GameStore } from './GameStore.js';
+import { SoundManager } from './SoundManager.js';
 import { Config } from './Config.js';
 
 /** 保存対象のデータキー */
@@ -69,6 +70,7 @@ class SaveManagerClass {
       memory: state.memory,
       house: state.house,
       town: state.town,
+      sound: state.sound,
       savedAt: new Date().toISOString(),
       version: Config.APP_VERSION
     };
@@ -240,6 +242,13 @@ class SaveManagerClass {
         ...GameStore.getState('town'),
         ...saveData.town
       });
+    }
+    if (saveData.sound) {
+      GameStore.setState('sound', {
+        ...GameStore.getState('sound'),
+        ...saveData.sound
+      });
+      SoundManager.importSettings(saveData.sound);
     }
 
     // ストリーク計算（ロード後に実施）

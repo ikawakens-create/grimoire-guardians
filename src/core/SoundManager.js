@@ -16,6 +16,7 @@
 
 import { Config } from './Config.js';
 import Logger from './Logger.js';
+import { GameStore } from './GameStore.js';
 
 // ─────────────────────────────────────────────────
 // サウンドタイプ定数（外部から SoundType.XXX で参照）
@@ -365,21 +366,25 @@ export class SoundManager {
     this.isMuted = muted;
     Logger.info(`[Sound] ${muted ? '🔇 Muted' : '🔊 Unmuted'}`);
     if (muted) this.stopAll();
+    GameStore.setState('sound.isMuted', muted);
   }
 
   /** @param {number} volume 0.0〜1.0 */
   static setMasterVolume(volume) {
     this.masterVolume = Math.max(0, Math.min(1, volume));
+    GameStore.setState('sound.masterVolume', this.masterVolume);
   }
 
   /** @param {number} volume 0.0〜1.0 */
   static setSFXVolume(volume) {
     this.sfxVolume = Math.max(0, Math.min(1, volume));
+    GameStore.setState('sound.sfxVolume', this.sfxVolume);
   }
 
   /** @param {number} volume 0.0〜1.0 */
   static setBGMVolume(volume) {
     this.bgmVolume = Math.max(0, Math.min(1, volume));
+    GameStore.setState('sound.bgmVolume', this.bgmVolume);
   }
 
   /** 設定をエクスポートする */
@@ -392,12 +397,18 @@ export class SoundManager {
     };
   }
 
-  /** 設定をインポートする */
+  /**
+   * 設定をインポートする（SaveManager からのロード時に使用）
+   * GameStore への書き戻しは行わない（呼び出し元が既に setState 済みのため）
+   */
   static importSettings(settings) {
-    if (settings.isMuted      !== undefined) this.setMuted(settings.isMuted);
-    if (settings.masterVolume !== undefined) this.setMasterVolume(settings.masterVolume);
-    if (settings.sfxVolume    !== undefined) this.setSFXVolume(settings.sfxVolume);
-    if (settings.bgmVolume    !== undefined) this.setBGMVolume(settings.bgmVolume);
+    if (settings.isMuted      !== undefined) {
+      this.isMuted = settings.isMuted;
+      if (this.isMuted) this.stopAll();
+    }
+    if (settings.masterVolume !== undefined) this.masterVolume = Math.max(0, Math.min(1, settings.masterVolume));
+    if (settings.sfxVolume    !== undefined) this.sfxVolume    = Math.max(0, Math.min(1, settings.sfxVolume));
+    if (settings.bgmVolume    !== undefined) this.bgmVolume    = Math.max(0, Math.min(1, settings.bgmVolume));
     Logger.info('[Sound] Settings imported');
   }
 
