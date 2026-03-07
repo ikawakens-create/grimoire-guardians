@@ -90,6 +90,7 @@ class MonsterBattleEvent {
       // フェーズ1: 登場演出
       layer.innerHTML = this._buildAppearanceHTML(monsterEmoji, isRare);
       layer.classList.add('event-layer-active');
+      SoundManager.playSFX(SoundType.MONSTER_APPEAR);
 
       // 1.2秒後に「たたかう！」ボタンを有効化
       const fightBtn = layer.querySelector('.monster-fight-btn');
@@ -191,6 +192,7 @@ class MonsterBattleEvent {
     let dropId = null;
 
     if (isCorrect) {
+      SoundManager.playSFX(SoundType.MONSTER_DEFEAT);
       dropId = pickDrop(isRare);
       GameStore.addMaterial(dropId, isRare ? 2 : 1);
     }

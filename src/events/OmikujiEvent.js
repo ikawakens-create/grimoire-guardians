@@ -100,6 +100,7 @@ class OmikujiEvent {
       // UI 構築
       layer.innerHTML = this._buildHTML();
       layer.classList.add('event-layer-active');
+      SoundManager.playSFX(SoundType.EVENT_START);
 
       // 巻物タップリスナー（once + 即解除で連打防止）
       const scrollBtns = layer.querySelectorAll('.omikuji-scroll');

@@ -14,7 +14,7 @@
 import { Config } from './core/Config.js';
 import Logger from './core/Logger.js';
 import { GameStore } from './core/GameStore.js';
-import { SoundManager } from './core/SoundManager.js';
+import { SoundManager, SoundType } from './core/SoundManager.js';
 import { SaveManager } from './core/SaveManager.js';
 import EventManager from './core/EventManager.js';
 import WelcomeScreen from './screens/WelcomeScreen.js';
@@ -142,6 +142,7 @@ function showGameScreen() {
   GameStore.subscribe((path, newValue) => {
     if (path !== 'app.currentScreen') return;
     const screen = newValue;
+    SoundManager.playSFX(SoundType.SCREEN_TRANSITION);
 
     // 全サブ画面を隠すヘルパー
     const hideAll = () => {

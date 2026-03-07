@@ -87,6 +87,7 @@ class TreasureEvent {
       // フェーズ1: 宝箱登場（通常でもミミックでも最初は同じ宝箱）
       layer.innerHTML = this._buildTreasureHTML();
       layer.classList.add('event-layer-active');
+      SoundManager.playSFX(SoundType.EVENT_START);
 
       const openBtn = layer.querySelector('.treasure-open-btn');
 
@@ -94,12 +95,14 @@ class TreasureEvent {
         // ミミック: タップすると変身演出 → バトルへ
         openBtn?.addEventListener('click', () => {
           HapticFeedback.medium();
+          SoundManager.playSFX(SoundType.TREASURE_OPEN);
           this._showMimicReveal(layer, resolve);
         }, { once: true });
       } else {
         // 通常宝箱: タップすると問題へ
         openBtn?.addEventListener('click', () => {
           HapticFeedback.medium();
+          SoundManager.playSFX(SoundType.TREASURE_OPEN);
           this._showQuestion(layer, false, resolve);
         }, { once: true });
       }

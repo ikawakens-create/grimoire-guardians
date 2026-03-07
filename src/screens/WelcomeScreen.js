@@ -76,11 +76,15 @@ class WelcomeScreen {
     this._container.appendChild(el);
     this._setupEvents();
 
+    // タイトル BGM 再生
+    SoundManager.playBGM(SoundType.BGM_TITLE);
+
     // 少し待ってからフォーカス（アニメーション中は避ける）
     setTimeout(() => {
       const input = this._el?.querySelector('#player-name-input');
       if (input) input.focus();
     }, 500);
+
 
     Logger.info('[WelcomeScreen] Rendered');
     return this;
