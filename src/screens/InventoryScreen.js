@@ -27,7 +27,7 @@ import Logger from '../core/Logger.js';
 /** @type {MaterialDef[]} */
 const MATERIAL_DEFS = [
   // 🏠 家ビルド用
-  { id: 'wood',          emoji: '🪵', label: 'もくざい',     rarity: 'common',     tab: 'build' },
+  { id: 'wood',          emoji: '🪵', label: 'まるた',       rarity: 'common',     tab: 'build' },
   { id: 'stone',         emoji: '🪨', label: 'いし',         rarity: 'common',     tab: 'build' },
   { id: 'brick',         emoji: '🧱', label: 'れんが',       rarity: 'uncommon',   tab: 'build' },
   { id: 'gem',           emoji: '💎', label: 'ほうせき',     rarity: 'rare',       tab: 'build' },

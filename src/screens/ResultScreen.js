@@ -37,7 +37,7 @@ const STAR_THRESHOLDS = [
 
 /** 素材の表示名（日本語） */
 const MATERIAL_NAMES = {
-  wood:          'もくざい',
+  wood:          'まるた',
   stone:         'いし',
   brick:         'れんが',
   gem:           'ほうせき',
