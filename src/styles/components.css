@@ -3737,6 +3737,105 @@
 .trade-arrow { font-size: 1.3rem; color: #e8a020; font-weight: 700; }
 .shop-empty { color: #888; font-size: 0.88rem; padding: 8px 0; }
 
+/* ── 商店 v2.0 ── */
+/* 左右カラム */
+.shop-left  { display: flex; flex-direction: column; gap: 8px; }
+.shop-right { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding: 8px 12px; }
+
+/* 10素材グリッド */
+.shop-mat-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px;
+  padding: 8px 10px;
+  background: rgba(0,0,0,0.06); border-radius: 12px;
+  margin: 0 10px 4px;
+}
+.shop-mat-cell {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: #fff; border-radius: 8px; padding: 4px 2px;
+  border: 1.5px solid rgba(0,0,0,0.08);
+  min-width: 0;
+}
+.shop-mat-cell.is-zero { opacity: 0.4; }
+.shop-mat-emoji { font-size: 1.2rem; line-height: 1; }
+.shop-mat-count { font-size: 0.62rem; font-weight: 800; color: #555; margin-top: 1px; }
+
+/* 無料アイテムカード */
+.shop-free-card {
+  border-radius: 16px; padding: 14px 16px;
+  box-shadow: 0 3px 12px rgba(232,160,32,0.18);
+}
+.shop-free-card.can-claim {
+  background: linear-gradient(135deg, #fffde7, #fff9c4);
+  border: 2.5px solid #f59e0b;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  animation: pulse 2s ease-in-out infinite;
+}
+.shop-free-card.already-claimed {
+  background: rgba(255,255,255,0.7);
+  border: 2px dashed rgba(180,180,180,0.5);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 12px 16px;
+}
+.free-card-item {
+  display: flex; align-items: center; gap: 10px;
+}
+.free-card-emoji { font-size: 2.8rem; }
+.free-card-name  { font-size: 1.05rem; font-weight: 800; color: #92400e; }
+.free-card-count { font-size: 1.1rem; font-weight: 900; color: #d97706; background: rgba(217,119,6,0.12); border-radius: 8px; padding: 2px 8px; }
+.free-claimed-msg { font-size: 0.88rem; font-weight: 700; color: #555; }
+.free-tomorrow-hint {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.7); border-radius: 10px;
+  padding: 6px 12px; font-size: 0.78rem; color: #666;
+}
+.tomorrow-label { color: #888; }
+.tomorrow-emoji { font-size: 1.2rem; }
+.tomorrow-name  { font-weight: 700; color: #555; }
+
+/* 交換カードグリッド */
+.shop-trades-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+}
+.shop-trade-card {
+  background: #fff; border-radius: 16px; padding: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  border: 2px solid rgba(0,0,0,0.08);
+  display: flex; flex-direction: column; gap: 8px;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.shop-trade-card.can-afford {
+  border-color: #f59e0b;
+  box-shadow: 0 4px 14px rgba(245,158,11,0.2);
+}
+.shop-trade-card.can-afford:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(245,158,11,0.3); }
+.shop-trade-card.cannot-afford { opacity: 0.65; }
+
+.trade-card-body {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.trade-side {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  flex: 1;
+}
+.trade-big-emoji  { font-size: 2rem; line-height: 1; }
+.trade-mat-name   { font-size: 0.62rem; color: #666; font-weight: 600; }
+.trade-mat-amount { font-size: 0.9rem; font-weight: 800; color: #333; }
+.trade-card-arrow { font-size: 1.2rem; flex-shrink: 0; }
+
+.trade-card-status { text-align: center; }
+.trade-have-label  { font-size: 0.7rem; color: #888; }
+
+.trade-btn         { width: 100%; font-size: 0.82rem; font-weight: 800; padding: 8px 4px; border-radius: 10px; }
+.trade-btn-disabled { width: 100%; font-size: 0.78rem; padding: 8px 4px; border-radius: 10px; color: #aaa; }
+
+/* Lv0空状態 */
+.shop-empty-state {
+  text-align: center; padding: 16px 12px;
+  background: rgba(255,255,255,0.6); border-radius: 16px;
+  border: 2px dashed rgba(180,180,180,0.4);
+}
+.shop-empty-msg { font-size: 0.85rem; color: #666; line-height: 1.7; margin-bottom: 12px; }
+
 /* ── ギルド ── */
 .guild-construction {
   text-align: center; padding: 16px 16px 12px;
