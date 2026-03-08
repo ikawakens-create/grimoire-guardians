@@ -22,7 +22,7 @@ const MATERIAL_EMOJI = {
   crown: '👑', cape: '🧣', magic_orb: '🔮',
 };
 const MATERIAL_NAME = {
-  wood: 'きのき', stone: 'いし', brick: 'れんが', gem: 'ほうせき',
+  wood: 'まるた', stone: 'いし', brick: 'れんが', gem: 'ほうせき',
   star_fragment: 'ほしのかけら',
 };
 

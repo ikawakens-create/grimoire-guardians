@@ -122,6 +122,30 @@ let _guildScreen = null;
 let _farmScreen = null;
 
 /**
+ * ミュートボタンを初期化する（クリックハンドラ登録・初期状態反映）
+ */
+function _initMuteButton() {
+  const btn = document.getElementById('mute-btn');
+  if (!btn) return;
+
+  // 初期状態を反映
+  const _updateBtn = () => {
+    const muted = GameStore.getState('sound.isMuted');
+    btn.textContent = muted ? '🔇' : '🔊';
+    btn.classList.toggle('is-muted', muted);
+  };
+  _updateBtn();
+
+  // クリックでトグル
+  btn.addEventListener('click', () => {
+    SoundManager.setMuted(!SoundManager.isMuted);
+    _updateBtn();
+    // SE は setMuted(false) のときのみ鳴らす
+    if (!SoundManager.isMuted) SoundManager.playSFX(SoundType.BUTTON_CLICK);
+  });
+}
+
+/**
  * ゲーム画面を表示する
  * 初回プレイヤー（createdAt === null）は WelcomeScreen を表示する
  */
@@ -130,6 +154,9 @@ function showGameScreen() {
   if (!gameScreen) return;
 
   gameScreen.classList.remove('hidden');
+
+  // ミュートボタンの初期化
+  _initMuteButton();
 
   // 初回起動かどうかを確認（セーブデータがなければ名前入力画面へ）
   const createdAt = GameStore.getState('player.createdAt');

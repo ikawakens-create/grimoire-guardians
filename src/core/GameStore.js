@@ -87,6 +87,14 @@ export class GameStore {
       activeBuffs: []          // 有効なバフ一覧 [{ type, value?, appliedAt }]
     },
 
+    // サウンド設定
+    sound: {
+      isMuted:      false,
+      masterVolume: 1.0,
+      sfxVolume:    1.0,
+      bgmVolume:    0.5
+    },
+
     // ライセンス情報
     license: {
       core: {
@@ -393,6 +401,12 @@ export class GameStore {
         rewardMultiplier: 1.0,
         shieldActive: false,
         activeBuffs: []
+      },
+      sound: {
+        isMuted:      false,
+        masterVolume: 1.0,
+        sfxVolume:    1.0,
+        bgmVolume:    0.5
       },
       license: {
         core: {
