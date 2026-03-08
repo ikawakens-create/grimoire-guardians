@@ -10,7 +10,7 @@
  *  - スタイル選択は即適用（プレビュー確認ステップを廃止）
  *  - にわアイテム: カード内に「つくる！」ボタン直接内蔵（詳細パネル廃止）
  *  - 家具・かべがみ・ゆか・タワー機能を完全削除
- *  - 素材不足表示: 「あと🪵が2こ」（× 記号を避ける）
+ *  - 素材不足表示: 「あと🌲が2こ」（× 記号を避ける）
  *  - 成功時: 大きな「できた！🎉」アニメーション
  *
  * @version 4.0
@@ -29,7 +29,7 @@ import { HOUSE_STYLES, getStyleById } from '../data/styleItems.js';
 
 // 素材絵文字マップ
 const MATERIAL_EMOJI = {
-  wood: '🪵', stone: '🪨', brick: '🧱', gem: '💎',
+  wood: '🌲', stone: '⛰️', brick: '🧱', gem: '💎',
   star_fragment: '✨', cloth: '🧶', paint: '🎨',
   crown: '👑', cape: '🧣', magic_orb: '🔮',
 };
@@ -385,7 +385,7 @@ export class HouseBuildScreen {
       } else if (craftable) {
         btnHtml = `<button class="gc-btn gc-btn-craft garden-craft-btn" data-item-id="${item.id}">🔨 つくる！</button>`;
       } else {
-        // 素材不足 → 「あと🪵が2こ」形式（× 記号なし）
+        // 素材不足 → 「あと🌲が2こ」形式（× 記号なし）
         const missingStr = Object.entries(missing)
           .map(([m, n]) => `${MATERIAL_EMOJI[m]}が${n}こ`)
           .join(' ');

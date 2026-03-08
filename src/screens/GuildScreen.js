@@ -22,7 +22,7 @@ const GUILD_MASTER_DIALOGUES = [
 
 // 予告クエスト一覧（表示のみ）
 const PREVIEW_QUESTS = [
-  { emoji: '⭐', name: '10もんれんぞくせいかい', reward: '🪵×3', diff: 'かんたん' },
+  { emoji: '⭐', name: '10もんれんぞくせいかい', reward: '🌲×3', diff: 'かんたん' },
   { emoji: '🔥', name: '3つのワールドをクリア', reward: '💎×1', diff: 'ふつう' },
   { emoji: '💎', name: '5かい合成をする',         reward: '✨×2', diff: 'ふつう' },
   { emoji: '🌟', name: '1日で20もんこたえる',    reward: '🔮×1', diff: 'むずかしい' },

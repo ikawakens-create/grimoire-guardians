@@ -25,7 +25,7 @@ const BASIC_DROPS = ['wood', 'stone', 'brick', 'cloth'];
 const RARE_DROPS  = ['gem', 'star_fragment', 'magic_orb'];
 
 const EMOJI_MAP = {
-  wood: '🪵', stone: '🪨', brick: '🧱', gem: '💎',
+  wood: '🌲', stone: '⛰️', brick: '🧱', gem: '💎',
   star_fragment: '✨', cloth: '🧶', paint: '🎨',
   crown: '👑', cape: '🧣', magic_orb: '🔮'
 };

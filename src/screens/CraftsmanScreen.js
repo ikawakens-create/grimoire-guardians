@@ -112,7 +112,7 @@ const RARITY_LABEL = {
 };
 
 const MATERIAL_EMOJI = {
-  wood: '🪵', stone: '🪨', brick: '🧱', gem: '💎',
+  wood: '🌲', stone: '⛰️', brick: '🧱', gem: '💎',
   star_fragment: '✨', cloth: '🧶', paint: '🎨',
   crown: '👑', cape: '🧣', magic_orb: '🔮',
 };
@@ -404,7 +404,7 @@ export class CraftsmanScreen {
       const { craftable, missing } = SkinManager.canCraft(skin.id);
       const materials = GameStore.getState('inventory.materials') || {};
       const recipe    = skin.obtain.recipe || {};
-      const MOJI = { wood:'🪵',stone:'🪨',brick:'🧱',gem:'💎',star_fragment:'✨',cloth:'🧶',paint:'🎨',crown:'👑',cape:'🧣',magic_orb:'🔮' };
+      const MOJI = { wood:'🌲',stone:'⛰️',brick:'🧱',gem:'💎',star_fragment:'✨',cloth:'🧶',paint:'🎨',crown:'👑',cape:'🧣',magic_orb:'🔮' };
       const recipeHtml = Object.entries(recipe).map(([m, req]) => {
         const have = materials[m] || 0;
         return `<span class="recipe-chip ${have >= req ? 'ok' : 'ng'}">${MOJI[m]} ${have}/${req}</span>`;

@@ -18,7 +18,7 @@ import { SaveManager } from './SaveManager.js';
 
 // ─── 定数 ─────────────────────────────────────────────
 const MATERIAL_EMOJI = {
-  wood: '🪵', stone: '🪨', brick: '🧱', gem: '💎',
+  wood: '🌲', stone: '⛰️', brick: '🧱', gem: '💎',
   star_fragment: '✨', cloth: '🧶', paint: '🎨',
   crown: '👑', cape: '🧣', magic_orb: '🔮',
 };

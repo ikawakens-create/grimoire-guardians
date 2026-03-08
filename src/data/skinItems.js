@@ -210,7 +210,7 @@ export const SKINS = [
     category:    SKIN_CATEGORY.FUNNY,
     rarity:      SKIN_RARITY.COMMON,
     image:       'assets/skins/ragged_adventurer.png',
-    emoji:       '🪨',
+    emoji:       '⛰️',
     description: 'ボロ布の服に傷だらけ。でっかい木の棒を持って、なぜか自信まんまんな顔！',
     obtain:      { method: SKIN_OBTAIN.CRAFT, tailorLevel: 1,
                    recipe: { wood: 5, cloth: 2 } },

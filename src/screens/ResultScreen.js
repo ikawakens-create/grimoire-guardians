@@ -51,8 +51,8 @@ const MATERIAL_NAMES = {
 
 /** 素材の絵文字 */
 const MATERIAL_EMOJIS = {
-  wood:          '🪵',
-  stone:         '🪨',
+  wood:          '🌲',
+  stone:         '⛰️',
   brick:         '🧱',
   gem:           '💎',
   star_fragment: '✨',

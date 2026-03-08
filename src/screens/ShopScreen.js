@@ -53,7 +53,7 @@ const TANUKI_DIALOGUES = {
 // 素材定義（名前バグ修正済み）
 // ─────────────────────────────────────────────
 const MATERIAL_EMOJI = {
-  wood: '🪵', stone: '🪨', brick: '🧱', gem: '💎',
+  wood: '🌲', stone: '⛰️', brick: '🧱', gem: '💎',
   star_fragment: '✨', cloth: '🧶', paint: '🎨',
   crown: '👑', cape: '🧣', magic_orb: '🔮',
 };
