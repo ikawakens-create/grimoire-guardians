@@ -17,7 +17,7 @@ import Logger from '../core/Logger.js';
 import { TownManager } from '../core/TownManager.js';
 
 const MATERIAL_EMOJI = {
-  wood: '🪵', stone: '🪨', brick: '🧱', gem: '💎',
+  wood: '🌲', stone: '⛰️', brick: '🧱', gem: '💎',
   star_fragment: '✨', cloth: '🧶', paint: '🎨',
   crown: '👑', cape: '🧣', magic_orb: '🔮',
 };
@@ -28,8 +28,8 @@ const MATERIAL_NAME = {
 
 // 種ごとの見た目（芽→実）
 const SEED_PLANTS = {
-  wood:  { growing: '🌱', ready: '🌳', emoji: '🪵' },
-  stone: { growing: '🌿', ready: '🏔️', emoji: '🪨' },
+  wood:  { growing: '🌱', ready: '🌳', emoji: '🌲' },
+  stone: { growing: '🌿', ready: '🏔️', emoji: '⛰️' },
   brick: { growing: '🌾', ready: '🧱', emoji: '🧱' },
   gem:   { growing: '💎', ready: '🔮', emoji: '💎' },
 };

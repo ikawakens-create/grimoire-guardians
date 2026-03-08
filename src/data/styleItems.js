@@ -53,7 +53,7 @@ export const HOUSE_STYLES = [
     decoAnimClass: 'deco-wood',
     decoDesc: '蔓が壁を伝い、窓に花かご',
     layerEmoji: {
-      garden: '🌿', floor1: '🪵', floor2: '🏠',
+      garden: '🌿', floor1: '🌲', floor2: '🏠',
       floor3: '🌲', tower: '🌳', decoration: '🍃',
     },
     // スプライトシート（1枚のまま使用 — CSSで切り取り位置を指定）
@@ -71,8 +71,8 @@ export const HOUSE_STYLES = [
     decoAnimClass: 'deco-stone',
     decoDesc: '苔と古代ルーン文字が光る',
     layerEmoji: {
-      garden: '🪨', floor1: '🏛️', floor2: '⬜',
-      floor3: '🗿', tower: '🪨', decoration: '✦',
+      garden: '⛰️', floor1: '🏛️', floor2: '⬜',
+      floor3: '🗿', tower: '⛰️', decoration: '✦',
     },
     spritesheet: 'assets/houses/style_stone/spritesheet.png',
   },

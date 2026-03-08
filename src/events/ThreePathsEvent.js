@@ -260,7 +260,7 @@ class ThreePathsEvent {
     let dropEmoji = null;
 
     const EMOJI_MAP = {
-      wood: '🪵', stone: '🪨', brick: '🧱', gem: '💎',
+      wood: '🌲', stone: '⛰️', brick: '🧱', gem: '💎',
       star_fragment: '✨', cloth: '🧶', paint: '🎨',
       crown: '👑', cape: '🧣', magic_orb: '🔮'
     };

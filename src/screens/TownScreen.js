@@ -23,7 +23,7 @@ import MemoryIsleScreen from './MemoryIsleScreen.js';
 
 // 素材絵文字
 const MATERIAL_EMOJI = {
-  wood: '🪵', stone: '🪨', brick: '🧱', gem: '💎',
+  wood: '🌲', stone: '⛰️', brick: '🧱', gem: '💎',
   star_fragment: '✨', cloth: '🧶', paint: '🎨',
   crown: '👑', cape: '🧣', magic_orb: '🔮',
 };
