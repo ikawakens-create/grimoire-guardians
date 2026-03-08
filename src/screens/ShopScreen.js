@@ -156,8 +156,8 @@ export class ShopScreen {
         <!-- 右: コンテンツ -->
         <div class="facility-right shop-right">
 
-          <!-- 日替わり無料アイテム -->
-          ${this._renderFreeItem(freeItem)}
+          <!-- 日替わり無料アイテム（Lv0は非表示） -->
+          ${shopLevel > 0 ? this._renderFreeItem(freeItem) : ''}
 
           <!-- 素材交換 -->
           <div class="shop-section">
