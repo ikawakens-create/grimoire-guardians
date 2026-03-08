@@ -632,7 +632,7 @@ export class GameStore {
   }
 
   /**
-   * デバッグ用: 全ワールドをアンロック
+   * デバッグ用: 全ワールド・家・施設・素材をアンロック
    */
   static unlockAllWorlds() {
     if (!Config.DEBUG.ENABLE_CHEATS) {
@@ -640,8 +640,34 @@ export class GameStore {
       return;
     }
 
-    Logger.warn('[CHEAT] Unlocking all worlds');
+    Logger.warn('[CHEAT] Unlocking all worlds, house sections, facilities, styles, and materials');
+
+    // ライセンス解放
     this.setState('license.core.licensed', true);
+
+    // 家セクション全解放
+    for (const sectionId of ['floor1', 'garden', 'floor2', 'exterior', 'floor3', 'tower']) {
+      this.setState(`house.sections.${sectionId}`, true);
+    }
+
+    // 家スタイル全解放
+    this.setState('house.unlockedStyles', [
+      'style_wood', 'style_stone', 'style_brick', 'style_bamboo', 'style_forest',
+      'style_ice', 'style_sakura', 'style_candy', 'style_flame', 'style_sea',
+      'style_black', 'style_thunder', 'style_moon', 'style_jewel', 'style_star',
+    ]);
+
+    // 町の施設全解放（レベル1）
+    for (const buildingId of ['craftsman', 'library', 'shop', 'guild', 'farm']) {
+      const current = this.getState(`town.buildings.${buildingId}.level`) || 0;
+      if (current < 1) this.setState(`town.buildings.${buildingId}.level`, 1);
+    }
+
+    // 素材をすべて99に
+    const materials = ['wood', 'stone', 'brick', 'gem', 'star_fragment', 'cloth', 'paint', 'crown', 'cape', 'magic_orb'];
+    for (const mat of materials) {
+      this.setState(`inventory.materials.${mat}`, 99);
+    }
   }
 
   /**
