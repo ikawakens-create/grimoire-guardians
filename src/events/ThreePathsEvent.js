@@ -22,7 +22,7 @@ import Logger from '../core/Logger.js';
 // 通常の道定義
 // ─────────────────────────────────────────
 const NORMAL_PATHS = [
-  { id: 'forest',   icon: '🌲', name: 'もりの みち',   hint: 'もくざいが でそう',      drop: { type: 'basic' } },
+  { id: 'forest',   icon: '🌲', name: 'もりの みち',   hint: 'まるたが でそう',        drop: { type: 'basic' } },
   { id: 'mountain', icon: '🏔️', name: 'やまの みち',   hint: 'いしが でそう',           drop: { type: 'stone' } },
   { id: 'sea',      icon: '🌊', name: 'うみの みち',   hint: 'なにが でるか わからない', drop: { type: 'random' } }
 ];
@@ -265,7 +265,7 @@ class ThreePathsEvent {
       crown: '👑', cape: '🧣', magic_orb: '🔮'
     };
     const NAME_MAP = {
-      wood: 'もくざい', stone: 'いし', brick: 'れんが', gem: 'ほうせき',
+      wood: 'まるた', stone: 'いし', brick: 'れんが', gem: 'ほうせき',
       star_fragment: 'ほしのかけら', cloth: 'ぬの', paint: 'えのぐ',
       crown: 'おうかん', cape: 'マント', magic_orb: 'まほうだま'
     };

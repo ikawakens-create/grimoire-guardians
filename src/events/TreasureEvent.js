@@ -30,7 +30,7 @@ const EMOJI_MAP = {
   crown: '👑', cape: '🧣', magic_orb: '🔮'
 };
 const NAME_MAP = {
-  wood: 'もくざい', stone: 'いし', brick: 'れんが', gem: 'ほうせき',
+  wood: 'まるた', stone: 'いし', brick: 'れんが', gem: 'ほうせき',
   star_fragment: 'ほしのかけら', cloth: 'ぬの', paint: 'えのぐ',
   crown: 'おうかん', cape: 'マント', magic_orb: 'まほうだま'
 };
