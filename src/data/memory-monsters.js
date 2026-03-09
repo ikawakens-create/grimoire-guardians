@@ -120,12 +120,12 @@ export const MONSTERS = [
   },
   {
     id: 'mon_10',
-    name: '（仮）チクタン',
+    name: '（仮）ネコマドウ',
     emoji: '🐱',
     worldId: 'world_8a',
     layer: 1,
     rarity: 'uncommon',
-    flavorText: 'ぴったりの時間にしか目を開かない古代ネコ竜。時計の針が止まると眠りにつく。',
+    flavorText: 'ぴったりの時間を読み取る時計型眼鏡をかけた魔道士ネコ。ローブに数字と時計の模様が刻まれている。',
   },
 
   // ══════════════════════════════════════════
@@ -169,12 +169,12 @@ export const MONSTERS = [
   },
   {
     id: 'mon_15',
-    name: '（仮）ハッチー',
+    name: '（仮）スタービー',
     emoji: '🐝',
     worldId: 'world_10b',
     layer: 2,
     rarity: 'uncommon',
-    flavorText: '8本の針を持つ古代ハチ竜。刺さった数が増えていく不思議な力を持つ。',
+    flavorText: '星型の針と聖なる翅を持つ神聖なハチ。羽ばたくたびに星の軌跡が輝き、8の繰り上がりを導く。',
   },
   {
     id: 'mon_16',
@@ -219,7 +219,7 @@ export const MONSTERS = [
     worldId: 'world_11c',
     layer: 2,
     rarity: 'rare',
-    flavorText: '紫の鱗をまとった幻の古代サメ竜。繰り下がりの深淵を泳ぎ続ける謎の存在。',
+    flavorText: '紫の鱗をまとった幻の古代サメ。繰り下がりの深淵を泳ぎ続ける謎の存在。',
   },
 
   // ══════════════════════════════════════════
@@ -227,12 +227,12 @@ export const MONSTERS = [
   // ══════════════════════════════════════════
   {
     id: 'mon_21',
-    name: '（仮）オウリュウ',
-    emoji: '🐉',
+    name: '（仮）アオホウオウ',
+    emoji: '🦅',
     worldId: 'world_11d',
     layer: 3,
     rarity: 'rare',
-    flavorText: '繰り下がりを極めた蒼い炎を纏う若き龍。その炎は冷たいのに輝く。',
+    flavorText: '繰り下がりを極め、蒼い炎の中から何度でも蘇る不死鳥。その炎は冷たいのに美しく輝く。',
   },
   {
     id: 'mon_22',
@@ -245,12 +245,12 @@ export const MONSTERS = [
   },
   {
     id: 'mon_23',
-    name: '（仮）ジュウハチドラゴ',
-    emoji: '🐉',
+    name: '（仮）ジュウハチライオン',
+    emoji: '🦁',
     worldId: 'world_12b',
     layer: 3,
     rarity: 'rare',
-    flavorText: '18の力を完全に解放した成熟した龍。かつて「まだ本気ではない」と言っていた面影は消え、圧倒的な威圧感を放つ。',
+    flavorText: '18の輝く鬣を持つ霊獣ライオン。くりさがりの18の世界を統べる誇り高き王者。',
   },
   {
     id: 'mon_24',
@@ -281,21 +281,21 @@ export const MONSTERS = [
   },
   {
     id: 'mon_27',
-    name: '（仮）ジュンバントラ',
+    name: '（仮）ライビャッコ',
     emoji: '🐯',
     worldId: 'world_14b',
     layer: 3,
     rarity: 'rare',
-    flavorText: '誰より速く大小と順番を見極める古代トラ竜。一瞬で答えを狩り取る。',
+    flavorText: '雷光をまとう古代の白虎。稲妻が走るたびに大きな数の順番が刻まれ、一瞬で答えを狩り取る。',
   },
   {
     id: 'mon_28',
-    name: '（仮）タスドラゴ',
+    name: '（仮）カズスフィンクス',
     emoji: '🔥',
     worldId: 'world_14c',
     layer: 3,
     rarity: 'rare',
-    flavorText: '大きな数の足し算に特化した紅蓮のドラゴン。炎が数字を照らし答えを導く。',
+    flavorText: '砂金色の石で作られた謎解きの守護者。体に刻まれた大きな数の計算式が炎で輝き、旅人に問いを投げかける。',
   },
   {
     id: 'mon_29',
@@ -339,12 +339,12 @@ export const MONSTERS = [
   },
   {
     id: 'mon_33',
-    name: '（仮）ヒクドラゴ',
-    emoji: '❄️',
+    name: '（仮）ウチュウレイジュウ',
+    emoji: '🌌',
     worldId: 'world_16b',
     layer: 4,
     rarity: 'legendary',
-    flavorText: 'タスドラゴとの宿命の対決を制し、氷晶の力を究極まで高めた伝説の龍。その吐息は全てを計算式に変える。',
+    flavorText: '宇宙のはざまに宿る霊獣。星雲をまとい、体の中に銀河が広がる。文章の意味を宇宙規模で読み解く神秘の存在。',
   },
 
   // ─── 秘密の7体（worldId なし：全Layer4コレクト後に解放予定）───
