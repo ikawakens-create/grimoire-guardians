@@ -404,7 +404,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_40',
-    name: '（仮）グリモア',
+    name: 'グリモア',
     emoji: '📖',
     worldId: null,
     layer: 4,
