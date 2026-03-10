@@ -66,7 +66,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_04',
-    name: '（仮）タスプタ',
+    name: 'タスプタ',
     emoji: '🦕',
     worldId: 'world_4',
     layer: 1,
