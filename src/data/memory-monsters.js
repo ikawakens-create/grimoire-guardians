@@ -245,7 +245,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_23',
-    name: '（仮）ジュウハチライオン',
+    name: 'ジュウハチライオン',
     emoji: '🦁',
     worldId: 'world_12b',
     layer: 3,
