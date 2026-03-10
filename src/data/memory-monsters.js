@@ -39,7 +39,7 @@ export const MONSTERS = [
   // ══════════════════════════════════════════
   {
     id: 'mon_01',
-    name: '（仮）カズカメ',
+    name: 'カズカメ',
     emoji: '🐢',
     worldId: 'world_1',
     layer: 1,
