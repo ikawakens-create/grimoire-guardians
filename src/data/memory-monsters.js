@@ -368,7 +368,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_36',
-    name: '（仮）ファントムキング',
+    name: 'ファントムキング',
     emoji: '👑',
     worldId: null,
     layer: 4,
