@@ -160,7 +160,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_14',
-    name: '（仮）クリアガリ',
+    name: 'クリアガリ',
     emoji: '🐸',
     worldId: 'world_10a',
     layer: 2,
@@ -196,7 +196,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_18',
-    name: '（仮）ヒミツガメ',
+    name: 'ヒミツガメ',
     emoji: '🐢',
     worldId: 'world_11a',
     layer: 2,
