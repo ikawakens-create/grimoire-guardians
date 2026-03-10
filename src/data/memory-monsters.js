@@ -386,7 +386,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_38',
-    name: '（仮）オメガサウリア',
+    name: 'オメガサウリア',
     emoji: '🌟',
     worldId: null,
     layer: 4,
