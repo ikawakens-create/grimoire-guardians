@@ -359,7 +359,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_35',
-    name: '（仮）インフィニタス',
+    name: 'インフィニタス',
     emoji: '♾️',
     worldId: null,
     layer: 4,
