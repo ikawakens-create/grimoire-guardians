@@ -94,13 +94,13 @@ export class ShapeFace {
   /** @private つつの かたち（円柱・かん） */
   static _cylinder(size) {
     const s =
-      // 底面（暗い緑）
-      `<ellipse cx="60" cy="93" rx="38" ry="11" fill="#2e9b65" stroke="#1a6b45" stroke-width="2"/>` +
-      // 胴体（中間の緑）
+      // 胴体（中間の緑）— 底面楕円より先に描いて、底リムを正しく乗せる
       `<rect x="22" y="30" width="76" height="63" fill="#5ecb87"/>` +
       // 胴体の輪郭線（左右）
       `<line x1="22" y1="30" x2="22" y2="93" stroke="#1a6b45" stroke-width="2.5"/>` +
       `<line x1="98" y1="30" x2="98" y2="93" stroke="#1a6b45" stroke-width="2.5"/>` +
+      // 底面（rect の上に描くことで底リムが丸く見える）
+      `<ellipse cx="60" cy="93" rx="38" ry="11" fill="#2e9b65" stroke="#1a6b45" stroke-width="2"/>` +
       // 上面（明るい緑）
       `<ellipse cx="60" cy="30" rx="38" ry="11" fill="#85dba5" stroke="#1a6b45" stroke-width="2.5"/>` +
       // ハイライト
