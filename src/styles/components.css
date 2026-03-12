@@ -232,6 +232,36 @@
   font-weight: bold;
 }
 
+/* 形付き選択肢（renderAs:'shape' 対応）
+   SVG 形 + テキストラベルを縦に並べて表示する。
+   小学1年生向けに十分なタップ領域とラベルサイズを確保。
+   ========================================================================== */
+
+.choice-button--with-shape {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-xs);
+  min-height: 9rem;
+}
+
+.choice-shape {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.choice-shape svg {
+  display: block;
+  /* モバイルで潰れないよう min-width を確保 */
+  min-width: 72px;
+  min-height: 72px;
+}
+
 /* ==========================================================================
    Cards
    ========================================================================== */

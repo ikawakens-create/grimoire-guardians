@@ -25,6 +25,7 @@ import { TypeValidator } from '../utils/TypeValidator.js';
 import { loadUnitQuestions } from '../data/units.js';
 import EventManager from '../core/EventManager.js';
 import ClockFace from '../components/ClockFace.js';
+import ShapeFace from '../components/ShapeFace.js';
 
 /** フィードバック待機時間（ms） */
 const FEEDBACK_DELAY = {
@@ -498,15 +499,24 @@ export class QuizScreen {
       btn.className = 'choice-button';
       btn.dataset.choice = choice;
 
-      // choiceImages サポート（nanobanana 対応: 画像が設定されていれば画像＋テキスト表示）
-      const imgSrc = question.choiceImages?.[choice];
-      if (imgSrc) {
-        btn.classList.add('choice-button--with-image');
+      // 形問題サポート: renderAs:'shape' のとき SVG 形＋テキスト表示（優先度: shape > choiceImages > text）
+      const shapeKey = question.renderAs === 'shape' ? ShapeFace.textToKey(choice) : null;
+      if (shapeKey !== null || question.renderAs === 'shape') {
+        btn.classList.add('choice-button--with-shape');
         btn.innerHTML =
-          `<img class="choice-image" src="${imgSrc}" alt="" aria-hidden="true">` +
+          `<span class="choice-shape" aria-hidden="true">${ShapeFace.renderSVG(shapeKey)}</span>` +
           `<span class="choice-label">${choice}</span>`;
       } else {
-        btn.textContent = choice;
+        // choiceImages サポート（nanobanana 対応: 画像が設定されていれば画像＋テキスト表示）
+        const imgSrc = question.choiceImages?.[choice];
+        if (imgSrc) {
+          btn.classList.add('choice-button--with-image');
+          btn.innerHTML =
+            `<img class="choice-image" src="${imgSrc}" alt="" aria-hidden="true">` +
+            `<span class="choice-label">${choice}</span>`;
+        } else {
+          btn.textContent = choice;
+        }
       }
 
       btn.addEventListener('click', () => {
