@@ -187,7 +187,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_17',
-    name: '（仮）クリオニ',
+    name: 'クリオニ',
     emoji: '👹',
     worldId: 'world_10d',
     layer: 2,
