@@ -262,6 +262,21 @@
   min-height: 72px;
 }
 
+/* 正解フィードバック: SVG 形をキラッと光らせる */
+.choice-button.correct .choice-shape svg {
+  filter: brightness(1.25) drop-shadow(0 0 6px rgba(255, 255, 255, 0.85));
+}
+
+/* 不正解フィードバック: SVG 形を暗くして目を引かない */
+.choice-button.wrong .choice-shape svg {
+  filter: brightness(0.7) opacity(0.7);
+}
+
+/* タップ時のフィードバック（touch デバイスで hover が効きにくいため） */
+.choice-button--with-shape:active {
+  transform: scale(0.95);
+}
+
 /* ==========================================================================
    Cards
    ========================================================================== */

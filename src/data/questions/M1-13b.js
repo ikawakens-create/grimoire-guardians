@@ -220,11 +220,11 @@ const questions = [
     step: 3,
     type: 'choice',
     renderAs: 'shape',
-    question: 'さんかく2まいを　あわせると　なに　かたちに　なる？',
+    question: 'しかくを　まっすぐ　よこに　はんぶんに　きりました。できた　かたちは　どれ？',
     correctAnswer: 'しかく',
     distractorPool: [
-      'まる',
       'さんかく',
+      'まる',
     ],
     image: null,
     choiceImages: null,
@@ -362,16 +362,192 @@ const questions = [
     choiceImages: null,
   },
 
+  // =====================================================
+  // Step1 追加プール（合計6問 → pick 3）
+  // =====================================================
+
+  {
+    id: 'M1-13b-Q21',
+    unitId: 'M1-13b',
+    step: 1,
+    type: 'choice',
+    renderAs: 'shape',
+    question: 'まんまるな　おつきさまは　どの　かたち？',
+    correctAnswer: 'まる',
+    distractorPool: [
+      'さんかく',
+      'しかく',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  // =====================================================
+  // Step2 追加プール（合計8問 → pick 4）
+  // =====================================================
+
+  {
+    id: 'M1-13b-Q22',
+    unitId: 'M1-13b',
+    step: 2,
+    type: 'choice',
+    renderAs: 'shape',
+    question: 'コインを　うえから　みると　どの　かたち？',
+    correctAnswer: 'まる',
+    distractorPool: [
+      'さんかく',
+      'しかく',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13b-Q23',
+    unitId: 'M1-13b',
+    step: 2,
+    type: 'choice',
+    renderAs: 'shape',
+    question: 'おりがみを　1まい　ひろげると　どの　かたち？',
+    correctAnswer: 'しかく',
+    distractorPool: [
+      'まる',
+      'さんかく',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  // =====================================================
+  // Step3 追加プール（合計8問 → pick 4）
+  // =====================================================
+
+  {
+    id: 'M1-13b-Q24',
+    unitId: 'M1-13b',
+    step: 3,
+    type: 'choice',
+    renderAs: 'shape',
+    question: '4本の　まっすぐな　せんで　かこわれた　かたちは？',
+    correctAnswer: 'しかく',
+    distractorPool: [
+      'さんかく',
+      'まる',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13b-Q25',
+    unitId: 'M1-13b',
+    step: 3,
+    type: 'choice',
+    renderAs: 'shape',
+    question: '3本の　まっすぐな　せんで　かこわれた　かたちは？',
+    correctAnswer: 'さんかく',
+    distractorPool: [
+      'しかく',
+      'まる',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13b-Q26',
+    unitId: 'M1-13b',
+    step: 3,
+    type: 'choice',
+    renderAs: 'shape',
+    question: 'まっすぐな　せんが　まったく　ない　かたちは？',
+    correctAnswer: 'まる',
+    distractorPool: [
+      'さんかく',
+      'しかく',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  // =====================================================
+  // Step4 追加プール（合計8問 → pick 4）
+  // =====================================================
+
+  {
+    id: 'M1-13b-Q27',
+    unitId: 'M1-13b',
+    step: 4,
+    type: 'choice',
+    renderAs: 'shape',
+    question: 'たろうくんは　かどが　ひとつも　ない　かたちの　クッキーを　もっています。どの　かたちですか？',
+    correctAnswer: 'まる',
+    distractorPool: [
+      'さんかく',
+      'しかく',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13b-Q28',
+    unitId: 'M1-13b',
+    step: 4,
+    type: 'choice',
+    renderAs: 'shape',
+    question: 'はるかさんは　4つの　かどが　ある　かたちの　ふうとうを　もっています。どの　かたちですか？',
+    correctAnswer: 'しかく',
+    distractorPool: [
+      'まる',
+      'さんかく',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13b-Q29',
+    unitId: 'M1-13b',
+    step: 4,
+    type: 'choice',
+    renderAs: 'shape',
+    question: 'けんじくんが　かいた　かたちは　かどが　3つ　ありました。どの　かたちですか？',
+    correctAnswer: 'さんかく',
+    distractorPool: [
+      'しかく',
+      'まる',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13b-Q30',
+    unitId: 'M1-13b',
+    step: 4,
+    type: 'choice',
+    renderAs: 'shape',
+    question: 'ゆかさんは　くるくる　まわしても　いつも　おなじ　みための　かたちを　かきました。どの　かたちですか？',
+    correctAnswer: 'まる',
+    distractorPool: [
+      'さんかく',
+      'しかく',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
 ];
 
 // ─── stepConfig ──────────────────────────────────────────────────────────────
 // シャッフル出題の設定: 各ステップから何問出題するかを定義する
 
 export const stepConfig = [
-  { step: 1, pick: 3 },   // Step1: かたちの なまえ（5問から3問）
-  { step: 2, pick: 4 },   // Step2: なかまさがし（6問から4問）
-  { step: 3, pick: 4 },   // Step3: かたちを かぞえよう（5問から4問）
-  { step: 4, pick: 4 },   // Step4: 文章題・チャレンジ（4問から4問）
+  { step: 1, pick: 3 },   // Step1: かたちの なまえ（6問から3問）
+  { step: 2, pick: 4 },   // Step2: なかまさがし（8問から4問）
+  { step: 3, pick: 4 },   // Step3: かたちを かぞえよう（8問から4問）
+  { step: 4, pick: 4 },   // Step4: 文章題・チャレンジ（8問から4問）
 ];
 
 export default questions;
