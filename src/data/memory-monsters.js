@@ -299,7 +299,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_29',
-    name: '（仮）ゾウヒキン',
+    name: 'ゾウヒキン',
     emoji: '🐘',
     worldId: 'world_14d',
     layer: 3,
