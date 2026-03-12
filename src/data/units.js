@@ -159,6 +159,12 @@ export const UNITS = {
     loader: () => import('./questions/M1-13.js')
   },
 
+  'M1-13b': {
+    unitId: 'M1-13b',
+    title: 'かたちづくり',
+    loader: () => import('./questions/M1-13b.js')
+  },
+
   // ---- Phase 0.3（M1-14〜M1-16）----
 
   'M1-14a': {

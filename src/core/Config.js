@@ -187,7 +187,7 @@ export const Config = {
       floor2:    11,  // 2階レイヤー（World 11後）
       exterior:  13,  // 装飾レイヤー・オーバーレイ（World 13後）
       floor3:    19,  // 3階レイヤー（World 19後）
-      tower:     33,  // てっぺん（全ワールドクリア後）
+      tower:     34,  // てっぺん（全ワールドクリア後）
     },
 
     // スタイル解放に必要なクリア済みワールド数（15種）
@@ -206,7 +206,7 @@ export const Config = {
       style_thunder: 27,  // かみなりのいえ
       style_moon:    29,  // つきのやかた
       style_jewel:   31,  // ほうせきのやかた
-      style_star:    33,  // ほしのしろ（全クリ報酬）
+      style_star:    34,  // ほしのしろ（全クリ報酬）
     },
 
     // フルセットボーナス段階（一致レイヤー数 → 演出）

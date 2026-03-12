@@ -9,7 +9,7 @@
  * @date 2026-03-04
  */
 
-const SW_VERSION   = '2.1.1';
+const SW_VERSION   = '2.1.2';
 const CACHE_NAME   = `grimoire-${SW_VERSION}`;
 
 /** キャッシュ対象ファイル（静的アセット） */
@@ -50,6 +50,7 @@ const ASSETS = [
   './src/components/BookCard.js',
   './src/components/ProgressBar.js',
   './src/components/ClockFace.js',
+  './src/components/ShapeFace.js',
   './src/events/OmikujiEvent.js',
   './src/events/MonsterBattleEvent.js',
   './src/events/TreasureEvent.js',
@@ -83,8 +84,9 @@ const ASSETS = [
   './src/data/questions/M1-12a.js',
   './src/data/questions/M1-12b.js',
   './src/data/questions/M1-12c.js',
-  // Phase 0.2 問題データ（M1-13）
+  // Phase 0.2 問題データ（M1-13・M1-13b）
   './src/data/questions/M1-13.js',
+  './src/data/questions/M1-13b.js',
   // Phase 0.3 問題データ（M1-14〜M1-16）
   './src/data/questions/M1-14a.js',
   './src/data/questions/M1-14b.js',
