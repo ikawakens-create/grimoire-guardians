@@ -500,8 +500,8 @@ export class QuizScreen {
       btn.dataset.choice = choice;
 
       // 形問題サポート: renderAs:'shape' のとき SVG 形＋テキスト表示（優先度: shape > choiceImages > text）
-      const shapeKey = question.renderAs === 'shape' ? ShapeFace.textToKey(choice) : null;
-      if (shapeKey !== null || question.renderAs === 'shape') {
+      if (question.renderAs === 'shape') {
+        const shapeKey = ShapeFace.textToKey(choice);
         btn.classList.add('choice-button--with-shape');
         btn.innerHTML =
           `<span class="choice-shape" aria-hidden="true">${ShapeFace.renderSVG(shapeKey)}</span>` +

@@ -120,7 +120,6 @@ const questions = [
     unitId: 'M1-13',
     step: 2,
     type: 'choice',
-    renderAs: 'shape',
     question: 'ビー玉と　おなじ　かたちの\nものは　どれ？',
     correctAnswer: 'テニスボール',
     distractorPool: [
@@ -138,7 +137,6 @@ const questions = [
     unitId: 'M1-13',
     step: 2,
     type: 'choice',
-    renderAs: 'shape',
     question: '消しゴムの　はこと　おなじ\nかたちの　ものは　どれ？',
     correctAnswer: 'クッキーの　はこ',
     distractorPool: [
@@ -156,7 +154,6 @@ const questions = [
     unitId: 'M1-13',
     step: 2,
     type: 'choice',
-    renderAs: 'shape',
     question: 'ストローと　おなじ　かたちの\nものは　どれ？',
     correctAnswer: 'ツナかん',
     distractorPool: [
@@ -174,7 +171,6 @@ const questions = [
     unitId: 'M1-13',
     step: 2,
     type: 'choice',
-    renderAs: 'shape',
     question: 'つぎの　うち、はこのかたちで\nないものは　どれ？',
     correctAnswer: 'ビー玉',
     distractorPool: [
@@ -192,7 +188,6 @@ const questions = [
     unitId: 'M1-13',
     step: 2,
     type: 'choice',
-    renderAs: 'shape',
     question: 'トイレットペーパーのしんと\nおなじかたちは　どれ？',
     correctAnswer: 'ストロー',
     distractorPool: [
@@ -210,7 +205,6 @@ const questions = [
     unitId: 'M1-13',
     step: 2,
     type: 'choice',
-    renderAs: 'shape',
     question: 'さいころと　おなじ\nかたちは　どれ？',
     correctAnswer: 'つみき',
     distractorPool: [
@@ -264,7 +258,6 @@ const questions = [
     unitId: 'M1-13',
     step: 3,
     type: 'choice',
-    renderAs: 'shape',
     question: 'ツナかんを　よこに　ねかせたら\nどうなるかな？',
     correctAnswer: '一方向だけ　ころがる',
     distractorPool: [
@@ -298,7 +291,6 @@ const questions = [
     unitId: 'M1-13',
     step: 3,
     type: 'choice',
-    renderAs: 'shape',
     question: 'はこのかたちを　さかみちに\nおいたら　どうなる？',
     correctAnswer: 'ころがらない',
     distractorPool: [
@@ -319,7 +311,6 @@ const questions = [
     unitId: 'M1-13',
     step: 4,
     type: 'choice',
-    renderAs: 'shape',
     question: 'はこのかたちの　平らな面は\nぜんぶで　なんまい？\n（上・下・前・後ろ・左・右）',
     correctAnswer: '6まい',
     distractorPool: [
@@ -337,7 +328,6 @@ const questions = [
     unitId: 'M1-13',
     step: 4,
     type: 'choice',
-    renderAs: 'shape',
     question: 'つつのかたちの　上と下の\nまるい面は　なんまい？',
     correctAnswer: '2まい',
     distractorPool: [
@@ -355,7 +345,6 @@ const questions = [
     unitId: 'M1-13',
     step: 4,
     type: 'choice',
-    renderAs: 'shape',
     question: 'まるのかたち（ボール）に\n平らな面は　いくつ？',
     correctAnswer: '0（ない）',
     distractorPool: [
@@ -373,7 +362,6 @@ const questions = [
     unitId: 'M1-13',
     step: 4,
     type: 'choice',
-    renderAs: 'shape',
     question: 'つつのかたちに　まるくない\nひらたい面は　なんまい？',
     correctAnswer: '0（ない）',
     distractorPool: [
@@ -412,7 +400,6 @@ const questions = [
     unitId: 'M1-13',
     step: 5,
     type: 'choice',
-    renderAs: 'shape',
     question: 'はこのかたちと　つつのかたちに\nりょうほう　あてはまるのは？',
     correctAnswer: 'つみあげられる',
     distractorPool: [
