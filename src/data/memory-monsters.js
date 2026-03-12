@@ -350,7 +350,7 @@ export const MONSTERS = [
   // ─── 秘密の7体（worldId なし：全Layer4コレクト後に解放予定）───
   {
     id: 'mon_34',
-    name: '（仮）ゼロガミ',
+    name: 'ゼロガミ',
     emoji: '✨',
     worldId: null,
     layer: 4,
