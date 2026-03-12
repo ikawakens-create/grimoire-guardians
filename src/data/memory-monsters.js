@@ -321,7 +321,7 @@ export const MONSTERS = [
   // ══════════════════════════════════════════
   {
     id: 'mon_31',
-    name: '（仮）クロノジン',
+    name: 'クロノジン',
     emoji: '🔮',
     worldId: 'world_15b',
     layer: 4,
