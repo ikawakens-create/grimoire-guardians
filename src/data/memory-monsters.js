@@ -308,7 +308,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_30',
-    name: '（仮）クロノリュウ',
+    name: 'クロノリュウ',
     emoji: '⏰',
     worldId: 'world_15a',
     layer: 3,
