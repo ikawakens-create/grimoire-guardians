@@ -200,8 +200,7 @@ export class SkinManager {
    * @returns {{ dropped: boolean, skinId?: string, combined?: boolean }}
    */
   static rollForFragment() {
-    const FRAGMENT_DROP_RATE = 0.15;  // 15%
-    if (Math.random() >= FRAGMENT_DROP_RATE) {
+    if (Math.random() >= Config.SKIN.FRAGMENT_DROP_RATE) {
       return { dropped: false };
     }
 
