@@ -403,7 +403,9 @@ export class HouseScreen {
   _renderSectionTabs(house) {
     const order = ['garden', 'floor1', 'floor2', 'floor3', 'tower', 'decoration'];
     const tabs = order.map(id => {
-      const unlocked = id === 'floor1' || house.sections[id];
+      // 'decoration' タブは state キー 'exterior' と対応している
+      const sectionKey = id === 'decoration' ? 'exterior' : id;
+      const unlocked = id === 'floor1' || house.sections[sectionKey];
       const active   = this._view === id;
       return `
         <button class="house-tab-btn ${active ? 'active' : ''} ${!unlocked ? 'locked' : ''}"
@@ -584,7 +586,7 @@ export class HouseScreen {
     // もどる / 全景に戻る
     this._container.querySelector('.house-back-btn')?.addEventListener('click', () => {
       if (this._view === VIEW.OVERVIEW) {
-        GameStore.setState('app.currentScreen', 'bookshelf');
+        GameStore.setState('app.currentScreen', 'town');
       } else {
         this._view = VIEW.OVERVIEW;
         this._render();

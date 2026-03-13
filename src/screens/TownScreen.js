@@ -34,10 +34,10 @@ const MATERIAL_EMOJI = {
  */
 const HOTSPOTS = [
   {
-    id: 'house_build',
+    id: 'house',
     label: '🏠 わたしのいえ',
-    sublabel: 'いえをたてよう！',
-    screen: 'house_build',
+    sublabel: 'いえをかんしょう！',
+    screen: 'house',
     // 左側の大きな家（SVG内 x:50-285, y:130-430 / 960×540）
     pos: { left: '5%', top: '24%', width: '24%', height: '60%' },
     alwaysUnlocked: true,
