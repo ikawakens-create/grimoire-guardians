@@ -34,10 +34,10 @@ export const HOUSE_SECTION = {
 // ─────────────────────────────────────────────
 export const SECTION_UNLOCK_CONDITIONS = {
   floor1:   { clearedWorlds: 0  },  // 最初から
-  garden:   { clearedWorlds: 4  },  // 世界4クリア後
-  exterior: { clearedWorlds: 8  },  // 世界8クリア後
-  floor2:   { clearedWorlds: 12 },  // 世界12クリア後
-  floor3:   { clearedWorlds: 16 },  // 世界16クリア後
+  garden:   { clearedWorlds: 7  },  // 世界7クリア後
+  floor2:   { clearedWorlds: 11 },  // 世界11クリア後
+  exterior: { clearedWorlds: 13 },  // 世界13クリア後
+  floor3:   { clearedWorlds: 19 },  // 世界19クリア後
   tower:    { clearedWorlds: 33 },  // 全ワールドクリア後
 };
 

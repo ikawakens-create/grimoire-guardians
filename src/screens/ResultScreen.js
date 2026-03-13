@@ -22,6 +22,9 @@ import HapticFeedback from '../utils/HapticFeedback.js';
 import { CharacterAvatar } from '../components/CharacterAvatar.js';
 import WORLDS, { getWorldById } from '../data/worlds.js';
 import { getMonsterByWorldId } from '../data/memory-monsters.js';
+import { HouseManager } from '../core/HouseManager.js';
+import { TownManager } from '../core/TownManager.js';
+import { SkinManager } from '../core/SkinManager.js';
 
 // ─────────────────────────────────────────
 // 定数
@@ -392,6 +395,14 @@ class ResultScreen {
     if (cleared && worldId) {
       this._newlyCollectedMonster = this._updateMonsterClearCount(worldId);
     }
+
+    // クリア時: 家・町・スキンの進捗チェック
+    if (cleared && worldId) {
+      HouseManager.checkProgressUnlocks();
+      HouseManager.checkAndUnlockStyles();
+    }
+    TownManager.onQuizCompleted();
+    SkinManager.checkMilestoneUnlocks();
 
     // 非同期でセーブ（エラーは握りつぶさない）
     SaveManager.save().catch(err => {
