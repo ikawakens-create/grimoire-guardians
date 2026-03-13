@@ -6,14 +6,14 @@
  * 準拠: 日本文教出版 算数1年
  *
  * Step構成（シャッフル出題）
- *   Step1: かたちの なまえ（プール5問 → 3問出題）
- *   Step2: なかまさがし（プール6問 → 4問出題）
- *   Step3: かたちを かぞえよう（プール5問 → 4問出題）
- *   Step4: 文章題・チャレンジ（プール4問 → 4問出題）
+ *   Step1: かたちの なまえ（プール9問 → 3問出題）
+ *   Step2: なかまさがし（プール12問 → 4問出題）
+ *   Step3: かたちを かぞえよう（プール12問 → 4問出題）
+ *   Step4: 文章題・チャレンジ（プール12問 → 4問出題）
  *
  * 設計方針:
  *   - 全問 distractorPool 形式 + renderAs:'shape' で SVG 形を表示
- *   - ShapeFace.SHAPE_TEXT_MAP に登録されたテキストを選択肢として使用
+ *   - ShapeFace._TEXT_MAP に登録されたテキストを選択肢として使用
  *   - 「さんかく」「しかく」「まる」の3種類が均等に登場するよう問題を設計
  *
  * @version 1.0
@@ -24,7 +24,7 @@
 const questions = [
 
   // =====================================================
-  // Step1: かたちの なまえ（5問）
+  // Step1: かたちの なまえ（9問）
   // 身近なものが3種類の平面図形のどれか識別する
   // =====================================================
 
@@ -109,7 +109,7 @@ const questions = [
   },
 
   // =====================================================
-  // Step2: なかまさがし（6問）
+  // Step2: なかまさがし（12問）
   // 正しい「なかま」の形を選ぶ
   // =====================================================
 
@@ -210,7 +210,7 @@ const questions = [
   },
 
   // =====================================================
-  // Step3: かたちを かぞえよう（5問）
+  // Step3: かたちを かぞえよう（12問）
   // 数や組み合わせの問題
   // =====================================================
 
@@ -295,7 +295,7 @@ const questions = [
   },
 
   // =====================================================
-  // Step4: 文章題・チャレンジ（4問）
+  // Step4: 文章題・チャレンジ（12問）
   // =====================================================
 
   {
@@ -363,7 +363,7 @@ const questions = [
   },
 
   // =====================================================
-  // Step1 追加プール（合計6問 → pick 3）
+  // Step1 追加プール①（合計9問 → pick 3）
   // =====================================================
 
   {
@@ -383,7 +383,7 @@ const questions = [
   },
 
   // =====================================================
-  // Step2 追加プール（合計8問 → pick 4）
+  // Step2 追加プール①（合計12問 → pick 4）
   // =====================================================
 
   {
@@ -419,7 +419,7 @@ const questions = [
   },
 
   // =====================================================
-  // Step3 追加プール（合計8問 → pick 4）
+  // Step3 追加プール①（合計12問 → pick 4）
   // =====================================================
 
   {
@@ -471,7 +471,7 @@ const questions = [
   },
 
   // =====================================================
-  // Step4 追加プール（合計8問 → pick 4）
+  // Step4 追加プール①（合計12問 → pick 4）
   // =====================================================
 
   {
@@ -538,16 +538,276 @@ const questions = [
     choiceImages: null,
   },
 
+  // =====================================================
+  // Step1 追加プール②（Q31〜Q33: 合計9問 → pick 3）
+  // バランス: まる×3, さんかく×3, しかく×3
+  // =====================================================
+
+  {
+    id: 'M1-13b-Q31',
+    unitId: 'M1-13b',
+    step: 1,
+    type: 'choice',
+    renderAs: 'shape',
+    question: 'スマートフォンを　うえから　みると　どの　かたち？',
+    correctAnswer: 'しかく',
+    distractorPool: [
+      'さんかく',
+      'まる',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13b-Q32',
+    unitId: 'M1-13b',
+    step: 1,
+    type: 'choice',
+    renderAs: 'shape',
+    question: 'きって（はがきに　はる　ちいさな　もの）は　どの　かたち？',
+    correctAnswer: 'しかく',
+    distractorPool: [
+      'まる',
+      'さんかく',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13b-Q33',
+    unitId: 'M1-13b',
+    step: 1,
+    type: 'choice',
+    renderAs: 'shape',
+    question: 'さんかくじょうぎは　どの　かたち？',
+    correctAnswer: 'さんかく',
+    distractorPool: [
+      'しかく',
+      'まる',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  // =====================================================
+  // Step2 追加プール②（Q34〜Q37: 合計12問 → pick 4）
+  // バランス: まる×4, さんかく×4, しかく×4
+  // =====================================================
+
+  {
+    id: 'M1-13b-Q34',
+    unitId: 'M1-13b',
+    step: 2,
+    type: 'choice',
+    renderAs: 'shape',
+    question: 'パーティーの　とんがりぼうしは　どの　かたち？',
+    correctAnswer: 'さんかく',
+    distractorPool: [
+      'まる',
+      'しかく',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13b-Q35',
+    unitId: 'M1-13b',
+    step: 2,
+    type: 'choice',
+    renderAs: 'shape',
+    question: 'おさらを　うえから　みると　どの　かたち？',
+    correctAnswer: 'まる',
+    distractorPool: [
+      'しかく',
+      'さんかく',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13b-Q36',
+    unitId: 'M1-13b',
+    step: 2,
+    type: 'choice',
+    renderAs: 'shape',
+    question: 'えんぴつの　さきっぽを　よこから　みると　どの　かたち？',
+    correctAnswer: 'さんかく',
+    distractorPool: [
+      'しかく',
+      'まる',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13b-Q37',
+    unitId: 'M1-13b',
+    step: 2,
+    type: 'choice',
+    renderAs: 'shape',
+    question: 'たたみを　うえから　みると　どの　かたち？',
+    correctAnswer: 'しかく',
+    distractorPool: [
+      'まる',
+      'さんかく',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  // =====================================================
+  // Step3 追加プール②（Q38〜Q41: 合計12問 → pick 4）
+  // バランス: まる×4, さんかく×4, しかく×4
+  // =====================================================
+
+  {
+    id: 'M1-13b-Q38',
+    unitId: 'M1-13b',
+    step: 3,
+    type: 'choice',
+    renderAs: 'shape',
+    question: 'へんが　3つの　かたちは　どれ？',
+    correctAnswer: 'さんかく',
+    distractorPool: [
+      'しかく',
+      'まる',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13b-Q39',
+    unitId: 'M1-13b',
+    step: 3,
+    type: 'choice',
+    renderAs: 'shape',
+    question: 'まわりを　どこを　さわっても　かどが　ない　かたちは？',
+    correctAnswer: 'まる',
+    distractorPool: [
+      'さんかく',
+      'しかく',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13b-Q40',
+    unitId: 'M1-13b',
+    step: 3,
+    type: 'choice',
+    renderAs: 'shape',
+    question: '3つの　てんを　むすぶと　できる　かたちは？',
+    correctAnswer: 'さんかく',
+    distractorPool: [
+      'まる',
+      'しかく',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13b-Q41',
+    unitId: 'M1-13b',
+    step: 3,
+    type: 'choice',
+    renderAs: 'shape',
+    question: 'どの　むきに　ひっくりかえしても　おなじ　かたちに　なるのは？',
+    correctAnswer: 'まる',
+    distractorPool: [
+      'しかく',
+      'さんかく',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  // =====================================================
+  // Step4 追加プール②（Q42〜Q45: 合計12問 → pick 4）
+  // バランス: まる×4, さんかく×4, しかく×4
+  // =====================================================
+
+  {
+    id: 'M1-13b-Q42',
+    unitId: 'M1-13b',
+    step: 4,
+    type: 'choice',
+    renderAs: 'shape',
+    question: 'あかりちゃんは　おつきさまの　えを　かきたいです。どの　かたちを　かきますか？',
+    correctAnswer: 'まる',
+    distractorPool: [
+      'さんかく',
+      'しかく',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13b-Q43',
+    unitId: 'M1-13b',
+    step: 4,
+    type: 'choice',
+    renderAs: 'shape',
+    question: 'けいすけくんは　かみで　やまの　かたちを　つくりました。どの　かたちですか？',
+    correctAnswer: 'さんかく',
+    distractorPool: [
+      'しかく',
+      'まる',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13b-Q44',
+    unitId: 'M1-13b',
+    step: 4,
+    type: 'choice',
+    renderAs: 'shape',
+    question: 'さつきちゃんは　かどが　4つ　ある　かたちの　シールを　ノートに　はりました。どの　かたちですか？',
+    correctAnswer: 'しかく',
+    distractorPool: [
+      'まる',
+      'さんかく',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
+  {
+    id: 'M1-13b-Q45',
+    unitId: 'M1-13b',
+    step: 4,
+    type: 'choice',
+    renderAs: 'shape',
+    question: 'りょうくんは　へんが　4つ　ある　かたちの　ぞうきんで　そうじを　しました。どの　かたちですか？',
+    correctAnswer: 'しかく',
+    distractorPool: [
+      'まる',
+      'さんかく',
+    ],
+    image: null,
+    choiceImages: null,
+  },
+
 ];
 
 // ─── stepConfig ──────────────────────────────────────────────────────────────
 // シャッフル出題の設定: 各ステップから何問出題するかを定義する
 
 export const stepConfig = [
-  { step: 1, pick: 3 },   // Step1: かたちの なまえ（6問から3問）
-  { step: 2, pick: 4 },   // Step2: なかまさがし（8問から4問）
-  { step: 3, pick: 4 },   // Step3: かたちを かぞえよう（8問から4問）
-  { step: 4, pick: 4 },   // Step4: 文章題・チャレンジ（8問から4問）
+  { step: 1, pick: 3 },   // Step1: かたちの なまえ（9問から3問）
+  { step: 2, pick: 4 },   // Step2: なかまさがし（12問から4問）
+  { step: 3, pick: 4 },   // Step3: かたちを かぞえよう（12問から4問）
+  { step: 4, pick: 4 },   // Step4: 文章題・チャレンジ（12問から4問）
 ];
 
 export default questions;
