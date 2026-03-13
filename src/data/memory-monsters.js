@@ -39,7 +39,7 @@ export const MONSTERS = [
   // ══════════════════════════════════════════
   {
     id: 'mon_01',
-    name: '（仮）カズカメ',
+    name: 'カズカメ',
     emoji: '🐢',
     worldId: 'world_1',
     layer: 1,
@@ -48,7 +48,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_02',
-    name: '（仮）ロッポリス',
+    name: 'ロッポリス',
     emoji: '🐰',
     worldId: 'world_2',
     layer: 1,
@@ -57,7 +57,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_03',
-    name: '（仮）バンバンゲロ',
+    name: 'バンバンゲロ',
     emoji: '🐸',
     worldId: 'world_3',
     layer: 1,
@@ -66,7 +66,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_04',
-    name: '（仮）タスプタ',
+    name: 'タスプタ',
     emoji: '🦕',
     worldId: 'world_4',
     layer: 1,
@@ -75,7 +75,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_05',
-    name: '（仮）ヒクリス',
+    name: 'ヒクリス',
     emoji: '🐿️',
     worldId: 'world_5',
     layer: 1,
@@ -84,7 +84,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_06',
-    name: '（仮）ヒクヒキ',
+    name: 'ヒクヒキ',
     emoji: '🦔',
     worldId: 'world_5b',
     layer: 1,
@@ -93,7 +93,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_07',
-    name: '（仮）ジュッポン',
+    name: 'ジュッポン',
     emoji: '🦗',
     worldId: 'world_6',
     layer: 1,
@@ -102,7 +102,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_08',
-    name: '（仮）トーテン',
+    name: 'トーテン',
     emoji: '🐞',
     worldId: 'world_6b',
     layer: 1,
@@ -111,7 +111,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_09',
-    name: '（仮）ハタザウル',
+    name: 'ハタザウル',
     emoji: '🦖',
     worldId: 'world_7',
     layer: 1,
@@ -120,7 +120,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_10',
-    name: '（仮）ネコマドウ',
+    name: 'ネコマドウ',
     emoji: '🐱',
     worldId: 'world_8a',
     layer: 1,
@@ -133,7 +133,7 @@ export const MONSTERS = [
   // ══════════════════════════════════════════
   {
     id: 'mon_11',
-    name: '（仮）ハンコロ',
+    name: 'ハンコロ',
     emoji: '🐙',
     worldId: 'world_8b',
     layer: 2,
@@ -142,7 +142,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_12',
-    name: '（仮）プリムス',
+    name: 'プリムス',
     emoji: '🗿',
     worldId: 'world_8c',
     layer: 2,
@@ -151,7 +151,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_13',
-    name: '（仮）サクランボン',
+    name: 'サクランボン',
     emoji: '🌸',
     worldId: 'world_9',
     layer: 2,
@@ -160,7 +160,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_14',
-    name: '（仮）クリアガリ',
+    name: 'クリアガリ',
     emoji: '🐸',
     worldId: 'world_10a',
     layer: 2,
@@ -169,7 +169,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_15',
-    name: '（仮）スタービー',
+    name: 'スタービー',
     emoji: '🐝',
     worldId: 'world_10b',
     layer: 2,
@@ -178,7 +178,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_16',
-    name: '（仮）シチキツ',
+    name: 'シチキツ',
     emoji: '🦊',
     worldId: 'world_10c',
     layer: 2,
@@ -187,7 +187,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_17',
-    name: '（仮）クリオニ',
+    name: 'クリオニ',
     emoji: '👹',
     worldId: 'world_10d',
     layer: 2,
@@ -196,7 +196,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_18',
-    name: '（仮）ヒミツガメ',
+    name: 'ヒミツガメ',
     emoji: '🐢',
     worldId: 'world_11a',
     layer: 2,
@@ -205,7 +205,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_19',
-    name: '（仮）サガリムー',
+    name: 'サガリムー',
     emoji: '👻',
     worldId: 'world_11b',
     layer: 2,
@@ -214,7 +214,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_20',
-    name: '（仮）ムラサメ',
+    name: 'ムラサメ',
     emoji: '🦈',
     worldId: 'world_11c',
     layer: 2,
@@ -227,7 +227,7 @@ export const MONSTERS = [
   // ══════════════════════════════════════════
   {
     id: 'mon_21',
-    name: '（仮）アオホウオウ',
+    name: 'アオホウオウ',
     emoji: '🦅',
     worldId: 'world_11d',
     layer: 3,
@@ -236,7 +236,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_22',
-    name: '（仮）ギアカニ',
+    name: 'ギアカニ',
     emoji: '🦀',
     worldId: 'world_12a',
     layer: 3,
@@ -245,7 +245,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_23',
-    name: '（仮）ジュウハチライオン',
+    name: 'ジュウハチライオン',
     emoji: '🦁',
     worldId: 'world_12b',
     layer: 3,
@@ -254,7 +254,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_24',
-    name: '（仮）ミックスリオン',
+    name: 'ミックスリオン',
     emoji: '🦁',
     worldId: 'world_12c',
     layer: 3,
@@ -263,7 +263,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_25',
-    name: '（仮）カタチゴン',
+    name: 'カタチゴン',
     emoji: '🌀',
     worldId: 'world_13',
     layer: 3,
@@ -272,7 +272,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_26',
-    name: '（仮）マンモリウス',
+    name: 'マンモリウス',
     emoji: '🦣',
     worldId: 'world_14a',
     layer: 3,
@@ -281,7 +281,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_27',
-    name: '（仮）ライビャッコ',
+    name: 'ライビャッコ',
     emoji: '🐯',
     worldId: 'world_14b',
     layer: 3,
@@ -290,7 +290,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_28',
-    name: '（仮）カズスフィンクス',
+    name: 'カズスフィンクス',
     emoji: '🔥',
     worldId: 'world_14c',
     layer: 3,
@@ -299,7 +299,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_29',
-    name: '（仮）ゾウヒキン',
+    name: 'ゾウヒキン',
     emoji: '🐘',
     worldId: 'world_14d',
     layer: 3,
@@ -308,7 +308,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_30',
-    name: '（仮）クロノリュウ',
+    name: 'クロノリュウ',
     emoji: '⏰',
     worldId: 'world_15a',
     layer: 3,
@@ -321,7 +321,7 @@ export const MONSTERS = [
   // ══════════════════════════════════════════
   {
     id: 'mon_31',
-    name: '（仮）クロノジン',
+    name: 'クロノジン',
     emoji: '🔮',
     worldId: 'world_15b',
     layer: 4,
@@ -330,7 +330,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_32',
-    name: '（仮）ゾウサン',
+    name: 'ゾウサン',
     emoji: '🐘',
     worldId: 'world_16a',
     layer: 4,
@@ -339,7 +339,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_33',
-    name: '（仮）ウチュウレイジュウ',
+    name: 'ウチュウレイジュウ',
     emoji: '🌌',
     worldId: 'world_16b',
     layer: 4,
@@ -350,7 +350,7 @@ export const MONSTERS = [
   // ─── 秘密の7体（worldId なし：全Layer4コレクト後に解放予定）───
   {
     id: 'mon_34',
-    name: '（仮）ゼロガミ',
+    name: 'ゼロガミ',
     emoji: '✨',
     worldId: null,
     layer: 4,
@@ -359,7 +359,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_35',
-    name: '（仮）インフィニタス',
+    name: 'インフィニタス',
     emoji: '♾️',
     worldId: null,
     layer: 4,
@@ -368,7 +368,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_36',
-    name: '（仮）ファントムキング',
+    name: 'ファントムキング',
     emoji: '👑',
     worldId: null,
     layer: 4,
@@ -377,7 +377,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_37',
-    name: '（仮）カルキュロン',
+    name: 'カルキュロン',
     emoji: '⚙️',
     worldId: null,
     layer: 4,
@@ -386,7 +386,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_38',
-    name: '（仮）オメガサウリア',
+    name: 'オメガサウリア',
     emoji: '🌟',
     worldId: null,
     layer: 4,
@@ -395,7 +395,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_39',
-    name: '（仮）ケイサンオウ',
+    name: 'ケイサンオウ',
     emoji: '👑',
     worldId: null,
     layer: 4,
@@ -404,7 +404,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_40',
-    name: '（仮）グリモア',
+    name: 'グリモア',
     emoji: '📖',
     worldId: null,
     layer: 4,
