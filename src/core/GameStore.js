@@ -424,10 +424,26 @@ export class GameStore {
         sections: {
           floor1:   true,
           garden:   false,
-          exterior: false,
           floor2:   false,
+          exterior: false,
           floor3:   false,
           tower:    false,
+        },
+        unlockedStyles: ['style_wood'],
+        layerStyles: {
+          garden:     'style_wood',
+          floor1:     'style_wood',
+          floor2:     'style_wood',
+          floor3:     'style_wood',
+          tower:      'style_wood',
+          decoration: null,
+        },
+        photo: {
+          unlockedFrames:  ['frame_simple'],
+          unlockedStamps:  [],
+          currentFrame:    'frame_simple',
+          currentPose:     'normal',
+          stampPlacements: [],
         },
         exteriorStyle: 'default',
         exteriorDeco: {

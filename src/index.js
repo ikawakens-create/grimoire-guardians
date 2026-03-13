@@ -391,6 +391,7 @@ function showPhoto(gameScreen) {
  * @param {HTMLElement} gameScreen
  */
 function showHouseBuild(gameScreen) {
+  if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
   if (!_houseBuildScreen) {
     _houseBuildScreen = new HouseBuildScreen();
   }
@@ -402,6 +403,7 @@ function showHouseBuild(gameScreen) {
  * @param {HTMLElement} gameScreen
  */
 function showCraftsman(gameScreen) {
+  if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
   if (!_craftsmanScreen) _craftsmanScreen = new CraftsmanScreen();
   _craftsmanScreen.show(gameScreen);
 }
@@ -415,24 +417,28 @@ function showTown(gameScreen) {
 
 /** GrimoireLibraryScreen（魔導書庫）を描画する */
 function showLibrary(gameScreen) {
+  if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
   if (!_libraryScreen) _libraryScreen = new GrimoireLibraryScreen();
   _libraryScreen.show(gameScreen);
 }
 
 /** ShopScreen（商店）を描画する */
 function showShop(gameScreen) {
+  if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
   if (!_shopScreen) _shopScreen = new ShopScreen();
   _shopScreen.show(gameScreen);
 }
 
 /** GuildScreen（ギルド）を描画する */
 function showGuild(gameScreen) {
+  if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
   if (!_guildScreen) _guildScreen = new GuildScreen();
   _guildScreen.show(gameScreen);
 }
 
 /** FarmScreen（魔法農場）を描画する */
 function showFarm(gameScreen) {
+  if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
   if (!_farmScreen) _farmScreen = new FarmScreen();
   _farmScreen.show(gameScreen);
 }

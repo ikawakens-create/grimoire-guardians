@@ -67,7 +67,7 @@ export class HouseManager {
    */
   static checkAndTriggerMilestones() {
     const clearedCount = this._getClearedWorldCount();
-    const triggered = GameStore.getState('house.triggeredMilestones') || [];
+    let triggered = GameStore.getState('house.triggeredMilestones') || [];
     const milestones = Config.HOUSE.MILESTONES || [];
     const newlyTriggered = [];
 
@@ -77,10 +77,13 @@ export class HouseManager {
 
       // マイルストーン発火
       this._applyMilestone(milestone);
-      const newTriggered = [...triggered, milestone.id];
-      GameStore.setState('house.triggeredMilestones', newTriggered);
+      triggered = [...triggered, milestone.id];
       newlyTriggered.push(milestone);
       Logger.info(`[House] マイルストーン達成: ${milestone.id}`);
+    }
+
+    if (newlyTriggered.length > 0) {
+      GameStore.setState('house.triggeredMilestones', triggered);
     }
 
     return newlyTriggered;
