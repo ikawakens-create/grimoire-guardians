@@ -251,7 +251,7 @@ export class CraftsmanScreen {
   _renderHeader(_materials) {
     return `
       <div class="craftsman-header facility-header">
-        <button class="btn-icon craft-back-btn" style="color:#fff">← いえへ</button>
+        <button class="btn-icon craft-back-btn" style="color:#fff">← まち</button>
         <h1 class="facility-title">🔨 ものづくりのいえ</h1>
       </div>
     `;
@@ -682,6 +682,7 @@ export class CraftsmanScreen {
 
     // もどるボタン（街へ）
     this._container.querySelector('.craft-back-btn')?.addEventListener('click', () => {
+      this.hide();
       GameStore.setState('app.currentScreen', 'town');
     });
 

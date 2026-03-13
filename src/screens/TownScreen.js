@@ -678,9 +678,11 @@ export class TownScreen {
         if (!screen) return;
 
         // きおくのいせきはモーダル方式で開く（画面遷移しない）
-        if (screen === 'memory_isle' && Config.FEATURES.ENABLE_MEMORY_ISLE) {
-          const memoryScreen = new MemoryIsleScreen();
-          memoryScreen.open();
+        if (screen === 'memory_isle') {
+          if (Config.FEATURES.ENABLE_MEMORY_ISLE) {
+            const memoryScreen = new MemoryIsleScreen();
+            memoryScreen.open();
+          }
           return;
         }
 
