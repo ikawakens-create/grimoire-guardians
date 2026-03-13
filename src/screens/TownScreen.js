@@ -34,10 +34,10 @@ const MATERIAL_EMOJI = {
  */
 const HOTSPOTS = [
   {
-    id: 'house_build',
+    id: 'house',
     label: '🏠 わたしのいえ',
-    sublabel: 'いえをたてよう！',
-    screen: 'house_build',
+    sublabel: 'いえをかんしょう！',
+    screen: 'house',
     // 左側の大きな家（SVG内 x:50-285, y:130-430 / 960×540）
     pos: { left: '5%', top: '24%', width: '24%', height: '60%' },
     alwaysUnlocked: true,
@@ -71,6 +71,37 @@ const HOTSPOTS = [
     // 右側エリア（元ロックゾーン）
     pos: { left: '82%', top: '35%', width: '16%', height: '55%' },
     alwaysUnlocked: true,
+    isMain: false,
+  },
+  // ─── 解放条件あり施設（ロック時は霧エフェクト表示） ───
+  {
+    id: 'shop',
+    label: '🛒 しょうてん',
+    sublabel: 'ざいりょうをとりひき',
+    screen: 'shop',
+    unlockWorlds: 5,
+    pos: { left: '5%', top: '80%', width: '28%', height: '17%' },
+    alwaysUnlocked: false,
+    isMain: false,
+  },
+  {
+    id: 'farm',
+    label: '🌱 まほうのうじょう',
+    sublabel: 'たねをそだてよう',
+    screen: 'farm',
+    unlockWorlds: 8,
+    pos: { left: '36%', top: '80%', width: '28%', height: '17%' },
+    alwaysUnlocked: false,
+    isMain: false,
+  },
+  {
+    id: 'guild',
+    label: '⚔️ ギルド',
+    sublabel: 'クエストにちょうせん',
+    screen: 'guild',
+    unlockWorlds: 10,
+    pos: { left: '67%', top: '80%', width: '28%', height: '17%' },
+    alwaysUnlocked: false,
     isMain: false,
   },
 ];
@@ -578,12 +609,41 @@ export class TownScreen {
 
   /** ホットスポットボタンのHTML */
   _renderHotspot(hotspot, isFirstVisit) {
-    // 現バージョンの HOTSPOTS はすべて alwaysUnlocked: true
-    if (!hotspot.alwaysUnlocked) return '';
-
-    const isFirst = isFirstVisit && hotspot.isMain;
     const { left, top, width, height } = hotspot.pos;
 
+    // 解放条件あり施設：レベルを確認して未解放ならロック表示
+    if (!hotspot.alwaysUnlocked) {
+      const level = GameStore.getState(`town.buildings.${hotspot.id}.level`) || 0;
+      const isUnlocked = level > 0;
+
+      if (!isUnlocked) {
+        const clearedCount = Object.values(GameStore.getState('progress.worlds') || {}).filter(w => w?.cleared).length;
+        const remaining = Math.max(0, (hotspot.unlockWorlds || 0) - clearedCount);
+        return `
+          <div class="town-hotspot-locked"
+               style="left:${left};top:${top};width:${width};height:${height};">
+            <span class="hotspot-lock-icon">🔒</span>
+            <span class="hotspot-lock-name">${hotspot.label}</span>
+            <span class="hotspot-lock-hint">あと${remaining}ワールド</span>
+          </div>
+        `;
+      }
+      // 解放済み → 通常ボタンとして描画
+      return `
+        <button class="town-hotspot-btn"
+                data-screen="${hotspot.screen}"
+                style="left:${left};top:${top};width:${width};height:${height};"
+                aria-label="${hotspot.label}">
+          <span class="town-hotspot-label">
+            <span class="hotspot-name">${hotspot.label}</span>
+            <span class="hotspot-sub">${hotspot.sublabel}</span>
+          </span>
+        </button>
+      `;
+    }
+
+    // 常時解放施設
+    const isFirst = isFirstVisit && hotspot.isMain;
     return `
       <button class="town-hotspot-btn ${hotspot.isMain ? 'is-main' : ''} ${isFirst ? 'first-visit-pulse' : ''}"
               data-screen="${hotspot.screen}"
@@ -618,9 +678,11 @@ export class TownScreen {
         if (!screen) return;
 
         // きおくのいせきはモーダル方式で開く（画面遷移しない）
-        if (screen === 'memory_isle' && Config.FEATURES.ENABLE_MEMORY_ISLE) {
-          const memoryScreen = new MemoryIsleScreen();
-          memoryScreen.open();
+        if (screen === 'memory_isle') {
+          if (Config.FEATURES.ENABLE_MEMORY_ISLE) {
+            const memoryScreen = new MemoryIsleScreen();
+            memoryScreen.open();
+          }
           return;
         }
 

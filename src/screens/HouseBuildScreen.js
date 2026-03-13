@@ -94,6 +94,10 @@ export class HouseBuildScreen {
     }
     GameStore.setState('app.styleTargetLayer', null);
 
+    // セクション・スタイル解放チェック（HouseScreenを経由しない場合も確実に実行）
+    HouseManager.checkProgressUnlocks();
+    HouseManager.checkAndUnlockStyles();
+
     this._tab         = 'style';
     this._craftResult = null;
     this._render();

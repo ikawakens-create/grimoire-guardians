@@ -332,17 +332,7 @@ function showResult(gameScreen, quizResult, worldData) {
 
   GameStore.setState('app.currentScreen', 'result');
 
-  // 農場カウンタ更新・施設解放チェック
-  TownManager.onQuizCompleted();
-
-  // スキンマイルストーン解放チェック
-  if (Config.FEATURES.ENABLE_SKINS) {
-    const milestoneUnlocked = SkinManager.checkMilestoneUnlocks();
-    if (milestoneUnlocked.length) {
-      Logger.info('[App] Milestone skins unlocked:', milestoneUnlocked);
-      setTimeout(() => showSkinUnlocked(milestoneUnlocked), 800);
-    }
-  }
+  // 注: 農場カウンタ・家解放・スキン解放は ResultScreen._persistResult() で処理する
 
   // クリアしたかどうかを判定（ブックシェルフのアニメーション用）
   const cleared = quizResult.percentage >= Config.GAME.CLEAR_THRESHOLD;

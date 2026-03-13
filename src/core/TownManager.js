@@ -72,8 +72,10 @@ class TownManagerClass {
     const clearedCount = this._getClearedWorldCount();
     const newlyUnlocked = [];
 
+    // craftsman/library は最初から解放、house_build/house は GameStore 管理外
+    const SKIP_IDS = new Set(['craftsman', 'library', 'house_build', 'house']);
     for (const cfg of Config.TOWN.BUILDINGS) {
-      if (cfg.id === 'craftsman' || cfg.id === 'library') continue; // 最初から解放
+      if (SKIP_IDS.has(cfg.id)) continue;
       const currentLevel = GameStore.getState(`town.buildings.${cfg.id}.level`) || 0;
       if (currentLevel === 0 && clearedCount >= cfg.unlockWorlds) {
         GameStore.setState(`town.buildings.${cfg.id}.level`, 1);
@@ -296,12 +298,13 @@ class TownManagerClass {
    * クイズ完了時に呼ぶ（農場カウンタを更新）
    */
   onQuizCompleted() {
+    // 施設解放チェックは farm の状態に関わらず常に実行
+    this.checkAndUnlockBuildings();
+
     const farmLevel = GameStore.getState('town.buildings.farm.level') || 0;
     if (farmLevel === 0) return;
     const current = GameStore.getState('town.farm.quizTotal') || 0;
     GameStore.setState('town.farm.quizTotal', current + 1);
-    // 解放チェックもまとめて
-    this.checkAndUnlockBuildings();
   }
 
   // ─────────────────────────────────────────
