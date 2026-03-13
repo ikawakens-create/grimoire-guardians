@@ -225,7 +225,7 @@ const questions = [
     question: '10が 4つ あります。ぜんぶで いくつ？',
     choices: ['30', '40', '50', '60'],
     correctAnswer: '40',
-    explanation: '10が 4つ → 10×4 = 40'
+    explanation: '10が 4つ → 40'
   },
   {
     id: 'M1-14a-Q14',
@@ -245,7 +245,7 @@ const questions = [
     question: '80は 10が □こ\n□に はいる かずは？',
     choices: ['6', '7', '8', '9'],
     correctAnswer: '8',
-    explanation: '80 ÷ 10 = 8。10が 8こ で 80。'
+    explanation: '10が 8こ で 80。'
   },
   {
     id: 'M1-14a-Q22',
@@ -255,7 +255,7 @@ const questions = [
     question: '10が 6つ あります。ぜんぶで いくつ？',
     choices: ['40', '50', '60', '70'],
     correctAnswer: '60',
-    explanation: '10が 6つ → 10×6 = 60'
+    explanation: '10が 6つ → 60'
   },
   {
     id: 'M1-14a-Q23',

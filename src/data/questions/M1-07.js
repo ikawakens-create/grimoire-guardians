@@ -27,7 +27,7 @@ const questions = [
     unitId: 'M1-07',
     step: 1,
     type: 'choice',
-    question: '🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓\nいちごは いくつ？',
+    question: '🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓\n🍓\nいちごは ぜんぶで いくつ？',
     choices: ['10', '11', '12', '13'],
     correctAnswer: '11',
     explanation: 'いちごを かぞえると 11こ ありますね。'
@@ -37,7 +37,7 @@ const questions = [
     unitId: 'M1-07',
     step: 1,
     type: 'choice',
-    question: '🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟\nほしは いくつ？',
+    question: '🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟\n🌟🌟🌟\nほしは ぜんぶで いくつ？',
     choices: ['12', '13', '14', '15'],
     correctAnswer: '13',
     explanation: 'ほしを かぞえると 13こ ありますね。'
@@ -47,7 +47,7 @@ const questions = [
     unitId: 'M1-07',
     step: 1,
     type: 'choice',
-    question: '🐣🐣🐣🐣🐣🐣🐣🐣🐣🐣🐣🐣🐣🐣🐣\nひよこは いくつ？',
+    question: '🐣🐣🐣🐣🐣🐣🐣🐣🐣🐣\n🐣🐣🐣🐣🐣\nひよこは ぜんぶで いくつ？',
     choices: ['13', '14', '15', '16'],
     correctAnswer: '15',
     explanation: 'ひよこを かぞえると 15こ ありますね。'
@@ -57,7 +57,7 @@ const questions = [
     unitId: 'M1-07',
     step: 1,
     type: 'choice',
-    question: '🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎\nりんごは いくつ？',
+    question: '🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎\n🍎🍎\nりんごは ぜんぶで いくつ？',
     choices: ['10', '11', '12', '13'],
     correctAnswer: '12',
     explanation: 'りんごを かぞえると 12こ ありますね。'
@@ -67,7 +67,7 @@ const questions = [
     unitId: 'M1-07',
     step: 1,
     type: 'choice',
-    question: '⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐\nほしは いくつ？',
+    question: '⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐\n⭐⭐⭐⭐\nほしは ぜんぶで いくつ？',
     choices: ['12', '13', '14', '15'],
     correctAnswer: '14',
     explanation: 'ほしを かぞえると 14こ ありますね。'
@@ -81,7 +81,7 @@ const questions = [
     unitId: 'M1-07',
     step: 2,
     type: 'choice',
-    question: '🫐🫐🫐🫐🫐🫐🫐🫐🫐🫐🫐🫐🫐🫐🫐🫐\nブルーベリーは いくつ？',
+    question: '🫐🫐🫐🫐🫐🫐🫐🫐🫐🫐\n🫐🫐🫐🫐🫐🫐\nブルーベリーは ぜんぶで いくつ？',
     choices: ['15', '16', '17', '18'],
     correctAnswer: '16',
     explanation: 'ブルーベリーを かぞえると 16こ ありますね。'
@@ -91,7 +91,7 @@ const questions = [
     unitId: 'M1-07',
     step: 2,
     type: 'choice',
-    question: '🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈\nにじは いくつ？',
+    question: '🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈\n🌈🌈🌈🌈🌈🌈🌈🌈\nにじは ぜんぶで いくつ？',
     choices: ['16', '17', '18', '19'],
     correctAnswer: '18',
     explanation: 'にじを かぞえると 18こ ありますね。'
@@ -101,7 +101,7 @@ const questions = [
     unitId: 'M1-07',
     step: 2,
     type: 'choice',
-    question: '🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸\nはなは いくつ？',
+    question: '🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸\n🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸\nはなは ぜんぶで いくつ？',
     choices: ['18', '19', '20', '21'],
     correctAnswer: '20',
     explanation: 'はなを かぞえると 20こ ありますね。'
@@ -111,7 +111,7 @@ const questions = [
     unitId: 'M1-07',
     step: 2,
     type: 'choice',
-    question: '🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸\nかえるは いくつ？',
+    question: '🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸\n🐸🐸🐸🐸🐸🐸🐸\nかえるは ぜんぶで いくつ？',
     choices: ['15', '16', '17', '18'],
     correctAnswer: '17',
     explanation: 'かえるを かぞえると 17こ ありますね。'
@@ -121,7 +121,7 @@ const questions = [
     unitId: 'M1-07',
     step: 2,
     type: 'choice',
-    question: '🍭🍭🍭🍭🍭🍭🍭🍭🍭🍭🍭🍭🍭🍭🍭🍭🍭🍭🍭\nあめは いくつ？',
+    question: '🍭🍭🍭🍭🍭🍭🍭🍭🍭🍭\n🍭🍭🍭🍭🍭🍭🍭🍭🍭\nあめは ぜんぶで いくつ？',
     choices: ['17', '18', '19', '20'],
     correctAnswer: '19',
     explanation: 'あめを かぞえると 19こ ありますね。'
