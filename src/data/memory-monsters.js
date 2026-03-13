@@ -263,7 +263,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_25',
-    name: '（仮）カタチゴン',
+    name: 'カタチゴン',
     emoji: '🌀',
     worldId: 'world_13',
     layer: 3,
