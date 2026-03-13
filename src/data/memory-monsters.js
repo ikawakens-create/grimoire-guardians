@@ -93,7 +93,7 @@ export const MONSTERS = [
   },
   {
     id: 'mon_07',
-    name: '（仮）ジュッポン',
+    name: 'ジュッポン',
     emoji: '🦗',
     worldId: 'world_6',
     layer: 1,
