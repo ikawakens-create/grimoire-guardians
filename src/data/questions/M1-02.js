@@ -6,13 +6,13 @@
  * 準拠: 日本文教出版 算数1年
  *
  * Step構成（シャッフル出題）
- *   Step1: かずを かぞえよう（プール5問 → 3問出題）
- *   Step2: かずの じゅんじょ（プール6問 → 4問出題）
- *   Step3: おおきい・ちいさい（プール6問 → 4問出題）
- *   Step4: かんじの かず（プール6問 → 4問出題）
+ *   Step1: かずを かぞえよう（プール8問 → 3問出題）
+ *   Step2: かずの じゅんじょ（プール9問 → 4問出題）
+ *   Step3: おおきい・ちいさい（プール9問 → 4問出題）
+ *   Step4: かんじの かず（プール9問 → 4問出題）
  *
- * @version 2.0
- * @date 2026-02-25
+ * @version 2.1
+ * @date 2026-03-13
  */
 
 /** @type {Array} */
@@ -65,6 +65,33 @@ const questions = [
     question: '🍭🍭🍭🍭🍭🍭🍭🍭🍭\nあめは いくつ？',
     choices: ['7', '8', '9', '10'],
     correctAnswer: '9'
+  },
+  {
+    id: 'M1-02-Q24',
+    unitId: 'M1-02',
+    step: 1,
+    type: 'choice',
+    question: '🐥🐥🐥🐥🐥🐥\nひよこは いくつ？',
+    choices: ['5', '6', '7', '8'],
+    correctAnswer: '6'
+  },
+  {
+    id: 'M1-02-Q25',
+    unitId: 'M1-02',
+    step: 1,
+    type: 'choice',
+    question: '🍌🍌🍌🍌🍌🍌🍌🍌🍌🍌\nバナナは いくつ？',
+    choices: ['7', '8', '9', '10'],
+    correctAnswer: '10'
+  },
+  {
+    id: 'M1-02-Q26',
+    unitId: 'M1-02',
+    step: 1,
+    type: 'choice',
+    question: '🌟🌟🌟🌟🌟🌟🌟\nほしは いくつ？',
+    choices: ['6', '7', '8', '9'],
+    correctAnswer: '7'
   },
 
   // =====================================================
@@ -124,6 +151,33 @@ const questions = [
     choices: ['8', '9', '10', '7'],
     correctAnswer: '9'
   },
+  {
+    id: 'M1-02-Q27',
+    unitId: 'M1-02',
+    step: 2,
+    type: 'choice',
+    question: '8の つぎの かずは いくつ？',
+    choices: ['7', '8', '9', '10'],
+    correctAnswer: '9'
+  },
+  {
+    id: 'M1-02-Q28',
+    unitId: 'M1-02',
+    step: 2,
+    type: 'choice',
+    question: '8と 10の あいだの かずは？',
+    choices: ['7', '8', '9', '10'],
+    correctAnswer: '9'
+  },
+  {
+    id: 'M1-02-Q29',
+    unitId: 'M1-02',
+    step: 2,
+    type: 'choice',
+    question: '□、7、8、9\nさいしょに はいる かずは？',
+    choices: ['5', '6', '7', '8'],
+    correctAnswer: '6'
+  },
 
   // =====================================================
   // Step3: おおきい・ちいさい（大小比較）
@@ -180,6 +234,33 @@ const questions = [
     type: 'choice',
     question: '9より おおきい かずは どれ？',
     choices: ['6', '7', '8', '10'],
+    correctAnswer: '10'
+  },
+  {
+    id: 'M1-02-Q30',
+    unitId: 'M1-02',
+    step: 3,
+    type: 'choice',
+    question: '7より ちいさい かずは どれ？',
+    choices: ['7', '8', '9', '6'],
+    correctAnswer: '6'
+  },
+  {
+    id: 'M1-02-Q31',
+    unitId: 'M1-02',
+    step: 3,
+    type: 'choice',
+    question: '7 と 10\nどちらが ちいさい？',
+    choices: ['7', '8', '9', '10'],
+    correctAnswer: '7'
+  },
+  {
+    id: 'M1-02-Q32',
+    unitId: 'M1-02',
+    step: 3,
+    type: 'choice',
+    question: 'いちばん おおきい かずは どれ？',
+    choices: ['6', '8', '10', '7'],
     correctAnswer: '10'
   },
 
@@ -239,6 +320,33 @@ const questions = [
     question: '「八」は いくつ？',
     choices: ['6', '7', '8', '9'],
     correctAnswer: '8'
+  },
+  {
+    id: 'M1-02-Q33',
+    unitId: 'M1-02',
+    step: 4,
+    type: 'choice',
+    question: '「7」を かんじで かくと？',
+    choices: ['五', '六', '七', '八'],
+    correctAnswer: '七'
+  },
+  {
+    id: 'M1-02-Q34',
+    unitId: 'M1-02',
+    step: 4,
+    type: 'choice',
+    question: '「九」は いくつ？',
+    choices: ['7', '8', '9', '10'],
+    correctAnswer: '9'
+  },
+  {
+    id: 'M1-02-Q35',
+    unitId: 'M1-02',
+    step: 4,
+    type: 'choice',
+    question: '「10」を かんじで かくと？',
+    choices: ['七', '八', '九', '十'],
+    correctAnswer: '十'
   }
 ];
 
