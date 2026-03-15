@@ -6,14 +6,14 @@
  * 準拠: 日本文教出版 算数1年
  *
  * Step構成（シャッフル出題）
- *   Step1: 11〜15を かぞえよう（プール5問 → 3問出題）
- *   Step2: 16〜20を かぞえよう（プール5問 → 3問出題）
- *   Step3: おおきい・ちいさい（プール5問 → 3問出題）
- *   Step4: じゅんばんに ならべよう（プール5問 → 3問出題）
- *   Step5: 10の まとまり（プール5問 → 3問出題）
+ *   Step1: 11〜15を かぞえよう（プール8問 → 3問出題）
+ *   Step2: 16〜20を かぞえよう（プール8問 → 3問出題）
+ *   Step3: おおきい・ちいさい（プール8問 → 3問出題）
+ *   Step4: じゅんばんに ならべよう（プール7問 → 3問出題）
+ *   Step5: 10の まとまり（プール7問 → 3問出題）
  *
- * @version 2.0
- * @date 2026-02-25
+ * @version 2.1
+ * @date 2026-03-15
  */
 
 /** @type {Array} */
@@ -72,6 +72,36 @@ const questions = [
     correctAnswer: '14',
     explanation: 'ほしを かぞえると 14こ ありますね。'
   },
+  {
+    id: 'M1-07-Q26',
+    unitId: 'M1-07',
+    step: 1,
+    type: 'choice',
+    question: '🐠🐠🐠🐠🐠🐠🐠🐠🐠🐠\n🐠\nさかなは ぜんぶで いくつ？',
+    choices: ['9', '10', '11', '12'],
+    correctAnswer: '11',
+    explanation: 'さかなを かぞえると 11ひき ありますね。'
+  },
+  {
+    id: 'M1-07-Q27',
+    unitId: 'M1-07',
+    step: 1,
+    type: 'choice',
+    question: '🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺\n🌺🌺🌺\nはなは ぜんぶで いくつ？',
+    choices: ['11', '12', '13', '14'],
+    correctAnswer: '13',
+    explanation: 'はなを かぞえると 13ほん ありますね。'
+  },
+  {
+    id: 'M1-07-Q28',
+    unitId: 'M1-07',
+    step: 1,
+    type: 'choice',
+    question: '🍋🍋🍋🍋🍋🍋🍋🍋🍋🍋\n🍋🍋🍋🍋\nレモンは ぜんぶで いくつ？',
+    choices: ['12', '13', '14', '15'],
+    correctAnswer: '14',
+    explanation: 'レモンを かぞえると 14こ ありますね。'
+  },
 
   // =====================================================
   // Step2: 16〜20を かぞえよう
@@ -114,7 +144,7 @@ const questions = [
     question: '🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸\n🐸🐸🐸🐸🐸🐸🐸\nかえるは ぜんぶで いくつ？',
     choices: ['15', '16', '17', '18'],
     correctAnswer: '17',
-    explanation: 'かえるを かぞえると 17こ ありますね。'
+    explanation: 'かえるを かぞえると 17ひき ありますね。'
   },
   {
     id: 'M1-07-Q19',
@@ -125,6 +155,36 @@ const questions = [
     choices: ['17', '18', '19', '20'],
     correctAnswer: '19',
     explanation: 'あめを かぞえると 19こ ありますね。'
+  },
+  {
+    id: 'M1-07-Q29',
+    unitId: 'M1-07',
+    step: 2,
+    type: 'choice',
+    question: '🦋🦋🦋🦋🦋🦋🦋🦋🦋🦋\n🦋🦋🦋🦋🦋🦋\nちょうちょは ぜんぶで いくつ？',
+    choices: ['14', '15', '16', '17'],
+    correctAnswer: '16',
+    explanation: 'ちょうちょを かぞえると 16ひき ありますね。'
+  },
+  {
+    id: 'M1-07-Q30',
+    unitId: 'M1-07',
+    step: 2,
+    type: 'choice',
+    question: '🐧🐧🐧🐧🐧🐧🐧🐧🐧🐧\n🐧🐧🐧🐧🐧🐧🐧🐧🐧\nペンギンは ぜんぶで いくつ？',
+    choices: ['17', '18', '19', '20'],
+    correctAnswer: '19',
+    explanation: 'ペンギンを かぞえると 19わ ありますね。'
+  },
+  {
+    id: 'M1-07-Q31',
+    unitId: 'M1-07',
+    step: 2,
+    type: 'choice',
+    question: '🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊\n🍊🍊🍊🍊🍊🍊🍊🍊\nみかんは ぜんぶで いくつ？',
+    choices: ['16', '17', '18', '19'],
+    correctAnswer: '18',
+    explanation: 'みかんを かぞえると 18こ ありますね。'
   },
 
   // =====================================================
@@ -180,6 +240,36 @@ const questions = [
     correctAnswer: '20',
     explanation: '20の ほうが 11より おおきいですね。'
   },
+  {
+    id: 'M1-07-Q32',
+    unitId: 'M1-07',
+    step: 3,
+    type: 'choice',
+    question: '14・19・16\nいちばん おおきい かずは？',
+    choices: ['14', '16', '19', '20'],
+    correctAnswer: '19',
+    explanation: '14・16・19の なかで、19が いちばん おおきいです。'
+  },
+  {
+    id: 'M1-07-Q33',
+    unitId: 'M1-07',
+    step: 3,
+    type: 'choice',
+    question: '13 と 18\nどちらが ちいさい？',
+    choices: ['13', '15', '18', '20'],
+    correctAnswer: '13',
+    explanation: '18より 13の ほうが ちいさいですね。'
+  },
+  {
+    id: 'M1-07-Q34',
+    unitId: 'M1-07',
+    step: 3,
+    type: 'choice',
+    question: '11・17・20\nいちばん ちいさい かずは？',
+    choices: ['11', '17', '20', '13'],
+    correctAnswer: '11',
+    explanation: '11・17・20の なかで、11が いちばん ちいさいです。'
+  },
 
   // =====================================================
   // Step4: じゅんばんに ならべよう（数列の穴埋め）
@@ -234,6 +324,26 @@ const questions = [
     correctAnswer: '18',
     explanation: '1ずつ ふえているので、□は 18ですね。'
   },
+  {
+    id: 'M1-07-Q35',
+    unitId: 'M1-07',
+    step: 4,
+    type: 'choice',
+    question: '18, □, 20\n□に はいる かずは？',
+    choices: ['17', '18', '19', '20'],
+    correctAnswer: '19',
+    explanation: '1ずつ ふえているので、□は 19ですね。'
+  },
+  {
+    id: 'M1-07-Q36',
+    unitId: 'M1-07',
+    step: 4,
+    type: 'choice',
+    question: '13, 14, 15, □, 17\n□に はいる かずは？',
+    choices: ['14', '15', '16', '17'],
+    correctAnswer: '16',
+    explanation: '1ずつ ふえているので、□は 16ですね。'
+  },
 
   // =====================================================
   // Step5: 10の まとまり（十の位・一の位の理解）
@@ -287,6 +397,26 @@ const questions = [
     choices: ['7', '8', '9', '10'],
     correctAnswer: '9',
     explanation: '19は 10と9で できています。'
+  },
+  {
+    id: 'M1-07-Q37',
+    unitId: 'M1-07',
+    step: 5,
+    type: 'choice',
+    question: '10と 5を あわせると？',
+    choices: ['13', '14', '15', '16'],
+    correctAnswer: '15',
+    explanation: '10と5を あわせると 15です。'
+  },
+  {
+    id: 'M1-07-Q38',
+    unitId: 'M1-07',
+    step: 5,
+    type: 'choice',
+    question: '13は 10と いくつ？',
+    choices: ['1', '2', '3', '4'],
+    correctAnswer: '3',
+    explanation: '13は 10と3で できています。'
   }
 ];
 
