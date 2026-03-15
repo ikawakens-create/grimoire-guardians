@@ -6,12 +6,12 @@
  * 準拠: 日本文教出版 算数1年
  *
  * Step構成（シャッフル出題）
- *   Step1: 補数の かくにん（プール4問 → 3問出題）
- *   Step2: 9+nの きほん（プール8問 → 7問出題）
- *   Step3: あなうめ・もんだいぶん（プール6問 → 5問出題）
+ *   Step1: 補数の かくにん（プール7問 → 3問出題）
+ *   Step2: 9+nの きほん（プール11問 → 7問出題）
+ *   Step3: あなうめ・もんだいぶん（プール9問 → 5問出題）
  *
- * @version 2.0
- * @date 2026-02-25
+ * @version 2.1
+ * @date 2026-03-15
  */
 
 /** @type {Array} */
@@ -59,6 +59,36 @@ const questions = [
     choices: ['１', '２', '３', '４'],
     correctAnswer: '２',
     explanation: '9 + 2 = 11 です。9 + 1 = 10、あと 1で 11です。'
+  },
+  {
+    id: 'M1-10a-Q19',
+    unitId: 'M1-10a',
+    step: 1,
+    type: 'choice',
+    question: '9 + □ = 10\nこの □に はいる かずは？',
+    choices: ['０', '１', '２', '３'],
+    correctAnswer: '１',
+    explanation: '9 + 1 = 10 です。9のせかいでは 1が かぎのかずです。'
+  },
+  {
+    id: 'M1-10a-Q20',
+    unitId: 'M1-10a',
+    step: 1,
+    type: 'choice',
+    question: '3を「1と□」に わけよう\n9のせかいで つかう わけかたは？\n3 → 1 と □',
+    choices: ['１', '２', '３', '４'],
+    correctAnswer: '２',
+    explanation: '3は 1と2に わけられます。9のせかいで 3を わけるときは「1と2」です。'
+  },
+  {
+    id: 'M1-10a-Q21',
+    unitId: 'M1-10a',
+    step: 1,
+    type: 'choice',
+    question: '9 + □ = 12\n□は いくつ？',
+    choices: ['１', '２', '３', '４'],
+    correctAnswer: '３',
+    explanation: '9 + 3 = 12 です。9 + 1 = 10、あと 2で 12なので □は 3。'
   },
 
   // =====================================================
@@ -144,6 +174,36 @@ const questions = [
     correctAnswer: '１３',
     explanation: '4 + 9 = 9 + 4 = 13。たし算は じゅんばんを かえても おなじ！'
   },
+  {
+    id: 'M1-10a-Q22',
+    unitId: 'M1-10a',
+    step: 2,
+    type: 'choice',
+    question: '2 + 9 = ？\n（ヒント：9 + 2 と おなじ こたえだよ）',
+    choices: ['１０', '１１', '１２', '１３'],
+    correctAnswer: '１１',
+    explanation: '2 + 9 = 9 + 2 = 11。おおきい ほうから かんがえると かんたん！'
+  },
+  {
+    id: 'M1-10a-Q23',
+    unitId: 'M1-10a',
+    step: 2,
+    type: 'choice',
+    question: '6 + 9 = ？\n（ヒント：9 + 6 と おなじ こたえだよ）',
+    choices: ['１３', '１４', '１５', '１６'],
+    correctAnswer: '１５',
+    explanation: '6 + 9 = 9 + 6 = 15。じゅんばんを かえて かんがえよう！'
+  },
+  {
+    id: 'M1-10a-Q24',
+    unitId: 'M1-10a',
+    step: 2,
+    type: 'choice',
+    question: '8 + 9 = ？\n（ヒント：9 + 8 と おなじ こたえだよ）',
+    choices: ['１５', '１６', '１７', '１８'],
+    correctAnswer: '１７',
+    explanation: '8 + 9 = 9 + 8 = 17。たし算は じゅんばんを かえても おなじ！'
+  },
 
   // =====================================================
   // Step3: あなうめ・もんだいぶん
@@ -207,6 +267,36 @@ const questions = [
     choices: ['４', '５', '６', '７'],
     correctAnswer: '６',
     explanation: '9 + 6 = 15 です。'
+  },
+  {
+    id: 'M1-10a-Q25',
+    unitId: 'M1-10a',
+    step: 3,
+    type: 'choice',
+    question: '□ + 9 = 14\n□に はいる かずは？',
+    choices: ['３', '４', '５', '６'],
+    correctAnswer: '５',
+    explanation: '5 + 9 = 14 です。'
+  },
+  {
+    id: 'M1-10a-Q26',
+    unitId: 'M1-10a',
+    step: 3,
+    type: 'choice',
+    question: 'ほしが 9こ、つきが 7つ あります。\nあわせて いくつ？',
+    choices: ['１４', '１５', '１６', '１７'],
+    correctAnswer: '１６',
+    explanation: '9 + 7 = 16。9 + 1 = 10、10 + 6 = 16 です。'
+  },
+  {
+    id: 'M1-10a-Q27',
+    unitId: 'M1-10a',
+    step: 3,
+    type: 'choice',
+    question: 'こどもが 9にん います。\n8にん やってきました。\nぜんぶで なんにん？',
+    choices: ['１５にん', '１６にん', '１７にん', '１８にん'],
+    correctAnswer: '１７にん',
+    explanation: '9 + 8 = 17。9 + 1 = 10、10 + 7 = 17にん です。'
   }
 ];
 
