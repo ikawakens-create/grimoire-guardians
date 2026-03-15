@@ -103,7 +103,7 @@ const questions = [
     unitId: 'M1-16a',
     step: 1,
     type: 'choice',
-    question: '🐦 鳥が 9わ、\n🦋 ちょうが 7わ います。\nあわせて なんわ？',
+    question: '🕊️ はとが 9わ、\n🐦 すずめが 7わ います。\nあわせて なんわ？',
     choices: ['14わ', '15わ', '16わ', '17わ'],
     correctAnswer: '16わ',
     explanation: '9 + 7 = 16。「あわせて」はたし算！'
