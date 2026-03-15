@@ -6,12 +6,12 @@
  * 準拠: 日本文教出版 算数1年
  *
  * Step構成（シャッフル出題）
- *   Step1: 7のせかい（プール7問 → 5問出題）
- *   Step2: 6のせかい（プール6問 → 5問出題）
- *   Step3: あなうめ・もんだいぶん（プール5問 → 5問出題）
+ *   Step1: 7のせかい（プール10問 → 5問出題）
+ *   Step2: 6のせかい（プール9問 → 5問出題）
+ *   Step3: あなうめ・もんだいぶん（プール8問 → 5問出題）
  *
- * @version 2.0
- * @date 2026-02-25
+ * @version 2.1
+ * @date 2026-03-15
  */
 
 /** @type {Array} */
@@ -90,6 +90,36 @@ const questions = [
     correctAnswer: '１２',
     explanation: '5 + 7 = 7 + 5 = 12。たし算は じゅんばんを かえても おなじ！'
   },
+  {
+    id: 'M1-10c-Q19',
+    unitId: 'M1-10c',
+    step: 1,
+    type: 'choice',
+    question: '7は あと いくつで 10に なる？',
+    choices: ['２', '３', '４', '５'],
+    correctAnswer: '３',
+    explanation: '7 + 3 = 10 です。7から 3つ すすむと 10になります。'
+  },
+  {
+    id: 'M1-10c-Q20',
+    unitId: 'M1-10c',
+    step: 1,
+    type: 'choice',
+    question: '7 + 9 = ？',
+    choices: ['１４', '１５', '１６', '１７'],
+    correctAnswer: '１６',
+    explanation: '7 + 3 = 10、9を「3と6」に わけて、10 + 6 = 16。答えは 16！'
+  },
+  {
+    id: 'M1-10c-Q21',
+    unitId: 'M1-10c',
+    step: 1,
+    type: 'choice',
+    question: '4 + 7 = ？\n（ヒント：7 + 4 と おなじ こたえだよ）',
+    choices: ['１０', '１１', '１２', '１３'],
+    correctAnswer: '１１',
+    explanation: '4 + 7 = 7 + 4 = 11。おおきい ほうから かんがえると かんたん！'
+  },
 
   // =====================================================
   // Step2: 6のせかい（補数4）
@@ -154,6 +184,36 @@ const questions = [
     correctAnswer: '１４',
     explanation: '6 + 4 = 10、8を「4と4」に わけて、10 + 4 = 14。答えは 14！'
   },
+  {
+    id: 'M1-10c-Q22',
+    unitId: 'M1-10c',
+    step: 2,
+    type: 'choice',
+    question: '6は あと いくつで 10に なる？',
+    choices: ['２', '３', '４', '５'],
+    correctAnswer: '４',
+    explanation: '6 + 4 = 10 です。6から 4つ すすむと 10になります。'
+  },
+  {
+    id: 'M1-10c-Q23',
+    unitId: 'M1-10c',
+    step: 2,
+    type: 'choice',
+    question: '5 + 6 = ？\n（ヒント：6 + 5 と おなじ こたえだよ）',
+    choices: ['１０', '１１', '１２', '１３'],
+    correctAnswer: '１１',
+    explanation: '5 + 6 = 6 + 5 = 11。おおきい ほうから かんがえると かんたん！'
+  },
+  {
+    id: 'M1-10c-Q24',
+    unitId: 'M1-10c',
+    step: 2,
+    type: 'choice',
+    question: '8 + 6 = ？\n（ヒント：6 + 8 と おなじ こたえだよ）',
+    choices: ['１３', '１４', '１５', '１６'],
+    correctAnswer: '１４',
+    explanation: '8 + 6 = 6 + 8 = 14。たし算は じゅんばんを かえても おなじ！'
+  },
 
   // =====================================================
   // Step3: あなうめ・もんだいぶん
@@ -207,6 +267,36 @@ const questions = [
     choices: ['４', '５', '６', '７'],
     correctAnswer: '６',
     explanation: '6 + 6 = 12 です。'
+  },
+  {
+    id: 'M1-10c-Q25',
+    unitId: 'M1-10c',
+    step: 3,
+    type: 'choice',
+    question: '□ + 7 = 14\n□に はいる かずは？',
+    choices: ['５', '６', '７', '８'],
+    correctAnswer: '７',
+    explanation: '7 + 7 = 14 です。'
+  },
+  {
+    id: 'M1-10c-Q26',
+    unitId: 'M1-10c',
+    step: 3,
+    type: 'choice',
+    question: 'ほんが 7さつ、ノートが 8さつ あります。\nあわせて なんさつ？',
+    choices: ['１４さつ', '１５さつ', '１６さつ', '１７さつ'],
+    correctAnswer: '１５さつ',
+    explanation: '7 + 8 = 15。7 + 3 = 10、10 + 5 = 15さつ です。'
+  },
+  {
+    id: 'M1-10c-Q27',
+    unitId: 'M1-10c',
+    step: 3,
+    type: 'choice',
+    question: 'くるまが 6だい、バスが 7だい とまっています。\nあわせて なんだい？',
+    choices: ['１２だい', '１３だい', '１４だい', '１５だい'],
+    correctAnswer: '１３だい',
+    explanation: '6 + 7 = 13。6 + 4 = 10、10 + 3 = 13だい です。'
   }
 ];
 
