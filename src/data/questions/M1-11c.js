@@ -328,9 +328,10 @@ const questions = [
     unitId: 'M1-11c',
     step: 4,
     type: 'choice',
-    question: '13 - 9 = ？',
-    choices: ['3', '4', '5', '6'],
-    correctAnswer: '4'
+    question: '17 - 9 = ？\n（クッキーが 17まい。9まい たべたら のこりは？）',
+    choices: ['6', '7', '8', '9'],
+    correctAnswer: '8',
+    explanation: '17 - 9 = 8。のこりは8まいです。'
   },
   {
     id: 'M1-11c-Q22',
