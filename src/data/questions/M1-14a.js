@@ -10,20 +10,20 @@
  *   20〜100を「10がいくつ」で理解し、十の位と一の位の分離へつなぐ。
  *
  * Step構成（シャッフル出題）
- *   Step1: 10のまとまりを かぞえよう（プール6問 → 4問出題）
- *   Step2: なんじゅうを よもう（プール6問 → 4問出題）
- *   Step3: じゅうのくらいと いちのくらい（プール6問 → 4問出題）
- *   Step4: まとめ（プール5問 → 3問出題）
+ *   Step1: 10のまとまりを かぞえよう（プール9問 → 4問出題）
+ *   Step2: なんじゅうを よもう（プール9問 → 4問出題）
+ *   Step3: じゅうのくらいと いちのくらい（プール9問 → 4問出題）
+ *   Step4: まとめ（プール8問 → 3問出題）
  *
- * @version 2.0
- * @date 2026-02-25
+ * @version 2.1
+ * @date 2026-03-15
  */
 
 /** @type {Array} */
 const questions = [
 
   // =====================================================
-  // Step1: 10のまとまりを かぞえよう（プール6問）
+  // Step1: 10のまとまりを かぞえよう（プール9問）
   // =====================================================
   {
     id: 'M1-14a-Q01',
@@ -85,9 +85,39 @@ const questions = [
     correctAnswer: '70',
     explanation: '10の まとまりが 7つ → 70'
   },
+  {
+    id: 'M1-14a-Q24',
+    unitId: 'M1-14a',
+    step: 1,
+    type: 'choice',
+    question: '10の まとまりが 4つ あります。\nぜんぶで いくつ？',
+    choices: ['20', '30', '40', '50'],
+    correctAnswer: '40',
+    explanation: '10の まとまりが 4つ → 40'
+  },
+  {
+    id: 'M1-14a-Q25',
+    unitId: 'M1-14a',
+    step: 1,
+    type: 'choice',
+    question: '10の まとまりが 6つ あります。\nぜんぶで いくつ？',
+    choices: ['40', '50', '60', '70'],
+    correctAnswer: '60',
+    explanation: '10の まとまりが 6つ → 60'
+  },
+  {
+    id: 'M1-14a-Q26',
+    unitId: 'M1-14a',
+    step: 1,
+    type: 'choice',
+    question: '10の まとまりが 9つ あります。\nぜんぶで いくつ？',
+    choices: ['70', '80', '90', '100'],
+    correctAnswer: '90',
+    explanation: '10の まとまりが 9つ → 90'
+  },
 
   // =====================================================
-  // Step2: なんじゅうを よもう（プール6問）
+  // Step2: なんじゅうを よもう（プール9問）
   // =====================================================
   {
     id: 'M1-14a-Q05',
@@ -149,9 +179,39 @@ const questions = [
     correctAnswer: '80',
     explanation: 'はちじゅう → 80'
   },
+  {
+    id: 'M1-14a-Q27',
+    unitId: 'M1-14a',
+    step: 2,
+    type: 'choice',
+    question: '20 は なんと よみますか？',
+    choices: ['じゅう', 'にじゅう', 'さんじゅう', 'よんじゅう'],
+    correctAnswer: 'にじゅう',
+    explanation: '20 → にじゅう'
+  },
+  {
+    id: 'M1-14a-Q28',
+    unitId: 'M1-14a',
+    step: 2,
+    type: 'choice',
+    question: '「ごじゅう」は どの かずですか？',
+    choices: ['30', '40', '50', '60'],
+    correctAnswer: '50',
+    explanation: 'ごじゅう → 50'
+  },
+  {
+    id: 'M1-14a-Q29',
+    unitId: 'M1-14a',
+    step: 2,
+    type: 'choice',
+    question: '100 は なんと よみますか？',
+    choices: ['きゅうじゅう', 'ひゃく', 'じゅう', 'せん'],
+    correctAnswer: 'ひゃく',
+    explanation: '100 → ひゃく'
+  },
 
   // =====================================================
-  // Step3: じゅうのくらいと いちのくらい（プール6問）
+  // Step3: じゅうのくらいと いちのくらい（プール9問）
   // =====================================================
   {
     id: 'M1-14a-Q09',
@@ -213,9 +273,39 @@ const questions = [
     correctAnswer: '56',
     explanation: '50（ごじゅう）と 6（ろく）で 56。'
   },
+  {
+    id: 'M1-14a-Q30',
+    unitId: 'M1-14a',
+    step: 3,
+    type: 'choice',
+    question: '82 = 80 + □\n□に はいる かずは いくつ？',
+    choices: ['1', '2', '3', '4'],
+    correctAnswer: '2',
+    explanation: '82は 80と 2。いちのくらいは 2。'
+  },
+  {
+    id: 'M1-14a-Q31',
+    unitId: 'M1-14a',
+    step: 3,
+    type: 'choice',
+    question: '40 + 9 = □\n□に はいる かずは いくつ？',
+    choices: ['45', '47', '49', '50'],
+    correctAnswer: '49',
+    explanation: '40（よんじゅう）と 9（きゅう）で 49。'
+  },
+  {
+    id: 'M1-14a-Q32',
+    unitId: 'M1-14a',
+    step: 3,
+    type: 'choice',
+    question: '91 = 90 + □\n□に はいる かずは いくつ？',
+    choices: ['1', '2', '3', '9'],
+    correctAnswer: '1',
+    explanation: '91は 90と 1。いちのくらいは 1。'
+  },
 
   // =====================================================
-  // Step4: まとめ（プール5問）
+  // Step4: まとめ（プール8問）
   // =====================================================
   {
     id: 'M1-14a-Q13',
@@ -266,6 +356,36 @@ const questions = [
     choices: ['1', '2', '3', '4'],
     correctAnswer: '3',
     explanation: '93 = 90 + 3。いちのくらいは 3。'
+  },
+  {
+    id: 'M1-14a-Q33',
+    unitId: 'M1-14a',
+    step: 4,
+    type: 'choice',
+    question: '10が 9つ あります。ぜんぶで いくつ？',
+    choices: ['70', '80', '90', '100'],
+    correctAnswer: '90',
+    explanation: '10が 9つ → 90'
+  },
+  {
+    id: 'M1-14a-Q34',
+    unitId: 'M1-14a',
+    step: 4,
+    type: 'choice',
+    question: '54は 50と □\n□に はいる かずは？',
+    choices: ['2', '3', '4', '5'],
+    correctAnswer: '4',
+    explanation: '54 = 50 + 4。いちのくらいは 4。'
+  },
+  {
+    id: 'M1-14a-Q35',
+    unitId: 'M1-14a',
+    step: 4,
+    type: 'choice',
+    question: '10が 5つ あります。ぜんぶで いくつ？',
+    choices: ['30', '40', '50', '60'],
+    correctAnswer: '50',
+    explanation: '10が 5つ → 50'
   }
 ];
 
