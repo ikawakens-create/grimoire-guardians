@@ -6,13 +6,13 @@
  * 準拠: 日本文教出版 算数1年（きほん単元の発展）
  *
  * Step構成（シャッフル出題）
- *   Step1: もんだいぶん（プール6問 → 4問出題）
- *   Step2: あなうめ もんだいぶん（プール6問 → 4問出題）
- *   Step3: しきを えらぼう（プール5問 → 4問出題）
- *   Step4: まとめ もんだい（プール5問 → 3問出題）
+ *   Step1: もんだいぶん（プール9問 → 4問出題）
+ *   Step2: あなうめ もんだいぶん（プール9問 → 4問出題）
+ *   Step3: しきを えらぼう（プール8問 → 4問出題）
+ *   Step4: まとめ もんだい（プール7問 → 3問出題）
  *
- * @version 2.0
- * @date 2026-02-25
+ * @version 2.1
+ * @date 2026-03-15
  */
 
 /** @type {Array} */
@@ -75,6 +75,33 @@ const questions = [
     choices: ['7', '8', '9', '10'],
     correctAnswer: '9'
   },
+  {
+    id: 'M1-05b-Q23',
+    unitId: 'M1-05b',
+    step: 1,
+    type: 'choice',
+    question: 'はとが 6わ います。\n2わ とんで きました。\nぜんぶで なんわ？',
+    choices: ['6', '7', '8', '9'],
+    correctAnswer: '8'
+  },
+  {
+    id: 'M1-05b-Q24',
+    unitId: 'M1-05b',
+    step: 1,
+    type: 'choice',
+    question: 'あめが 3こ、ガムが 6こ あります。\nあわせて なんこ？',
+    choices: ['7', '8', '9', '10'],
+    correctAnswer: '9'
+  },
+  {
+    id: 'M1-05b-Q25',
+    unitId: 'M1-05b',
+    step: 1,
+    type: 'choice',
+    question: 'ほんが 7さつ あります。\n2さつ もらいました。\nぜんぶで なんさつ？',
+    choices: ['7', '8', '9', '10'],
+    correctAnswer: '9'
+  },
 
   // =====================================================
   // Step2: あなうめ もんだいぶん（穴埋め文章題）
@@ -133,6 +160,33 @@ const questions = [
     choices: ['4', '5', '6', '7'],
     correctAnswer: '5'
   },
+  {
+    id: 'M1-05b-Q26',
+    unitId: 'M1-05b',
+    step: 2,
+    type: 'choice',
+    question: '5 + □ = 8\n□は いくつ？',
+    choices: ['2', '3', '4', '5'],
+    correctAnswer: '3'
+  },
+  {
+    id: 'M1-05b-Q27',
+    unitId: 'M1-05b',
+    step: 2,
+    type: 'choice',
+    question: 'かごに なしが 3こ あります。\nあと □こ いれると 7こに なります。\n□は いくつ？',
+    choices: ['3', '4', '5', '6'],
+    correctAnswer: '4'
+  },
+  {
+    id: 'M1-05b-Q28',
+    unitId: 'M1-05b',
+    step: 2,
+    type: 'choice',
+    question: '□ + 4 = 9\n□は いくつ？',
+    choices: ['4', '5', '6', '7'],
+    correctAnswer: '5'
+  },
 
   // =====================================================
   // Step3: しきを えらぼう（式の選択 + 大小比較）
@@ -182,6 +236,33 @@ const questions = [
     choices: ['4 + 5', '6 + 4', 'おなじ', 'わからない'],
     correctAnswer: '6 + 4'
   },
+  {
+    id: 'M1-05b-Q29',
+    unitId: 'M1-05b',
+    step: 3,
+    type: 'choice',
+    question: 'とりが 2わ います。\n5わ きました。\nしきは どれ？',
+    choices: ['5 - 2', '2 + 5', '2 - 5', '2 + 2'],
+    correctAnswer: '2 + 5'
+  },
+  {
+    id: 'M1-05b-Q30',
+    unitId: 'M1-05b',
+    step: 3,
+    type: 'choice',
+    question: 'どちらが おおきい？\n3 + 6  と  8 + 1',
+    choices: ['3 + 6', '8 + 1', 'おなじ', 'わからない'],
+    correctAnswer: 'おなじ'
+  },
+  {
+    id: 'M1-05b-Q31',
+    unitId: 'M1-05b',
+    step: 3,
+    type: 'choice',
+    question: 'おかしが 4こ あります。\n4こ もらいました。\nしきは どれ？',
+    choices: ['4 - 4', '4 + 0', '4 + 4', '4 × 4'],
+    correctAnswer: '4 + 4'
+  },
 
   // =====================================================
   // Step4: まとめ もんだい（応用・総合）
@@ -230,6 +311,24 @@ const questions = [
     question: 'こうえんに 8にん います。\n□にん きたので 10にんに なりました。\n□は いくつ？',
     choices: ['1', '2', '3', '4'],
     correctAnswer: '2'
+  },
+  {
+    id: 'M1-05b-Q32',
+    unitId: 'M1-05b',
+    step: 4,
+    type: 'choice',
+    question: 'みずたまごが 6こ あります。\n3こ もらいました。\nぜんぶで なんこ？',
+    choices: ['7', '8', '9', '10'],
+    correctAnswer: '9'
+  },
+  {
+    id: 'M1-05b-Q33',
+    unitId: 'M1-05b',
+    step: 4,
+    type: 'choice',
+    question: 'くるまが 5だい、トラックが 4だい あります。\nあわせて なんだい？',
+    choices: ['7', '8', '9', '10'],
+    correctAnswer: '9'
   }
 ];
 

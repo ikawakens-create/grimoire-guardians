@@ -18,19 +18,19 @@
  *   0x分（07分・03分）は特に読み間違いが起きやすいため丁寧に扱う。
  *
  * Step構成（シャッフル出題）
- *   Step1: 5の倍数・復習から始める（プール5問 → 3問出題）
- *   Step2: 端数分（1〜30分）（プール9問 → 7問出題）
- *   Step3: 難しいパターン（0x分・ひっかけ）（プール7問 → 5問出題）
+ *   Step1: 5の倍数・復習から始める（プール9問 → 3問出題）
+ *   Step2: 端数分（1〜30分）（プール13問 → 7問出題）
+ *   Step3: 難しいパターン（0x分・ひっかけ）（プール10問 → 5問出題）
  *
- * @version 2.0
- * @date 2026-02-25
+ * @version 2.1
+ * @date 2026-03-15
  */
 
 /** @type {Array} */
 const questions = [
 
   // =====================================================
-  // Step1: 5の倍数・復習（プール5問）
+  // Step1: 5の倍数・復習（プール9問）
   // =====================================================
   {
     id: 'M1-15a-Q01',
@@ -87,9 +87,53 @@ const questions = [
     correctAnswer: '5じ 25ふん',
     explanation: 'みじかいはりが 5、ながいはりが 5（25ふん）のところ。5じ25ふん！'
   },
+  {
+    id: 'M1-15a-Q22',
+    unitId: 'M1-15a',
+    step: 1,
+    type: 'clock',
+    question: 'とけいは なんじ なんぷん？',
+    clockFace: { hour: 6, minute: 30 },
+    choices: ['6じ 20ふん', '6じ 25ふん', '6じ 30ふん', '7じ 30ふん'],
+    correctAnswer: '6じ 30ふん',
+    explanation: 'みじかいはりが 6、ながいはりが 6（30ふん）のところ。6じ30ふん！'
+  },
+  {
+    id: 'M1-15a-Q23',
+    unitId: 'M1-15a',
+    step: 1,
+    type: 'clock',
+    question: 'とけいは なんじ なんぷん？',
+    clockFace: { hour: 4, minute: 10 },
+    choices: ['4じ 2ふん', '4じ 10ふん', '4じ 20ふん', '5じ 10ふん'],
+    correctAnswer: '4じ 10ふん',
+    explanation: 'みじかいはりが 4、ながいはりが 2（10ふん）のところ。4じ10ふん！'
+  },
+  {
+    id: 'M1-15a-Q24',
+    unitId: 'M1-15a',
+    step: 1,
+    type: 'clock',
+    question: 'とけいは なんじ なんぷん？',
+    clockFace: { hour: 11, minute: 5 },
+    choices: ['11じ 1ぷん', '11じ 5ふん', '11じ 10ふん', '12じ 5ふん'],
+    correctAnswer: '11じ 5ふん',
+    explanation: 'みじかいはりが 11、ながいはりが 1（5ふん）のところ。11じ5ふん！'
+  },
+  {
+    id: 'M1-15a-Q25',
+    unitId: 'M1-15a',
+    step: 1,
+    type: 'clock',
+    question: 'とけいは なんじ なんぷん？',
+    clockFace: { hour: 2, minute: 25 },
+    choices: ['2じ 20ふん', '2じ 25ふん', '2じ 30ふん', '3じ 25ふん'],
+    correctAnswer: '2じ 25ふん',
+    explanation: 'みじかいはりが 2、ながいはりが 5（25ふん）のところ。2じ25ふん！'
+  },
 
   // =====================================================
-  // Step2: 端数分（1〜30分）（プール9問）
+  // Step2: 端数分（1〜30分）（プール13問）
   // =====================================================
   {
     id: 'M1-15a-Q04',
@@ -190,9 +234,53 @@ const questions = [
     correctAnswer: '12じ 26ふん',
     explanation: '12じ 26ふん。ながいはりは 25ふんより 1つすすんだところ。'
   },
+  {
+    id: 'M1-15a-Q26',
+    unitId: 'M1-15a',
+    step: 2,
+    type: 'clock',
+    question: 'とけいは なんじ なんぷん？',
+    clockFace: { hour: 7, minute: 17 },
+    choices: ['7じ 15ふん', '7じ 17ふん', '7じ 19ふん', '8じ 17ふん'],
+    correctAnswer: '7じ 17ふん',
+    explanation: '7じ 17ふん。ながいはりは 15ふんより 2つすすんだところ。'
+  },
+  {
+    id: 'M1-15a-Q27',
+    unitId: 'M1-15a',
+    step: 2,
+    type: 'clock',
+    question: 'とけいは なんじ なんぷん？',
+    clockFace: { hour: 3, minute: 14 },
+    choices: ['3じ 10ふん', '3じ 14ふん', '3じ 16ふん', '4じ 14ふん'],
+    correctAnswer: '3じ 14ふん',
+    explanation: '3じ 14ふん。ながいはりは 10ふんより 4つすすんだところ。'
+  },
+  {
+    id: 'M1-15a-Q28',
+    unitId: 'M1-15a',
+    step: 2,
+    type: 'clock',
+    question: 'とけいは なんじ なんぷん？',
+    clockFace: { hour: 1, minute: 28 },
+    choices: ['1じ 25ふん', '1じ 27ふん', '1じ 28ふん', '2じ 28ふん'],
+    correctAnswer: '1じ 28ふん',
+    explanation: '1じ 28ふん。ながいはりは 25ふんより 3つすすんだところ。'
+  },
+  {
+    id: 'M1-15a-Q29',
+    unitId: 'M1-15a',
+    step: 2,
+    type: 'clock',
+    question: 'とけいは なんじ なんぷん？',
+    clockFace: { hour: 6, minute: 24 },
+    choices: ['6じ 20ふん', '6じ 24ふん', '6じ 26ふん', '7じ 24ふん'],
+    correctAnswer: '6じ 24ふん',
+    explanation: '6じ 24ふん。ながいはりは 20ふんより 4つすすんだところ。'
+  },
 
   // =====================================================
-  // Step3: 難しいパターン（プール7問）
+  // Step3: 難しいパターン（プール10問）
   // =====================================================
   {
     id: 'M1-15a-Q11',
@@ -203,7 +291,7 @@ const questions = [
     clockFace: { hour: 8, minute: 7 },
     choices: ['8じ 1ぷん', '8じ 5ふん', '8じ 7ふん', '8じ 35ふん'],
     correctAnswer: '8じ 7ふん',
-    explanation: '8じ 7ふん。ながいはりは 5ふんより 2つすすんで 7ふん。「れいじかん7ふん」ではなく「8じ7ふん」！'
+    explanation: '8じ 7ふん。ながいはりは 5ふんより 2つすすんで 7ふん。「7ふん」だけでなく「8じ7ふん」と いおう！'
   },
   {
     id: 'M1-15a-Q12',
@@ -258,7 +346,7 @@ const questions = [
     clockFace: { hour: 2, minute: 4 },
     choices: ['2じ 1ぷん', '2じ 4ふん', '2じ 20ふん', '3じ 4ふん'],
     correctAnswer: '2じ 4ふん',
-    explanation: '2じ 4ふん。ながいはりは 12から 4つすすんで 4ふん。「にじかん4ふん」ではなく「2じ4ふん」！'
+    explanation: '2じ 4ふん。ながいはりは 12から 4つすすんで 4ふん。「4ふん」だけでなく「2じ4ふん」と いおう！'
   },
   {
     id: 'M1-15a-Q21',
@@ -270,6 +358,39 @@ const questions = [
     choices: ['10じ 1ぷん', '10じ 9ふん', '10じ 45ふん', '11じ 9ふん'],
     correctAnswer: '10じ 9ふん',
     explanation: '10じ 9ふん。ながいはりは 5ふんより 4つすすんで 9ふん。'
+  },
+  {
+    id: 'M1-15a-Q30',
+    unitId: 'M1-15a',
+    step: 3,
+    type: 'clock',
+    question: 'とけいは なんじ なんぷん？\n（ながいはりに ちゅうもく！）',
+    clockFace: { hour: 5, minute: 2 },
+    choices: ['5じ 1ぷん', '5じ 2ふん', '5じ 10ふん', '6じ 2ふん'],
+    correctAnswer: '5じ 2ふん',
+    explanation: '5じ 2ふん。ながいはりは 12から 2つすすんで 2ふん。'
+  },
+  {
+    id: 'M1-15a-Q31',
+    unitId: 'M1-15a',
+    step: 3,
+    type: 'clock',
+    question: 'とけいは なんじ なんぷん？',
+    clockFace: { hour: 9, minute: 19 },
+    choices: ['9じ 15ふん', '9じ 18ふん', '9じ 19ふん', '10じ 19ふん'],
+    correctAnswer: '9じ 19ふん',
+    explanation: '9じ 19ふん。ながいはりは 15ふんより 4つすすんだところ。'
+  },
+  {
+    id: 'M1-15a-Q32',
+    unitId: 'M1-15a',
+    step: 3,
+    type: 'clock',
+    question: 'とけいは なんじ なんぷん？\n（ながいはりに ちゅうもく！）',
+    clockFace: { hour: 4, minute: 6 },
+    choices: ['4じ 1ぷん', '4じ 6ふん', '4じ 30ふん', '5じ 6ふん'],
+    correctAnswer: '4じ 6ふん',
+    explanation: '4じ 6ふん。ながいはりは 5ふんより 1つすすんで 6ふん。'
   }
 ];
 

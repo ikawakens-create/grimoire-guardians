@@ -6,16 +6,16 @@
  * 準拠: 日本文教出版 算数1年
  *
  * Step構成（シャッフル出題）
- *   Step1: 時計を よもう！（1〜6じ）（プール6問 → 5問出題）
- *   Step2: 時計を よもう！（7〜12じ）（プール6問 → 5問出題）
- *   Step3: しくみを りかいしよう（プール5問 → 5問出題）
+ *   Step1: 時計を よもう！（1〜6じ）（プール9問 → 5問出題）
+ *   Step2: 時計を よもう！（7〜12じ）（プール9問 → 5問出題）
+ *   Step3: しくみを りかいしよう（プール8問 → 5問出題）
  *
  * 【時計の読み方ポイント】
  *   みじかいはり（時針）→ なんじ かを あらわす
  *   ちょうどのとき ながいはり（分針）は 12 をさす
  *
- * @version 2.0
- * @date 2026-02-25
+ * @version 2.1
+ * @date 2026-03-15
  */
 
 /** @type {Array} */
@@ -90,6 +90,39 @@ const questions = [
     correctAnswer: '２じ',
     explanation: 'みじかいはりが ２ を さしているので、２じ です。'
   },
+  {
+    id: 'M1-08a-Q18',
+    unitId: 'M1-08a',
+    step: 1,
+    type: 'clock',
+    clockFace: { hour: 1, minute: 0 },
+    question: 'ながいはりが 12、みじかいはりが 1を さしています。なんじ？',
+    choices: ['１じ', '２じ', '３じ', '１２じ'],
+    correctAnswer: '１じ',
+    explanation: 'ちょうどのとき ながいはりは 12。みじかいはりが 1なので １じ です。'
+  },
+  {
+    id: 'M1-08a-Q19',
+    unitId: 'M1-08a',
+    step: 1,
+    type: 'clock',
+    clockFace: { hour: 4, minute: 0 },
+    question: 'ながいはりが 12、みじかいはりが 4を さしています。なんじ？',
+    choices: ['３じ', '４じ', '５じ', '６じ'],
+    correctAnswer: '４じ',
+    explanation: 'ちょうどのとき ながいはりは 12。みじかいはりが 4なので ４じ です。'
+  },
+  {
+    id: 'M1-08a-Q20',
+    unitId: 'M1-08a',
+    step: 1,
+    type: 'clock',
+    clockFace: { hour: 6, minute: 0 },
+    question: 'ながいはりが 12、みじかいはりが 6を さしています。なんじ？',
+    choices: ['５じ', '６じ', '７じ', '１２じ'],
+    correctAnswer: '６じ',
+    explanation: 'ちょうどのとき ながいはりは 12。みじかいはりが 6なので ６じ です。'
+  },
 
   // =====================================================
   // Step2: 時計を よもう！（7〜12じ）
@@ -160,6 +193,39 @@ const questions = [
     correctAnswer: '１０じ',
     explanation: 'みじかいはりが 10 を さしているので、１０じ です。'
   },
+  {
+    id: 'M1-08a-Q21',
+    unitId: 'M1-08a',
+    step: 2,
+    type: 'clock',
+    clockFace: { hour: 8, minute: 0 },
+    question: 'ながいはりが 12、みじかいはりが 8を さしています。なんじ？',
+    choices: ['７じ', '８じ', '９じ', '１０じ'],
+    correctAnswer: '８じ',
+    explanation: 'ちょうどのとき ながいはりは 12。みじかいはりが 8なので ８じ です。'
+  },
+  {
+    id: 'M1-08a-Q22',
+    unitId: 'M1-08a',
+    step: 2,
+    type: 'clock',
+    clockFace: { hour: 11, minute: 0 },
+    question: 'ながいはりが 12、みじかいはりが 11を さしています。なんじ？',
+    choices: ['９じ', '１０じ', '１１じ', '１２じ'],
+    correctAnswer: '１１じ',
+    explanation: 'ちょうどのとき ながいはりは 12。みじかいはりが 11なので １１じ です。'
+  },
+  {
+    id: 'M1-08a-Q23',
+    unitId: 'M1-08a',
+    step: 2,
+    type: 'clock',
+    clockFace: { hour: 9, minute: 0 },
+    question: 'ながいはりが 12、みじかいはりが 9を さしています。なんじ？',
+    choices: ['８じ', '９じ', '１０じ', '１１じ'],
+    correctAnswer: '９じ',
+    explanation: 'ちょうどのとき ながいはりは 12。みじかいはりが 9なので ９じ です。'
+  },
 
   // =====================================================
   // Step3: しくみを りかいしよう（文章で考える）
@@ -213,6 +279,36 @@ const questions = [
     choices: ['３じ', '４じ', '５じ', '６じ'],
     correctAnswer: '５じ',
     explanation: '3じから 2じかん すすむと 5じ になります。'
+  },
+  {
+    id: 'M1-08a-Q24',
+    unitId: 'M1-08a',
+    step: 3,
+    type: 'choice',
+    question: '９じの 1じかんまえは なんじ？',
+    choices: ['７じ', '８じ', '９じ', '１０じ'],
+    correctAnswer: '８じ',
+    explanation: '9じの 1じかんまえは ８じ です。'
+  },
+  {
+    id: 'M1-08a-Q25',
+    unitId: 'M1-08a',
+    step: 3,
+    type: 'choice',
+    question: '１１じの 2じかんあとは なんじ？',
+    choices: ['１じ', '２じ', '３じ', '１２じ'],
+    correctAnswer: '１じ',
+    explanation: '11じから 2じかん すすむと 12じ、そして 1じ になります。'
+  },
+  {
+    id: 'M1-08a-Q26',
+    unitId: 'M1-08a',
+    step: 3,
+    type: 'choice',
+    question: 'とけいは 1にちに なんかい\nおなじ じこくを さす？',
+    choices: ['１かい', '２かい', '３かい', '１２かい'],
+    correctAnswer: '２かい',
+    explanation: '1にちは 24じかんで、とけいは 12じかんで 1しゅう するので、おなじ じこくを 2かい さします。'
   }
 ];
 

@@ -68,7 +68,7 @@ const questions = [
     step: 1,
     type: 'choice',
     renderAs: 'shape',
-    question: 'ツナかん（空きかん）は　どの　かたち？',
+    question: 'ツナかん（あきかん）は　どの　かたち？',
     correctAnswer: 'つつの　かたち',
     distractorPool: [
       'はこの　かたち',
@@ -123,7 +123,7 @@ const questions = [
     question: 'ビー玉と　おなじ　かたちの\nものは　どれ？',
     correctAnswer: 'テニスボール',
     distractorPool: [
-      'つみき（四角い）',
+      'つみき（しかくい）',
       'ツナかん',
       'さいころ',
       'ストロー',
@@ -137,7 +137,7 @@ const questions = [
     unitId: 'M1-13',
     step: 2,
     type: 'choice',
-    question: '消しゴムの　はこと　おなじ\nかたちの　ものは　どれ？',
+    question: 'けしゴムの　はこと　おなじ\nかたちの　ものは　どれ？',
     correctAnswer: 'クッキーの　はこ',
     distractorPool: [
       'ボール',
@@ -175,7 +175,7 @@ const questions = [
     correctAnswer: 'ビー玉',
     distractorPool: [
       'さいころ',
-      '消しゴムの　はこ',
+      'けしゴムの　はこ',
       'つみき',
       'クッキーの　はこ',
     ],
@@ -259,7 +259,7 @@ const questions = [
     step: 3,
     type: 'choice',
     question: 'ツナかんを　よこに　ねかせたら\nどうなるかな？',
-    correctAnswer: '一方向だけ　ころがる',
+    correctAnswer: 'いっぽうこうだけ　ころがる',
     distractorPool: [
       'どこでも　ころがる',
       'ころがらない',
@@ -295,7 +295,7 @@ const questions = [
     correctAnswer: 'ころがらない',
     distractorPool: [
       'どこでも　ころがる',
-      '一方向だけ　ころがる',
+      'いっぽうこうだけ　ころがる',
       'とびはねる',
     ],
     image: null,
@@ -311,7 +311,7 @@ const questions = [
     unitId: 'M1-13',
     step: 4,
     type: 'choice',
-    question: 'はこのかたちの　平らな面は\nぜんぶで　なんまい？\n（上・下・前・後ろ・左・右）',
+    question: 'はこのかたちの　たいらな　めんは\nぜんぶで　なんまい？\n（うえ・した・まえ・うしろ・ひだり・みぎ）',
     correctAnswer: '6まい',
     distractorPool: [
       '4まい',
@@ -328,7 +328,7 @@ const questions = [
     unitId: 'M1-13',
     step: 4,
     type: 'choice',
-    question: 'つつのかたちの　上と下の\nまるい面は　なんまい？',
+    question: 'つつのかたちの　うえと　したの\nまるい　めんは　なんまい？',
     correctAnswer: '2まい',
     distractorPool: [
       '1まい',
@@ -345,7 +345,7 @@ const questions = [
     unitId: 'M1-13',
     step: 4,
     type: 'choice',
-    question: 'まるのかたち（ボール）に\n平らな面は　いくつ？',
+    question: 'まるのかたち（ボール）に\nたいらな　めんは　いくつ？',
     correctAnswer: '0（ない）',
     distractorPool: [
       '1まい',
@@ -362,7 +362,7 @@ const questions = [
     unitId: 'M1-13',
     step: 4,
     type: 'choice',
-    question: 'つつのかたちに　まるくない\nひらたい面は　なんまい？',
+    question: 'つつのかたちに　まるくない\nひらたい　めんは　なんまい？',
     correctAnswer: '0（ない）',
     distractorPool: [
       '1まい',
@@ -385,7 +385,7 @@ const questions = [
     step: 5,
     type: 'choice',
     renderAs: 'shape',
-    question: 'つぎの　3つに　あてはまる\nかたちは　どれ？\n\n・ころがらない\n・つみかさねられる\n・平らな面が　6まい',
+    question: 'つぎの　3つに　あてはまる\nかたちは　どれ？\n\n・ころがらない\n・つみかさねられる\n・たいらな　めんが　6まい',
     correctAnswer: 'はこの　かたち',
     distractorPool: [
       'まるの　かたち',
@@ -404,9 +404,9 @@ const questions = [
     correctAnswer: 'つみあげられる',
     distractorPool: [
       'ころがる',
-      'まるい面が　ある',
+      'まるい　めんが　ある',
       'どこでも　ころがる',
-      '平らな面が　ない',
+      'たいらな　めんが　ない',
     ],
     image: null,
     choiceImages: null,
@@ -418,7 +418,7 @@ const questions = [
     step: 5,
     type: 'choice',
     renderAs: 'shape',
-    question: 'まるくて、どこでもころがって、\nひらたい面がない　かたちは？',
+    question: 'まるくて、どこでもころがって、\nひらたい　めんが　ない　かたちは？',
     correctAnswer: 'まるの　かたち',
     distractorPool: [
       'はこの　かたち',

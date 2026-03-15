@@ -6,14 +6,14 @@
  * 準拠: 日本文教出版 算数1年「あわせて いくつ／ふえると いくつ」
  *
  * Step構成（シャッフル出題）
- *   Step1: かんたん たしざん（プール5問 → 3問出題）
- *   Step2: えを みて たしざん（プール5問 → 3問出題）
- *   Step3: たして 10に なる（プール5問 → 3問出題）
- *   Step4: □を もとめよう（プール5問 → 3問出題）
- *   Step5: かんたん もんだい（プール5問 → 3問出題）
+ *   Step1: かんたん たしざん（プール8問 → 3問出題）
+ *   Step2: えを みて たしざん（プール8問 → 3問出題）
+ *   Step3: たして 10に なる（プール7問 → 3問出題）
+ *   Step4: □を もとめよう（プール8問 → 3問出題）
+ *   Step5: かんたん もんだい（プール7問 → 3問出題）
  *
- * @version 2.0
- * @date 2026-02-25
+ * @version 2.1
+ * @date 2026-03-15
  */
 
 /** @type {Array} */
@@ -67,6 +67,33 @@ const questions = [
     choices: ['6', '7', '8', '9'],
     correctAnswer: '8'
   },
+  {
+    id: 'M1-05-Q26',
+    unitId: 'M1-05',
+    step: 1,
+    type: 'choice',
+    question: '2 + 6 = □\n□は いくつ？',
+    choices: ['6', '7', '8', '9'],
+    correctAnswer: '8'
+  },
+  {
+    id: 'M1-05-Q27',
+    unitId: 'M1-05',
+    step: 1,
+    type: 'choice',
+    question: '4 + 3 = □\n□は いくつ？',
+    choices: ['5', '6', '7', '8'],
+    correctAnswer: '7'
+  },
+  {
+    id: 'M1-05-Q28',
+    unitId: 'M1-05',
+    step: 1,
+    type: 'choice',
+    question: '6 + 2 = □\n□は いくつ？',
+    choices: ['6', '7', '8', '9'],
+    correctAnswer: '8'
+  },
 
   // =====================================================
   // Step2: えを みて たしざん（絵を数えてたし算）
@@ -116,6 +143,33 @@ const questions = [
     choices: ['6', '7', '8', '9'],
     correctAnswer: '7'
   },
+  {
+    id: 'M1-05-Q29',
+    unitId: 'M1-05',
+    step: 2,
+    type: 'choice',
+    question: '🌸🌸🌸 と 🌸🌸🌸🌸🌸🌸\nあわせて いくつ？',
+    choices: ['7', '8', '9', '10'],
+    correctAnswer: '9'
+  },
+  {
+    id: 'M1-05-Q30',
+    unitId: 'M1-05',
+    step: 2,
+    type: 'choice',
+    question: '🐶🐶 と 🐶🐶🐶🐶🐶🐶\nあわせて いくつ？',
+    choices: ['6', '7', '8', '9'],
+    correctAnswer: '8'
+  },
+  {
+    id: 'M1-05-Q31',
+    unitId: 'M1-05',
+    step: 2,
+    type: 'choice',
+    question: '🍓🍓🍓🍓 と 🍓🍓🍓🍓🍓\nあわせて いくつ？',
+    choices: ['7', '8', '9', '10'],
+    correctAnswer: '9'
+  },
 
   // =====================================================
   // Step3: たして 10に なる（補数の感覚を育てる）
@@ -163,6 +217,24 @@ const questions = [
     type: 'choice',
     question: '5 + 5 = □\n□は いくつ？',
     choices: ['8', '9', '10', '7'],
+    correctAnswer: '10'
+  },
+  {
+    id: 'M1-05-Q32',
+    unitId: 'M1-05',
+    step: 3,
+    type: 'choice',
+    question: '4 + 6 = □\n□は いくつ？',
+    choices: ['8', '9', '10', '11'],
+    correctAnswer: '10'
+  },
+  {
+    id: 'M1-05-Q33',
+    unitId: 'M1-05',
+    step: 3,
+    type: 'choice',
+    question: '7 + 3 = □\n□は いくつ？',
+    choices: ['8', '9', '10', '11'],
     correctAnswer: '10'
   },
 
@@ -214,6 +286,33 @@ const questions = [
     choices: ['3', '4', '5', '6'],
     correctAnswer: '5'
   },
+  {
+    id: 'M1-05-Q34',
+    unitId: 'M1-05',
+    step: 4,
+    type: 'choice',
+    question: '4 + □ = 9\n□は いくつ？',
+    choices: ['3', '4', '5', '6'],
+    correctAnswer: '5'
+  },
+  {
+    id: 'M1-05-Q35',
+    unitId: 'M1-05',
+    step: 4,
+    type: 'choice',
+    question: '□ + 6 = 10\n□は いくつ？',
+    choices: ['2', '3', '4', '5'],
+    correctAnswer: '4'
+  },
+  {
+    id: 'M1-05-Q36',
+    unitId: 'M1-05',
+    step: 4,
+    type: 'choice',
+    question: '□ + 2 = 7\n□は いくつ？',
+    choices: ['4', '5', '6', '7'],
+    correctAnswer: '5'
+  },
 
   // =====================================================
   // Step5: かんたん もんだい（簡単な文章題）
@@ -262,6 +361,24 @@ const questions = [
     question: 'バスに 6にん のっています。\n2にん のってきました。\nぜんぶで なんにん？',
     choices: ['6', '7', '8', '9'],
     correctAnswer: '8'
+  },
+  {
+    id: 'M1-05-Q37',
+    unitId: 'M1-05',
+    step: 5,
+    type: 'choice',
+    question: 'いけに かめが 3びき います。\n6びき きました。\nぜんぶで なんびき？',
+    choices: ['7', '8', '9', '10'],
+    correctAnswer: '9'
+  },
+  {
+    id: 'M1-05-Q38',
+    unitId: 'M1-05',
+    step: 5,
+    type: 'choice',
+    question: 'あかい はなが 5ほん、\nきいろい はなが 4ほん あります。\nあわせて なんぼん？',
+    choices: ['7', '8', '9', '10'],
+    correctAnswer: '9'
   }
 ];
 

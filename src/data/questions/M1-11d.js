@@ -11,23 +11,23 @@
  *   確実な定着と「全部できる！」という自信を育てる。
  *
  * Step構成（シャッフル出題）
- *   Step1: 混合スピード練習（プール9問 → 6問出題）
- *   Step2: 文章題（プール6問 → 4問出題）
- *   Step3: くりあがり足し算との混合（プール5問 → 3問出題）
- *   Step4: 腕試し・逆算・穴埋め（プール4問 → 2問出題）
+ *   Step1: 混合スピード練習（プール12問 → 6問出題）
+ *   Step2: 文章題（プール9問 → 4問出題）
+ *   Step3: くりあがり足し算との混合（プール8問 → 3問出題）
+ *   Step4: 腕試し・逆算・穴埋め（プール7問 → 2問出題）
  *
  * ひらめきポイント:
  *   「くりあがりもくりさがりも、さくらんぼ1本で全部解ける！」
  *
- * @version 2.0
- * @date 2026-02-25
+ * @version 2.1
+ * @date 2026-03-15
  */
 
 /** @type {Array} */
 const questions = [
 
   // =====================================================
-  // Step1: 混合スピード練習（9問）
+  // Step1: 混合スピード練習（12問）
   // 11〜17台からランダム。さくらんぼ図なし・自力で素早く解く
   // =====================================================
   {
@@ -111,9 +111,36 @@ const questions = [
     choices: ['7', '8', '9', '10'],
     correctAnswer: '9'
   },
+  {
+    id: 'M1-11d-Q25',
+    unitId: 'M1-11d',
+    step: 1,
+    type: 'choice',
+    question: '12 - 4 = ？',
+    choices: ['6', '7', '8', '9'],
+    correctAnswer: '8'
+  },
+  {
+    id: 'M1-11d-Q26',
+    unitId: 'M1-11d',
+    step: 1,
+    type: 'choice',
+    question: '18 - 9 = ？',
+    choices: ['7', '8', '9', '10'],
+    correctAnswer: '9'
+  },
+  {
+    id: 'M1-11d-Q27',
+    unitId: 'M1-11d',
+    step: 1,
+    type: 'choice',
+    question: '13 - 9 = ？',
+    choices: ['3', '4', '5', '6'],
+    correctAnswer: '4'
+  },
 
   // =====================================================
-  // Step2: 文章題（6問）
+  // Step2: 文章題（9問）
   // 日常の場面から式を立てて繰り下がりを使う
   // =====================================================
   {
@@ -176,9 +203,39 @@ const questions = [
     correctAnswer: '7',
     explanation: '16 - 9 = 7。のこりは7こです。'
   },
+  {
+    id: 'M1-11d-Q28',
+    unitId: 'M1-11d',
+    step: 2,
+    type: 'choice',
+    question: 'とりが 14わ います。\n6わ とんで いきました。\nのこりは なんわ？',
+    choices: ['6', '7', '8', '9'],
+    correctAnswer: '8',
+    explanation: '14 - 6 = 8。のこりは8わです。'
+  },
+  {
+    id: 'M1-11d-Q29',
+    unitId: 'M1-11d',
+    step: 2,
+    type: 'choice',
+    question: 'きんぎょが 18ひき います。\n9ひき うりました。\nのこりは なんびき？',
+    choices: ['7', '8', '9', '10'],
+    correctAnswer: '9',
+    explanation: '18 - 9 = 9。のこりは9ひきです。'
+  },
+  {
+    id: 'M1-11d-Q30',
+    unitId: 'M1-11d',
+    step: 2,
+    type: 'choice',
+    question: 'くりが 11こ あります。\n8こ たべました。\nのこりは なんこ？',
+    choices: ['2', '3', '4', '5'],
+    correctAnswer: '3',
+    explanation: '11 - 8 = 3。のこりは3こです。'
+  },
 
   // =====================================================
-  // Step3: くりあがり足し算との混合（5問）
+  // Step3: くりあがり足し算との混合（8問）
   // + と - の記号を正しく読んで使い分ける力をつける
   // =====================================================
   {
@@ -226,9 +283,36 @@ const questions = [
     choices: ['7', '8', '9', '10'],
     correctAnswer: '8'
   },
+  {
+    id: 'M1-11d-Q31',
+    unitId: 'M1-11d',
+    step: 3,
+    type: 'choice',
+    question: '6 + 9 = ？',
+    choices: ['13', '14', '15', '16'],
+    correctAnswer: '15'
+  },
+  {
+    id: 'M1-11d-Q32',
+    unitId: 'M1-11d',
+    step: 3,
+    type: 'choice',
+    question: '11 - 5 = ？',
+    choices: ['5', '6', '7', '8'],
+    correctAnswer: '6'
+  },
+  {
+    id: 'M1-11d-Q33',
+    unitId: 'M1-11d',
+    step: 3,
+    type: 'choice',
+    question: '8 + 5 = ？',
+    choices: ['11', '12', '13', '14'],
+    correctAnswer: '13'
+  },
 
   // =====================================================
-  // Step4: 腕試し（4問）
+  // Step4: 腕試し（7問）
   // 逆算・穴埋め問題。M1-11 完全攻略の達成感演出
   // =====================================================
   {
@@ -270,6 +354,36 @@ const questions = [
     choices: ['5', '6', '7', '8'],
     correctAnswer: '7',
     explanation: '15 - 7 = 8 なので、□ = 7です。'
+  },
+  {
+    id: 'M1-11d-Q34',
+    unitId: 'M1-11d',
+    step: 4,
+    type: 'choice',
+    question: '□ - 6 = 7\n□は いくつ？',
+    choices: ['11', '12', '13', '14'],
+    correctAnswer: '13',
+    explanation: '7 + 6 = 13 なので、□ = 13です。'
+  },
+  {
+    id: 'M1-11d-Q35',
+    unitId: 'M1-11d',
+    step: 4,
+    type: 'choice',
+    question: '16 - □ = 9\n□は いくつ？',
+    choices: ['5', '6', '7', '8'],
+    correctAnswer: '7',
+    explanation: '16 - 7 = 9 なので、□ = 7です。'
+  },
+  {
+    id: 'M1-11d-Q36',
+    unitId: 'M1-11d',
+    step: 4,
+    type: 'choice',
+    question: '□ - 8 = 4\n□は いくつ？',
+    choices: ['10', '11', '12', '13'],
+    correctAnswer: '12',
+    explanation: '4 + 8 = 12 なので、□ = 12です。'
   }
 ];
 

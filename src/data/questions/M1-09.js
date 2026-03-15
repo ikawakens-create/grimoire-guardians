@@ -6,14 +6,14 @@
  * 準拠: 日本文教出版 算数1年
  *
  * Step構成（シャッフル出題）
- *   Step1: 「10に する」れんしゅう（プール5問 → 3問出題）
- *   Step2: 「わける」れんしゅう（プール5問 → 3問出題）
- *   Step3: さくらんぼ算で たしざん（プール5問 → 3問出題）
- *   Step4: 分解のバリエーション（プール5問 → 3問出題）
- *   Step5: まとめ・おうよう（プール5問 → 3問出題）
+ *   Step1: 「10に する」れんしゅう（プール8問 → 3問出題）
+ *   Step2: 「わける」れんしゅう（プール8問 → 3問出題）
+ *   Step3: さくらんぼ算で たしざん（プール8問 → 3問出題）
+ *   Step4: 分解のバリエーション（プール7問 → 3問出題）
+ *   Step5: まとめ・おうよう（プール7問 → 3問出題）
  *
- * @version 2.0
- * @date 2026-02-25
+ * @version 2.1
+ * @date 2026-03-15
  */
 
 /** @type {Array} */
@@ -72,6 +72,36 @@ const questions = [
     correctAnswer: '６',
     explanation: '4 + 6 = 10 です。'
   },
+  {
+    id: 'M1-09-Q26',
+    unitId: 'M1-09',
+    step: 1,
+    type: 'choice',
+    question: '6に いくつ たすと 10に なる？\n6 + □ = 10',
+    choices: ['２', '３', '４', '５'],
+    correctAnswer: '４',
+    explanation: '6 + 4 = 10 です。'
+  },
+  {
+    id: 'M1-09-Q27',
+    unitId: 'M1-09',
+    step: 1,
+    type: 'choice',
+    question: '2に いくつ たすと 10に なる？\n2 + □ = 10',
+    choices: ['６', '７', '８', '９'],
+    correctAnswer: '８',
+    explanation: '2 + 8 = 10 です。'
+  },
+  {
+    id: 'M1-09-Q28',
+    unitId: 'M1-09',
+    step: 1,
+    type: 'choice',
+    question: '1に いくつ たすと 10に なる？\n1 + □ = 10',
+    choices: ['７', '８', '９', '１０'],
+    correctAnswer: '９',
+    explanation: '1 + 9 = 10 です。'
+  },
 
   // =====================================================
   // Step2: 「わける」れんしゅう
@@ -125,6 +155,36 @@ const questions = [
     choices: ['１', '２', '３', '４'],
     correctAnswer: '３',
     explanation: '5は 2と3に わけられます。'
+  },
+  {
+    id: 'M1-09-Q29',
+    unitId: 'M1-09',
+    step: 2,
+    type: 'choice',
+    question: '4を 1と □に わけよう\n4 → 1 と □',
+    choices: ['１', '２', '３', '４'],
+    correctAnswer: '３',
+    explanation: '4は 1と3に わけられます。'
+  },
+  {
+    id: 'M1-09-Q30',
+    unitId: 'M1-09',
+    step: 2,
+    type: 'choice',
+    question: '6を 2と □に わけよう\n6 → 2 と □',
+    choices: ['２', '３', '４', '５'],
+    correctAnswer: '４',
+    explanation: '6は 2と4に わけられます。'
+  },
+  {
+    id: 'M1-09-Q31',
+    unitId: 'M1-09',
+    step: 2,
+    type: 'choice',
+    question: '7を 4と □に わけよう\n7 → 4 と □',
+    choices: ['１', '２', '３', '４'],
+    correctAnswer: '３',
+    explanation: '7は 4と3に わけられます。'
   },
 
   // =====================================================
@@ -180,6 +240,36 @@ const questions = [
     correctAnswer: '１１',
     explanation: '6 + 4 = 10、10 + 1 = 11。答えは 11です！'
   },
+  {
+    id: 'M1-09-Q32',
+    unitId: 'M1-09',
+    step: 3,
+    type: 'choice',
+    question: 'さくらんぼ算で かんがえよう！\n8 + 6 = ？\n（8に 2たすと10、6を「2と4」に わける）',
+    choices: ['１２', '１３', '１４', '１５'],
+    correctAnswer: '１４',
+    explanation: '8 + 2 = 10、10 + 4 = 14。答えは 14です！'
+  },
+  {
+    id: 'M1-09-Q33',
+    unitId: 'M1-09',
+    step: 3,
+    type: 'choice',
+    question: 'さくらんぼ算で かんがえよう！\n9 + 5 = ？\n（9に 1たすと10、5を「1と4」に わける）',
+    choices: ['１２', '１３', '１４', '１５'],
+    correctAnswer: '１４',
+    explanation: '9 + 1 = 10、10 + 4 = 14。答えは 14です！'
+  },
+  {
+    id: 'M1-09-Q34',
+    unitId: 'M1-09',
+    step: 3,
+    type: 'choice',
+    question: 'さくらんぼ算で かんがえよう！\n7 + 6 = ？\n（7に 3たすと10、6を「3と3」に わける）',
+    choices: ['１１', '１２', '１３', '１４'],
+    correctAnswer: '１３',
+    explanation: '7 + 3 = 10、10 + 3 = 13。答えは 13です！'
+  },
 
   // =====================================================
   // Step4: 分解のバリエーション
@@ -234,6 +324,26 @@ const questions = [
     correctAnswer: '７',
     explanation: '3 + 7 = 10 です。'
   },
+  {
+    id: 'M1-09-Q35',
+    unitId: 'M1-09',
+    step: 4,
+    type: 'choice',
+    question: '8を 3と □に わけよう\n8 → 3 と □',
+    choices: ['３', '４', '５', '６'],
+    correctAnswer: '５',
+    explanation: '8は 3と5に わけられます。'
+  },
+  {
+    id: 'M1-09-Q36',
+    unitId: 'M1-09',
+    step: 4,
+    type: 'choice',
+    question: '9を 2と □に わけよう\n9 → 2 と □',
+    choices: ['５', '６', '７', '８'],
+    correctAnswer: '７',
+    explanation: '9は 2と7に わけられます。'
+  },
 
   // =====================================================
   // Step5: まとめ・さくらんぼ算のおうよう
@@ -287,6 +397,26 @@ const questions = [
     choices: ['１３', '１４', '１５', '１６'],
     correctAnswer: '１５',
     explanation: '8 + 2 = 10、7を「2と5」に わけて、10 + 5 = 15。答えは 15です！'
+  },
+  {
+    id: 'M1-09-Q37',
+    unitId: 'M1-09',
+    step: 5,
+    type: 'choice',
+    question: 'さくらんぼ算で かんがえよう！\n9 + 8 = ？',
+    choices: ['１５', '１６', '１７', '１８'],
+    correctAnswer: '１７',
+    explanation: '9 + 1 = 10、8を「1と7」に わけて、10 + 7 = 17。答えは 17です！'
+  },
+  {
+    id: 'M1-09-Q38',
+    unitId: 'M1-09',
+    step: 5,
+    type: 'choice',
+    question: 'さくらんぼ算で かんがえよう！\n6 + 8 = ？',
+    choices: ['１２', '１３', '１４', '１５'],
+    correctAnswer: '１４',
+    explanation: '6 + 4 = 10、8を「4と4」に わけて、10 + 4 = 14。答えは 14です！'
   }
 ];
 

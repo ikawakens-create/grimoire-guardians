@@ -11,23 +11,23 @@
  *   問題フェーズでは自力で解けるようにする。
  *
  * Step構成（シャッフル出題）
- *   Step1: 例題・アニメ誘導（プール5問 → 3問出題）
- *   Step2: 考え方・中間□ヒント（プール6問 → 4問出題）
- *   Step3: 11のせかい（プール6問 → 4問出題）
- *   Step4: 12のせかい（プール6問 → 4問出題）
+ *   Step1: 例題・アニメ誘導（プール8問 → 3問出題）
+ *   Step2: 考え方・中間□ヒント（プール9問 → 4問出題）
+ *   Step3: 11のせかい（プール9問 → 4問出題）
+ *   Step4: 12のせかい（プール9問 → 4問出題）
  *
  * ひらめきポイント:
  *   「11は10と1、12は10と2……自分で言えたら勝ち！」
  *
- * @version 2.0
- * @date 2026-02-25
+ * @version 2.1
+ * @date 2026-03-15
  */
 
 /** @type {Array} */
 const questions = [
 
   // =====================================================
-  // Step1: 例題（5問）
+  // Step1: 例題（8問）
   // さくらんぼ図が動くアニメーション演出と対応。
   // ヒントを問題文に埋め込み、方法を再確認する
   // =====================================================
@@ -81,9 +81,39 @@ const questions = [
     correctAnswer: '3',
     explanation: '12 = 10 + 2。10 - 9 = 1、1 + 2 = 3。答えは3！'
   },
+  {
+    id: 'M1-11b-Q24',
+    unitId: 'M1-11b',
+    step: 1,
+    type: 'choice',
+    question: '11 - 5 = ？\n（11を 10と 1に わけよう！\n10 - 5 = 5、5 + 1 = ？）',
+    choices: ['5', '6', '7', '8'],
+    correctAnswer: '6',
+    explanation: '11 = 10 + 1。10 - 5 = 5、5 + 1 = 6。答えは6！'
+  },
+  {
+    id: 'M1-11b-Q25',
+    unitId: 'M1-11b',
+    step: 1,
+    type: 'choice',
+    question: '12 - 5 = ？\n（12を 10と 2に わけよう！\n10 - 5 = 5、5 + 2 = ？）',
+    choices: ['5', '6', '7', '8'],
+    correctAnswer: '7',
+    explanation: '12 = 10 + 2。10 - 5 = 5、5 + 2 = 7。答えは7！'
+  },
+  {
+    id: 'M1-11b-Q26',
+    unitId: 'M1-11b',
+    step: 1,
+    type: 'choice',
+    question: '12 - 6 = ？\n（12を 10と 2に わけよう！\n10 - 6 = 4、4 + 2 = ？）',
+    choices: ['4', '5', '6', '7'],
+    correctAnswer: '6',
+    explanation: '12 = 10 + 2。10 - 6 = 4、4 + 2 = 6。答えは6！'
+  },
 
   // =====================================================
-  // Step2: 考え方（6問）
+  // Step2: 考え方（9問）
   // 中間の□を示して2段階の思考を促す
   // =====================================================
   {
@@ -146,9 +176,39 @@ const questions = [
     correctAnswer: '5',
     explanation: '10 - 7 = 3、3 + 2 = 5。答えは5！'
   },
+  {
+    id: 'M1-11b-Q27',
+    unitId: 'M1-11b',
+    step: 2,
+    type: 'choice',
+    question: '11 - 4 = ？\n（まず 10 - 4 = □ を かんがえよう）',
+    choices: ['5', '6', '7', '8'],
+    correctAnswer: '7',
+    explanation: '10 - 4 = 6、6 + 1 = 7。答えは7！'
+  },
+  {
+    id: 'M1-11b-Q28',
+    unitId: 'M1-11b',
+    step: 2,
+    type: 'choice',
+    question: '12 - 3 = ？\n（まず 10 - 3 = □ を かんがえよう）',
+    choices: ['7', '8', '9', '10'],
+    correctAnswer: '9',
+    explanation: '10 - 3 = 7、7 + 2 = 9。答えは9！'
+  },
+  {
+    id: 'M1-11b-Q29',
+    unitId: 'M1-11b',
+    step: 2,
+    type: 'choice',
+    question: '11 - 8 = ？\n（まず 10 - 8 = □ を かんがえよう）',
+    choices: ['2', '3', '4', '5'],
+    correctAnswer: '3',
+    explanation: '10 - 8 = 2、2 + 1 = 3。答えは3！'
+  },
 
   // =====================================================
-  // Step3: 11のせかい（6問）
+  // Step3: 11のせかい（9問）
   // ヒントなし。自力で減加法を使いこなす
   // =====================================================
   {
@@ -205,9 +265,36 @@ const questions = [
     choices: ['3', '4', '5', '6'],
     correctAnswer: '4'
   },
+  {
+    id: 'M1-11b-Q30',
+    unitId: 'M1-11b',
+    step: 3,
+    type: 'choice',
+    question: '11 - 9 = ？',
+    choices: ['1', '2', '3', '4'],
+    correctAnswer: '2'
+  },
+  {
+    id: 'M1-11b-Q31',
+    unitId: 'M1-11b',
+    step: 3,
+    type: 'choice',
+    question: '11 - 5 = ？',
+    choices: ['5', '6', '7', '8'],
+    correctAnswer: '6'
+  },
+  {
+    id: 'M1-11b-Q32',
+    unitId: 'M1-11b',
+    step: 3,
+    type: 'choice',
+    question: '11 - 1 = ？',
+    choices: ['8', '9', '10', '11'],
+    correctAnswer: '10'
+  },
 
   // =====================================================
-  // Step4: 12のせかい（6問）
+  // Step4: 12のせかい（9問）
   // =====================================================
   {
     id: 'M1-11b-Q12',
@@ -262,6 +349,33 @@ const questions = [
     question: '12 - 6 = ？',
     choices: ['4', '5', '6', '7'],
     correctAnswer: '6'
+  },
+  {
+    id: 'M1-11b-Q33',
+    unitId: 'M1-11b',
+    step: 4,
+    type: 'choice',
+    question: '12 - 8 = ？',
+    choices: ['3', '4', '5', '6'],
+    correctAnswer: '4'
+  },
+  {
+    id: 'M1-11b-Q34',
+    unitId: 'M1-11b',
+    step: 4,
+    type: 'choice',
+    question: '12 - 2 = ？',
+    choices: ['8', '9', '10', '11'],
+    correctAnswer: '10'
+  },
+  {
+    id: 'M1-11b-Q35',
+    unitId: 'M1-11b',
+    step: 4,
+    type: 'choice',
+    question: '12 - 1 = ？',
+    choices: ['9', '10', '11', '12'],
+    correctAnswer: '11'
   }
 ];
 
