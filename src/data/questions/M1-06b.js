@@ -6,13 +6,13 @@
  * 準拠: 日本文教出版 算数1年（きほん単元の発展）
  *
  * Step構成（シャッフル出題）
- *   Step1: もんだいぶん（プール6問 → 4問出題）
- *   Step2: ちがいを もとめよう（プール5問 → 3問出題）
- *   Step3: あなうめ もんだいぶん（プール5問 → 4問出題）
- *   Step4: しきを えらぼう + まとめ（プール6問 → 4問出題）
+ *   Step1: もんだいぶん（プール9問 → 4問出題）
+ *   Step2: ちがいを もとめよう（プール8問 → 3問出題）
+ *   Step3: あなうめ もんだいぶん（プール8問 → 4問出題）
+ *   Step4: しきを えらぼう + まとめ（プール8問 → 4問出題）
  *
- * @version 2.0
- * @date 2026-02-25
+ * @version 2.1
+ * @date 2026-03-15
  */
 
 /** @type {Array} */
@@ -75,6 +75,33 @@ const questions = [
     choices: ['5', '6', '7', '8'],
     correctAnswer: '6'
   },
+  {
+    id: 'M1-06b-Q23',
+    unitId: 'M1-06b',
+    step: 1,
+    type: 'choice',
+    question: 'おかしが 8こ あります。\n6こ たべました。\nのこりは なんこ？',
+    choices: ['1', '2', '3', '4'],
+    correctAnswer: '2'
+  },
+  {
+    id: 'M1-06b-Q24',
+    unitId: 'M1-06b',
+    step: 1,
+    type: 'choice',
+    question: 'くりが 10こ あります。\n3こ たべました。\nのこりは なんこ？',
+    choices: ['6', '7', '8', '9'],
+    correctAnswer: '7'
+  },
+  {
+    id: 'M1-06b-Q25',
+    unitId: 'M1-06b',
+    step: 1,
+    type: 'choice',
+    question: 'バスに 9にん のっています。\n2にん おりました。\nのこりは なんにん？',
+    choices: ['6', '7', '8', '9'],
+    correctAnswer: '7'
+  },
 
   // =====================================================
   // Step2: ちがいを もとめよう（差を求める文章題）
@@ -124,6 +151,33 @@ const questions = [
     choices: ['2', '3', '4', '5'],
     correctAnswer: '3'
   },
+  {
+    id: 'M1-06b-Q26',
+    unitId: 'M1-06b',
+    step: 2,
+    type: 'choice',
+    question: 'あかい はなが 9ほん、\nきいろい はなが 4ほん あります。\nちがいは なんぼん？',
+    choices: ['4', '5', '6', '7'],
+    correctAnswer: '5'
+  },
+  {
+    id: 'M1-06b-Q27',
+    unitId: 'M1-06b',
+    step: 2,
+    type: 'choice',
+    question: 'はとが 10わ、すずめが 8わ います。\nはとは すずめより なんわ おおい？',
+    choices: ['1', '2', '3', '4'],
+    correctAnswer: '2'
+  },
+  {
+    id: 'M1-06b-Q28',
+    unitId: 'M1-06b',
+    step: 2,
+    type: 'choice',
+    question: 'あかい いとが 7ほん、\nあおい いとが 2ほん あります。\nちがいは なんぼん？',
+    choices: ['4', '5', '6', '7'],
+    correctAnswer: '5'
+  },
 
   // =====================================================
   // Step3: あなうめ もんだいぶん（穴埋め文章題）
@@ -172,6 +226,33 @@ const questions = [
     question: '□ - 6 = 2\n□は いくつ？',
     choices: ['6', '7', '8', '9'],
     correctAnswer: '8'
+  },
+  {
+    id: 'M1-06b-Q29',
+    unitId: 'M1-06b',
+    step: 3,
+    type: 'choice',
+    question: '7 - □ = 3\n□は いくつ？',
+    choices: ['3', '4', '5', '6'],
+    correctAnswer: '4'
+  },
+  {
+    id: 'M1-06b-Q30',
+    unitId: 'M1-06b',
+    step: 3,
+    type: 'choice',
+    question: '□ - 3 = 4\n□は いくつ？',
+    choices: ['5', '6', '7', '8'],
+    correctAnswer: '7'
+  },
+  {
+    id: 'M1-06b-Q31',
+    unitId: 'M1-06b',
+    step: 3,
+    type: 'choice',
+    question: '10 - □ = 4\n□は いくつ？',
+    choices: ['5', '6', '7', '8'],
+    correctAnswer: '6'
   },
 
   // =====================================================
@@ -230,6 +311,24 @@ const questions = [
     question: 'バスに 10にん のっています。\n□にん おりたので 4にんに なりました。\n□は いくつ？',
     choices: ['5', '6', '7', '8'],
     correctAnswer: '6'
+  },
+  {
+    id: 'M1-06b-Q32',
+    unitId: 'M1-06b',
+    step: 4,
+    type: 'choice',
+    question: 'はなが 9ほん あります。\n□ほん とると 5ほんに なります。\n□は いくつ？',
+    choices: ['3', '4', '5', '6'],
+    correctAnswer: '4'
+  },
+  {
+    id: 'M1-06b-Q33',
+    unitId: 'M1-06b',
+    step: 4,
+    type: 'choice',
+    question: 'どちらが おおきい？\n9 - 3  と  10 - 5',
+    choices: ['9 - 3', '10 - 5', 'おなじ', 'わからない'],
+    correctAnswer: '9 - 3'
   }
 ];
 
