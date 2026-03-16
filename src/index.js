@@ -330,7 +330,8 @@ function showFinalBattle(gameScreen) {
     _activeScreen = null;
   }
 
-  GameStore.setState('app.currentScreen', 'final_battle');
+  // ※ app.currentScreen は呼び出し元（購読者 or ドアクリック）がすでに設定済みのため
+  //   ここで再度 setState しない（再設定すると購読者が再発火して無限再帰になる）
 
   const battle = new FinalBattleScreen(
     gameScreen,

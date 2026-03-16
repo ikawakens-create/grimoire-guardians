@@ -376,7 +376,15 @@ export class GameStore {
         isInitialized: true,
         isLoading: false,
         currentScreen: 'bookshelf',
-        error: null
+        error: null,
+        prologueShown: false,
+        storyAct: 1,
+        finaleShown: false,
+        finalBattleCleared: false,
+        sealStrength: 0,
+        currentDimension: 'dim1',
+        dailyMissionDate: null,
+        dailyMissionsDone: [],
       },
       player: {
         name: 'プレイヤー',

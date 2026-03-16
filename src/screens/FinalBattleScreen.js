@@ -111,7 +111,7 @@ class FinalBattleScreen {
     const allQuestions = [];
     for (const unitId of HARD_UNITS) {
       try {
-        const questions = await loadUnitQuestions(unitId);
+        const { questions } = await loadUnitQuestions(unitId);   // ← オブジェクトを分割代入
         if (Array.isArray(questions)) {
           allQuestions.push(...questions);
         }
@@ -346,7 +346,7 @@ class FinalBattleScreen {
       const btn = document.createElement('button');
       btn.className   = 'button fb-choice-btn';
       btn.textContent = String(choice);
-      btn.addEventListener('click', () => this._onChoiceClick(btn, choice, q.answer));
+      btn.addEventListener('click', () => this._onChoiceClick(btn, choice, q.correctAnswer));
       grid.appendChild(btn);
     });
   }
@@ -357,8 +357,9 @@ class FinalBattleScreen {
    * @returns {Array}
    */
   _buildChoices(q) {
-    const all = [q.answer, ...(q.choices || q.distractors || [])].filter(
-      (v, i, arr) => arr.indexOf(v) === i
+    // 問題の正解フィールドは correctAnswer（choices には正解も含まれる場合があるので dedup する）
+    const all = [q.correctAnswer, ...(q.choices || q.distractors || [])].filter(
+      (v, i, arr) => v !== undefined && arr.indexOf(v) === i
     );
     // Fisher-Yates
     for (let i = all.length - 1; i > 0; i--) {

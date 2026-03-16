@@ -62,6 +62,9 @@ class SaveManagerClass {
     this._markPlayedToday();
 
     const state = GameStore.getState();
+    // app からストーリー進捗フィールドのみ抽出して保存（isInitialized 等は保存不要）
+    const { prologueShown, storyAct, finaleShown, finalBattleCleared,
+            sealStrength, currentDimension, dailyMissionDate, dailyMissionsDone } = state.app;
     const saveData = {
       id: SAVE_KEY,
       player: state.player,
@@ -71,6 +74,10 @@ class SaveManagerClass {
       house: state.house,
       town: state.town,
       sound: state.sound,
+      storyProgress: {
+        prologueShown, storyAct, finaleShown, finalBattleCleared,
+        sealStrength, currentDimension, dailyMissionDate, dailyMissionsDone
+      },
       savedAt: new Date().toISOString(),
       version: Config.APP_VERSION
     };
@@ -249,6 +256,19 @@ class SaveManagerClass {
         ...saveData.sound
       });
       SoundManager.importSettings(saveData.sound);
+    }
+
+    // ストーリー進行フラグを復元
+    if (saveData.storyProgress) {
+      const sp = saveData.storyProgress;
+      if (sp.storyAct !== undefined)          GameStore.setState('app.storyAct', sp.storyAct);
+      if (sp.sealStrength !== undefined)       GameStore.setState('app.sealStrength', sp.sealStrength);
+      if (sp.prologueShown !== undefined)      GameStore.setState('app.prologueShown', sp.prologueShown);
+      if (sp.finaleShown !== undefined)        GameStore.setState('app.finaleShown', sp.finaleShown);
+      if (sp.finalBattleCleared !== undefined) GameStore.setState('app.finalBattleCleared', sp.finalBattleCleared);
+      if (sp.currentDimension !== undefined)   GameStore.setState('app.currentDimension', sp.currentDimension);
+      if (sp.dailyMissionDate !== undefined)   GameStore.setState('app.dailyMissionDate', sp.dailyMissionDate);
+      if (sp.dailyMissionsDone !== undefined)  GameStore.setState('app.dailyMissionsDone', sp.dailyMissionsDone);
     }
 
     // ストリーク計算（ロード後に実施）
