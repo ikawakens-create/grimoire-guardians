@@ -17,6 +17,7 @@ import { SoundManager, SoundType } from '../core/SoundManager.js';
 import BookCard from '../components/BookCard.js';
 import { CharacterAvatar } from '../components/CharacterAvatar.js';
 import WORLDS from '../data/worlds.js';
+import { SEAL_GAUGE_TEXT, FINAL_BATTLE } from '../data/storyData.js';
 import InventoryScreen from './InventoryScreen.js';
 import MemoryIsleScreen from './MemoryIsleScreen.js';
 
@@ -69,8 +70,17 @@ class BookshelfScreen {
     const screen = document.createElement('div');
     screen.className = 'bookshelf-screen screen-transition-enter';
 
+    // Act3（世界20以降）は霧のエフェクト
+    const storyAct = GameStore.getState('app.storyAct') || 1;
+    if (storyAct >= 3) {
+      screen.classList.add('bookshelf-fog');
+    }
+
     // ヘッダー
     screen.appendChild(this._buildHeader());
+
+    // 封印ゲージバナー
+    screen.appendChild(this._buildSealGauge());
 
     // カードグリッド
     const grid = document.createElement('div');
@@ -155,10 +165,17 @@ class BookshelfScreen {
     const header = document.createElement('header');
     header.className = 'bookshelf-header';
 
-    // タイトル
+    // Act に応じたタイトル
+    const storyAct = GameStore.getState('app.storyAct') || 1;
+    const actTitles = {
+      1: 'ふういんされたグリモア',
+      2: 'グリモアをとりもどせ！',
+      3: '🌫️ やみにおおわれたほんだな',
+      4: '✨ さいごのグリモアへ！'
+    };
     const title = document.createElement('h1');
     title.className = 'bookshelf-title';
-    title.textContent = 'ほんだな';
+    title.textContent = actTitles[storyAct] || 'ほんだな';
 
     // プレイヤー名（空文字列の場合は「プレイヤー」にフォールバック）
     const rawName    = GameStore.getState('player.name');
@@ -255,6 +272,33 @@ class BookshelfScreen {
   }
 
   /**
+   * 封印ゲージバナーを生成する
+   * @returns {HTMLElement}
+   * @private
+   */
+  _buildSealGauge() {
+    const sealStrength  = GameStore.getState('app.sealStrength') || 0;
+    const total         = WORLDS.length; // 34
+    const pct           = Math.round((sealStrength / total) * 100);
+    const gaugeText     = SEAL_GAUGE_TEXT[sealStrength] || SEAL_GAUGE_TEXT[0];
+
+    const wrap = document.createElement('div');
+    wrap.className = 'seal-gauge-wrap';
+    wrap.innerHTML = `
+      <div class="seal-gauge-label">
+        <span class="seal-gauge-icon">📖</span>
+        <span class="seal-gauge-text">${gaugeText}</span>
+        <span class="seal-gauge-count">${sealStrength} / ${total}</span>
+      </div>
+      <div class="seal-gauge-bar" role="progressbar"
+           aria-valuenow="${sealStrength}" aria-valuemin="0" aria-valuemax="${total}">
+        <div class="seal-gauge-fill" style="width:${pct}%"></div>
+      </div>
+    `;
+    return wrap;
+  }
+
+  /**
    * ワールドカードを一括生成してグリッドに追加する
    * @param {HTMLElement} grid
    * @private
@@ -303,6 +347,38 @@ class BookshelfScreen {
       card.render();
       this.cards.push(card);
     });
+
+    // 最終決戦ドア（world_16b クリア後に出現）
+    this._buildFinalBattleDoor(grid);
+  }
+
+  /**
+   * 最終決戦ドアカードをグリッドに追加する
+   * world_16b クリア後かつ finalBattleCleared === false の場合のみ表示
+   * @param {HTMLElement} grid
+   * @private
+   */
+  _buildFinalBattleDoor(grid) {
+    const worldProgress    = GameStore.getState('progress.worlds') || {};
+    const unlockWorldProg  = worldProgress[FINAL_BATTLE.unlockAfterWorld];
+    const unlocked         = unlockWorldProg?.cleared === true;
+    const alreadyCleared   = GameStore.getState('app.finalBattleCleared') === true;
+
+    if (!unlocked) return;
+
+    const door = document.createElement('div');
+    door.className = 'final-battle-door' + (alreadyCleared ? ' final-battle-door-cleared' : '');
+    door.innerHTML = `
+      <div class="fbd-glow"></div>
+      <div class="fbd-icon">${alreadyCleared ? '👑' : '⚔️'}</div>
+      <div class="fbd-title">${alreadyCleared ? 'さいしゅうけっせん（クリアずみ）' : 'さいしゅうけっせん！'}</div>
+      <div class="fbd-desc">${alreadyCleared ? 'もう一度いどもう！' : 'やみのまじんをたおせ！'}</div>
+    `;
+    door.addEventListener('click', () => {
+      SoundManager.playSFX(SoundType.BUTTON_CLICK);
+      GameStore.setState('app.currentScreen', 'final_battle');
+    });
+    grid.appendChild(door);
   }
 
   /**

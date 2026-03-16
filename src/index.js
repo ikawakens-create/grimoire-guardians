@@ -30,6 +30,8 @@ import { GrimoireLibraryScreen } from './screens/GrimoireLibraryScreen.js';
 import { ShopScreen } from './screens/ShopScreen.js';
 import { GuildScreen } from './screens/GuildScreen.js';
 import { FarmScreen } from './screens/FarmScreen.js';
+import UnitIntroScreen from './screens/UnitIntroScreen.js';
+import FinalBattleScreen from './screens/FinalBattleScreen.js';
 import { TownManager } from './core/TownManager.js';
 import { SkinManager } from './core/SkinManager.js';
 
@@ -213,6 +215,9 @@ function showGameScreen() {
     } else if (screen === 'farm') {
       hideAll();
       showFarm(gameScreen);
+    } else if (screen === 'final_battle') {
+      hideAll();
+      showFinalBattle(gameScreen);
     } else if (screen === 'bookshelf') {
       hideAll();
       // まち等のサブ画面から戻ってきた場合はブックシェルフを再描画
@@ -264,7 +269,7 @@ function showBookshelf(gameScreen, newlyClearedWorldId = null) {
     gameScreen,
     (worldData) => {
       Logger.info(`[App] World selected: ${worldData.id} (unit: ${worldData.unitId})`);
-      showQuiz(gameScreen, worldData);
+      showUnitIntro(gameScreen, worldData);
     },
     newlyClearedWorldId
   );
@@ -276,6 +281,76 @@ function showBookshelf(gameScreen, newlyClearedWorldId = null) {
 
   if (Config.IS_DEBUG) {
     window.GG._screen = bookshelf;
+  }
+}
+
+/**
+ * UnitIntroScreen を描画する（本棚 → クイズ の間）
+ * @param {HTMLElement} gameScreen - ゲーム画面コンテナ
+ * @param {Object}      worldData  - 選択されたワールドデータ
+ */
+function showUnitIntro(gameScreen, worldData) {
+  if (_activeScreen) {
+    _activeScreen.destroy();
+    _activeScreen = null;
+  }
+
+  GameStore.setState('app.currentScreen', 'unit_intro');
+
+  const intro = new UnitIntroScreen(
+    gameScreen,
+    worldData.id,
+    // はじめる！
+    () => {
+      Logger.info('[App] UnitIntro start:', worldData.id);
+      showQuiz(gameScreen, worldData);
+    },
+    // もどる
+    () => {
+      Logger.info('[App] UnitIntro back to bookshelf');
+      showBookshelf(gameScreen);
+    }
+  );
+
+  intro.render();
+  _activeScreen = intro;
+
+  if (Config.IS_DEBUG) {
+    window.GG._screen = intro;
+  }
+}
+
+/**
+ * FinalBattleScreen を描画する（全ワールドクリア後の最終決戦）
+ * @param {HTMLElement} gameScreen - ゲーム画面コンテナ
+ */
+function showFinalBattle(gameScreen) {
+  if (_activeScreen) {
+    _activeScreen.destroy();
+    _activeScreen = null;
+  }
+
+  GameStore.setState('app.currentScreen', 'final_battle');
+
+  const battle = new FinalBattleScreen(
+    gameScreen,
+    // 完了（correctCount を受け取る）
+    (correctCount) => {
+      Logger.info(`[App] FinalBattle complete: ${correctCount}/30 correct`);
+      showBookshelf(gameScreen);
+    },
+    // もどる（途中断念）
+    () => {
+      Logger.info('[App] FinalBattle aborted');
+      showBookshelf(gameScreen);
+    }
+  );
+
+  battle.render();
+  _activeScreen = battle;
+
+  if (Config.IS_DEBUG) {
+    window.GG._screen = battle;
   }
 }
 

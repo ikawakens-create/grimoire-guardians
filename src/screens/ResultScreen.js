@@ -21,6 +21,7 @@ import { SoundManager, SoundType } from '../core/SoundManager.js';
 import HapticFeedback from '../utils/HapticFeedback.js';
 import { CharacterAvatar } from '../components/CharacterAvatar.js';
 import WORLDS, { getWorldById } from '../data/worlds.js';
+import { FUKUROU_CLEAR_COMMENTS, ACT_CUTINS, NPC_FIRST_MEET, STORY_IMAGES } from '../data/storyData.js';
 import { getMonsterByWorldId } from '../data/memory-monsters.js';
 import { HouseManager } from '../core/HouseManager.js';
 import { TownManager } from '../core/TownManager.js';
@@ -112,6 +113,10 @@ class ResultScreen {
     this._drops = [];
     /** @type {import('../data/memory-monsters.js').MonsterDef|null} */
     this._newlyCollectedMonster = null;
+    /** @type {string|null} */
+    this._pendingActMoment = null;
+    /** @type {string|null} */
+    this._pendingNpcMeet = null;
   }
 
   // ─────────────────────────────────────────
@@ -266,6 +271,20 @@ class ResultScreen {
          </div>`
       : '';
 
+    // フクロウ先生のクリアコメント
+    const worldId   = GameStore.getState('currentSession.worldId');
+    const fukuComment = cleared && worldId && FUKUROU_CLEAR_COMMENTS[worldId]
+      ? FUKUROU_CLEAR_COMMENTS[worldId]
+      : null;
+    const fukuHTML = fukuComment
+      ? `<div class="result-fukurou-bubble">
+           <img src="${STORY_IMAGES.npcs.fukurou}"
+                class="result-fukurou-icon"
+                onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🦉',className:'result-fukurou-emoji'}))">
+           <p class="result-fukurou-text">${fukuComment.replace(/\n/g, '<br>')}</p>
+         </div>`
+      : '';
+
     // ドロップ領域
     const dropsHTML = this._drops.length > 0
       ? `<div class="result-drops">
@@ -319,6 +338,9 @@ class ResultScreen {
 
         <!-- 倍率バナー -->
         ${multiplierHTML}
+
+        <!-- フクロウ先生コメント -->
+        ${fukuHTML}
 
         <!-- ドロップ -->
         ${dropsHTML}
@@ -396,10 +418,11 @@ class ResultScreen {
       this._newlyCollectedMonster = this._updateMonsterClearCount(worldId);
     }
 
-    // クリア時: 家・町・スキンの進捗チェック
+    // クリア時: 家・町・スキンの進捗チェック + ストーリー進捗更新
     if (cleared && worldId) {
       HouseManager.checkProgressUnlocks();
       HouseManager.checkAndUnlockStyles();
+      this._updateStoryProgress(worldId);
     }
     TownManager.onQuizCompleted();
     SkinManager.checkMilestoneUnlocks();
@@ -471,7 +494,19 @@ class ResultScreen {
       await this._animateMonsterGet(this._newlyCollectedMonster);
     }
 
-    // ⑤ 全ワールドクリア判定（phase_complete）
+    // ⑤ NPC初登場バナー
+    if (this._pendingNpcMeet) {
+      await this._showNpcFirstMeet(this._pendingNpcMeet);
+      this._pendingNpcMeet = null;
+    }
+
+    // ⑥ Act転換カットイン
+    if (this._pendingActMoment) {
+      await this._showActCutin(this._pendingActMoment);
+      this._pendingActMoment = null;
+    }
+
+    // ⑦ 全ワールドクリア判定（phase_complete）
     if (cleared) {
       this._checkPhaseComplete();
     }
@@ -505,6 +540,121 @@ class ResultScreen {
         banner.classList.add('monster-get-exit');
         setTimeout(() => { banner.remove(); resolve(); }, 500);
       }, 3000);
+    });
+  }
+
+  /**
+   * ストーリー進捗を更新する（sealStrength・storyAct・actMoment演出）
+   * @param {string} worldId
+   * @private
+   */
+  _updateStoryProgress(worldId) {
+    // 封印強度 = クリア済みワールド数
+    const worldProgress = GameStore.getState('progress.worlds') || {};
+    const clearedCount  = Object.values(worldProgress).filter(w => w.cleared).length;
+    GameStore.setState('app.sealStrength', clearedCount);
+
+    // actMoment で storyAct を更新
+    const worldDef = getWorldById(worldId);
+    if (!worldDef) return;
+
+    const { actMoment, facilityUnlock } = worldDef;
+
+    if (actMoment === 'act2_start') GameStore.setState('app.storyAct', 2);
+    else if (actMoment === 'act3_start') GameStore.setState('app.storyAct', 3);
+    else if (actMoment === 'act4_start') GameStore.setState('app.storyAct', 4);
+
+    // NPC初登場フラグを記録（セッションストレージで管理）
+    if (facilityUnlock) {
+      const key = `npc_met_${facilityUnlock}`;
+      if (!sessionStorage.getItem(key)) {
+        sessionStorage.setItem(key, '1');
+        this._pendingNpcMeet = facilityUnlock;
+      }
+    }
+
+    // actMoment を演出キューに積む
+    if (actMoment && actMoment !== 'none') {
+      this._pendingActMoment = actMoment;
+    }
+  }
+
+  /**
+   * Act転換カットインをオーバーレイ表示する
+   * @param {string} actMoment - 'act2_start' | 'act3_start' | 'act4_start' | 'finale_unlock'
+   * @returns {Promise<void>}
+   * @private
+   */
+  _showActCutin(actMoment) {
+    // ACT_CUTINS からデータを取得
+    const cutin = actMoment === 'act2_start'    ? ACT_CUTINS.act2
+                : actMoment === 'act3_start'    ? ACT_CUTINS.act3
+                : actMoment === 'act4_start'    ? ACT_CUTINS.act4
+                : actMoment === 'finale_unlock' ? ACT_CUTINS.finale
+                : null;
+
+    if (!cutin) return Promise.resolve();
+
+    return new Promise((resolve) => {
+      const overlay = document.createElement('div');
+      overlay.className = 'act-cutin-overlay';
+      overlay.innerHTML = `
+        <div class="act-cutin-content">
+          <div class="act-cutin-icon">${cutin.icon || '📖'}</div>
+          <div class="act-cutin-act-label">${cutin.actLabel || ''}</div>
+          <div class="act-cutin-title">${cutin.title || ''}</div>
+          <div class="act-cutin-text">${(cutin.text || '').replace(/\n/g, '<br>')}</div>
+          <div class="act-cutin-tap">タップして つづける</div>
+        </div>
+      `;
+
+      overlay.addEventListener('click', () => {
+        overlay.classList.add('act-cutin-exit');
+        setTimeout(() => { overlay.remove(); resolve(); }, 500);
+      });
+
+      if (this._el) this._el.appendChild(overlay);
+      SoundManager.playSFX(SoundType.WORLD_CLEAR);
+    });
+  }
+
+  /**
+   * NPC初登場バナーを表示する
+   * @param {string} facilityId - 'tanuki' | 'farm' | 'guildmaster'
+   * @returns {Promise<void>}
+   * @private
+   */
+  _showNpcFirstMeet(facilityId) {
+    const npcData = NPC_FIRST_MEET[facilityId];
+    if (!npcData) return Promise.resolve();
+
+    return new Promise((resolve) => {
+      const banner = document.createElement('div');
+      banner.className = 'npc-firstmeet-banner';
+      banner.innerHTML = `
+        <div class="npc-fm-inner">
+          <span class="npc-fm-emoji">${npcData.emoji || '👤'}</span>
+          <div class="npc-fm-text">
+            <div class="npc-fm-name">${npcData.name || ''}が まちに あらわれた！</div>
+            <div class="npc-fm-speech">${(npcData.firstSpeech || '').replace(/\n/g, '<br>')}</div>
+          </div>
+        </div>
+      `;
+
+      banner.addEventListener('click', () => {
+        banner.classList.add('npc-fm-exit');
+        setTimeout(() => { banner.remove(); resolve(); }, 400);
+      });
+
+      // 5秒後に自動で消える
+      setTimeout(() => {
+        if (banner.isConnected) {
+          banner.classList.add('npc-fm-exit');
+          setTimeout(() => { banner.remove(); resolve(); }, 400);
+        }
+      }, 5000);
+
+      if (this._el) this._el.appendChild(banner);
     });
   }
 

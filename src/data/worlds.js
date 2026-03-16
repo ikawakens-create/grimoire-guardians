@@ -52,7 +52,10 @@ export const WORLDS = [
     },
     order: 1,
     freeToPlay: true,
-    events: []
+    events: [],
+    storyDesc: 'やみが かくした さいしょの グリモア！\nかずの きほんを とりもどせ！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -76,7 +79,10 @@ export const WORLDS = [
     freeToPlay: true,
     events: [
       { triggerAt: 10, type: 'omikuji' }
-    ]
+    ],
+    storyDesc: '10までの かずが はいった グリモア！\nかずを かぞえる まほうが もどってくる！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -100,7 +106,10 @@ export const WORLDS = [
     freeToPlay: true,
     events: [
       { triggerAt: 8, type: 'three_paths' }
-    ]
+    ],
+    storyDesc: 'じゅんばんの まほうが はいった グリモア！\nどこに いるかが わかるように なるぞ！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -124,7 +133,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'monster' }
-    ]
+    ],
+    storyDesc: 'たしざんの まほうが はいった グリモア！\nあわせる ちからが めざめる！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -148,7 +160,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'treasure' }
-    ]
+    ],
+    storyDesc: 'ひきざんの まほうが はいった グリモア！\nのこりを かぞえる ちからが もどる！',
+    actMoment: null,
+    facilityUnlock: 'tanuki',
   },
 
   // ============================================================
@@ -172,7 +187,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'omikuji' }
-    ]
+    ],
+    storyDesc: 'たしざん おうようの グリモア！\nいろんな もんだいに つかえるぞ！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -194,7 +212,10 @@ export const WORLDS = [
     },
     order: 7,
     freeToPlay: false,
-    events: []
+    events: [],
+    storyDesc: 'ひきざん きほんの グリモア！\nのこりを もとめる まほうが つよくなる！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -219,7 +240,10 @@ export const WORLDS = [
     events: [
       { triggerAt: 10, type: 'monster' },
       { triggerAt: -1, type: 'phase_complete' }
-    ]
+    ],
+    storyDesc: 'ひきざん おうようの グリモア！\nこれで まちに あたらしい なかまが やってくる……！',
+    actMoment: 'act2_start',
+    facilityUnlock: 'farm',
   },
 
   // ============================================================
@@ -245,7 +269,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'treasure' }
-    ]
+    ],
+    storyDesc: '20までの かずの グリモア！\nおおきい かずが わかるように なるぞ！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -268,7 +295,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'omikuji' }
-    ]
+    ],
+    storyDesc: 'とけいの グリモア！\nじかんを よむ まほうが めざめるぞ！',
+    actMoment: null,
+    facilityUnlock: 'guildmaster',
   },
 
   // ============================================================
@@ -290,7 +320,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'three_paths' }
-    ]
+    ],
+    storyDesc: 'なんじはんの グリモア！\nとけいの まほうが ふかまるぞ！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -312,7 +345,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'monster' }
-    ]
+    ],
+    storyDesc: '5ふんたんいの グリモア！\nとけいを かんぺきに よめるように なるぞ！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -335,7 +371,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'three_paths' }
-    ]
+    ],
+    storyDesc: 'さくらんぼ算の グリモア！\nかずを わける まほうが うまれるぞ！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -357,7 +396,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'monster' }
-    ]
+    ],
+    storyDesc: 'くりあがり（9）の グリモア！\nおおきい たしざんの とびらが ひらく！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -379,7 +421,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'treasure' }
-    ]
+    ],
+    storyDesc: 'くりあがり（8）の グリモア！\nまほうが どんどん つよくなる！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -401,7 +446,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'three_paths' }
-    ]
+    ],
+    storyDesc: 'くりあがり（7・6）の グリモア！\nふういんが どんどん かいふくしていく！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -423,7 +471,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'omikuji' }
-    ]
+    ],
+    storyDesc: 'くりあがり おうようの グリモア！\nたしざんの まほうが かんぜんに そなわるぞ！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -445,7 +496,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'three_paths' }
-    ]
+    ],
+    storyDesc: 'くりさがりの ひみつが はいった グリモア！\nひきざんの おくぎが めざめるぞ！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -467,7 +521,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'treasure' }
-    ]
+    ],
+    storyDesc: 'くりさがり（11・12）の グリモア！\nむずかしい ひきざんが できるようになるぞ！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -489,7 +546,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'monster' }
-    ]
+    ],
+    storyDesc: 'くりさがり（13〜18）の グリモア！\nふういんが なかばを こえた……だが なにかが……！',
+    actMoment: 'act3_start',
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -511,7 +571,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'omikuji' }
-    ]
+    ],
+    storyDesc: 'くりさがり おうようの グリモア！\nやみの きりを はねのけろ！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -533,7 +596,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'treasure' }
-    ]
+    ],
+    storyDesc: '3つの たしざんの グリモア！\nまだ あきらめるな！ ふういんを まもれ！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -555,7 +621,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'monster' }
-    ]
+    ],
+    storyDesc: '3つの ひきざんの グリモア！\nやみの こうげきを うけながらも まけるな！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -578,7 +647,10 @@ export const WORLDS = [
     events: [
       { triggerAt: 10, type: 'omikuji' },
       { triggerAt: -1, type: 'phase_complete' }
-    ]
+    ],
+    storyDesc: 'たし・ひきまじりの グリモア！\nりょうほうの まほうで やみに たちむかえ！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -600,7 +672,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'treasure' }
-    ]
+    ],
+    storyDesc: 'かたちの グリモア！\nまわりの ものを みる まほうが めざめるぞ！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -622,7 +697,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'treasure' }
-    ]
+    ],
+    storyDesc: 'かたちづくりの グリモア！\nかたちを つかいこなす まほうが そなわるぞ！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // ============================================================
@@ -647,7 +725,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'omikuji' }
-    ]
+    ],
+    storyDesc: 'おおきいかず よみかきの グリモア！\nやみよ……もうすぐ きみの まけだ！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // world_14b: M1-14b かずの じゅんばん と だいしょう
@@ -668,7 +749,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'three_paths' }
-    ]
+    ],
+    storyDesc: 'かずの じゅんばんの グリモア！\nきりが はれていく……！ もうすぐ だぞ！！',
+    actMoment: 'act4_start',
+    facilityUnlock: null,
   },
 
   // world_14c: M1-14c おおきい かず の たしざん
@@ -689,7 +773,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'monster' }
-    ]
+    ],
+    storyDesc: 'おおきいかず たしざんの グリモア！\nひかりが あつまってきたぞ！！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // world_14d: M1-14d おおきい かず の ひきざん
@@ -710,7 +797,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'treasure' }
-    ]
+    ],
+    storyDesc: 'おおきいかず ひきざんの グリモア！\nやみの ちからが よわまってきた！！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // world_15a: M1-15a なんじ なんぷん（〜30ぷん）
@@ -731,7 +821,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'omikuji' }
-    ]
+    ],
+    storyDesc: 'なんじなんぷん（前半）の グリモア！\nあと3さつ！ まけるな！！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // world_15b: M1-15b なんじ なんぷん（31ぷん〜）
@@ -752,7 +845,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'three_paths' }
-    ]
+    ],
+    storyDesc: 'なんじなんぷん（後半）の グリモア！\nあと2さつ！ きぼうの ひかりが みえてきた！！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // world_16a: M1-16a ずを つかって（たしざん 文章題）
@@ -773,7 +869,10 @@ export const WORLDS = [
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'monster' }
-    ]
+    ],
+    storyDesc: 'たしざん ぶんしょうだいの グリモア！\nさいご の 1さつ まで きた……！！',
+    actMoment: null,
+    facilityUnlock: null,
   },
 
   // world_16b: M1-16b ずを つかって（ひきざん 文章題）Phase 0.3 最終
@@ -795,7 +894,10 @@ export const WORLDS = [
     events: [
       { triggerAt: 10, type: 'treasure' },
       { triggerAt: -1, type: 'phase_complete' }
-    ]
+    ],
+    storyDesc: 'さいごの グリモア！\nぜんぶ とりもどす！ ふういんを かんせいさせろ！！',
+    actMoment: 'finale_unlock',
+    facilityUnlock: null,
   }
 ];
 

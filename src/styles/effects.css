@@ -1036,3 +1036,654 @@
   font-size: 2rem;
   line-height: 1;
 }
+
+/* ==========================================================================
+   ストーリーシステム CSS（v2.0 追加）
+   ========================================================================== */
+
+/* ─── プロローグスライド ──────────────────────────────────────── */
+
+.prologue-slide {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 24px;
+  opacity: 0;
+  transform: translateX(30px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.prologue-slide-in {
+  opacity: 1;
+  transform: translateX(0);
+}
+.prologue-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+.prologue-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.prologue-bg-emoji {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 120px;
+  opacity: 0.4;
+}
+.prologue-char-wrap {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 8px;
+}
+.prologue-npc-bubble {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: rgba(255,255,255,0.92);
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin: 0 16px 8px;
+  max-width: 480px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.prologue-npc-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.prologue-npc-emoji { font-size: 28px; flex-shrink: 0; }
+.prologue-npc-text  { margin: 0; font-size: 14px; line-height: 1.5; color: #333; }
+
+.prologue-main-text {
+  position: relative;
+  z-index: 3;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  font-size: 16px;
+  line-height: 1.7;
+  border-radius: 12px;
+  padding: 12px 20px;
+  margin: 0 16px 8px;
+  max-width: 480px;
+  text-align: center;
+}
+.prologue-sub-text {
+  position: relative;
+  z-index: 3;
+  color: rgba(255,255,255,0.8);
+  font-size: 13px;
+  margin: 0 16px 8px;
+  text-align: center;
+}
+.prologue-nav {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 8px;
+}
+.prologue-skip-btn {
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.8);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.prologue-next-btn { min-width: 100px; }
+.prologue-name-form {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 320px;
+  margin: 8px auto 0;
+}
+.welcome-name-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 18px;
+  border-radius: 12px;
+  border: 2px solid #7C4DFF;
+  outline: none;
+  text-align: center;
+}
+.prologue-name-btn { width: 100%; }
+.prologue-slide-decision {
+  justify-content: center;
+  gap: 20px;
+}
+.prologue-decision-text {
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+  text-align: center;
+  line-height: 1.6;
+}
+.prologue-start-btn { min-width: 200px; }
+.prologue-char-decision { margin-bottom: 0; }
+
+/* ─── UnitIntroScreen ─────────────────────────────────────────── */
+
+.unit-intro-screen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #E8EAF6 0%, #C5CAE9 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.unit-intro-visible { opacity: 1; }
+
+.unit-intro-content {
+  width: 90%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.unit-intro-header { text-align: center; }
+.unit-intro-world-name {
+  font-size: 20px;
+  font-weight: bold;
+  color: #3F51B5;
+}
+.unit-intro-story-desc {
+  font-size: 13px;
+  color: #666;
+  margin-top: 4px;
+  line-height: 1.5;
+}
+.unit-intro-illust-wrap {
+  width: 160px;
+  height: 120px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.unit-intro-illust-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.unit-intro-illust-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.unit-intro-ph-emoji { font-size: 40px; }
+.unit-intro-ph-label { font-size: 13px; color: #555; }
+
+.unit-intro-avatar-slot { position: absolute; bottom: 16px; right: 16px; }
+
+.unit-intro-hint-bubble {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 10px 14px;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.unit-intro-fukurou-icon { font-size: 24px; flex-shrink: 0; }
+.unit-intro-hint-text { margin: 0; font-size: 14px; line-height: 1.5; color: #333; }
+
+.unit-intro-buttons {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  justify-content: center;
+}
+.unit-intro-btn-back { min-width: 80px; }
+.unit-intro-btn-start { min-width: 140px; }
+
+/* ミニバナー */
+.unit-intro-mini-banner {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  background: linear-gradient(90deg, #3F51B5, #7986CB);
+  color: #fff;
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.unit-intro-mini-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.unit-intro-mini-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+}
+.unit-intro-mini-title { font-size: 15px; font-weight: bold; }
+.unit-intro-mini-desc  { font-size: 12px; opacity: 0.85; flex: 1; }
+.unit-intro-mini-start { min-width: 90px; }
+
+/* ─── 封印ゲージ（BookshelfScreen） ─────────────────────────── */
+
+.seal-gauge-wrap {
+  padding: 8px 16px 4px;
+  background: rgba(63,81,181,0.06);
+}
+.seal-gauge-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: #555;
+}
+.seal-gauge-icon  { font-size: 16px; }
+.seal-gauge-text  { flex: 1; }
+.seal-gauge-count { font-weight: bold; color: #3F51B5; }
+.seal-gauge-bar {
+  height: 8px;
+  background: rgba(0,0,0,0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.seal-gauge-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7986CB, #3F51B5);
+  border-radius: 4px;
+  transition: width 0.6s ease;
+  will-change: width;
+}
+
+/* 霧エフェクト（Act3） */
+@keyframes fog-drift {
+  0%   { opacity: 0.18; transform: translateX(-5px); }
+  50%  { opacity: 0.28; transform: translateX(5px); }
+  100% { opacity: 0.18; transform: translateX(-5px); }
+}
+.bookshelf-fog::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(80,80,120,0.35) 100%);
+  pointer-events: none;
+  z-index: 1;
+  animation: fog-drift 8s ease-in-out infinite;
+}
+
+/* ─── 最終決戦ドア（BookshelfScreen） ─────────────────────────── */
+
+@keyframes fbd-glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px 4px rgba(255,215,0,0.5); }
+  50%       { box-shadow: 0 0 36px 10px rgba(255,215,0,0.9); }
+}
+.final-battle-door {
+  position: relative;
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 20px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  border: 2px solid #FFD700;
+  border-radius: 16px;
+  cursor: pointer;
+  animation: fbd-glow-pulse 2.5s ease-in-out infinite;
+  overflow: hidden;
+}
+.final-battle-door-cleared {
+  border-color: #aaa;
+  animation: none;
+  opacity: 0.75;
+}
+.fbd-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(255,215,0,0.12), transparent 70%);
+  pointer-events: none;
+}
+.fbd-icon  { font-size: 40px; z-index: 1; }
+.fbd-title { font-size: 18px; font-weight: bold; color: #FFD700; z-index: 1; }
+.fbd-desc  { font-size: 13px; color: rgba(255,255,255,0.7); z-index: 1; }
+
+/* ─── Act転換カットイン ──────────────────────────────────────── */
+
+@keyframes act-cutin-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.act-cutin-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+  cursor: pointer;
+  animation: act-cutin-in 0.4s ease forwards;
+}
+.act-cutin-exit {
+  animation: fade-out 0.5s ease forwards;
+}
+.act-cutin-content {
+  text-align: center;
+  color: #fff;
+  padding: 32px;
+  max-width: 420px;
+}
+.act-cutin-icon       { font-size: 60px; margin-bottom: 12px; }
+.act-cutin-act-label  { font-size: 13px; letter-spacing: 3px; color: #FFD700; opacity: 0.8; margin-bottom: 6px; }
+.act-cutin-title      { font-size: 24px; font-weight: bold; margin-bottom: 12px; }
+.act-cutin-text       { font-size: 15px; line-height: 1.8; opacity: 0.9; margin-bottom: 20px; }
+.act-cutin-tap        { font-size: 12px; opacity: 0.5; letter-spacing: 1px; }
+
+/* ─── NPC初登場バナー ────────────────────────────────────────── */
+
+@keyframes npc-fm-slide-in {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.npc-firstmeet-banner {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 480px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  z-index: 400;
+  cursor: pointer;
+  animation: npc-fm-slide-in 0.4s ease forwards;
+}
+.npc-fm-exit {
+  animation: fade-out 0.4s ease forwards;
+}
+.npc-fm-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+}
+.npc-fm-emoji  { font-size: 36px; flex-shrink: 0; }
+.npc-fm-name   { font-size: 14px; font-weight: bold; color: #333; margin-bottom: 4px; }
+.npc-fm-speech { font-size: 13px; color: #666; line-height: 1.5; }
+
+/* ─── ResultScreen フクロウコメント ─────────────────────────── */
+
+.result-fukurou-bubble {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: #F3F0FF;
+  border: 1px solid #D1C4E9;
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin: 8px 0;
+  max-width: 400px;
+  align-self: center;
+}
+.result-fukurou-icon  { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.result-fukurou-emoji { font-size: 26px; flex-shrink: 0; }
+.result-fukurou-text  { margin: 0; font-size: 13px; line-height: 1.6; color: #4A148C; }
+
+/* ─── FinalBattleScreen ──────────────────────────────────────── */
+
+.final-battle-screen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, #0a0a1a 0%, #1a0a2e 50%, #2a0a0a 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* 開幕カットイン */
+.fb-opening-slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.fb-opening-visible { opacity: 1; }
+.fb-opening-bg {
+  position: absolute;
+  inset: 0;
+  object-fit: cover;
+  opacity: 0.4;
+}
+.fb-opening-boss-img {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  z-index: 1;
+  filter: drop-shadow(0 0 24px rgba(255,0,0,0.8));
+}
+.fb-opening-text {
+  z-index: 1;
+  text-align: center;
+  color: #fff;
+  font-size: 18px;
+  line-height: 1.7;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  max-width: 400px;
+}
+.fb-opening-next-btn {
+  z-index: 1;
+  min-width: 140px;
+}
+
+/* バトルUI */
+.fb-battle-ui {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 16px;
+  gap: 10px;
+}
+
+/* ボスHPバー */
+.fb-boss-hp-wrap {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.fb-boss-hp-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
+}
+.fb-boss-hp-bar {
+  height: 14px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 7px;
+  overflow: hidden;
+}
+.fb-boss-hp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff4444, #ff8800);
+  border-radius: 7px;
+  transition: width 0.5s ease, background 0.5s ease;
+}
+.fb-hp-low      .fb-boss-hp-fill { background: linear-gradient(90deg, #ff2222, #ff6600); }
+.fb-hp-critical .fb-boss-hp-fill {
+  background: linear-gradient(90deg, #cc0000, #ff3300);
+  animation: pulse 0.6s ease-in-out infinite alternate;
+}
+
+/* ボス画像 */
+.fb-boss-area {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fb-boss-img {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 16px rgba(255,50,50,0.7));
+  transition: filter 0.4s ease;
+}
+.fb-boss-img-damaged {
+  filter: drop-shadow(0 0 28px rgba(255,200,0,0.9)) brightness(1.5);
+}
+.fb-boss-dialogue {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.7);
+  color: #ff6666;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+/* キャラ（xl） */
+.fb-char-area { position: relative; }
+@keyframes fb-char-attack-anim {
+  0%   { transform: translateX(0); }
+  30%  { transform: translateX(40px) scale(1.1); }
+  60%  { transform: translateX(10px) scale(1.05); }
+  100% { transform: translateX(0) scale(1); }
+}
+.fb-char-attack .char-avatar {
+  animation: fb-char-attack-anim 0.5s ease forwards;
+}
+
+/* 問題エリア */
+.fb-question-area {
+  width: 100%;
+  max-width: 480px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 12px 16px;
+}
+.fb-question-text {
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.fb-choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.fb-choice-btn {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.fb-choice-btn:active { background: rgba(255,255,255,0.25); }
+.fb-progress-text {
+  color: rgba(255,255,255,0.5);
+  font-size: 12px;
+  text-align: right;
+}
+
+/* 正解・不正解フラッシュ */
+@keyframes screen-flash-red-anim {
+  0%   { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+.fb-screen-flash-red::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(255,0,0,0.35);
+  pointer-events: none;
+  z-index: 100;
+  animation: screen-flash-red-anim 0.4s ease forwards;
+}
+
+/* 勝利カットイン */
+.fb-victory-slide {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #1a1a5e, #2d4373);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 50;
+}
+.fb-victory-visible { opacity: 1; }
+.fb-victory-icon  { font-size: 64px; }
+.fb-victory-rank  { font-size: 28px; font-weight: bold; color: #FFD700; }
+.fb-victory-title { font-size: 18px; color: #fff; }
+.fb-victory-text  { font-size: 14px; color: rgba(255,255,255,0.8); text-align: center; line-height: 1.7; max-width: 360px; }
+
+/* 素材配達アニメーション（ResultScreen用） */
+@keyframes deliver-float {
+  0%   { transform: translateY(0) scale(1); opacity: 1; }
+  70%  { transform: translateY(-30px) scale(1.2); opacity: 1; }
+  100% { transform: translateY(-60px) scale(0.8); opacity: 0; }
+}
+.result-deliver-badge {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, #4CAF50, #8BC34A);
+  color: #fff;
+  font-size: 13px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  animation: deliver-float 2s ease forwards;
+  white-space: nowrap;
+}
