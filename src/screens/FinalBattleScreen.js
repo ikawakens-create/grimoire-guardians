@@ -59,6 +59,8 @@ class FinalBattleScreen {
     this._isAnswered = false;
     /** @type {CharacterAvatar|null} */
     this._avatar     = null;
+    /** @type {boolean} ボスが被ダメージ画像に切り替わったか */
+    this._bossDamaged = false;
   }
 
   // ─────────────────────────────────────────
@@ -466,12 +468,11 @@ class FinalBattleScreen {
       dialogue.textContent = text;
     }
 
-    // ボスHP50%以下でダメージ画像に切り替え
-    if (this._bossHp <= 50) {
+    // ボスHP50%以下で一度だけダメージ画像に切り替え
+    if (this._bossHp <= 50 && !this._bossDamaged) {
+      this._bossDamaged = true;
       const bossImg = this._el.querySelector('#fb-boss-img');
-      if (bossImg && bossImg.src !== STORY_IMAGES.boss.damaged) {
-        bossImg.src = STORY_IMAGES.boss.damaged;
-      }
+      if (bossImg) bossImg.src = STORY_IMAGES.boss.damaged;
     }
   }
 

@@ -280,7 +280,7 @@ class BookshelfScreen {
     const sealStrength  = GameStore.getState('app.sealStrength') || 0;
     const total         = WORLDS.length; // 34
     const pct           = Math.round((sealStrength / total) * 100);
-    const gaugeText     = SEAL_GAUGE_TEXT[sealStrength] || SEAL_GAUGE_TEXT[0];
+    const gaugeText     = SEAL_GAUGE_TEXT.getComment(sealStrength);
 
     const wrap = document.createElement('div');
     wrap.className = 'seal-gauge-wrap';

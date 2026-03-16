@@ -598,12 +598,14 @@ class ResultScreen {
     return new Promise((resolve) => {
       const overlay = document.createElement('div');
       overlay.className = 'act-cutin-overlay';
+      // ACT_CUTINS フィールド: icon, actLabel, title, npcText（= 表示テキスト）
+      const displayText = cutin.npcText || cutin.text || '';
       overlay.innerHTML = `
         <div class="act-cutin-content">
           <div class="act-cutin-icon">${cutin.icon || '📖'}</div>
           <div class="act-cutin-act-label">${cutin.actLabel || ''}</div>
           <div class="act-cutin-title">${cutin.title || ''}</div>
-          <div class="act-cutin-text">${(cutin.text || '').replace(/\n/g, '<br>')}</div>
+          <div class="act-cutin-text">${displayText.replace(/\n/g, '<br>')}</div>
           <div class="act-cutin-tap">タップして つづける</div>
         </div>
       `;
@@ -631,12 +633,15 @@ class ResultScreen {
     return new Promise((resolve) => {
       const banner = document.createElement('div');
       banner.className = 'npc-firstmeet-banner';
+      // NPC_FIRST_MEET のフィールド: title（絵文字入りタイトル）, npcText（台詞）
+      const npcEmojis = { tanuki: '🦝', guildmaster: '⚔️', fukurou: '🦉' };
+      const npcEmoji  = npcEmojis[facilityId] || '👤';
       banner.innerHTML = `
         <div class="npc-fm-inner">
-          <span class="npc-fm-emoji">${npcData.emoji || '👤'}</span>
+          <span class="npc-fm-emoji">${npcEmoji}</span>
           <div class="npc-fm-text">
-            <div class="npc-fm-name">${npcData.name || ''}が まちに あらわれた！</div>
-            <div class="npc-fm-speech">${(npcData.firstSpeech || '').replace(/\n/g, '<br>')}</div>
+            <div class="npc-fm-name">${npcData.title || ''}</div>
+            <div class="npc-fm-speech">${(npcData.npcText || '').replace(/\n/g, '<br>')}</div>
           </div>
         </div>
       `;
