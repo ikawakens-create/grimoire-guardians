@@ -483,7 +483,8 @@ class ResultScreen {
       await this._animateDrops();
     }
 
-    // ③ ボタンをフェードイン
+    // ③ ボタンをフェードイン（画面が破棄済みなら中断）
+    if (!this._el) return;
     const btns = this._el.querySelector('.result-buttons');
     if (btns) {
       btns.classList.add('result-buttons-visible');
@@ -560,21 +561,35 @@ class ResultScreen {
 
     const { actMoment, facilityUnlock } = worldDef;
 
-    if (actMoment === 'act2_start') GameStore.setState('app.storyAct', 2);
-    else if (actMoment === 'act3_start') GameStore.setState('app.storyAct', 3);
-    else if (actMoment === 'act4_start') GameStore.setState('app.storyAct', 4);
+    // storyAct 更新（初めて到達した Act のみ）
+    const currentAct = GameStore.getState('app.storyAct') || 1;
+    let actAdvanced = false;
 
-    // NPC初登場フラグを記録（セッションストレージで管理）
+    if (actMoment === 'act2_start' && currentAct < 2) {
+      GameStore.setState('app.storyAct', 2);
+      actAdvanced = true;
+    } else if (actMoment === 'act3_start' && currentAct < 3) {
+      GameStore.setState('app.storyAct', 3);
+      actAdvanced = true;
+    } else if (actMoment === 'act4_start' && currentAct < 4) {
+      GameStore.setState('app.storyAct', 4);
+      actAdvanced = true;
+    } else if (actMoment === 'finale_unlock' && !GameStore.getState('app.finaleShown')) {
+      // finale カットインは finaleShown が false のときのみ
+      actAdvanced = true;
+    }
+
+    // NPC初登場フラグを記録（localStorage で永続化）
     if (facilityUnlock) {
       const key = `npc_met_${facilityUnlock}`;
-      if (!sessionStorage.getItem(key)) {
-        sessionStorage.setItem(key, '1');
+      if (!localStorage.getItem(key)) {
+        localStorage.setItem(key, '1');
         this._pendingNpcMeet = facilityUnlock;
       }
     }
 
-    // actMoment を演出キューに積む
-    if (actMoment && actMoment !== 'none') {
+    // actMoment を演出キューに積む（初回のみ）
+    if (actAdvanced && actMoment && actMoment !== 'none') {
       this._pendingActMoment = actMoment;
     }
   }
@@ -594,6 +609,11 @@ class ResultScreen {
                 : null;
 
     if (!cutin) return Promise.resolve();
+
+    // finale_unlock は表示済みフラグを立てる（2回目以降は表示しない）
+    if (actMoment === 'finale_unlock') {
+      GameStore.setState('app.finaleShown', true);
+    }
 
     return new Promise((resolve) => {
       const overlay = document.createElement('div');
@@ -634,8 +654,9 @@ class ResultScreen {
       const banner = document.createElement('div');
       banner.className = 'npc-firstmeet-banner';
       // NPC_FIRST_MEET のフィールド: title（絵文字入りタイトル）, npcText（台詞）
+      // emoji は npcData.npc（'tanuki'/'guildmaster'/'fukurou'）で引く（'farm' など facilityId では取れないため）
       const npcEmojis = { tanuki: '🦝', guildmaster: '⚔️', fukurou: '🦉' };
-      const npcEmoji  = npcEmojis[facilityId] || '👤';
+      const npcEmoji  = npcEmojis[npcData.npc] || npcEmojis[facilityId] || '👤';
       banner.innerHTML = `
         <div class="npc-fm-inner">
           <span class="npc-fm-emoji">${npcEmoji}</span>
