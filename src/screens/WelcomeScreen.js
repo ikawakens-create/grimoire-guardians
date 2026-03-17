@@ -252,11 +252,14 @@ class WelcomeScreen {
     charWrap.appendChild(avatar.render());
     el.appendChild(charWrap);
 
-    // 決意テキスト（名前入り）
+    // 決意テキスト（名前入り）— innerHTML に直接入れず DOM API で挿入（XSS防止）
     const name = this._playerName || 'プレイヤー';
     const textEl = document.createElement('div');
     textEl.className = 'prologue-decision-text';
-    textEl.innerHTML = `よし、<strong>${name}</strong>！<br>いっしょに グリモアを とりもどそう！`;
+    const strong = document.createElement('strong');
+    strong.textContent = name;
+    textEl.append('よし、', strong, '！', document.createElement('br'),
+                  'いっしょに グリモアを とりもどそう！');
     el.appendChild(textEl);
 
     // スタートボタン

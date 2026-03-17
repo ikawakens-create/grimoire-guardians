@@ -18,6 +18,9 @@ import { HouseManager } from '../core/HouseManager.js';
 import { SkinManager } from '../core/SkinManager.js';
 import { getStyleById } from '../data/styleItems.js';
 
+/** HTML特殊文字をエスケープ（ユーザー入力を innerHTML に入れる際に使用） */
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
 /** レイヤー表示順（下から上） */
 const LAYER_ORDER = ['garden', 'floor1', 'floor2', 'floor3', 'tower', 'decoration'];
 
@@ -261,7 +264,7 @@ export class PhotoScreen {
 
           <!-- フッター情報 -->
           <div class="photo-info-bar">
-            <span class="photo-player-name">${playerName}</span>
+            <span class="photo-player-name">${esc(playerName)}</span>
             <span class="photo-world-count">🌟 ${cleared}/33</span>
             <span class="photo-date">${today}</span>
           </div>
