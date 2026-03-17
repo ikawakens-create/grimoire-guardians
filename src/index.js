@@ -593,7 +593,13 @@ function displayDebugInfo() {
 
     // デバッグコマンド
     unlockAll:   () => GameStore.unlockAllWorlds(),
-    resetState:  () => GameStore.reset(),
+    resetState: () => {
+      // npc_met_* と phase_complete_shown を localStorage からクリア
+      Object.keys(localStorage)
+        .filter(k => k.startsWith('npc_met_') || k === 'phase_complete_shown')
+        .forEach(k => localStorage.removeItem(k));
+      GameStore.reset();
+    },
     exportState: () => GameStore.toJSON(),
     save:        () => SaveManager.save(),
 
