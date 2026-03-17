@@ -398,7 +398,7 @@ class FinalBattleScreen {
 
     btn.classList.add('fb-choice-correct');
     HapticFeedback.light();
-    SoundManager.playSFX(SoundType.CORRECT);
+    SoundManager.playSFX(SoundType.CORRECT_ANSWER);
 
     // キャラ攻撃アニメ
     this._setCharEmotion('happy');
@@ -426,7 +426,7 @@ class FinalBattleScreen {
     });
 
     HapticFeedback.medium();
-    SoundManager.playSFX(SoundType.WRONG);
+    SoundManager.playSFX(SoundType.WRONG_ANSWER);
 
     // キャラhurt
     this._setCharEmotion('sad');

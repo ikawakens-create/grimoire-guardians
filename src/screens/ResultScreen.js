@@ -689,10 +689,15 @@ class ResultScreen {
    * @private
    */
   _checkPhaseComplete() {
+    // 一度表示したら再表示しない
+    if (localStorage.getItem('phase_complete_shown')) return;
+
     const worldProgress = GameStore.getState('progress.worlds') || {};
     const allCleared = WORLDS.every(w => worldProgress[w.id]?.cleared);
 
     if (!allCleared) return;
+
+    localStorage.setItem('phase_complete_shown', '1');
 
     Logger.info('[ResultScreen] 🎊 Phase Complete! All worlds cleared!');
     SoundManager.playSFX(SoundType.PHASE_CLEAR);
