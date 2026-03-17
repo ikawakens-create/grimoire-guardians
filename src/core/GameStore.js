@@ -25,7 +25,29 @@ export class GameStore {
       isInitialized: false,
       isLoading: false,
       currentScreen: 'loading',  // 'loading' | 'bookshelf' | 'quiz' | 'result' | 'clear'
-      error: null
+      error: null,
+
+      // ─── ストーリー進行フラグ ───
+      /** プロローグを表示済みか（2回目以降は非表示） */
+      prologueShown: false,
+      /**
+       * 現在のストーリーAct（1〜4）
+       * Act1: worlds 1〜7   / Act2: worlds 8〜19
+       * Act3: worlds 20〜27 / Act4: worlds 28〜33
+       */
+      storyAct: 1,
+      /** グランドフィナーレを表示済みか（1回のみ） */
+      finaleShown: false,
+      /** 最終決戦をクリア済みか */
+      finalBattleCleared: false,
+      /** 封印回復数（0〜33）。クリアワールド数と同期 */
+      sealStrength: 0,
+      /** 現在の次元ID */
+      currentDimension: 'dim1',
+      /** デイリーミッション達成日（Date.toDateString()形式） */
+      dailyMissionDate: null,
+      /** デイリーミッション完了済みIDs（当日分） */
+      dailyMissionsDone: [],
     },
 
     // プレイヤー情報
@@ -354,7 +376,15 @@ export class GameStore {
         isInitialized: true,
         isLoading: false,
         currentScreen: 'bookshelf',
-        error: null
+        error: null,
+        prologueShown: false,
+        storyAct: 1,
+        finaleShown: false,
+        finalBattleCleared: false,
+        sealStrength: 0,
+        currentDimension: 'dim1',
+        dailyMissionDate: null,
+        dailyMissionsDone: [],
       },
       player: {
         name: 'プレイヤー',

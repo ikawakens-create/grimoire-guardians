@@ -15,12 +15,12 @@
 import { SkinManager } from '../core/SkinManager.js';
 import { Config } from '../core/Config.js';
 
-const SIZE_PX = { sm: 40, md: 80, lg: 120 };
+const SIZE_PX = { sm: 40, md: 80, lg: 120, xl: 200 };
 
 export class CharacterAvatar {
   /**
-   * @param {'sm'|'md'|'lg'} size - アバターサイズ
-   * @param {'normal'|'happy'|'sad'} [emotion='normal'] - リザルト画面用感情（lg のみ有効）
+   * @param {'sm'|'md'|'lg'|'xl'} size - アバターサイズ（xl=200px 最終決戦・プロローグ用）
+   * @param {'normal'|'happy'|'sad'} [emotion='normal'] - リザルト画面用感情（lg/xl で有効）
    */
   constructor(size = 'md', emotion = 'normal') {
     this._size    = size;
@@ -38,7 +38,7 @@ export class CharacterAvatar {
 
     const wrapper = document.createElement('div');
     wrapper.className = `char-avatar char-avatar-${this._size}`;
-    if (this._size === 'lg') {
+    if (this._size === 'lg' || this._size === 'xl') {
       wrapper.classList.add(`char-avatar-${this._emotion}`);
     }
     wrapper.style.width  = `${px}px`;
