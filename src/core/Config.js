@@ -163,7 +163,11 @@ export const Config = {
     ENABLE_HOUSE_BUILD: true,       // 家ビルドシステム（Phase 1-D）
     ENABLE_SKINS: true,             // スキンシステム（Phase 1-F）
     ENABLE_MEMORY_ISLE: true,
-    ENABLE_DLC: false
+    ENABLE_DLC: false,
+
+    // Phase 2 機能
+    ENABLE_GRADE2: true,      // Grade 2 深海グリモア（Phase 2）
+    ENABLE_FLASH_MODE: true,  // フラッシュモード（九九専用・初回クリア後に解放）
   },
 
   // ─── スキンシステム（Phase 1-F） ──────────────────────────────────────
@@ -427,6 +431,61 @@ export const Config = {
       { id: 'guild_master',    name: 'ギルドマスター', building: 'guild',   image: 'assets/npcs/guild_master.png',    emoji: '⚔️', color: '#c0392b' },
     ],
   },
+
+  // ─── Grade 2 深海グリモア設定（Phase 2） ──────────────────────────────
+  GRADE2: {
+    TOTAL_WORLDS: 42,
+
+    // ゾーン定義（Zone 1〜5）
+    // unlockWorlds = Grade 2 内での累計クリア数
+    ZONES: [
+      { id: 'zone1', name: '浅瀬',     emoji: '🏖️', worldCount: 7,  unlockWorlds: 0,  description: '筆算の世界' },
+      { id: 'zone2', name: 'サンゴ礁', emoji: '🪸', worldCount: 9,  unlockWorlds: 7,  description: '数・量・時刻の世界' },
+      { id: 'zone3', name: '外洋',     emoji: '🌊', worldCount: 11, unlockWorlds: 16, description: '九九の世界' },
+      { id: 'zone4', name: '深海',     emoji: '🌑', worldCount: 11, unlockWorlds: 27, description: '図形・大きな数の世界' },
+      { id: 'zone5', name: '海底都市', emoji: '🏛️', worldCount: 4,  unlockWorlds: 38, description: '総復習・フィナーレ' },
+    ],
+
+    // 船のサイズ定義（成長ロードマップ）
+    SHIP_SIZES: [
+      { id: 'small',  name: '小型船',   emoji: '⛵',  unlockAt: null,    description: '出発のふね' },
+      { id: 'medium', name: '中型船',   emoji: '🚢',  unlockAt: 'zone2', description: 'Zone 2 クリア後にストーリーでGET' },
+      { id: 'large',  name: '大型船艦', emoji: '🛳️', unlockAt: 'zone3', description: 'Zone 3 クリア後に設計図GET → クラフトで完成' },
+    ],
+
+    // 大型船艦クラフトコスト（Zone 3後に設計図GET・Zone 4中に素材収集）
+    LARGE_SHIP_CRAFT_COST: { pearl: 5, coral: 5, anchor: 3, deepstone: 2 },
+
+    // 船パーツ定義（ShipBuildScreen の6部位）
+    SHIP_PARTS: [
+      { id: 'hull',       name: '船体',     emoji: '🛥️' },
+      { id: 'sail',       name: '帆',       emoji: '🎌' },
+      { id: 'figurehead', name: '船首像',   emoji: '🐬' },
+      { id: 'flag',       name: '旗',       emoji: '🚩' },
+      { id: 'deck',       name: '甲板デコ', emoji: '⚓' },
+      { id: 'glow',       name: '船底発光', emoji: '✨' },
+    ],
+
+    // フラッシュモード設定（九九専用：m2_10a〜m2_10i）
+    FLASH_MODE: {
+      ENABLED_WORLD_IDS: ['m2_10a','m2_10b','m2_10c','m2_10d','m2_10e','m2_10f','m2_10g','m2_10h','m2_10i'],
+      UNLOCK_CONDITION: 'first_clear', // 初回クリア後解放
+      TIME_LIMIT_PER_QUESTION: 5,      // 秒
+      QUESTION_COUNT: 9,               // 九九は全9問固定出題
+    },
+
+    // Grade 2 新素材
+    NEW_MATERIALS: ['pearl', 'coral', 'seaglass', 'anchor', 'deepstone'],
+
+    // Grade 2 NPC（npcs/g2/ サブディレクトリに配置）
+    NPCS: [
+      { id: 'captain_takuzo',  name: '船長タコぞう',       emoji: '🐙', role: 'guide', image: 'assets/npcs/g2/captain_takuzo.png'   },
+      { id: 'mermaid_lina',    name: '人魚の算術士リーナ', emoji: '🧜', role: 'kuku',  image: 'assets/npcs/g2/mermaid_lina.png'     },
+      { id: 'coral_daiku',     name: 'サンゴの大工さん',   emoji: '🪸', role: 'shape', image: 'assets/npcs/g2/coral_daiku.png'      },
+      { id: 'lighthouse_ojii', name: '灯台守のおじいさん', emoji: '🏠', role: 'time',  image: 'assets/npcs/g2/lighthouse_ojii.png'  },
+      { id: 'sea_sage',        name: '海の賢者',            emoji: '🧙', role: 'story', image: 'assets/npcs/g2/sea_sage.png'         },
+    ],
+  },
 };
 
 // 設定値の凍結（変更を防止）
@@ -449,5 +508,8 @@ Object.freeze(Config.TOWN.UPGRADE_COSTS);
 Object.freeze(Config.TOWN.SHOP);
 Object.freeze(Config.TOWN.FARM);
 Object.freeze(Config.SKIN);
+Object.freeze(Config.GRADE2);
+Object.freeze(Config.GRADE2.FLASH_MODE);
+Object.freeze(Config.GRADE2.LARGE_SHIP_CRAFT_COST);
 
 export default Config;
