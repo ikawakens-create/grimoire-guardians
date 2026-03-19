@@ -1,76 +1,103 @@
 # セッション引き継ぎ
 
-**保存日時**: 2026-03-17
+**保存日時**: 2026-03-19 （午後セッション）
 
 ## 今日やったこと
 
-### バグ徹底チェック（3ラウンド + SoundType確認）
+### バグ修正（実装済み・プッシュ済み）
+- `FinalBattleScreen.js` の未使用 `WORLDS` import を削除
+- `GG.resetState()` が `npc_met_*` / `phase_complete_shown` を localStorage からも削除するよう修正
+- コミット: `57ce935`
 
-**Round 1 — ロジック・状態管理・null安全**
-- Bug A (🔴高): `ResultScreen._updateStoryProgress` — actMomentを毎回キューに積む → `actAdvanced`フラグで初回のみに修正
-- Bug B (🟡中): NPC初登場フラグが `sessionStorage`（非永続）→ `localStorage` に変更
-- Bug C (🟢低): `_playAnimations` の `this._el` null チェック欠如 → ガード追加
-- Bug D (🟢低): `_showNpcFirstMeet('farm')` の絵文字が `'👤'` → `npcData.npc` 経由で `'🦉'` に修正
-
-**Round 2 — XSS・sw.js・WelcomeScreen**
-- Bug E (🔴高): `sw.js` ASSETS に `PhotoScreen.js` 未登録 → 追加、SW_VERSION 2.2.0 → 2.2.1
-- Bug F (🟡中): `sw.js` ASSETS に `styleItems.js` 未登録 → 追加
-- Bug G (🟡中): `WelcomeScreen.js` playerName XSS → DOM API で安全に構築
-- Bug H (🟡中): `PhotoScreen.js` playerName XSS → `esc()` ヘルパーで修正
-
-**Round 3・4 — SoundType・phaseComplete**
-- Bug I (🔴高): `FinalBattleScreen` `SoundType.CORRECT` → `SoundType.CORRECT_ANSWER`
-- Bug J (🔴高): `FinalBattleScreen` `SoundType.WRONG` → `SoundType.WRONG_ANSWER`
-- Bug K (🟡中): `ResultScreen._checkPhaseComplete` — 全クリア後に毎回表示 → localStorage ガード追加
-
-**クリーンだった箇所（修正不要確認済）**
-- QuizScreen: `_lockAllChoices` は同期呼び出しのため null 安全
-- QuizScreen: `answers` スパース配列リスク → 連番書き込みのため問題なし
-- CSS クラス: `seal-gauge-wrap`, `final-battle-door`, `act-cutin-overlay`, `npc-firstmeet-banner` すべて定義済み
-- TypeValidator: `distractorPool` < DISTRACTOR_COUNT のフォールバック問題 → バリデーション側でガード済み
-- イベント系 SoundType 呼び出し: OmikujiEvent / TreasureEvent / MonsterBattleEvent すべて有効な定数
+### Grade 2「深海グリモア」設計（プランのみ・実装未着手）
+長時間かけて設計を詰めた。最終確定プラン v2 が完成済み。
 
 ## 未コミットの変更
+なし（クリーン状態）
 
-なし（すべてコミット・プッシュ済み）
+## Grade 2 最終確定プラン サマリー
 
-最新コミット：
-```
-8f31907 fix: バグI・J・K修正 — SoundType定数誤り2件・phaseComplete重複表示
-7801b92 fix: XSS2箇所修正 + sw.js に PhotoScreen/styleItems を追加
-2d668d4 fix: ResultScreen バグA〜D修正 — Act転換重複・NPC永続化・null安全・絵文字
-```
+### 世界観
+- テーマ: 海の世界 / 深海グリモア
+- キャッチコピー: 「深海に眠る魔法の謎を解き明かせ」
+- ラスボス: グランド・レヴィアサン（3形態）
+- グリモア: 深海図（シーグリモア）
+- 船の成長: 小型（開幕）→ 中型（Zone2後ストーリーGET）→ 大型（Zone3後クラフト必須）
+
+### 全42ワールド構成
+Zone 1 浅瀬（7本）  : 筆算（+ミニまとめ1本）
+Zone 2 サンゴ礁（9本）: 数・量・時刻（+ミニまとめ1本）
+Zone 3 外洋（11本）  : 九九9段+文章題+ミニまとめ2本
+Zone 4 深海（11本）  : 図形・3桁筆算・分数（トピック別ミニまとめ3本）
+Zone 5 海底都市（4本）: 総復習（フィナーレ解放条件：m2_15d）
+
+### Zone 4 の詳細（トピック別ミニまとめ3本）
+図形2本（m2_11, m2_12）      → m2_12b 図形ミニまとめ
+3桁筆算2本（m2_13a, m2_13b） → m2_13c 3桁筆算ミニまとめ
+分数4本（m2_14a〜d）          → m2_14e 分数ミニまとめ
+
+### 問題数ルール（確定）
+- 通常ワールド: プール45問 / 出題15問
+- 九九各段: プール9問 / 出題9問（全問出題・唯一の例外）
+- 九九まとめ系: プール81問 / 出題15問
+
+### 命名規則（確定・全教科共通）
+- 問題ファイル: M2-01.js（教科M + 学年2 + 連番）
+- ワールドID: m2_01（小文字）
+- 他教科プレフィックス: E（英語）/ J（国語）/ S（理科）/ C（社会）
+- Grade 1 の既存ID（M1-xx / world_x）は変更なし
+
+### システム方針
+- 船ビルド（ShipBuildScreen）: 6部位（船体・帆・船首像・旗・甲板デコ・船底発光）
+- フラッシュモード: 九九専用（m2_10a〜i）、初回クリア後解放
+- 図形問題: テキスト選択肢（新type不要）
+- 時刻計算（m2_09c）: テキスト文章題形式
+- クリア閾値: 0.6（全ワールド共通）
+- Memory Isle: 一旦OFF
+- スキン: 24種（海テーマ8・かわいい8・ネタ6・跨ぎ特別2）
+- 新素材: pearl / coral / seaglass / anchor / deepstone
+
+### NPC
+- 船長タコぞう（全体ガイド）
+- 人魚の算術士リーナ（九九の師匠）
+- サンゴの大工さん（図形・長さ）
+- 灯台守のおじいさん（時刻・時間）
+- 海の賢者（ストーリーの鍵・終盤登場）
 
 ## 次にやること（優先順）
 
-1. **キャラクタースキン画像の制作**
-   - `.claude/tasks/skin-images-plan.md` に全25スキンの詳細プランあり（Gemini Imagen 用プロンプト全文含む）
-   - まず `default`（デフォルトまどうし）を生成してスタイル基準確定
-   - 生成順序: default → knight_silver → mage_fire → bear_kigurumi → dancer_sakura …（planファイル参照）
-   - 完成後: `assets/skins/*.png` に配置 → `sw.js` ASSETS に全パス追加 → SW_VERSION 更新
+1. Config.js に Grade 2 設定追加
+   - Config.GRADE2（ゾーン定義・船サイズ・クラフトコスト）
+   - Config.FEATURES.ENABLE_GRADE2 = true
+   - Config.FEATURES.ENABLE_FLASH_MODE = true
 
-2. **assets/skins/ ディレクトリ作成**（画像受け入れ準備）
+2. GameStore.js に ship ステート追加
+   - ship.size / ship.hull / ship.sail / ship.figurehead / ship.flag / ship.deck / ship.glow / ship.crafted[]
 
-3. **CharacterAvatar.js の画像パス確認**
-   - `assets/skins/{id}.png` を参照しているか、emoji フォールバックの仕組みを確認
+3. worlds.js に m2_01〜m2_15d の42世界追加
 
-4. **Phase 2 設計**（将来）: 2年生算数 M2 シリーズのワールド・問題ファイル作成
+4. units.js に M2 の lazy loader 追加
+
+5. 問題ファイル作成（Zone 1 から順番に）
+   - M2-01.js〜M2-05c.js（筆算7本）が最初
+
+6. HarborScreen 実装（港ハブ・船が最も目立つ起点画面）
+
+7. ShipBuildScreen 実装（船カスタマイズ）
+
+8. フラッシュモード実装（QuizScreen 拡張）
+
+9. Zone 2〜5 の問題ファイル作成
+
+10. FinalBattleScreen Grade 2 版調整
 
 ## 未解決のバグ・問題
-
-- `FinalBattleScreen` に `WORLDS` の dead import あり（軽微）
-- `GameStore.reset()` が localStorage の `npc_met_*` と `phase_complete_shown` をクリアしない
-  （デバッグ用 `GG.resetState()` を呼んでも NPC バナー再表示されない → 必要なら `GG.resetState` 拡張）
+なし（現時点ではクリーン）
 
 ## 重要なメモ
-
-- **SW_VERSION は現在 2.2.1**（sw.js）
-- スキン画像のパス規則: `assets/skins/{skinId}.png`（例: `assets/skins/default.png`）
-- スキン画像サイズ仕様: 生成 480×720px → 縮小 240×360px、透過背景必須
-- skinItems.js に定義済みの全25スキン ID:
-  `default`, `knight_silver`, `mage_fire`, `mage_ice`, `ninja_dark`, `knight_dragon`,
-  `swordsman_thunder`, `dancer_sakura`, `rabbit_traveler`, `fairy_princess`, `princess_magic`,
-  `mermaid`, `ballerina`, `bear_kigurumi`, `ragged_adventurer`, `dinosaur_cos`,
-  `ghost_pajama`, `robot_hakase`, `tomato_costume`, `pirate_captain`, `astronaut`,
-  `rainbow_witch`, `royal_eternal`, `demon_king`, `grimoire_guardian`
-- BGM_BOSS は定義済みだが未使用（将来のモンスターバトル演出用として温存）
+- Grade 2 は設計完了・実装未着手の状態
+- Grade 1 の既存コード・データは一切変更不要
+- sw.js の ASSETS[] は問題ファイル追加のたびに更新が必要
+- 大型船艦クラフト: Zone3後に設計図GET → Zone4中に素材収集 → Zone4完了で完成
+- SW_VERSION は現在 2.2.1（sw.js）
+- スキン画像プランは .claude/tasks/skin-images-plan.md に詳細あり（Grade1スキン24種の生成プロンプト含む）
