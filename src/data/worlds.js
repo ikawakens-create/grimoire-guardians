@@ -24,8 +24,12 @@
  *              → 11a → 11b → 11c → 11d → 12a → 12b → 12c → 13
  *   Phase 0.3: world_14a → 14b → 14c → 14d → 15a → 15b → 16a → 16b
  *
- * @version 4.0
- * @date 2026-02-26
+ * Phase 2 更新（2026-03-19）:
+ *   - Grade 2 深海グリモア m2_01〜m2_15d（42ワールド）追加
+ *   - grade / zone フィールド追加（Grade 2 ワールドのみ）
+ *
+ * @version 5.0
+ * @date 2026-03-19
  */
 
 /**
@@ -898,7 +902,1074 @@ export const WORLDS = [
     storyDesc: 'さいごの グリモア！\nぜんぶ とりもどす！ ふういんを かんせいさせろ！！',
     actMoment: 'finale_unlock',
     facilityUnlock: null,
-  }
+  },
+
+  // ============================================================
+  // Phase 2 Grade 2 深海グリモア ワールド（m2_01〜m2_15d）
+  // ============================================================
+
+  // ===== Zone 1 浅瀬（7本）— 筆算 =====
+
+  // m2_01: M2-01 2けたのたしざん きほん（無料）
+  {
+    id: 'm2_01',
+    unitId: 'M2-01',
+    grade: 2,
+    zone: 'zone1',
+    title: '2けたの たしざん',
+    description: 'ひっさんで たしざんを まなぼう',
+    difficulty: 2,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_01.png',
+      iconLocked: 'assets/icons/worlds/m2_01_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #00C9FF, #92FE9D)' },
+    order: 35,
+    freeToPlay: true,
+    events: [],
+    storyDesc: 'しんかいグリモアの とびらが ひらいた！\nたしざんの まほうを とりもどせ！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_02: M2-02 くりあがりのたしざん（無料）
+  {
+    id: 'm2_02',
+    unitId: 'M2-02',
+    grade: 2,
+    zone: 'zone1',
+    title: 'くりあがりの たしざん',
+    description: 'くりあがりが ある たしざんに ちょうせん！',
+    difficulty: 2,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_02.png',
+      iconLocked: 'assets/icons/worlds/m2_02_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #11998E, #38EF7D)' },
+    order: 36,
+    freeToPlay: true,
+    events: [
+      { triggerAt: 8, type: 'omikuji' }
+    ],
+    storyDesc: 'くりあがりの なみを こえろ！\nふねは まだ はしりつづける……！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_02b: M2-02b 2けた+2けたのたしざん（無料）
+  {
+    id: 'm2_02b',
+    unitId: 'M2-02b',
+    grade: 2,
+    zone: 'zone1',
+    title: '2けた＋2けたの たしざん',
+    description: 'おおきな たしざんに ちょうせん！',
+    difficulty: 2,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_02b.png',
+      iconLocked: 'assets/icons/worlds/m2_02b_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #56AB2F, #A8E063)' },
+    order: 37,
+    freeToPlay: true,
+    events: [
+      { triggerAt: 8, type: 'treasure' }
+    ],
+    storyDesc: 'あさせの かいじゅうが あらわれた！\nたしざんで たちむかえ！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_03: M2-03 2けたのひきざん きほん
+  {
+    id: 'm2_03',
+    unitId: 'M2-03',
+    grade: 2,
+    zone: 'zone1',
+    title: '2けたの ひきざん',
+    description: 'ひっさんで ひきざんを まなぼう',
+    difficulty: 2,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_03.png',
+      iconLocked: 'assets/icons/worlds/m2_03_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #74b9ff, #0984e3)' },
+    order: 38,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 8, type: 'three_paths' }
+    ],
+    storyDesc: 'ひきざんの まほうが めざめた！\nうみの そこへと すすんでいく……',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_03b: M2-03b くりさがりのひきざん
+  {
+    id: 'm2_03b',
+    unitId: 'M2-03b',
+    grade: 2,
+    zone: 'zone1',
+    title: 'くりさがりの ひきざん',
+    description: 'くりさがりが ある ひきざんに ちょうせん！',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_03b.png',
+      iconLocked: 'assets/icons/worlds/m2_03b_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #4776E6, #8E54E9)' },
+    order: 39,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 10, type: 'monster' }
+    ],
+    storyDesc: 'くりさがりの なみが おそってきた！\nまけるな！ ふねを まもれ！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_04: M2-04 2けた±2けたのけいさん おうよう
+  {
+    id: 'm2_04',
+    unitId: 'M2-04',
+    grade: 2,
+    zone: 'zone1',
+    title: '2けたの けいさん おうよう',
+    description: 'たし・ひきを つかいこなそう！',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_04.png',
+      iconLocked: 'assets/icons/worlds/m2_04_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #F09819, #EDDE5D)' },
+    order: 40,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 10, type: 'treasure' }
+    ],
+    storyDesc: 'あさせの ラストバトル！\nたし・ひきを かんぺきに つかえ！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_04b: M2-04b Zone 1 ミニまとめ（筆算総まとめ）
+  {
+    id: 'm2_04b',
+    unitId: 'M2-04b',
+    grade: 2,
+    zone: 'zone1',
+    title: 'ひっさん まとめ',
+    description: 'たし・ひきざんを まとめて ふりかえろう',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_04b.png',
+      iconLocked: 'assets/icons/worlds/m2_04b_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #36D1DC, #5B86E5)' },
+    order: 41,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 10, type: 'omikuji' },
+      { triggerAt: -1, type: 'phase_complete' }
+    ],
+    storyDesc: 'あさせを せいはした！\nさんごしょうが まっている……！',
+    actMoment: 'zone2_start',
+    facilityUnlock: null,
+  },
+
+  // ===== Zone 2 サンゴ礁（9本）— 数・量・時刻 =====
+
+  // m2_05: M2-05 ながさをはかろう（cm・mm・m）
+  {
+    id: 'm2_05',
+    unitId: 'M2-05',
+    grade: 2,
+    zone: 'zone2',
+    title: 'ながさを はかろう',
+    description: 'cm・mm・m を つかって ながさを はかろう',
+    difficulty: 2,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_05.png',
+      iconLocked: 'assets/icons/worlds/m2_05_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #FF6B6B, #FEC89A)' },
+    order: 42,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 8, type: 'omikuji' }
+    ],
+    storyDesc: 'さんごしょうの グリモアに ちかづく！\nながさの まほうが めざめるぞ！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_06a: M2-06a 大きい数①（100まで）
+  {
+    id: 'm2_06a',
+    unitId: 'M2-06a',
+    grade: 2,
+    zone: 'zone2',
+    title: 'おおきい かず①',
+    description: '100までの かずを よんだり かいたり しよう',
+    difficulty: 2,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_06a.png',
+      iconLocked: 'assets/icons/worlds/m2_06a_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #FDA085, #F6D365)' },
+    order: 43,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 8, type: 'three_paths' }
+    ],
+    storyDesc: 'さんごが ひかっている！\nおおきい かずの ひみつが みえてくる！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_06b: M2-06b 大きい数②（1000まで）
+  {
+    id: 'm2_06b',
+    unitId: 'M2-06b',
+    grade: 2,
+    zone: 'zone2',
+    title: 'おおきい かず②',
+    description: '1000までの かずを まなぼう',
+    difficulty: 2,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_06b.png',
+      iconLocked: 'assets/icons/worlds/m2_06b_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #F093FB, #F5576C)' },
+    order: 44,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 10, type: 'monster' }
+    ],
+    storyDesc: '1000の すうじの まほうが ひびく！\nもっと おおきな かずへ！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_07: M2-07 水のかさ（dL・L）
+  {
+    id: 'm2_07',
+    unitId: 'M2-07',
+    grade: 2,
+    zone: 'zone2',
+    title: 'みずの かさ',
+    description: 'dL・L を つかって かさを はかろう',
+    difficulty: 2,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_07.png',
+      iconLocked: 'assets/icons/worlds/m2_07_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #0cebeb, #20e3b2)' },
+    order: 45,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 8, type: 'treasure' }
+    ],
+    storyDesc: 'うみの みずが てらす グリモア！\nかさを はかる まほうが そなわるぞ！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_08: M2-08 重さ（g・kg）
+  {
+    id: 'm2_08',
+    unitId: 'M2-08',
+    grade: 2,
+    zone: 'zone2',
+    title: 'おもさを はかろう',
+    description: 'g・kg を つかって おもさを はかろう',
+    difficulty: 2,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_08.png',
+      iconLocked: 'assets/icons/worlds/m2_08_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #a1c4fd, #c2e9fb)' },
+    order: 46,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 8, type: 'omikuji' }
+    ],
+    storyDesc: 'さんごの おくに グリモアが ねむる！\nおもさの まほうで たどりつけ！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_09a: M2-09a 時こくと時間①（なんじなんぷん）
+  {
+    id: 'm2_09a',
+    unitId: 'M2-09a',
+    grade: 2,
+    zone: 'zone2',
+    title: 'じこくと じかん①',
+    description: 'なんじ なんぷんを よんでみよう',
+    difficulty: 2,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_09a.png',
+      iconLocked: 'assets/icons/worlds/m2_09a_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #FDC830, #F37335)' },
+    order: 47,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 8, type: 'three_paths' }
+    ],
+    storyDesc: 'じかんの グリモアが みつかった！\nとけいを よむ まほうが つよくなる！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_09b: M2-09b 時こくと時間②（何時間後・何分後）
+  {
+    id: 'm2_09b',
+    unitId: 'M2-09b',
+    grade: 2,
+    zone: 'zone2',
+    title: 'じこくと じかん②',
+    description: 'なんじかんご・なんぷんごを もとめよう',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_09b.png',
+      iconLocked: 'assets/icons/worlds/m2_09b_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #FF512F, #F09819)' },
+    order: 48,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 10, type: 'monster' }
+    ],
+    storyDesc: 'じかんの かいじゅうが あらわれた！\nけいさんの まほうで たちむかえ！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_09c: M2-09c 時刻計算（文章題）
+  {
+    id: 'm2_09c',
+    unitId: 'M2-09c',
+    grade: 2,
+    zone: 'zone2',
+    title: 'じかんの もんだい',
+    description: 'じこくの もんだいを ぶんしょうで といてみよう',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_09c.png',
+      iconLocked: 'assets/icons/worlds/m2_09c_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #c0392b, #8e44ad)' },
+    order: 49,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 10, type: 'treasure' }
+    ],
+    storyDesc: 'じかんの グリモアを まもる ボスが！\nぶんしょうだいで かちぬけ！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_09d: M2-09d Zone 2 ミニまとめ（数・量・時刻まとめ）
+  {
+    id: 'm2_09d',
+    unitId: 'M2-09d',
+    grade: 2,
+    zone: 'zone2',
+    title: 'さんごしょう まとめ',
+    description: 'かず・りょう・じこくを まとめて ふりかえろう',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_09d.png',
+      iconLocked: 'assets/icons/worlds/m2_09d_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #eb3349, #f45c43)' },
+    order: 50,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 10, type: 'omikuji' },
+      { triggerAt: -1, type: 'phase_complete' }
+    ],
+    storyDesc: 'さんごしょうを せいはした！\nなかがたの ふねが やってきた！',
+    actMoment: 'zone3_start',
+    facilityUnlock: null,
+  },
+
+  // ===== Zone 3 外洋（11本）— 九九（totalQuestions:9 ＝ 全問出題） =====
+
+  // m2_10a: M2-10a 九九 2のだん
+  {
+    id: 'm2_10a',
+    unitId: 'M2-10a',
+    grade: 2,
+    zone: 'zone3',
+    title: '九九 2のだん',
+    description: '2のだんを そらで いえるように なろう！',
+    difficulty: 2,
+    totalQuestions: 9,
+    assets: {
+      icon: 'assets/icons/worlds/m2_10a.png',
+      iconLocked: 'assets/icons/worlds/m2_10a_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #0077B6, #0096C7)' },
+    order: 51,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 6, type: 'omikuji' }
+    ],
+    storyDesc: 'がいようへ とびだした！\n九九の まほうが めざめていく……！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_10b: M2-10b 九九 3のだん
+  {
+    id: 'm2_10b',
+    unitId: 'M2-10b',
+    grade: 2,
+    zone: 'zone3',
+    title: '九九 3のだん',
+    description: '3のだんを そらで いえるように なろう！',
+    difficulty: 2,
+    totalQuestions: 9,
+    assets: {
+      icon: 'assets/icons/worlds/m2_10b.png',
+      iconLocked: 'assets/icons/worlds/m2_10b_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #0096C7, #00B4D8)' },
+    order: 52,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 6, type: 'three_paths' }
+    ],
+    storyDesc: '3のだんの まほうが ひびく！\nなみが たかくなってきた……！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_10c: M2-10c 九九 4のだん
+  {
+    id: 'm2_10c',
+    unitId: 'M2-10c',
+    grade: 2,
+    zone: 'zone3',
+    title: '九九 4のだん',
+    description: '4のだんを そらで いえるように なろう！',
+    difficulty: 2,
+    totalQuestions: 9,
+    assets: {
+      icon: 'assets/icons/worlds/m2_10c.png',
+      iconLocked: 'assets/icons/worlds/m2_10c_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #00B4D8, #48CAE4)' },
+    order: 53,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 6, type: 'monster' }
+    ],
+    storyDesc: '4のだんの かいじゅうが あらわれた！\nまほうで たちむかえ！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_10d: M2-10d 九九 5のだん
+  {
+    id: 'm2_10d',
+    unitId: 'M2-10d',
+    grade: 2,
+    zone: 'zone3',
+    title: '九九 5のだん',
+    description: '5のだんを そらで いえるように なろう！',
+    difficulty: 2,
+    totalQuestions: 9,
+    assets: {
+      icon: 'assets/icons/worlds/m2_10d.png',
+      iconLocked: 'assets/icons/worlds/m2_10d_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #48CAE4, #90E0EF)' },
+    order: 54,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 6, type: 'treasure' }
+    ],
+    storyDesc: '5のだんの ひかりが あたりを てらす！\nふなたびが もりあがってきた！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_10e: M2-10e 九九 6のだん
+  {
+    id: 'm2_10e',
+    unitId: 'M2-10e',
+    grade: 2,
+    zone: 'zone3',
+    title: '九九 6のだん',
+    description: '6のだんを そらで いえるように なろう！',
+    difficulty: 3,
+    totalQuestions: 9,
+    assets: {
+      icon: 'assets/icons/worlds/m2_10e.png',
+      iconLocked: 'assets/icons/worlds/m2_10e_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #023E8A, #0077B6)' },
+    order: 55,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 6, type: 'omikuji' }
+    ],
+    storyDesc: '6のだんに さしかかった……\nここから むずかしくなるぞ！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_10f: M2-10f 九九 7のだん
+  {
+    id: 'm2_10f',
+    unitId: 'M2-10f',
+    grade: 2,
+    zone: 'zone3',
+    title: '九九 7のだん',
+    description: '7のだんを そらで いえるように なろう！',
+    difficulty: 3,
+    totalQuestions: 9,
+    assets: {
+      icon: 'assets/icons/worlds/m2_10f.png',
+      iconLocked: 'assets/icons/worlds/m2_10f_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #03045E, #023E8A)' },
+    order: 56,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 6, type: 'monster' }
+    ],
+    storyDesc: '7のだんの かいじゅうが おそいかかる！\nまけるな！ まほうを だせ！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_10g: M2-10g 九九 8のだん
+  {
+    id: 'm2_10g',
+    unitId: 'M2-10g',
+    grade: 2,
+    zone: 'zone3',
+    title: '九九 8のだん',
+    description: '8のだんを そらで いえるように なろう！',
+    difficulty: 3,
+    totalQuestions: 9,
+    assets: {
+      icon: 'assets/icons/worlds/m2_10g.png',
+      iconLocked: 'assets/icons/worlds/m2_10g_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #240046, #03045E)' },
+    order: 57,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 6, type: 'three_paths' }
+    ],
+    storyDesc: '8のだんの あらなみが おそう！\nここまで きたら あとすこし！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_10h: M2-10h 九九 9のだん
+  {
+    id: 'm2_10h',
+    unitId: 'M2-10h',
+    grade: 2,
+    zone: 'zone3',
+    title: '九九 9のだん',
+    description: '9のだんを そらで いえるように なろう！',
+    difficulty: 3,
+    totalQuestions: 9,
+    assets: {
+      icon: 'assets/icons/worlds/m2_10h.png',
+      iconLocked: 'assets/icons/worlds/m2_10h_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #10002B, #240046)' },
+    order: 58,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 6, type: 'monster' }
+    ],
+    storyDesc: '9のだんの ラストに はいった！\nあとひとつ……！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_10i: M2-10i 九九 1のだん・0のかけざん
+  {
+    id: 'm2_10i',
+    unitId: 'M2-10i',
+    grade: 2,
+    zone: 'zone3',
+    title: '九九 1のだん・0のかけざん',
+    description: '1のだんと 0のかけざんを まなぼう',
+    difficulty: 2,
+    totalQuestions: 9,
+    assets: {
+      icon: 'assets/icons/worlds/m2_10i.png',
+      iconLocked: 'assets/icons/worlds/m2_10i_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #C77DFF, #7B2FBE)' },
+    order: 59,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 6, type: 'treasure' }
+    ],
+    storyDesc: '1のだんの ひみつが あきらかに！\nかけざんの まほうが かんせいした！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_10j: M2-10j 九九 文章題（かけざんをつかおう）
+  {
+    id: 'm2_10j',
+    unitId: 'M2-10j',
+    grade: 2,
+    zone: 'zone3',
+    title: 'かけざん もんだい',
+    description: 'かけざんを つかった もんだいを といてみよう',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_10j.png',
+      iconLocked: 'assets/icons/worlds/m2_10j_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #7B2FBE, #5A189A)' },
+    order: 60,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 10, type: 'monster' }
+    ],
+    storyDesc: 'かけざん ぶんしょうだいの グリモア！\nがいようの ボスが ちかづいてきた……！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_10k: M2-10k 九九 総まとめ（Zone 3 最終）
+  {
+    id: 'm2_10k',
+    unitId: 'M2-10k',
+    grade: 2,
+    zone: 'zone3',
+    title: '九九 そうまとめ',
+    description: '九九を ぜんぶ つかいこなそう！',
+    difficulty: 4,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_10k.png',
+      iconLocked: 'assets/icons/worlds/m2_10k_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #3C096C, #10002B)' },
+    order: 61,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 10, type: 'omikuji' },
+      { triggerAt: -1, type: 'phase_complete' }
+    ],
+    storyDesc: 'がいようを せいはした！\nおおがたのふねの せっけいずが てにはいった！',
+    actMoment: 'zone4_start',
+    facilityUnlock: null,
+  },
+
+  // ===== Zone 4 深海（11本）— 図形・3桁筆算・分数 =====
+
+  // m2_11: M2-11 三角形と四角形
+  {
+    id: 'm2_11',
+    unitId: 'M2-11',
+    grade: 2,
+    zone: 'zone4',
+    title: 'さんかくけいと しかくけい',
+    description: 'さんかくけいと しかくけいを まなぼう',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_11.png',
+      iconLocked: 'assets/icons/worlds/m2_11_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #0f0c29, #302b63)' },
+    order: 62,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 8, type: 'three_paths' }
+    ],
+    storyDesc: 'しんかいへの とびらが ひらいた……\nかたちの グリモアが ねむっている！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_12: M2-12 長方形・正方形・直角
+  {
+    id: 'm2_12',
+    unitId: 'M2-12',
+    grade: 2,
+    zone: 'zone4',
+    title: 'ちょうほうけい・せいほうけい',
+    description: 'ちょうほうけいと せいほうけいの ちがいを まなぼう',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_12.png',
+      iconLocked: 'assets/icons/worlds/m2_12_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #24243e, #302b63)' },
+    order: 63,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 8, type: 'monster' }
+    ],
+    storyDesc: 'ちょっかくの かいじゅうが あらわれた！\nかたちの まほうで たちむかえ！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_12b: M2-12b 図形ミニまとめ
+  {
+    id: 'm2_12b',
+    unitId: 'M2-12b',
+    grade: 2,
+    zone: 'zone4',
+    title: 'ずけい まとめ',
+    description: 'かたちの まほうを まとめて たしかめよう',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_12b.png',
+      iconLocked: 'assets/icons/worlds/m2_12b_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #1a1a2e, #16213e)' },
+    order: 64,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 10, type: 'treasure' }
+    ],
+    storyDesc: 'ずけいのグリモアを かいふくした！\nつぎは ひっさんの ちょうせん！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_13a: M2-13a 3けたのたしざん
+  {
+    id: 'm2_13a',
+    unitId: 'M2-13a',
+    grade: 2,
+    zone: 'zone4',
+    title: '3けたの たしざん',
+    description: '3けたの ひっさんたしざんに ちょうせん！',
+    difficulty: 4,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_13a.png',
+      iconLocked: 'assets/icons/worlds/m2_13a_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #0f3460, #16213e)' },
+    order: 65,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 10, type: 'omikuji' }
+    ],
+    storyDesc: 'しんかいの やみが ふかくなる……\n3けたの まほうで きりひらけ！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_13b: M2-13b 3けたのひきざん
+  {
+    id: 'm2_13b',
+    unitId: 'M2-13b',
+    grade: 2,
+    zone: 'zone4',
+    title: '3けたの ひきざん',
+    description: '3けたの ひっさんひきざんに ちょうせん！',
+    difficulty: 4,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_13b.png',
+      iconLocked: 'assets/icons/worlds/m2_13b_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #000428, #004e92)' },
+    order: 66,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 10, type: 'monster' }
+    ],
+    storyDesc: 'やみの かいじゅうが あらわれた！\nひきざんの まほうで たちむかえ！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_13c: M2-13c 3けた筆算ミニまとめ
+  {
+    id: 'm2_13c',
+    unitId: 'M2-13c',
+    grade: 2,
+    zone: 'zone4',
+    title: '3けた ひっさん まとめ',
+    description: '3けたの たし・ひきを まとめて たしかめよう',
+    difficulty: 4,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_13c.png',
+      iconLocked: 'assets/icons/worlds/m2_13c_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #0a3d62, #1e3799)' },
+    order: 67,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 10, type: 'treasure' }
+    ],
+    storyDesc: '3けた ひっさんの グリモアを かいふく！\nつぎは ぶんすうの むずかしさが まつ……',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_14a: M2-14a 分数のきほん（1/2・1/3）
+  {
+    id: 'm2_14a',
+    unitId: 'M2-14a',
+    grade: 2,
+    zone: 'zone4',
+    title: 'ぶんすうの きほん',
+    description: '1/2や 1/3を まなぼう',
+    difficulty: 4,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_14a.png',
+      iconLocked: 'assets/icons/worlds/m2_14a_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #192a56, #273c75)' },
+    order: 68,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 8, type: 'three_paths' }
+    ],
+    storyDesc: 'ぶんすうの グリモアが みつかった！\nわけることの まほうが めざめる……！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_14b: M2-14b 分数のたしざん
+  {
+    id: 'm2_14b',
+    unitId: 'M2-14b',
+    grade: 2,
+    zone: 'zone4',
+    title: 'ぶんすうの たしざん',
+    description: 'ぶんすうを たしてみよう',
+    difficulty: 4,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_14b.png',
+      iconLocked: 'assets/icons/worlds/m2_14b_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #0c2461, #1e3799)' },
+    order: 69,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 10, type: 'monster' }
+    ],
+    storyDesc: 'ぶんすうの かいじゅうが おそいかかる！\nたしざんの まほうで はねかえせ！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_14c: M2-14c 分数のひきざん
+  {
+    id: 'm2_14c',
+    unitId: 'M2-14c',
+    grade: 2,
+    zone: 'zone4',
+    title: 'ぶんすうの ひきざん',
+    description: 'ぶんすうを ひいてみよう',
+    difficulty: 4,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_14c.png',
+      iconLocked: 'assets/icons/worlds/m2_14c_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #1B1464, #2C3E50)' },
+    order: 70,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 10, type: 'omikuji' }
+    ],
+    storyDesc: 'やみが うずまく しんかいのそこ……\nひきざんの まほうで てらしだせ！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_14d: M2-14d 分数のおうよう（文章題）
+  {
+    id: 'm2_14d',
+    unitId: 'M2-14d',
+    grade: 2,
+    zone: 'zone4',
+    title: 'ぶんすうの おうよう',
+    description: 'ぶんすうの ぶんしょうもんだいを といてみよう',
+    difficulty: 5,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_14d.png',
+      iconLocked: 'assets/icons/worlds/m2_14d_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #0f0c29, #1B1464)' },
+    order: 71,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 10, type: 'monster' }
+    ],
+    storyDesc: 'グランド・レヴィアサンの きざしが……！\nぜんぶの まほうを あつめろ！！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_14e: M2-14e 分数ミニまとめ（Zone 4 最終）
+  {
+    id: 'm2_14e',
+    unitId: 'M2-14e',
+    grade: 2,
+    zone: 'zone4',
+    title: 'ぶんすう まとめ',
+    description: 'ぶんすうの まほうを まとめて たしかめよう',
+    difficulty: 5,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_14e.png',
+      iconLocked: 'assets/icons/worlds/m2_14e_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #1a0533, #0f0c29)' },
+    order: 72,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 10, type: 'treasure' },
+      { triggerAt: -1, type: 'phase_complete' }
+    ],
+    storyDesc: 'しんかいを せいはした！\nおおがたのふねが かんせいした！！',
+    actMoment: 'zone5_start',
+    facilityUnlock: null,
+  },
+
+  // ===== Zone 5 海底都市（4本）— 総復習 =====
+
+  // m2_15a: M2-15a 総復習①（たしざん・ひきざん・大きな数）
+  {
+    id: 'm2_15a',
+    unitId: 'M2-15a',
+    grade: 2,
+    zone: 'zone5',
+    title: 'そうふくしゅう①',
+    description: 'たし・ひきざんと おおきな かずを ふりかえろう',
+    difficulty: 4,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_15a.png',
+      iconLocked: 'assets/icons/worlds/m2_15a_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #005c97, #363795)' },
+    order: 73,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 8, type: 'omikuji' }
+    ],
+    storyDesc: 'かいていとしに とうちゃくした！\nさいごの たたかいに むけて まほうを みがけ！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_15b: M2-15b 総復習②（九九・かけざん）
+  {
+    id: 'm2_15b',
+    unitId: 'M2-15b',
+    grade: 2,
+    zone: 'zone5',
+    title: 'そうふくしゅう②',
+    description: '九九と かけざんを ふりかえろう',
+    difficulty: 4,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_15b.png',
+      iconLocked: 'assets/icons/worlds/m2_15b_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #1e3c72, #2a5298)' },
+    order: 74,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 10, type: 'three_paths' }
+    ],
+    storyDesc: 'かいていとしが ひかりで あふれる！\n九九の まほうを ふりしぼれ！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_15c: M2-15c 総復習③（図形・分数）
+  {
+    id: 'm2_15c',
+    unitId: 'M2-15c',
+    grade: 2,
+    zone: 'zone5',
+    title: 'そうふくしゅう③',
+    description: 'ずけいと ぶんすうを ふりかえろう',
+    difficulty: 5,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_15c.png',
+      iconLocked: 'assets/icons/worlds/m2_15c_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #0a0a2a, #1e3c72)' },
+    order: 75,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 10, type: 'monster' }
+    ],
+    storyDesc: 'グランド・レヴィアサンが めを さます……！\nすべての まほうで むかえうて！！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // m2_15d: M2-15d グランド・レヴィアサン 決戦！（Grade 2 フィナーレ）
+  {
+    id: 'm2_15d',
+    unitId: 'M2-15d',
+    grade: 2,
+    zone: 'zone5',
+    title: 'グランド・レヴィアサン けっせん！',
+    description: 'すべての まほうを つかって たたかえ！',
+    difficulty: 5,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_15d.png',
+      iconLocked: 'assets/icons/worlds/m2_15d_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #FDC830, #F37335)' },
+    order: 76,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 8, type: 'monster' },
+      { triggerAt: -1, type: 'phase_complete' }
+    ],
+    storyDesc: 'しんかいグリモアの さいごの たたかい！\nグランド・レヴィアサンを たおせ！！',
+    actMoment: 'grade2_finale_unlock',
+    facilityUnlock: null,
+  },
 ];
 
 /**
