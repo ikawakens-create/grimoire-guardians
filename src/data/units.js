@@ -9,8 +9,11 @@
  *   - M1-07 〜 M1-10d を実装済みに変更
  *   - M1-08 を M1-08a / M1-08b / M1-08c に分割（時計3ワールド）
  *
- * @version 3.0
- * @date 2026-02-24
+ * Phase 2 更新（2026-03-19）:
+ *   - M2-01〜M2-15d（42ユニット）をローダー未実装として登録
+ *
+ * @version 4.0
+ * @date 2026-03-19
  */
 
 /**
@@ -206,7 +209,61 @@ export const UNITS = {
     unitId: 'M1-16b',
     title: 'ずを つかって（ひきざん 文章題）',
     loader: () => import('./questions/M1-16b.js')
-  }
+  },
+
+  // ---- Phase 2 Grade 2 深海グリモア（未実装 — loader: null）----
+
+  // Zone 1 浅瀬（7本）— 筆算
+  'M2-01':  { unitId: 'M2-01',  title: '2けたの たしざん',           loader: () => import('./questions/M2-01.js') },
+  'M2-02':  { unitId: 'M2-02',  title: 'くりあがりの たしざん',      loader: () => import('./questions/M2-02.js') },
+  'M2-02b': { unitId: 'M2-02b', title: '2けた＋2けたの たしざん',    loader: () => import('./questions/M2-02b.js') },
+  'M2-03':  { unitId: 'M2-03',  title: '2けたの ひきざん',           loader: () => import('./questions/M2-03.js') },
+  'M2-03b': { unitId: 'M2-03b', title: 'くりさがりの ひきざん',      loader: () => import('./questions/M2-03b.js') },
+  'M2-04':  { unitId: 'M2-04',  title: '2けたの けいさん おうよう',  loader: () => import('./questions/M2-04.js') },
+  'M2-04b': { unitId: 'M2-04b', title: 'ひっさん まとめ',            loader: () => import('./questions/M2-04b.js') },
+
+  // Zone 2 サンゴ礁（9本）— 数・量・時刻
+  'M2-05':  { unitId: 'M2-05',  title: 'ながさを はかろう',   loader: null },
+  'M2-06a': { unitId: 'M2-06a', title: 'おおきい かず①',     loader: null },
+  'M2-06b': { unitId: 'M2-06b', title: 'おおきい かず②',     loader: null },
+  'M2-07':  { unitId: 'M2-07',  title: 'みずの かさ',         loader: null },
+  'M2-08':  { unitId: 'M2-08',  title: 'おもさを はかろう',   loader: null },
+  'M2-09a': { unitId: 'M2-09a', title: 'じこくと じかん①',   loader: null },
+  'M2-09b': { unitId: 'M2-09b', title: 'じこくと じかん②',   loader: null },
+  'M2-09c': { unitId: 'M2-09c', title: 'じかんの もんだい',   loader: null },
+  'M2-09d': { unitId: 'M2-09d', title: 'さんごしょう まとめ', loader: null },
+
+  // Zone 3 外洋（11本）— 九九（m2_10a〜i はフラッシュモード対象）
+  'M2-10a': { unitId: 'M2-10a', title: '九九 2のだん',        loader: null },
+  'M2-10b': { unitId: 'M2-10b', title: '九九 3のだん',        loader: null },
+  'M2-10c': { unitId: 'M2-10c', title: '九九 4のだん',        loader: null },
+  'M2-10d': { unitId: 'M2-10d', title: '九九 5のだん',        loader: null },
+  'M2-10e': { unitId: 'M2-10e', title: '九九 6のだん',        loader: null },
+  'M2-10f': { unitId: 'M2-10f', title: '九九 7のだん',        loader: null },
+  'M2-10g': { unitId: 'M2-10g', title: '九九 8のだん',        loader: null },
+  'M2-10h': { unitId: 'M2-10h', title: '九九 9のだん',        loader: null },
+  'M2-10i': { unitId: 'M2-10i', title: '九九 1のだん・0のかけざん', loader: null },
+  'M2-10j': { unitId: 'M2-10j', title: 'かけざん もんだい',   loader: null },
+  'M2-10k': { unitId: 'M2-10k', title: '九九 そうまとめ',     loader: null },
+
+  // Zone 4 深海（11本）— 図形・3桁筆算・分数
+  'M2-11':  { unitId: 'M2-11',  title: 'さんかくけいと しかくけい',     loader: null },
+  'M2-12':  { unitId: 'M2-12',  title: 'ちょうほうけい・せいほうけい', loader: null },
+  'M2-12b': { unitId: 'M2-12b', title: 'ずけい まとめ',                loader: null },
+  'M2-13a': { unitId: 'M2-13a', title: '3けたの たしざん',             loader: null },
+  'M2-13b': { unitId: 'M2-13b', title: '3けたの ひきざん',             loader: null },
+  'M2-13c': { unitId: 'M2-13c', title: '3けた ひっさん まとめ',        loader: null },
+  'M2-14a': { unitId: 'M2-14a', title: 'ぶんすうの きほん',            loader: null },
+  'M2-14b': { unitId: 'M2-14b', title: 'ぶんすうの たしざん',          loader: null },
+  'M2-14c': { unitId: 'M2-14c', title: 'ぶんすうの ひきざん',          loader: null },
+  'M2-14d': { unitId: 'M2-14d', title: 'ぶんすうの おうよう',          loader: null },
+  'M2-14e': { unitId: 'M2-14e', title: 'ぶんすう まとめ',              loader: null },
+
+  // Zone 5 海底都市（4本）— 総復習
+  'M2-15a': { unitId: 'M2-15a', title: 'そうふくしゅう①',                loader: null },
+  'M2-15b': { unitId: 'M2-15b', title: 'そうふくしゅう②',                loader: null },
+  'M2-15c': { unitId: 'M2-15c', title: 'そうふくしゅう③',                loader: null },
+  'M2-15d': { unitId: 'M2-15d', title: 'グランド・レヴィアサン けっせん！', loader: null },
 };
 
 /**
