@@ -27,8 +27,6 @@ import HapticFeedback from '../utils/HapticFeedback.js';
 import { CharacterAvatar } from '../components/CharacterAvatar.js';
 import { FINAL_BATTLE, STORY_IMAGES } from '../data/storyData.js';
 import { loadUnitQuestions } from '../data/units.js';
-import WORLDS from '../data/worlds.js';
-
 /** バトルクイズ1問あたりのボスHP減少量（30問で100%） */
 const HP_PER_CORRECT = 100 / FINAL_BATTLE.questionCount;
 
