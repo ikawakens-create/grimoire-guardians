@@ -83,6 +83,7 @@ export class GameStore {
     // インベントリ（v1.2）
     inventory: {
       materials: {
+        // Grade 1 素材
         wood: 0,
         stone: 0,
         brick: 0,
@@ -92,7 +93,13 @@ export class GameStore {
         paint: 0,
         crown: 0,
         cape: 0,
-        magic_orb: 0
+        magic_orb: 0,
+        // Grade 2 新素材（深海グリモア）
+        pearl:     0,
+        coral:     0,
+        seaglass:  0,
+        anchor:    0,
+        deepstone: 0,
       }
     },
 
@@ -230,6 +237,25 @@ export class GameStore {
 
       // 最終更新日時
       lastUpdated: null,
+    },
+
+    // 船システム（Grade 2 深海グリモア / Phase 2）
+    ship: {
+      /** 現在の船サイズ 'small' | 'medium' | 'large' */
+      size: 'small',
+      /** 各パーツの装備中ID（null = デフォルト） */
+      hull:       null,
+      sail:       null,
+      figurehead: null,
+      flag:       null,
+      deck:       null,
+      glow:       null,
+      /** クラフト済みパーツIDの配列 */
+      crafted: [],
+      /** 大型船艦クラフト完了済みか */
+      largeCrafted: false,
+      /** フラッシュモード解放済みワールドID配列 */
+      flashUnlockedWorlds: [],
     },
 
     // 街のシステム（Phase 1-E）
@@ -409,6 +435,7 @@ export class GameStore {
       },
       inventory: {
         materials: {
+          // Grade 1 素材
           wood: 0,
           stone: 0,
           brick: 0,
@@ -418,7 +445,13 @@ export class GameStore {
           paint: 0,
           crown: 0,
           cape: 0,
-          magic_orb: 0
+          magic_orb: 0,
+          // Grade 2 新素材（深海グリモア）
+          pearl:     0,
+          coral:     0,
+          seaglass:  0,
+          anchor:    0,
+          deepstone: 0,
         }
       },
       currentSession: {
@@ -509,6 +542,18 @@ export class GameStore {
         triggeredMilestones: [],
         bonusSlots: { garden_extra: 0, floor1_extra: 0 },
         lastUpdated: null,
+      },
+      ship: {
+        size: 'small',
+        hull:       null,
+        sail:       null,
+        figurehead: null,
+        flag:       null,
+        deck:       null,
+        glow:       null,
+        crafted: [],
+        largeCrafted: false,
+        flashUnlockedWorlds: [],
       },
       town: {
         buildings: {
@@ -709,8 +754,11 @@ export class GameStore {
       if (current < 1) this.setState(`town.buildings.${buildingId}.level`, 1);
     }
 
-    // 素材をすべて99に
-    const materials = ['wood', 'stone', 'brick', 'gem', 'star_fragment', 'cloth', 'paint', 'crown', 'cape', 'magic_orb'];
+    // 素材をすべて99に（Grade 1 + Grade 2）
+    const materials = [
+      'wood', 'stone', 'brick', 'gem', 'star_fragment', 'cloth', 'paint', 'crown', 'cape', 'magic_orb',
+      'pearl', 'coral', 'seaglass', 'anchor', 'deepstone',
+    ];
     for (const mat of materials) {
       this.setState(`inventory.materials.${mat}`, 99);
     }
