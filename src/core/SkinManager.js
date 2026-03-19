@@ -208,11 +208,16 @@ export class SkinManager {
     const fragmentSkins = COLLECTIBLE_SKINS.filter(s => s.obtain.method === SKIN_OBTAIN.FRAGMENT);
     if (!fragmentSkins.length) return { dropped: false };
 
-    // ランダムに1つ選ぶ（未解放優先だが枯渇したら全体から）
+    // 未解放スキンのみ対象（全解放済みなら代替素材を返す）
     const locked = fragmentSkins.filter(s => !this.isUnlocked(s.id));
-    const pool   = locked.length ? locked : fragmentSkins;
-    const chosen = pool[Math.floor(Math.random() * pool.length)];
+    if (!locked.length) {
+      // 全スキン解放済み → star_fragment を代替報酬として付与
+      GameStore.addMaterial('star_fragment', 1);
+      Logger.info('[SkinManager] かけら全取得済み → ほしのかけら×1 に変換');
+      return { dropped: true, convertedToMaterial: true, materialId: 'star_fragment' };
+    }
 
+    const chosen = locked[Math.floor(Math.random() * locked.length)];
     const result = this.addFragment(chosen.id);
     return { dropped: true, skinId: chosen.id, ...result };
   }
@@ -260,7 +265,7 @@ export class SkinManager {
       if (this._checkMilestoneCondition(skin.obtain.milestoneId)) {
         this._unlock(skin.id);
         newlyUnlocked.push(skin.id);
-        Logger.info(`[SkinManager] マイルストーン解放: ${skin.id} (${skin.obtain.condition})`);
+        Logger.info(`[SkinManager] マイルストーン解放: ${skin.id} (${skin.obtain.milestoneId})`);
       }
     }
 
