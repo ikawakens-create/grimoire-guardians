@@ -606,12 +606,11 @@ class ResultScreen {
       this._pendingActMoment = actMoment;
     }
 
-    // Grade 2 zone 転換演出（初回のみ）
+    // Grade 2 zone 転換演出（初回のみ・GameStore で管理しリセット連動）
     const grade2Moments = ['zone2_start', 'zone3_start', 'zone4_start', 'zone5_start', 'grade2_finale_unlock'];
     if (actMoment && grade2Moments.includes(actMoment)) {
-      const shownKey = `zone_moment_shown_${actMoment}`;
-      if (!localStorage.getItem(shownKey)) {
-        localStorage.setItem(shownKey, '1');
+      const shownStateKey = `app.${actMoment}Shown`;
+      if (!GameStore.getState(shownStateKey)) {
         this._pendingActMoment = actMoment;
       }
     }
@@ -620,6 +619,8 @@ class ResultScreen {
   /**
    * Act転換カットインをオーバーレイ表示する
    * @param {string} actMoment - 'act2_start' | 'act3_start' | 'act4_start' | 'finale_unlock'
+   *                           | 'zone2_start' | 'zone3_start' | 'zone4_start' | 'zone5_start'
+   *                           | 'grade2_finale_unlock'
    * @returns {Promise<void>}
    * @private
    */
@@ -638,9 +639,13 @@ class ResultScreen {
 
     if (!cutin) return Promise.resolve();
 
-    // finale_unlock は表示済みフラグを立てる（2回目以降は表示しない）
+    // 表示済みフラグを立てる（2回目以降は表示しない）
     if (actMoment === 'finale_unlock') {
       GameStore.setState('app.finaleShown', true);
+    }
+    const grade2Moments = ['zone2_start', 'zone3_start', 'zone4_start', 'zone5_start', 'grade2_finale_unlock'];
+    if (grade2Moments.includes(actMoment)) {
+      GameStore.setState(`app.${actMoment}Shown`, true);
     }
 
     return new Promise((resolve) => {
