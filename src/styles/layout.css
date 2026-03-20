@@ -125,6 +125,72 @@
   padding-bottom: var(--spacing-xl);
 }
 
+/* ── Grade タブ ───────────────────────────────── */
+.grade-tab-wrap {
+  display: flex;
+  gap: var(--spacing-xs);
+  background: rgba(0,0,0,0.15);
+  border-radius: var(--border-radius);
+  padding: 3px;
+}
+
+.grade-tab {
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+  border: none;
+  border-radius: calc(var(--border-radius) - 2px);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.grade-tab:hover:not(:disabled) {
+  background: rgba(255,255,255,0.15);
+  color: var(--text-primary);
+}
+
+.grade-tab-active {
+  background: var(--primary-color, #6c47ff);
+  color: #fff;
+  box-shadow: var(--shadow-small);
+}
+
+.grade-tab:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Grade 2 ゾーンヘッダー ────────────────────── */
+.bookshelf-zone-header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin-top: var(--spacing-md);
+  background: linear-gradient(135deg, rgba(0,100,180,0.25), rgba(0,60,120,0.15));
+  border-left: 4px solid #00aaff;
+  border-radius: var(--border-radius);
+}
+
+.zone-header-emoji {
+  font-size: var(--font-size-xl);
+}
+
+.zone-header-name {
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+  color: #7dd3fc;
+}
+
+.zone-header-desc {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-left: var(--spacing-xs);
+}
+
 .bookshelf-player {
   font-size: var(--font-size-md);
   color: var(--text-secondary);
