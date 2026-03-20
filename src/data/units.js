@@ -247,17 +247,17 @@ export const UNITS = {
   'M2-10k': { unitId: 'M2-10k', title: '九九 そうまとめ',     loader: () => import('./questions/M2-10k.js') },
 
   // Zone 4 深海（11本）— 図形・3桁筆算・分数
-  'M2-11':  { unitId: 'M2-11',  title: 'さんかくけいと しかくけい',     loader: null },
-  'M2-12':  { unitId: 'M2-12',  title: 'ちょうほうけい・せいほうけい', loader: null },
-  'M2-12b': { unitId: 'M2-12b', title: 'ずけい まとめ',                loader: null },
-  'M2-13a': { unitId: 'M2-13a', title: '3けたの たしざん',             loader: null },
-  'M2-13b': { unitId: 'M2-13b', title: '3けたの ひきざん',             loader: null },
-  'M2-13c': { unitId: 'M2-13c', title: '3けた ひっさん まとめ',        loader: null },
-  'M2-14a': { unitId: 'M2-14a', title: 'ぶんすうの きほん',            loader: null },
-  'M2-14b': { unitId: 'M2-14b', title: 'ぶんすうの たしざん',          loader: null },
-  'M2-14c': { unitId: 'M2-14c', title: 'ぶんすうの ひきざん',          loader: null },
-  'M2-14d': { unitId: 'M2-14d', title: 'ぶんすうの おうよう',          loader: null },
-  'M2-14e': { unitId: 'M2-14e', title: 'ぶんすう まとめ',              loader: null },
+  'M2-11':  { unitId: 'M2-11',  title: 'さんかくけいと しかくけい',     loader: () => import('./questions/M2-11.js') },
+  'M2-12':  { unitId: 'M2-12',  title: 'ちょうほうけい・せいほうけい', loader: () => import('./questions/M2-12.js') },
+  'M2-12b': { unitId: 'M2-12b', title: 'ずけい まとめ',                loader: () => import('./questions/M2-12b.js') },
+  'M2-13a': { unitId: 'M2-13a', title: '3けたの たしざん',             loader: () => import('./questions/M2-13a.js') },
+  'M2-13b': { unitId: 'M2-13b', title: '3けたの ひきざん',             loader: () => import('./questions/M2-13b.js') },
+  'M2-13c': { unitId: 'M2-13c', title: '3けた ひっさん まとめ',        loader: () => import('./questions/M2-13c.js') },
+  'M2-14a': { unitId: 'M2-14a', title: 'ぶんすうの きほん',            loader: () => import('./questions/M2-14a.js') },
+  'M2-14b': { unitId: 'M2-14b', title: 'ぶんすうの たしざん',          loader: () => import('./questions/M2-14b.js') },
+  'M2-14c': { unitId: 'M2-14c', title: 'ぶんすうの ひきざん',          loader: () => import('./questions/M2-14c.js') },
+  'M2-14d': { unitId: 'M2-14d', title: 'ぶんすうの おうよう',          loader: () => import('./questions/M2-14d.js') },
+  'M2-14e': { unitId: 'M2-14e', title: 'ぶんすう まとめ',              loader: () => import('./questions/M2-14e.js') },
 
   // Zone 5 海底都市（4本）— 総復習
   'M2-15a': { unitId: 'M2-15a', title: 'そうふくしゅう①',                loader: null },
