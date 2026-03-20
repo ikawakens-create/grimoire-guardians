@@ -238,6 +238,54 @@ export const ACT_CUTINS = {
     showCharacter: true,
     npc: 'fukurou',
   },
+
+  // ── Grade 2 ゾーン転換カットイン ──────────────────────────────────
+
+  /** Zone 2 突入 = さんごしょうゾーン開始 */
+  zone2: {
+    bgFallback: 'linear-gradient(135deg, #FF6B9D, #56CCF2)',
+    icon:       '🪸',
+    actLabel:   'Zone 2 さんごしょう',
+    title:      'さんごしょうに とうたつ！',
+    npcText:    'ふねが ちゅうがたに なったぞ！\nさんごしょうへ こぎだせ！',
+    npc:        'fukurou',
+  },
+  /** Zone 3 突入 = がいようゾーン開始 */
+  zone3: {
+    bgFallback: 'linear-gradient(135deg, #1565C0, #0D47A1)',
+    icon:       '🌊',
+    actLabel:   'Zone 3 がいよう',
+    title:      'おおうみへ こぎだせ！',
+    npcText:    'ちゅうがたのふねで がいようを めざすんじゃ！\nおおきな うみが まっているぞ！',
+    npc:        'fukurou',
+  },
+  /** Zone 4 突入 = しんかいゾーン開始 */
+  zone4: {
+    bgFallback: 'linear-gradient(135deg, #1a0533, #000428)',
+    icon:       '🌑',
+    actLabel:   'Zone 4 しんかい',
+    title:      'しんかいに もぐれ！',
+    npcText:    'おおがたのふねの せっけいずを てにいれた……！\nくらやみを おそれるな！',
+    npc:        'fukurou',
+  },
+  /** Zone 5 突入 = かいていとしゾーン開始 */
+  zone5: {
+    bgFallback: 'linear-gradient(135deg, #0f3443, #FDC830)',
+    icon:       '🏙️',
+    actLabel:   'Zone 5 かいていとし',
+    title:      'おおがたのふね かんせい！！',
+    npcText:    'ふねが かんせいしたぞ！！\nかいていとしが みえてきた……！',
+    npc:        'fukurou',
+  },
+  /** Grade 2 finale解放 = 最終ワールドクリア後 */
+  grade2Finale: {
+    bgFallback: 'linear-gradient(135deg, #0f0c29, #302b63)',
+    icon:       '⚓',
+    actLabel:   'さいしゅうけっせん',
+    title:      'グランド・レヴィアサン あらわる！！',
+    npcText:    'グランド・レヴィアサンが めのまえに……！\nいざ……さいしゅうけっせんへ！！',
+    npc:        'fukurou',
+  },
 };
 
 // ─────────────────────────────────────────

@@ -38,6 +38,12 @@ export class GameStore {
       storyAct: 1,
       /** グランドフィナーレを表示済みか（1回のみ） */
       finaleShown: false,
+      /** Grade 2 ゾーン転換カットイン表示済みフラグ（各1回のみ） */
+      zone2_startShown:          false,
+      zone3_startShown:          false,
+      zone4_startShown:          false,
+      zone5_startShown:          false,
+      grade2_finale_unlockShown: false,
       /** 最終決戦をクリア済みか */
       finalBattleCleared: false,
       /** 封印回復数（0〜33）。Grade 1 クリアワールド数と同期 */
@@ -408,6 +414,11 @@ export class GameStore {
         prologueShown: false,
         storyAct: 1,
         finaleShown: false,
+        zone2_startShown:          false,
+        zone3_startShown:          false,
+        zone4_startShown:          false,
+        zone5_startShown:          false,
+        grade2_finale_unlockShown: false,
         finalBattleCleared: false,
         sealStrength: 0,
         currentGrade: 1,
