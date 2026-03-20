@@ -606,10 +606,14 @@ class ResultScreen {
       this._pendingActMoment = actMoment;
     }
 
-    // Grade 2 の zone 転換は未実装のため現時点ではログのみ（TODO: Phase 2 演出実装時に対応）
+    // Grade 2 zone 転換演出（初回のみ）
     const grade2Moments = ['zone2_start', 'zone3_start', 'zone4_start', 'zone5_start', 'grade2_finale_unlock'];
     if (actMoment && grade2Moments.includes(actMoment)) {
-      Logger.info(`[Story] Grade 2 zone moment: ${actMoment} (演出未実装 — Phase 2 予定)`);
+      const shownKey = `zone_moment_shown_${actMoment}`;
+      if (!localStorage.getItem(shownKey)) {
+        localStorage.setItem(shownKey, '1');
+        this._pendingActMoment = actMoment;
+      }
     }
   }
 
@@ -621,10 +625,15 @@ class ResultScreen {
    */
   _showActCutin(actMoment) {
     // ACT_CUTINS からデータを取得
-    const cutin = actMoment === 'act2_start'    ? ACT_CUTINS.act2
-                : actMoment === 'act3_start'    ? ACT_CUTINS.act3
-                : actMoment === 'act4_start'    ? ACT_CUTINS.act4
-                : actMoment === 'finale_unlock' ? ACT_CUTINS.finale
+    const cutin = actMoment === 'act2_start'           ? ACT_CUTINS.act2
+                : actMoment === 'act3_start'           ? ACT_CUTINS.act3
+                : actMoment === 'act4_start'           ? ACT_CUTINS.act4
+                : actMoment === 'finale_unlock'        ? ACT_CUTINS.finale
+                : actMoment === 'zone2_start'          ? ACT_CUTINS.zone2
+                : actMoment === 'zone3_start'          ? ACT_CUTINS.zone3
+                : actMoment === 'zone4_start'          ? ACT_CUTINS.zone4
+                : actMoment === 'zone5_start'          ? ACT_CUTINS.zone5
+                : actMoment === 'grade2_finale_unlock' ? ACT_CUTINS.grade2Finale
                 : null;
 
     if (!cutin) return Promise.resolve();
@@ -637,6 +646,7 @@ class ResultScreen {
     return new Promise((resolve) => {
       const overlay = document.createElement('div');
       overlay.className = 'act-cutin-overlay';
+      if (cutin.bgFallback) overlay.style.background = cutin.bgFallback;
       // ACT_CUTINS フィールド: icon, actLabel, title, npcText（= 表示テキスト）
       const displayText = cutin.npcText || cutin.text || '';
       overlay.innerHTML = `
