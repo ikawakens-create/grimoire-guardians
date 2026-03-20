@@ -226,7 +226,7 @@ class BookshelfScreen {
     rightGroup.className = 'bookshelf-header-right';
 
     // グレードタブ（Grade 2 が有効なときのみ表示）
-    if (Config.ENABLE_GRADE2) {
+    if (Config.FEATURES.ENABLE_GRADE2) {
       const worldProgress = GameStore.getState('progress.worlds') || {};
       const g1Worlds = WORLDS.filter(w => !w.grade || w.grade === 1);
       const g1Cleared = g1Worlds.filter(w => worldProgress[w.id]?.cleared).length;
@@ -241,6 +241,7 @@ class BookshelfScreen {
         btn.type = 'button';
         btn.className = 'grade-tab' + (g === currentGrade ? ' grade-tab-active' : '');
         btn.textContent = g === 1 ? '1年生' : '2年生';
+        btn.dataset.grade = String(g);
         if (g === 2 && !grade2Unlocked) {
           btn.disabled = true;
           btn.title = '1年生を すすめると かいほうされます';

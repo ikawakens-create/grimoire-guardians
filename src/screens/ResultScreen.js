@@ -694,7 +694,8 @@ class ResultScreen {
     if (localStorage.getItem('phase_complete_shown')) return;
 
     const worldProgress = GameStore.getState('progress.worlds') || {};
-    const allCleared = WORLDS.every(w => worldProgress[w.id]?.cleared);
+    const g1Worlds   = WORLDS.filter(w => !w.grade || w.grade === 1);
+    const allCleared = g1Worlds.every(w => worldProgress[w.id]?.cleared);
 
     if (!allCleared) return;
 
