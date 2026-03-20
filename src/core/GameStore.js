@@ -40,8 +40,10 @@ export class GameStore {
       finaleShown: false,
       /** 最終決戦をクリア済みか */
       finalBattleCleared: false,
-      /** 封印回復数（0〜33）。クリアワールド数と同期 */
+      /** 封印回復数（0〜33）。Grade 1 クリアワールド数と同期 */
       sealStrength: 0,
+      /** 現在表示中のグレード 1 | 2 */
+      currentGrade: 1,
       /** 現在の次元ID */
       currentDimension: 'dim1',
       /** デイリーミッション達成日（Date.toDateString()形式） */
@@ -408,6 +410,7 @@ export class GameStore {
         finaleShown: false,
         finalBattleCleared: false,
         sealStrength: 0,
+        currentGrade: 1,
         currentDimension: 'dim1',
         dailyMissionDate: null,
         dailyMissionsDone: [],

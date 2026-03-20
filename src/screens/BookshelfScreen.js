@@ -3,11 +3,12 @@
  * 本棚画面（ワールド選択）
  *
  * 変更履歴:
+ *   v1.2 (2026-03-20): Grade 2 対応（グレードタブ・ゾーン別フィルタ・封印ゲージ分離）
  *   v1.1 (2026-02-22): ストリーク表示 + ワールドクリアアニメーション追加
  *   v1.0 (2026-02-17): 初版
  *
- * @version 1.1
- * @date 2026-02-22
+ * @version 1.2
+ * @date 2026-03-20
  */
 
 import Logger from '../core/Logger.js';
@@ -70,9 +71,10 @@ class BookshelfScreen {
     const screen = document.createElement('div');
     screen.className = 'bookshelf-screen screen-transition-enter';
 
-    // Act3（世界20以降）は霧のエフェクト
+    // Act3（世界20以降）は霧のエフェクト（Grade 1 のみ）
+    const currentGrade = GameStore.getState('app.currentGrade') || 1;
     const storyAct = GameStore.getState('app.storyAct') || 1;
-    if (storyAct >= 3) {
+    if (currentGrade === 1 && storyAct >= 3) {
       screen.classList.add('bookshelf-fog');
     }
 
@@ -157,7 +159,20 @@ class BookshelfScreen {
   // ─────────────────────────────────────────
 
   /**
-   * ヘッダー要素を生成する（ストリークバッジ含む）
+   * 現在表示中のグレードのワールド一覧を返す
+   * @returns {Object[]}
+   * @private
+   */
+  _gradeWorlds() {
+    const grade = GameStore.getState('app.currentGrade') || 1;
+    if (grade === 2) {
+      return WORLDS.filter(w => w.grade === 2);
+    }
+    return WORLDS.filter(w => !w.grade || w.grade === 1);
+  }
+
+  /**
+   * ヘッダー要素を生成する（ストリークバッジ・グレードタブ含む）
    * @returns {HTMLElement}
    * @private
    */
@@ -165,17 +180,31 @@ class BookshelfScreen {
     const header = document.createElement('header');
     header.className = 'bookshelf-header';
 
-    // Act に応じたタイトル
-    const storyAct = GameStore.getState('app.storyAct') || 1;
-    const actTitles = {
-      1: 'ふういんされたグリモア',
-      2: 'グリモアをとりもどせ！',
-      3: '🌫️ やみにおおわれたほんだな',
-      4: '✨ さいごのグリモアへ！'
-    };
+    const currentGrade = GameStore.getState('app.currentGrade') || 1;
+
+    // グレードに応じたタイトル
+    let titleText;
+    if (currentGrade === 2) {
+      const worldProgress = GameStore.getState('progress.worlds') || {};
+      const g2Worlds = WORLDS.filter(w => w.grade === 2);
+      const g2Cleared = g2Worlds.filter(w => worldProgress[w.id]?.cleared).length;
+      const zone = Config.GRADE2.ZONES.slice().reverse().find(z => g2Cleared >= z.unlockWorlds)
+        || Config.GRADE2.ZONES[0];
+      titleText = `${zone.emoji} 深海グリモア — ${zone.name}`;
+    } else {
+      const storyAct = GameStore.getState('app.storyAct') || 1;
+      const actTitles = {
+        1: 'ふういんされたグリモア',
+        2: 'グリモアをとりもどせ！',
+        3: '🌫️ やみにおおわれたほんだな',
+        4: '✨ さいごのグリモアへ！'
+      };
+      titleText = actTitles[storyAct] || 'ほんだな';
+    }
     const title = document.createElement('h1');
     title.className = 'bookshelf-title';
-    title.textContent = actTitles[storyAct] || 'ほんだな';
+    title.id = 'bookshelf-title';
+    title.textContent = titleText;
 
     // プレイヤー名（空文字列の場合は「プレイヤー」にフォールバック）
     const rawName    = GameStore.getState('player.name');
@@ -196,25 +225,52 @@ class BookshelfScreen {
     const rightGroup = document.createElement('div');
     rightGroup.className = 'bookshelf-header-right';
 
-    // きおくのいせきボタン
-    const memoryBtn = document.createElement('button');
-    memoryBtn.type = 'button';
-    memoryBtn.className = 'button button-small bookshelf-memory-btn';
-    // バッジ：シルエット（clearCount>0 かつ未コレクト）の数を表示
-    const clearCounts = GameStore.getState('memory.clearCounts') ?? {};
-    const collected   = GameStore.getState('memory.collected') ?? [];
-    const nearlyReady = Object.entries(clearCounts).filter(([wId, cnt]) => {
-      const mon = /** @type {any} */ (window.__MONSTERS_BY_WORLD?.[wId]);
-      return cnt > 0 && cnt < 3 && !collected.includes(mon?.id ?? '');
-    }).length;
-    const badgeHTML = nearlyReady > 0
-      ? `<span class="memory-badge-dot"></span>`
-      : '';
-    memoryBtn.innerHTML = `🏛️ いせき${badgeHTML}`;
-    memoryBtn.addEventListener('click', () => {
-      new MemoryIsleScreen().open();
-    });
-    rightGroup.appendChild(memoryBtn);
+    // グレードタブ（Grade 2 が有効なときのみ表示）
+    if (Config.FEATURES.ENABLE_GRADE2) {
+      const worldProgress = GameStore.getState('progress.worlds') || {};
+      const g1Worlds = WORLDS.filter(w => !w.grade || w.grade === 1);
+      const g1Cleared = g1Worlds.filter(w => worldProgress[w.id]?.cleared).length;
+      // Grade 2 は Grade 1 を 1 ワールド以上クリアするか DEBUG_CHEATS 有効で解放
+      const grade2Unlocked = g1Cleared > 0 || Config.DEBUG.ENABLE_CHEATS;
+
+      const tabWrap = document.createElement('div');
+      tabWrap.className = 'grade-tab-wrap';
+
+      [1, 2].forEach(g => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'grade-tab' + (g === currentGrade ? ' grade-tab-active' : '');
+        btn.textContent = g === 1 ? '1年生' : '2年生';
+        btn.dataset.grade = String(g);
+        if (g === 2 && !grade2Unlocked) {
+          btn.disabled = true;
+          btn.title = '1年生を すすめると かいほうされます';
+        }
+        btn.addEventListener('click', () => this._switchGrade(g));
+        tabWrap.appendChild(btn);
+      });
+
+      rightGroup.appendChild(tabWrap);
+    }
+
+    // きおくのいせきボタン（Grade 1 のみ）
+    if (currentGrade === 1) {
+      const memoryBtn = document.createElement('button');
+      memoryBtn.type = 'button';
+      memoryBtn.className = 'button button-small bookshelf-memory-btn';
+      const clearCounts = GameStore.getState('memory.clearCounts') ?? {};
+      const collected   = GameStore.getState('memory.collected') ?? [];
+      const nearlyReady = Object.entries(clearCounts).filter(([wId, cnt]) => {
+        const mon = /** @type {any} */ (window.__MONSTERS_BY_WORLD?.[wId]);
+        return cnt > 0 && cnt < 3 && !collected.includes(mon?.id ?? '');
+      }).length;
+      const badgeHTML = nearlyReady > 0 ? `<span class="memory-badge-dot"></span>` : '';
+      memoryBtn.innerHTML = `🏛️ いせき${badgeHTML}`;
+      memoryBtn.addEventListener('click', () => {
+        new MemoryIsleScreen().open();
+      });
+      rightGroup.appendChild(memoryBtn);
+    }
 
     // まちボタン（いえ・合成屋等のハブ）
     if (Config.FEATURES.ENABLE_HOUSE_BUILD) {
@@ -251,14 +307,15 @@ class BookshelfScreen {
       rightGroup.appendChild(streakBadge);
     }
 
-    // クリア数バッジ
+    // クリア数バッジ（現在のグレードのみカウント）
+    const gradeWorlds  = this._gradeWorlds();
     const worlds       = GameStore.getState('progress.worlds') || {};
-    const clearedCount = Object.values(worlds).filter(w => w.cleared).length;
+    const clearedCount = gradeWorlds.filter(w => worlds[w.id]?.cleared).length;
     const statsBadge   = document.createElement('div');
     statsBadge.className = 'bookshelf-stats';
     statsBadge.innerHTML = `
       <span class="stats-badge">
-        ⭐ ${clearedCount} / ${WORLDS.length} クリア
+        ⭐ ${clearedCount} / ${gradeWorlds.length} クリア
       </span>
     `;
     rightGroup.appendChild(statsBadge);
@@ -272,26 +329,46 @@ class BookshelfScreen {
   }
 
   /**
-   * 封印ゲージバナーを生成する
+   * 封印ゲージバナーを生成する（グレード別）
    * @returns {HTMLElement}
    * @private
    */
   _buildSealGauge() {
-    const sealStrength  = GameStore.getState('app.sealStrength') || 0;
-    const total         = WORLDS.length; // 34
-    const pct           = Math.round((sealStrength / total) * 100);
-    const gaugeText     = SEAL_GAUGE_TEXT.getComment(sealStrength);
+    const currentGrade = GameStore.getState('app.currentGrade') || 1;
+    const gradeWorlds  = this._gradeWorlds();
+    const total        = gradeWorlds.length;
+
+    let current, gaugeIcon, gaugeText;
+    if (currentGrade === 2) {
+      const worldProgress = GameStore.getState('progress.worlds') || {};
+      current   = gradeWorlds.filter(w => worldProgress[w.id]?.cleared).length;
+      gaugeIcon = '🌊';
+      if (current === 0)        gaugeText = '深海グリモアの ぼうけんを はじめよう！';
+      else if (current < 7)     gaugeText = `${current}さつ かいふく！ 浅瀬を すすもう！`;
+      else if (current < 16)    gaugeText = `${current}さつ！ サンゴ礁の ひみつが わかってきた！`;
+      else if (current < 27)    gaugeText = `${current}さつ！ 九九マスター まであとすこし！`;
+      else if (current < 38)    gaugeText = `${current}さつ！ 深海に ちかづいている…！`;
+      else if (current < total) gaugeText = `のこり ${total - current}さつ！ 海底都市が みえてきた！`;
+      else                      gaugeText = '深海グリモア ぜんぶ とりもどした！';
+    } else {
+      current   = GameStore.getState('app.sealStrength') || 0;
+      gaugeIcon = '📖';
+      gaugeText = SEAL_GAUGE_TEXT.getComment(current);
+    }
+
+    const pct = total > 0 ? Math.round((current / total) * 100) : 0;
 
     const wrap = document.createElement('div');
     wrap.className = 'seal-gauge-wrap';
+    wrap.id = 'seal-gauge-wrap';
     wrap.innerHTML = `
       <div class="seal-gauge-label">
-        <span class="seal-gauge-icon">📖</span>
+        <span class="seal-gauge-icon">${gaugeIcon}</span>
         <span class="seal-gauge-text">${gaugeText}</span>
-        <span class="seal-gauge-count">${sealStrength} / ${total}</span>
+        <span class="seal-gauge-count">${current} / ${total}</span>
       </div>
       <div class="seal-gauge-bar" role="progressbar"
-           aria-valuenow="${sealStrength}" aria-valuemin="0" aria-valuemax="${total}">
+           aria-valuenow="${current}" aria-valuemin="0" aria-valuemax="${total}">
         <div class="seal-gauge-fill" style="width:${pct}%"></div>
       </div>
     `;
@@ -299,18 +376,19 @@ class BookshelfScreen {
   }
 
   /**
-   * ワールドカードを一括生成してグリッドに追加する
+   * ワールドカードを一括生成してグリッドに追加する（グレード別）
    * @param {HTMLElement} grid
    * @private
    */
   _buildCards(grid) {
     const licensed      = GameStore.getState('license.core.licensed');
     const worldProgress = GameStore.getState('progress.worlds') || {};
+    const currentGrade  = GameStore.getState('app.currentGrade') || 1;
+    const gradeWorlds   = this._gradeWorlds();
 
     // 「つぎはここ！」バッジを付けるワールドを特定する
-    // ルール: ロックされていないワールドの中で最初の未クリアワールド
     let nextWorldId = null;
-    for (const worldDef of WORLDS) {
+    for (const worldDef of gradeWorlds) {
       const locked = !worldDef.freeToPlay && !licensed;
       if (locked) continue;
       const prog = worldProgress[worldDef.id];
@@ -320,7 +398,26 @@ class BookshelfScreen {
       }
     }
 
-    WORLDS.forEach(worldDef => {
+    // Grade 2 はゾーンヘッダーを挿入する
+    let lastZone = null;
+
+    gradeWorlds.forEach(worldDef => {
+      // Grade 2 ゾーンヘッダー
+      if (currentGrade === 2 && worldDef.zone && worldDef.zone !== lastZone) {
+        lastZone = worldDef.zone;
+        const zoneDef = Config.GRADE2.ZONES.find(z => z.id === worldDef.zone);
+        if (zoneDef) {
+          const zoneHeader = document.createElement('div');
+          zoneHeader.className = 'bookshelf-zone-header';
+          zoneHeader.innerHTML = `
+            <span class="zone-header-emoji">${zoneDef.emoji}</span>
+            <span class="zone-header-name">${zoneDef.name}</span>
+            <span class="zone-header-desc">${zoneDef.description}</span>
+          `;
+          grid.appendChild(zoneHeader);
+        }
+      }
+
       const progress = worldProgress[worldDef.id] || {
         cleared: false,
         score: 0,
@@ -348,8 +445,10 @@ class BookshelfScreen {
       this.cards.push(card);
     });
 
-    // 最終決戦ドア（world_16b クリア後に出現）
-    this._buildFinalBattleDoor(grid);
+    // 最終決戦ドア（Grade 1 のみ: world_16b クリア後に出現）
+    if (currentGrade === 1) {
+      this._buildFinalBattleDoor(grid);
+    }
   }
 
   /**
@@ -386,11 +485,12 @@ class BookshelfScreen {
    * @private
    */
   _syncLockStates() {
-    const licensed = GameStore.getState('license.core.licensed');
+    const licensed    = GameStore.getState('license.core.licensed');
+    const gradeWorlds = this._gradeWorlds();
     Logger.debug('[BookshelfScreen] Syncing lock states, licensed:', licensed);
 
     this.cards.forEach((card, index) => {
-      const worldDef = WORLDS[index];
+      const worldDef = gradeWorlds[index];
       if (!worldDef) return;
       const shouldBeLocked = !worldDef.freeToPlay && !licensed;
       card.setLocked(shouldBeLocked);
@@ -403,7 +503,8 @@ class BookshelfScreen {
    * @private
    */
   _animateWorldClear(worldId) {
-    const worldIndex = WORLDS.findIndex(w => w.id === worldId);
+    const gradeWorlds = this._gradeWorlds();
+    const worldIndex  = gradeWorlds.findIndex(w => w.id === worldId);
     if (worldIndex < 0) return;
 
     const card = this.cards[worldIndex];
@@ -461,6 +562,76 @@ class BookshelfScreen {
         this._timers.push(removeTimer);
       }, i * 120);
       this._timers.push(spawnTimer);
+    }
+  }
+
+  /**
+   * グレードを切り替える（タブクリック時）
+   * @param {number} grade - 1 | 2
+   * @private
+   */
+  _switchGrade(grade) {
+    if ((GameStore.getState('app.currentGrade') || 1) === grade) return;
+    GameStore.setState('app.currentGrade', grade);
+    this._rebuildGradeView();
+  }
+
+  /**
+   * グレード切り替え後にゲージ・グリッド・タイトルを再構築する
+   * @private
+   */
+  _rebuildGradeView() {
+    if (!this.element) return;
+
+    // 霧エフェクト更新
+    const currentGrade = GameStore.getState('app.currentGrade') || 1;
+    const storyAct = GameStore.getState('app.storyAct') || 1;
+    this.element.classList.toggle('bookshelf-fog', currentGrade === 1 && storyAct >= 3);
+
+    // タイトル更新
+    const titleEl = this.element.querySelector('#bookshelf-title');
+    if (titleEl) {
+      if (currentGrade === 2) {
+        const worldProgress = GameStore.getState('progress.worlds') || {};
+        const g2Worlds  = WORLDS.filter(w => w.grade === 2);
+        const g2Cleared = g2Worlds.filter(w => worldProgress[w.id]?.cleared).length;
+        const zone = Config.GRADE2.ZONES.slice().reverse().find(z => g2Cleared >= z.unlockWorlds)
+          || Config.GRADE2.ZONES[0];
+        titleEl.textContent = `${zone.emoji} 深海グリモア — ${zone.name}`;
+      } else {
+        const stAct = GameStore.getState('app.storyAct') || 1;
+        const acts = { 1: 'ふういんされたグリモア', 2: 'グリモアをとりもどせ！',
+          3: '🌫️ やみにおおわれたほんだな', 4: '✨ さいごのグリモアへ！' };
+        titleEl.textContent = acts[stAct] || 'ほんだな';
+      }
+    }
+
+    // グレードタブのアクティブ状態更新
+    this.element.querySelectorAll('.grade-tab').forEach(btn => {
+      const g = parseInt(btn.dataset.grade, 10);
+      btn.classList.toggle('grade-tab-active', g === currentGrade);
+    });
+
+    // 封印ゲージ再構築
+    const oldGauge = this.element.querySelector('#seal-gauge-wrap');
+    if (oldGauge) oldGauge.replaceWith(this._buildSealGauge());
+
+    // カード再構築
+    this.cards.forEach(card => card.destroy());
+    this.cards = [];
+    const grid = this.element.querySelector('#bookshelf-grid');
+    if (grid) {
+      grid.innerHTML = '';
+      this._buildCards(grid);
+    }
+
+    // クリア数バッジ更新
+    const gradeWorlds  = this._gradeWorlds();
+    const worlds       = GameStore.getState('progress.worlds') || {};
+    const clearedCount = gradeWorlds.filter(w => worlds[w.id]?.cleared).length;
+    const statsBadge   = this.element.querySelector('.bookshelf-stats');
+    if (statsBadge) {
+      statsBadge.innerHTML = `<span class="stats-badge">⭐ ${clearedCount} / ${gradeWorlds.length} クリア</span>`;
     }
   }
 

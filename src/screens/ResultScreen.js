@@ -550,9 +550,10 @@ class ResultScreen {
    * @private
    */
   _updateStoryProgress(worldId) {
-    // 封印強度 = クリア済みワールド数
+    // 封印強度 = Grade 1 クリア済みワールド数のみカウント
     const worldProgress = GameStore.getState('progress.worlds') || {};
-    const clearedCount  = Object.values(worldProgress).filter(w => w.cleared).length;
+    const g1WorldIds    = new Set(WORLDS.filter(w => !w.grade || w.grade === 1).map(w => w.id));
+    const clearedCount  = Object.entries(worldProgress).filter(([id, w]) => w.cleared && g1WorldIds.has(id)).length;
     GameStore.setState('app.sealStrength', clearedCount);
 
     // actMoment で storyAct を更新
@@ -693,7 +694,8 @@ class ResultScreen {
     if (localStorage.getItem('phase_complete_shown')) return;
 
     const worldProgress = GameStore.getState('progress.worlds') || {};
-    const allCleared = WORLDS.every(w => worldProgress[w.id]?.cleared);
+    const g1Worlds   = WORLDS.filter(w => !w.grade || w.grade === 1);
+    const allCleared = g1Worlds.every(w => worldProgress[w.id]?.cleared);
 
     if (!allCleared) return;
 
