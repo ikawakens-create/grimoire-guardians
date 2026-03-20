@@ -41,7 +41,7 @@ const questions = [
     step: 1,
     type: 'text',
     question: '415 + 203 = ？',
-    choices: ['608', '618', '618', '628'],
+    choices: ['608', '618', '625', '628'],
     correctAnswer: '618'
   },
   {
@@ -88,7 +88,7 @@ const questions = [
     step: 2,
     type: 'text',
     question: '263 + 174 = ？',
-    choices: ['427', '437', '437', '447'],
+    choices: ['427', '437', '443', '447'],
     correctAnswer: '437'
   },
   {

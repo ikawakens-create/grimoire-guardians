@@ -260,10 +260,10 @@ export const UNITS = {
   'M2-14e': { unitId: 'M2-14e', title: 'ぶんすう まとめ',              loader: () => import('./questions/M2-14e.js') },
 
   // Zone 5 海底都市（4本）— 総復習
-  'M2-15a': { unitId: 'M2-15a', title: 'そうふくしゅう①',                loader: null },
-  'M2-15b': { unitId: 'M2-15b', title: 'そうふくしゅう②',                loader: null },
-  'M2-15c': { unitId: 'M2-15c', title: 'そうふくしゅう③',                loader: null },
-  'M2-15d': { unitId: 'M2-15d', title: 'グランド・レヴィアサン けっせん！', loader: null },
+  'M2-15a': { unitId: 'M2-15a', title: 'そうふくしゅう①',                loader: () => import('./questions/M2-15a.js') },
+  'M2-15b': { unitId: 'M2-15b', title: 'そうふくしゅう②',                loader: () => import('./questions/M2-15b.js') },
+  'M2-15c': { unitId: 'M2-15c', title: 'そうふくしゅう③',                loader: () => import('./questions/M2-15c.js') },
+  'M2-15d': { unitId: 'M2-15d', title: 'グランド・レヴィアサン けっせん！', loader: () => import('./questions/M2-15d.js') },
 };
 
 /**
