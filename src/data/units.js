@@ -234,17 +234,17 @@ export const UNITS = {
   'M2-09d': { unitId: 'M2-09d', title: 'さんごしょう まとめ', loader: () => import('./questions/M2-09d.js') },
 
   // Zone 3 外洋（11本）— 九九（m2_10a〜i はフラッシュモード対象）
-  'M2-10a': { unitId: 'M2-10a', title: '九九 2のだん',        loader: null },
-  'M2-10b': { unitId: 'M2-10b', title: '九九 3のだん',        loader: null },
-  'M2-10c': { unitId: 'M2-10c', title: '九九 4のだん',        loader: null },
-  'M2-10d': { unitId: 'M2-10d', title: '九九 5のだん',        loader: null },
-  'M2-10e': { unitId: 'M2-10e', title: '九九 6のだん',        loader: null },
-  'M2-10f': { unitId: 'M2-10f', title: '九九 7のだん',        loader: null },
-  'M2-10g': { unitId: 'M2-10g', title: '九九 8のだん',        loader: null },
-  'M2-10h': { unitId: 'M2-10h', title: '九九 9のだん',        loader: null },
-  'M2-10i': { unitId: 'M2-10i', title: '九九 1のだん・0のかけざん', loader: null },
-  'M2-10j': { unitId: 'M2-10j', title: 'かけざん もんだい',   loader: null },
-  'M2-10k': { unitId: 'M2-10k', title: '九九 そうまとめ',     loader: null },
+  'M2-10a': { unitId: 'M2-10a', title: '九九 2のだん',        loader: () => import('./questions/M2-10a.js') },
+  'M2-10b': { unitId: 'M2-10b', title: '九九 3のだん',        loader: () => import('./questions/M2-10b.js') },
+  'M2-10c': { unitId: 'M2-10c', title: '九九 4のだん',        loader: () => import('./questions/M2-10c.js') },
+  'M2-10d': { unitId: 'M2-10d', title: '九九 5のだん',        loader: () => import('./questions/M2-10d.js') },
+  'M2-10e': { unitId: 'M2-10e', title: '九九 6のだん',        loader: () => import('./questions/M2-10e.js') },
+  'M2-10f': { unitId: 'M2-10f', title: '九九 7のだん',        loader: () => import('./questions/M2-10f.js') },
+  'M2-10g': { unitId: 'M2-10g', title: '九九 8のだん',        loader: () => import('./questions/M2-10g.js') },
+  'M2-10h': { unitId: 'M2-10h', title: '九九 9のだん',        loader: () => import('./questions/M2-10h.js') },
+  'M2-10i': { unitId: 'M2-10i', title: '九九 1のだん・0のかけざん', loader: () => import('./questions/M2-10i.js') },
+  'M2-10j': { unitId: 'M2-10j', title: 'かけざん もんだい',   loader: () => import('./questions/M2-10j.js') },
+  'M2-10k': { unitId: 'M2-10k', title: '九九 そうまとめ',     loader: () => import('./questions/M2-10k.js') },
 
   // Zone 4 深海（11本）— 図形・3桁筆算・分数
   'M2-11':  { unitId: 'M2-11',  title: 'さんかくけいと しかくけい',     loader: null },
