@@ -222,16 +222,16 @@ export const UNITS = {
   'M2-04':  { unitId: 'M2-04',  title: '2けたの けいさん おうよう',  loader: () => import('./questions/M2-04.js') },
   'M2-04b': { unitId: 'M2-04b', title: 'ひっさん まとめ',            loader: () => import('./questions/M2-04b.js') },
 
-  // Zone 2 サンゴ礁（9本）— 数・量・時刻
-  'M2-05':  { unitId: 'M2-05',  title: 'ながさを はかろう',   loader: null },
-  'M2-06a': { unitId: 'M2-06a', title: 'おおきい かず①',     loader: null },
-  'M2-06b': { unitId: 'M2-06b', title: 'おおきい かず②',     loader: null },
-  'M2-07':  { unitId: 'M2-07',  title: 'みずの かさ',         loader: null },
-  'M2-08':  { unitId: 'M2-08',  title: 'おもさを はかろう',   loader: null },
-  'M2-09a': { unitId: 'M2-09a', title: 'じこくと じかん①',   loader: null },
-  'M2-09b': { unitId: 'M2-09b', title: 'じこくと じかん②',   loader: null },
-  'M2-09c': { unitId: 'M2-09c', title: 'じかんの もんだい',   loader: null },
-  'M2-09d': { unitId: 'M2-09d', title: 'さんごしょう まとめ', loader: null },
+  // Zone 2 サンゴ礁（9本）— 数・量・時刻（仮実装）
+  'M2-05':  { unitId: 'M2-05',  title: 'ながさを はかろう',   loader: () => import('./questions/M2-05.js') },
+  'M2-06a': { unitId: 'M2-06a', title: 'おおきい かず①',     loader: () => import('./questions/M2-06a.js') },
+  'M2-06b': { unitId: 'M2-06b', title: 'おおきい かず②',     loader: () => import('./questions/M2-06b.js') },
+  'M2-07':  { unitId: 'M2-07',  title: 'みずの かさ',         loader: () => import('./questions/M2-07.js') },
+  'M2-08':  { unitId: 'M2-08',  title: 'おもさを はかろう',   loader: () => import('./questions/M2-08.js') },
+  'M2-09a': { unitId: 'M2-09a', title: 'じこくと じかん①',   loader: () => import('./questions/M2-09a.js') },
+  'M2-09b': { unitId: 'M2-09b', title: 'じこくと じかん②',   loader: () => import('./questions/M2-09b.js') },
+  'M2-09c': { unitId: 'M2-09c', title: 'じかんの もんだい',   loader: () => import('./questions/M2-09c.js') },
+  'M2-09d': { unitId: 'M2-09d', title: 'さんごしょう まとめ', loader: () => import('./questions/M2-09d.js') },
 
   // Zone 3 外洋（11本）— 九九（m2_10a〜i はフラッシュモード対象）
   'M2-10a': { unitId: 'M2-10a', title: '九九 2のだん',        loader: null },
