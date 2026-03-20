@@ -369,3 +369,186 @@
 .position-absolute { position: absolute; }
 .position-fixed { position: fixed; }
 .position-sticky { position: sticky; }
+
+/* ==========================================================================
+   ChantScreen（九九フラッシュモード）
+   ========================================================================== */
+
+.chant-screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(160deg, #0a0a2e 0%, #1a1a5e 60%, #0d1b4b 100%);
+  color: #fff;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  overflow: hidden;
+  z-index: 10;
+}
+.chant-screen.chant-visible { opacity: 1; }
+
+/* ヘッダー */
+.chant-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: rgba(0,0,0,0.3);
+  flex-shrink: 0;
+}
+.chant-back-btn {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.7);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background var(--transition-fast);
+}
+.chant-back-btn:hover { background: rgba(255,255,255,0.1); }
+.chant-world-title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #ffe082;
+}
+.chant-progress-text {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.8);
+  font-weight: bold;
+  min-width: 48px;
+  text-align: right;
+}
+
+/* タイマー円形 */
+.chant-timer-wrap {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 12px auto 8px;
+  flex-shrink: 0;
+}
+.chant-timer-svg {
+  width: 80px;
+  height: 80px;
+  transform: rotate(-90deg);
+}
+.chant-timer-track {
+  fill: none;
+  stroke: rgba(255,255,255,0.15);
+  stroke-width: 6;
+}
+.chant-timer-bar {
+  fill: none;
+  stroke: #42d0ff;
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.1s linear, stroke var(--transition-fast);
+}
+.chant-timer-bar.chant-timer-danger { stroke: #ff5555; }
+.chant-timer-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #42d0ff;
+  transition: color var(--transition-fast);
+}
+.chant-timer-label.chant-timer-danger { color: #ff5555; }
+
+/* 問題カード */
+.chant-question-card {
+  background: rgba(255,255,255,0.1);
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 16px;
+  padding: 20px 32px;
+  margin: 0 16px 16px;
+  text-align: center;
+  flex-shrink: 0;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+.chant-question-text {
+  font-size: 1.6rem;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+}
+.chant-question-card.chant-card-correct {
+  background: rgba(76,175,80,0.3);
+  border-color: #4caf50;
+}
+.chant-question-card.chant-card-wrong {
+  background: rgba(244,67,54,0.3);
+  border-color: #f44336;
+}
+
+/* 選択肢グリッド */
+.chant-choices-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+  max-width: 480px;
+  padding: 0 16px;
+  flex-shrink: 0;
+}
+.chant-choice-btn {
+  background: rgba(255,255,255,0.12);
+  border: 2px solid rgba(255,255,255,0.25);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: bold;
+  padding: 14px 0;
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+  touch-action: manipulation;
+}
+.chant-choice-btn:active { transform: scale(0.96); }
+.chant-choice-btn.chant-choice-correct {
+  background: rgba(76,175,80,0.5);
+  border-color: #4caf50;
+}
+.chant-choice-btn.chant-choice-wrong {
+  background: rgba(244,67,54,0.4);
+  border-color: #f44336;
+}
+
+/* リザルトパネル */
+.chant-result-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex: 1;
+  padding: 24px 16px;
+  text-align: center;
+}
+.chant-result-rank { font-size: 3rem; }
+.chant-result-score {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.chant-result-correct {
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: #ffe082;
+  line-height: 1;
+}
+.chant-result-sep  { font-size: 1.5rem; color: rgba(255,255,255,0.5); }
+.chant-result-total { font-size: 1.8rem; color: rgba(255,255,255,0.8); }
+.chant-result-unit  { font-size: 0.9rem; color: rgba(255,255,255,0.6); align-self: flex-end; margin-left: 6px; }
+.chant-result-time  { font-size: 1rem; color: rgba(255,255,255,0.7); }
+.chant-result-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}

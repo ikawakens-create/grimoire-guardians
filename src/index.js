@@ -31,6 +31,7 @@ import { ShopScreen } from './screens/ShopScreen.js';
 import { GuildScreen } from './screens/GuildScreen.js';
 import { FarmScreen } from './screens/FarmScreen.js';
 import UnitIntroScreen from './screens/UnitIntroScreen.js';
+import ChantScreen from './screens/ChantScreen.js';
 import FinalBattleScreen from './screens/FinalBattleScreen.js';
 import { TownManager } from './core/TownManager.js';
 import { SkinManager } from './core/SkinManager.js';
@@ -309,6 +310,11 @@ function showUnitIntro(gameScreen, worldData) {
     () => {
       Logger.info('[App] UnitIntro back to bookshelf');
       showBookshelf(gameScreen);
+    },
+    // フラッシュモード（九九ワールドのみ、初クリア後に表示）
+    () => {
+      Logger.info('[App] UnitIntro flash mode:', worldData.id);
+      showChant(gameScreen, worldData);
     }
   );
 
@@ -317,6 +323,33 @@ function showUnitIntro(gameScreen, worldData) {
 
   if (Config.IS_DEBUG) {
     window.GG._screen = intro;
+  }
+}
+
+/**
+ * ChantScreen（九九フラッシュモード）を描画する
+ * @param {HTMLElement} gameScreen - ゲーム画面コンテナ
+ * @param {Object}      worldData  - 選択されたワールドデータ
+ */
+function showChant(gameScreen, worldData) {
+  if (_activeScreen) {
+    _activeScreen.destroy();
+    _activeScreen = null;
+  }
+
+  GameStore.setState('app.currentScreen', 'chant');
+
+  const chant = new ChantScreen(gameScreen, worldData, (result) => {
+    Logger.info('[App] ChantScreen exited:', result);
+    // 終了（finish/abort どちらも本棚へ）
+    showBookshelf(gameScreen);
+  });
+
+  chant.render();
+  _activeScreen = chant;
+
+  if (Config.IS_DEBUG) {
+    window.GG._screen = chant;
   }
 }
 
