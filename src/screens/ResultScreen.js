@@ -589,9 +589,15 @@ class ResultScreen {
       }
     }
 
-    // actMoment を演出キューに積む（初回のみ）
+    // actMoment を演出キューに積む（Grade 1 のみ、初回のみ）
     if (actAdvanced && actMoment && actMoment !== 'none') {
       this._pendingActMoment = actMoment;
+    }
+
+    // Grade 2 の zone 転換は未実装のため現時点ではログのみ（TODO: Phase 2 演出実装時に対応）
+    const grade2Moments = ['zone2_start', 'zone3_start', 'zone4_start', 'zone5_start', 'grade2_finale_unlock'];
+    if (actMoment && grade2Moments.includes(actMoment)) {
+      Logger.info(`[Story] Grade 2 zone moment: ${actMoment} (演出未実装 — Phase 2 予定)`);
     }
   }
 

@@ -72,6 +72,7 @@ class SaveManagerClass {
       inventory: state.inventory,
       memory: state.memory,
       house: state.house,
+      ship: state.ship,
       town: state.town,
       sound: state.sound,
       storyProgress: {
@@ -242,6 +243,12 @@ class SaveManagerClass {
       GameStore.setState('house', {
         ...GameStore.getState('house'),
         ...saveData.house
+      });
+    }
+    if (saveData.ship) {
+      GameStore.setState('ship', {
+        ...GameStore.getState('ship'),
+        ...saveData.ship
       });
     }
     if (saveData.town) {
