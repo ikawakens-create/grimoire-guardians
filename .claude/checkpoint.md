@@ -1,103 +1,50 @@
 # セッション引き継ぎ
 
-**保存日時**: 2026-03-19 （午後セッション）
+**保存日時**: 2026-03-20
 
 ## 今日やったこと
 
-### バグ修正（実装済み・プッシュ済み）
-- `FinalBattleScreen.js` の未使用 `WORLDS` import を削除
-- `GG.resetState()` が `npc_met_*` / `phase_complete_shown` を localStorage からも削除するよう修正
-- コミット: `57ce935`
+- **BookshelfScreen / GameStore の Grade 2 対応**
+  - グレードタブ切り替え（`app.currentGrade`、`_switchGrade()`、`_rebuildGradeView()`）
+  - Grade 2 ゾーンヘッダー（`.bookshelf-zone-header`）
+  - sealStrength を Grade 1 のみにスコープ化
+  - `_checkPhaseComplete()` も Grade 1 のみに修正
+  - バグ修正：`Config.FEATURES.ENABLE_GRADE2`、`btn.dataset.grade`、SaveManager ship 永続化
 
-### Grade 2「深海グリモア」設計（プランのみ・実装未着手）
-長時間かけて設計を詰めた。最終確定プラン v2 が完成済み。
+- **ChantScreen（九九フラッシュモード）実装**
+  - `src/screens/ChantScreen.js` 新規作成（9問固定・5秒タイマー・画面内リザルト）
+  - `UnitIntroScreen.js` に `onFlash` コールバック・フラッシュボタン追加
+  - `ResultScreen.js` に初クリア時 `ship.flashUnlockedWorlds` 解放ロジック追加
+  - `index.js` に `showChant()` 追加
+  - `layout.css` に ChantScreen スタイル追加
+  - `sw.js` バンプ → v2.2.2
+
+- **ChantScreen バグ修正 4件**
+  - Bug1（クリティカル）: `loadUnitQuestions()` の戻り値を `{ questions }` で正しく分解
+  - Bug2&3: `SoundType.ANSWER_WRONG/CORRECT` → `SoundType.WRONG_ANSWER/CORRECT_ANSWER`
+  - Bug4: 未使用インポート `GameStore` 削除
 
 ## 未コミットの変更
-なし（クリーン状態）
 
-## Grade 2 最終確定プラン サマリー
-
-### 世界観
-- テーマ: 海の世界 / 深海グリモア
-- キャッチコピー: 「深海に眠る魔法の謎を解き明かせ」
-- ラスボス: グランド・レヴィアサン（3形態）
-- グリモア: 深海図（シーグリモア）
-- 船の成長: 小型（開幕）→ 中型（Zone2後ストーリーGET）→ 大型（Zone3後クラフト必須）
-
-### 全42ワールド構成
-Zone 1 浅瀬（7本）  : 筆算（+ミニまとめ1本）
-Zone 2 サンゴ礁（9本）: 数・量・時刻（+ミニまとめ1本）
-Zone 3 外洋（11本）  : 九九9段+文章題+ミニまとめ2本
-Zone 4 深海（11本）  : 図形・3桁筆算・分数（トピック別ミニまとめ3本）
-Zone 5 海底都市（4本）: 総復習（フィナーレ解放条件：m2_15d）
-
-### Zone 4 の詳細（トピック別ミニまとめ3本）
-図形2本（m2_11, m2_12）      → m2_12b 図形ミニまとめ
-3桁筆算2本（m2_13a, m2_13b） → m2_13c 3桁筆算ミニまとめ
-分数4本（m2_14a〜d）          → m2_14e 分数ミニまとめ
-
-### 問題数ルール（確定）
-- 通常ワールド: プール45問 / 出題15問
-- 九九各段: プール9問 / 出題9問（全問出題・唯一の例外）
-- 九九まとめ系: プール81問 / 出題15問
-
-### 命名規則（確定・全教科共通）
-- 問題ファイル: M2-01.js（教科M + 学年2 + 連番）
-- ワールドID: m2_01（小文字）
-- 他教科プレフィックス: E（英語）/ J（国語）/ S（理科）/ C（社会）
-- Grade 1 の既存ID（M1-xx / world_x）は変更なし
-
-### システム方針
-- 船ビルド（ShipBuildScreen）: 6部位（船体・帆・船首像・旗・甲板デコ・船底発光）
-- フラッシュモード: 九九専用（m2_10a〜i）、初回クリア後解放
-- 図形問題: テキスト選択肢（新type不要）
-- 時刻計算（m2_09c）: テキスト文章題形式
-- クリア閾値: 0.6（全ワールド共通）
-- Memory Isle: 一旦OFF
-- スキン: 24種（海テーマ8・かわいい8・ネタ6・跨ぎ特別2）
-- 新素材: pearl / coral / seaglass / anchor / deepstone
-
-### NPC
-- 船長タコぞう（全体ガイド）
-- 人魚の算術士リーナ（九九の師匠）
-- サンゴの大工さん（図形・長さ）
-- 灯台守のおじいさん（時刻・時間）
-- 海の賢者（ストーリーの鍵・終盤登場）
+なし（working tree clean）
 
 ## 次にやること（優先順）
 
-1. Config.js に Grade 2 設定追加
-   - Config.GRADE2（ゾーン定義・船サイズ・クラフトコスト）
-   - Config.FEATURES.ENABLE_GRADE2 = true
-   - Config.FEATURES.ENABLE_FLASH_MODE = true
-
-2. GameStore.js に ship ステート追加
-   - ship.size / ship.hull / ship.sail / ship.figurehead / ship.flag / ship.deck / ship.glow / ship.crafted[]
-
-3. worlds.js に m2_01〜m2_15d の42世界追加
-
-4. units.js に M2 の lazy loader 追加
-
-5. 問題ファイル作成（Zone 1 から順番に）
-   - M2-01.js〜M2-05c.js（筆算7本）が最初
-
-6. HarborScreen 実装（港ハブ・船が最も目立つ起点画面）
-
-7. ShipBuildScreen 実装（船カスタマイズ）
-
-8. フラッシュモード実装（QuizScreen 拡張）
-
-9. Zone 2〜5 の問題ファイル作成
-
-10. FinalBattleScreen Grade 2 版調整
+1. **Grade 2 zone story 演出** — `zone2_start`〜`grade2_finale_unlock` actMoment の ResultScreen 演出実装（現在は Logger.info のみ）
+2. **スキン画像生成** — `.claude/tasks/skin-images-plan.md` に 25 件の Gemini プロンプト準備済み、`assets/skins/` は空
+3. **Grade 2 ShipBuildScreen** — 船カスタマイズ画面（未実装）
+4. **Phase 1 音声** — SoundManager は現在モック実装
 
 ## 未解決のバグ・問題
-なし（現時点ではクリーン）
+
+なし（今セッションで発見した全バグは修正済み）
 
 ## 重要なメモ
-- Grade 2 は設計完了・実装未着手の状態
-- Grade 1 の既存コード・データは一切変更不要
-- sw.js の ASSETS[] は問題ファイル追加のたびに更新が必要
-- 大型船艦クラフト: Zone3後に設計図GET → Zone4中に素材収集 → Zone4完了で完成
-- SW_VERSION は現在 2.2.1（sw.js）
-- スキン画像プランは .claude/tasks/skin-images-plan.md に詳細あり（Grade1スキン24種の生成プロンプト含む）
+
+- ブランチ: `claude/morning-standup-YBA3o`
+- SW_VERSION: `2.2.2`
+- Grade 2 actMoment (`zone2_start` 等) は ResultScreen で `Logger.info` のみ（演出未実装・TODO）
+- `Config.FEATURES.ENABLE_FLASH_MODE = true` でフラッシュモード有効
+- フラッシュ解放ワールド: `m2_10a`〜`m2_10i`（9ワールド）
+- `loadUnitQuestions()` の戻り値は `{ questions, stepConfig }` オブジェクト — 直接 `.slice()` 不可（要分解）
+- SaveManager の `ship` 永続化は修正済み
