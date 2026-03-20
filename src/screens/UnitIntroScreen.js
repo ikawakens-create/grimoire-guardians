@@ -17,6 +17,7 @@
 
 import Logger from '../core/Logger.js';
 import { GameStore } from '../core/GameStore.js';
+import { Config } from '../core/Config.js';
 import { SoundManager, SoundType } from '../core/SoundManager.js';
 import { CharacterAvatar } from '../components/CharacterAvatar.js';
 import { UNIT_INTROS, STORY_IMAGES } from '../data/storyData.js';
@@ -28,12 +29,14 @@ class UnitIntroScreen {
    * @param {string}      worldId     - 選択されたワールドID
    * @param {Function}    onStart     - 「はじめる！」コールバック () => void
    * @param {Function}    onBack      - 「もどる」コールバック () => void
+   * @param {Function}    [onFlash]   - 「フラッシュモード」コールバック () => void（省略可）
    */
-  constructor(container, worldId, onStart, onBack) {
+  constructor(container, worldId, onStart, onBack, onFlash = null) {
     this._container = container;
     this._worldId   = worldId;
     this._onStart   = onStart;
     this._onBack    = onBack;
+    this._onFlash   = onFlash;
     this._el        = null;
   }
 
@@ -86,6 +89,10 @@ class UnitIntroScreen {
     const hint       = intro?.hint       || 'がんばって といてみよう！';
     const imgSrc     = intro?.image      || null;
     const ph         = intro?.imagePlaceholder || { bg: '#E8EAF6', emoji: '📘', label: worldTitle };
+    const flashBtn   = this._isFlashUnlocked() ? `
+          <button class="button button-warning unit-intro-btn-flash" type="button">
+            ⚡ フラッシュモード
+          </button>` : '';
 
     const el = document.createElement('div');
     el.className = 'unit-intro-screen';
@@ -115,6 +122,7 @@ class UnitIntroScreen {
           <button class="button button-secondary unit-intro-btn-back" type="button">
             もどる
           </button>
+          ${flashBtn}
           <button class="button button-large unit-intro-btn-start" type="button">
             はじめる！ 🚀
           </button>
@@ -150,6 +158,10 @@ class UnitIntroScreen {
     Logger.info('[UnitIntroScreen] Mini banner:', world?.id);
     const worldTitle = world?.title || 'クイズ';
     const storyDesc  = world?.storyDesc || '';
+    const flashBtn   = this._isFlashUnlocked() ? `
+        <button class="button button-warning unit-intro-mini-flash" type="button">
+          ⚡ フラッシュ
+        </button>` : '';
 
     const el = document.createElement('div');
     el.className = 'unit-intro-mini-banner';
@@ -157,6 +169,7 @@ class UnitIntroScreen {
       <div class="unit-intro-mini-inner">
         <span class="unit-intro-mini-title">📘 ${worldTitle}</span>
         <span class="unit-intro-mini-desc">${storyDesc.split('\n')[0]}</span>
+        ${flashBtn}
         <button class="button button-large unit-intro-mini-start" type="button">
           はじめる！
         </button>
@@ -170,6 +183,12 @@ class UnitIntroScreen {
       SoundManager.playSFX(SoundType.BUTTON_CLICK);
       this.destroy();
       if (typeof this._onStart === 'function') this._onStart();
+    });
+
+    el.querySelector('.unit-intro-mini-flash')?.addEventListener('click', () => {
+      SoundManager.playSFX(SoundType.BUTTON_CLICK);
+      this.destroy();
+      if (typeof this._onFlash === 'function') this._onFlash();
     });
 
     // 自動でフェードイン
@@ -226,6 +245,7 @@ class UnitIntroScreen {
   _bindEvents() {
     const btnStart = this._el.querySelector('.unit-intro-btn-start');
     const btnBack  = this._el.querySelector('.unit-intro-btn-back');
+    const btnFlash = this._el.querySelector('.unit-intro-btn-flash');
 
     btnStart?.addEventListener('click', () => {
       SoundManager.playSFX(SoundType.BUTTON_CLICK);
@@ -238,6 +258,24 @@ class UnitIntroScreen {
       this.destroy();
       if (typeof this._onBack === 'function') this._onBack();
     });
+
+    btnFlash?.addEventListener('click', () => {
+      SoundManager.playSFX(SoundType.BUTTON_CLICK);
+      this.destroy();
+      if (typeof this._onFlash === 'function') this._onFlash();
+    });
+  }
+
+  /**
+   * このワールドのフラッシュモードが解放済みかどうかを返す
+   * @returns {boolean}
+   */
+  _isFlashUnlocked() {
+    if (!Config.FEATURES.ENABLE_FLASH_MODE) return false;
+    const flashIds = Config.GRADE2.FLASH_MODE.ENABLED_WORLD_IDS;
+    if (!flashIds.includes(this._worldId)) return false;
+    const unlocked = GameStore.getState('ship.flashUnlockedWorlds') ?? [];
+    return unlocked.includes(this._worldId);
   }
 }
 

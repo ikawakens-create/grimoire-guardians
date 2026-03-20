@@ -424,6 +424,18 @@ class ResultScreen {
       HouseManager.checkAndUnlockStyles();
       this._updateStoryProgress(worldId);
     }
+
+    // フラッシュモード解放チェック（九九ワールドの初クリア時）
+    if (cleared && worldId && Config.FEATURES.ENABLE_FLASH_MODE) {
+      const flashIds = Config.GRADE2.FLASH_MODE.ENABLED_WORLD_IDS;
+      if (flashIds.includes(worldId)) {
+        const unlocked = GameStore.getState('ship.flashUnlockedWorlds') ?? [];
+        if (!unlocked.includes(worldId)) {
+          GameStore.setState('ship.flashUnlockedWorlds', [...unlocked, worldId]);
+          Logger.info(`[ResultScreen] ⚡ フラッシュモード解放: ${worldId}`);
+        }
+      }
+    }
     TownManager.onQuizCompleted();
     SkinManager.checkMilestoneUnlocks();
 
