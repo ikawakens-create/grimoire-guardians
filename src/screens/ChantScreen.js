@@ -17,7 +17,6 @@
  */
 
 import Logger from '../core/Logger.js';
-import { GameStore } from '../core/GameStore.js';
 import { Config } from '../core/Config.js';
 import { SoundManager, SoundType } from '../core/SoundManager.js';
 import HapticFeedback from '../utils/HapticFeedback.js';
@@ -159,10 +158,10 @@ class ChantScreen {
    */
   async _loadQuestions() {
     const unitId = this._worldData.unitId;
-    const allQuestions = await loadUnitQuestions(unitId);
+    const { questions } = await loadUnitQuestions(unitId);
     const count = Config.GRADE2.FLASH_MODE.QUESTION_COUNT;
     // stepConfig で pick:9 になっているため先頭 count 件をそのまま使用
-    this._questions = allQuestions.slice(0, count);
+    this._questions = questions.slice(0, count);
     Logger.info(`[ChantScreen] ${this._questions.length}問ロード完了 (unit: ${unitId})`);
   }
 
@@ -270,7 +269,7 @@ class ChantScreen {
     if (this._isAnswered) return;
     this._isAnswered = true;
     HapticFeedback.error();
-    SoundManager.playSFX(SoundType.ANSWER_WRONG);
+    SoundManager.playSFX(SoundType.WRONG_ANSWER);
     this._showFeedback(false, null);
   }
 
@@ -289,11 +288,11 @@ class ChantScreen {
     if (isCorrect) {
       this._correctCount++;
       HapticFeedback.success();
-      SoundManager.playSFX(SoundType.ANSWER_CORRECT);
+      SoundManager.playSFX(SoundType.CORRECT_ANSWER);
       btn.classList.add('chant-choice-correct');
     } else {
       HapticFeedback.error();
-      SoundManager.playSFX(SoundType.ANSWER_WRONG);
+      SoundManager.playSFX(SoundType.WRONG_ANSWER);
       btn.classList.add('chant-choice-wrong');
       // 正解ボタンをハイライト
       this._el.querySelectorAll('.chant-choice-btn').forEach(b => {
