@@ -1724,6 +1724,17 @@
   will-change: opacity, filter;
 }
 
+/* パーツ装備時のきらきらフラッシュ */
+@keyframes equip-flash {
+  0%   { filter: brightness(1); }
+  40%  { filter: brightness(2) saturate(2); }
+  100% { filter: brightness(1); }
+}
+.ship-equip-flash {
+  animation: equip-flash 0.6s ease forwards;
+  will-change: filter;
+}
+
 /* テーマセット完成バッジ（初回のみ大きく出る） */
 @keyframes theme-complete-burst {
   0%   { transform: scale(0.5); opacity: 0; }

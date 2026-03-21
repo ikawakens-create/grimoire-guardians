@@ -852,9 +852,7 @@ export class CraftsmanScreen {
       toast.style.cssText = 'bottom:80px;cursor:pointer;';
       toast.textContent = '⛵ マイふねに装備できるよ！';
       toast.addEventListener('click', () => {
-        import('../core/GameStore.js').then(({ GameStore }) => {
-          GameStore.setState('app.currentScreen', 'ship_build');
-        });
+        GameStore.setState('app.currentScreen', 'ship_build');
         toast.remove();
       });
       document.body.appendChild(toast);

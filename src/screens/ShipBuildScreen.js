@@ -52,6 +52,12 @@ export class ShipBuildScreen {
   show(container) {
     this._container = container;
 
+    // 既存購読があれば先に解除（多重登録防止）
+    if (this._unsubscribe) {
+      this._unsubscribe();
+      this._unsubscribe = null;
+    }
+
     if (!this._el) {
       this._el = document.createElement('div');
       this._el.className = 'ship-build-screen';
@@ -136,8 +142,8 @@ export class ShipBuildScreen {
     const flagEmoji = this._getEquippedEmoji(ship, 'flag', '🚩');
     const fhdEmoji  = this._getEquippedEmoji(ship, 'figurehead', '🐬');
 
-    // small は skin のみ
-    if (ship.size === 'small') {
+    // small（または「ちいさくみせる」ON）は skin のみ表示
+    if (dispSize === 'small') {
       const skinId    = ship.hull ?? 'skin_default';
       const skin      = SMALL_SKINS.find(s => s.id === skinId) ?? SMALL_SKINS[0];
       return `
@@ -541,7 +547,7 @@ export class ShipBuildScreen {
       GameStore.setState('ship.name', newName);
       GameStore.setState('ship.nameSetByUser', true);
       overlay.remove();
-      this._render();
+      // GameStore subscriber が自動で _render() を呼ぶため明示呼び出し不要
       Logger.info(`[ShipBuildScreen] ship renamed: ${newName}`);
     });
 
@@ -658,6 +664,12 @@ export class ShipBuildScreen {
 export function showShipNameDialog(container) {
   const maxLen = Config.GRADE2.SHIP_NAME_MAX_LENGTH;
   const currentName = GameStore.getState('ship.name') ?? 'グリモア号';
+  // XSS 対策: value 属性に埋め込む前にエスケープ
+  const escapedName = String(currentName)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 
   const overlay = document.createElement('div');
   overlay.className = 'modal-overlay ship-intro-modal';
@@ -670,12 +682,13 @@ export function showShipNameDialog(container) {
       <input
         type="text"
         class="ship-name-input"
-        value="${currentName}"
+        value="${escapedName}"
         maxlength="${maxLen}"
         placeholder="グリモア号"
       />
       <div class="ship-name-counter"><span class="ship-name-len">${currentName.length}</span> / ${maxLen}</div>
       <button type="button" class="button button-success ship-intro-confirm-btn">これにする！</button>
+
     </div>
   `;
 
