@@ -41,6 +41,7 @@ const STAR_THRESHOLDS = [
 
 /** 素材の表示名（日本語） */
 const MATERIAL_NAMES = {
+  // Grade 1
   wood:          'まるた',
   stone:         'いし',
   brick:         'れんが',
@@ -50,11 +51,18 @@ const MATERIAL_NAMES = {
   paint:         'えのぐ',
   crown:         'おうかん',
   cape:          'マント',
-  magic_orb:     'まほうだま'
+  magic_orb:     'まほうだま',
+  // Grade 2
+  pearl:         'しんじゅ',
+  coral:         'さんご',
+  seaglass:      'うみのガラス',
+  anchor:        'いかり',
+  deepstone:     'しんかいいし',
 };
 
 /** 素材の絵文字 */
 const MATERIAL_EMOJIS = {
+  // Grade 1
   wood:          '🌲',
   stone:         '⛰️',
   brick:         '🧱',
@@ -64,13 +72,23 @@ const MATERIAL_EMOJIS = {
   paint:         '🎨',
   crown:         '👑',
   cape:          '🧣',
-  magic_orb:     '🔮'
+  magic_orb:     '🔮',
+  // Grade 2
+  pearl:         '🦪',
+  coral:         '🪸',
+  seaglass:      '💠',
+  anchor:        '⚓',
+  deepstone:     '🪨',
 };
 
-/** 基本素材プール */
+/** Grade 1 基本素材プール */
 const BASIC_MATERIALS = ['wood', 'stone', 'brick'];
-/** レア素材プール */
+/** Grade 1 レア素材プール */
 const RARE_MATERIALS  = ['gem', 'star_fragment', 'cloth'];
+/** Grade 2 基本素材プール */
+const G2_BASIC_MATERIALS = ['pearl', 'coral', 'seaglass'];
+/** Grade 2 レア素材プール */
+const G2_RARE_MATERIALS  = ['anchor', 'deepstone'];
 
 // ─────────────────────────────────────────
 // ResultScreen クラス
@@ -201,11 +219,16 @@ class ResultScreen {
     const baseRate  = Config.DROP.NORMAL_QUESTION_DROP_RATE;
     const drops     = [];
 
+    // グレードに応じた素材プールを選択
+    const isGrade2  = (GameStore.getState('app.currentGrade') || 1) === 2;
+    const basicPool = isGrade2 ? G2_BASIC_MATERIALS : BASIC_MATERIALS;
+    const rarePool  = isGrade2 ? G2_RARE_MATERIALS  : RARE_MATERIALS;
+
     // ① 倍率なしで基本ドロップを確率計算
     for (let i = 0; i < correctCount; i++) {
       if (Math.random() < baseRate) {
         // 90% で基本素材、10% でレア素材
-        const pool  = Math.random() < 0.9 ? BASIC_MATERIALS : RARE_MATERIALS;
+        const pool  = Math.random() < 0.9 ? basicPool : rarePool;
         const matId = pool[Math.floor(Math.random() * pool.length)];
         const found = drops.find(d => d.id === matId);
         if (found) {
@@ -224,7 +247,7 @@ class ResultScreen {
         });
       } else {
         // ドロップがゼロでも倍率バフがある場合は最低1個保証
-        const matId = BASIC_MATERIALS[Math.floor(Math.random() * BASIC_MATERIALS.length)];
+        const matId = basicPool[Math.floor(Math.random() * basicPool.length)];
         drops.push({ id: matId, count: Math.ceil(multiplier) });
       }
     }

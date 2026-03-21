@@ -27,6 +27,13 @@ const NORMAL_PATHS = [
   { id: 'sea',      icon: '🌊', name: 'うみの みち',   hint: 'なにが でるか わからない', drop: { type: 'random' } }
 ];
 
+// Grade 2 専用の道定義（深海テーマ）
+const G2_NORMAL_PATHS = [
+  { id: 'coral',    icon: '🪸', name: 'さんごの みち',   hint: 'さんごや しんじゅが でそう',    drop: { type: 'g2_basic' } },
+  { id: 'deep',     icon: '🌑', name: 'しんかいの みち', hint: 'ふかいうみの たからが でそう',   drop: { type: 'g2_rare'  } },
+  { id: 'pearl',    icon: '🦪', name: 'しんじゅの うみ', hint: 'なにが でるか わからない',       drop: { type: 'g2_random'} }
+];
+
 // ─────────────────────────────────────────
 // レアな道定義
 // ─────────────────────────────────────────
@@ -73,19 +80,27 @@ function pickQuestion() {
 
 /**
  * ドロップ素材IDを決定する
- * @param {'basic'|'stone'|'random'|'rare'} type
+ * @param {'basic'|'stone'|'random'|'rare'|'g2_basic'|'g2_rare'|'g2_random'} type
+ * @param {boolean} isGrade2 - Grade 2 の場合 rare もG2素材にする
  */
-function resolveDrop(type) {
-  const BASIC  = ['wood', 'brick', 'cloth'];
-  const STONES = ['stone'];
-  const RARE   = ['gem', 'star_fragment', 'magic_orb'];
+function resolveDrop(type, isGrade2 = false) {
+  const BASIC    = ['wood', 'brick', 'cloth'];
+  const STONES   = ['stone'];
+  const RARE     = ['gem', 'star_fragment', 'magic_orb'];
+  const G2_BASIC = ['pearl', 'coral', 'seaglass'];
+  const G2_RARE  = ['anchor', 'deepstone'];
   switch (type) {
-    case 'stone':  return STONES[0];
-    case 'rare':   return RARE[Math.floor(Math.random() * RARE.length)];
-    case 'random': return Math.random() < 0.5
+    case 'stone':     return STONES[0];
+    case 'rare':      { const p = isGrade2 ? G2_RARE : RARE; return p[Math.floor(Math.random() * p.length)]; }
+    case 'random':    return Math.random() < 0.5
       ? BASIC[Math.floor(Math.random() * BASIC.length)]
       : RARE[Math.floor(Math.random() * RARE.length)];
-    default:       return BASIC[Math.floor(Math.random() * BASIC.length)];
+    case 'g2_basic':  return G2_BASIC[Math.floor(Math.random() * G2_BASIC.length)];
+    case 'g2_rare':   return G2_RARE[Math.floor(Math.random() * G2_RARE.length)];
+    case 'g2_random': return Math.random() < 0.6
+      ? G2_BASIC[Math.floor(Math.random() * G2_BASIC.length)]
+      : G2_RARE[Math.floor(Math.random() * G2_RARE.length)];
+    default:          return BASIC[Math.floor(Math.random() * BASIC.length)];
   }
 }
 
@@ -142,10 +157,12 @@ class ThreePathsEvent {
   // ─────────────────────────────────────────
 
   static _buildPathChoices(rarePath) {
-    if (!rarePath) return shuffle(NORMAL_PATHS).slice(0, 3);
+    const isGrade2   = (GameStore.getState('app.currentGrade') || 1) === 2;
+    const normalPool = isGrade2 ? G2_NORMAL_PATHS : NORMAL_PATHS;
+    if (!rarePath) return shuffle(normalPool).slice(0, 3);
 
     // レアな道を1つランダムな通常の道と置き換え
-    const normals = shuffle(NORMAL_PATHS).slice(0, 2);
+    const normals = shuffle(normalPool).slice(0, 2);
     return shuffle([rarePath, ...normals]);
   }
 
@@ -262,17 +279,21 @@ class ThreePathsEvent {
     const EMOJI_MAP = {
       wood: '🌲', stone: '⛰️', brick: '🧱', gem: '💎',
       star_fragment: '✨', cloth: '🧶', paint: '🎨',
-      crown: '👑', cape: '🧣', magic_orb: '🔮'
+      crown: '👑', cape: '🧣', magic_orb: '🔮',
+      pearl: '🦪', coral: '🪸', seaglass: '💠', anchor: '⚓', deepstone: '🪨',
     };
     const NAME_MAP = {
       wood: 'まるた', stone: 'いし', brick: 'れんが', gem: 'ほうせき',
       star_fragment: 'ほしのかけら', cloth: 'ぬの', paint: 'えのぐ',
-      crown: 'おうかん', cape: 'マント', magic_orb: 'まほうだま'
+      crown: 'おうかん', cape: 'マント', magic_orb: 'まほうだま',
+      pearl: 'しんじゅ', coral: 'さんご', seaglass: 'うみのガラス',
+      anchor: 'いかり', deepstone: 'しんかいいし',
     };
 
+    const isGrade2 = (GameStore.getState('app.currentGrade') || 1) === 2;
     if (isCorrect) {
       const dropType = isRareChoice ? 'rare' : (path.drop?.type ?? 'basic');
-      dropId    = resolveDrop(dropType);
+      dropId    = resolveDrop(dropType, isGrade2);
       dropName  = NAME_MAP[dropId] || dropId;
       dropEmoji = EMOJI_MAP[dropId] || '📦';
       GameStore.addMaterial(dropId, 1);

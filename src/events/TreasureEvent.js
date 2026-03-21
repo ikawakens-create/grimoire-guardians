@@ -21,18 +21,23 @@ import { SkinManager } from '../core/SkinManager.js';
 // 定数
 // ─────────────────────────────────────────
 
-const BASIC_DROPS = ['wood', 'stone', 'brick', 'cloth'];
-const RARE_DROPS  = ['gem', 'star_fragment', 'magic_orb'];
+const BASIC_DROPS    = ['wood', 'stone', 'brick', 'cloth'];
+const RARE_DROPS     = ['gem', 'star_fragment', 'magic_orb'];
+const G2_BASIC_DROPS = ['pearl', 'coral', 'seaglass'];
+const G2_RARE_DROPS  = ['anchor', 'deepstone'];
 
 const EMOJI_MAP = {
   wood: '🌲', stone: '⛰️', brick: '🧱', gem: '💎',
   star_fragment: '✨', cloth: '🧶', paint: '🎨',
-  crown: '👑', cape: '🧣', magic_orb: '🔮'
+  crown: '👑', cape: '🧣', magic_orb: '🔮',
+  pearl: '🦪', coral: '🪸', seaglass: '💠', anchor: '⚓', deepstone: '🪨',
 };
 const NAME_MAP = {
   wood: 'まるた', stone: 'いし', brick: 'れんが', gem: 'ほうせき',
   star_fragment: 'ほしのかけら', cloth: 'ぬの', paint: 'えのぐ',
-  crown: 'おうかん', cape: 'マント', magic_orb: 'まほうだま'
+  crown: 'おうかん', cape: 'マント', magic_orb: 'まほうだま',
+  pearl: 'しんじゅ', coral: 'さんご', seaglass: 'うみのガラス',
+  anchor: 'いかり', deepstone: 'しんかいいし',
 };
 
 // ─────────────────────────────────────────
@@ -64,7 +69,13 @@ function pickQuestion() {
 }
 
 function pickDrop(isRare) {
-  const pool = isRare ? RARE_DROPS : BASIC_DROPS;
+  const isGrade2 = (GameStore.getState('app.currentGrade') || 1) === 2;
+  let pool;
+  if (isGrade2) {
+    pool = isRare ? G2_RARE_DROPS : G2_BASIC_DROPS;
+  } else {
+    pool = isRare ? RARE_DROPS : BASIC_DROPS;
+  }
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
