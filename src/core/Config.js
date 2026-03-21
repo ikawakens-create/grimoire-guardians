@@ -458,12 +458,12 @@ export const Config = {
 
     // 船パーツ定義（ShipBuildScreen の6部位）
     SHIP_PARTS: [
-      { id: 'hull',       name: '船体',     emoji: '🛥️' },
-      { id: 'sail',       name: '帆',       emoji: '🎌' },
-      { id: 'figurehead', name: '船首像',   emoji: '🐬' },
-      { id: 'flag',       name: '旗',       emoji: '🚩' },
-      { id: 'deck',       name: '甲板デコ', emoji: '⚓' },
-      { id: 'glow',       name: '船底発光', emoji: '✨' },
+      { id: 'hull',       name: 'ふねのほんたい', emoji: '🛥️' },
+      { id: 'sail',       name: 'ほ',            emoji: '🎌' },
+      { id: 'figurehead', name: 'へさきかざり',   emoji: '🐬' },
+      { id: 'flag',       name: 'はた',           emoji: '🚩' },
+      { id: 'deck',       name: 'うえのかざり',   emoji: '⚓' },
+      { id: 'glow',       name: 'そこびかり',     emoji: '✨' },
     ],
 
     // フラッシュモード設定（九九専用：m2_10a〜m2_10i）
@@ -473,6 +473,41 @@ export const Config = {
       TIME_LIMIT_PER_QUESTION: 5,      // 秒
       QUESTION_COUNT: 9,               // 九九は全9問固定出題
     },
+
+    // 船の名前 最大文字数
+    SHIP_NAME_MAX_LENGTH: 12,
+
+    // テーマセット定義（3パーツ揃うと演出発火）
+    THEME_SETS: [
+      {
+        id:     'pirate',
+        name:   'かいぞくセット',
+        emoji:  '🏴‍☠️',
+        parts:  ['hull_pirate', 'sail_skull', 'flag_jolly'],
+        effect: 'theme-pirate',
+      },
+      {
+        id:     'mermaid',
+        name:   'にんぎょセット',
+        emoji:  '🧜',
+        parts:  ['hull_pearl', 'sail_wave', 'figurehead_mermaid'],
+        effect: 'theme-mermaid',
+      },
+      {
+        id:     'storm',
+        name:   'あらしセット',
+        emoji:  '⛈️',
+        parts:  ['hull_thunder', 'sail_dark', 'flag_storm'],
+        effect: 'theme-storm',
+      },
+      {
+        id:     'coral',
+        name:   'さんごセット',
+        emoji:  '🪸',
+        parts:  ['hull_coral', 'sail_fan', 'figurehead_crab'],
+        effect: 'theme-coral',
+      },
+    ],
 
     // Grade 2 新素材
     NEW_MATERIALS: ['pearl', 'coral', 'seaglass', 'anchor', 'deepstone'],
@@ -511,5 +546,6 @@ Object.freeze(Config.SKIN);
 Object.freeze(Config.GRADE2);
 Object.freeze(Config.GRADE2.FLASH_MODE);
 Object.freeze(Config.GRADE2.LARGE_SHIP_CRAFT_COST);
+Object.freeze(Config.GRADE2.THEME_SETS);
 
 export default Config;

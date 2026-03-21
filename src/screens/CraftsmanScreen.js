@@ -818,6 +818,8 @@ export class CraftsmanScreen {
 
       if (result.success) {
         this._dialogue = this._getDialogue('craftSuccess');
+        // 船パーツが完成した時に「マイふねに装備できるよ！」トーストを表示
+        this._showShipPartToast(itemId);
       } else if (result.reason?.includes('済み')) {
         this._dialogue = this._getDialogue('alreadyCrafted');
       } else {
@@ -832,6 +834,31 @@ export class CraftsmanScreen {
   // ─────────────────────────────────────────────
   // 配置処理（HouseManagerに委譲）
   // ─────────────────────────────────────────────
+
+  /**
+   * 船パーツのクラフト完了後にトーストを出す
+   * shipItems.js の SHIP_PARTS に該当 ID があれば表示
+   * @param {string} itemId
+   * @private
+   */
+  _showShipPartToast(itemId) {
+    // 動的 import で shipItems を参照（循環依存を避けるため）
+    import('../data/shipItems.js').then(({ SHIP_PARTS, SMALL_SKINS }) => {
+      const isShipPart = [...SHIP_PARTS, ...SMALL_SKINS].some(p => p.id === itemId);
+      if (!isShipPart) return;
+
+      const toast = document.createElement('div');
+      toast.className = 'skin-toast';   // 既存トーストスタイルを流用
+      toast.style.cssText = 'bottom:80px;cursor:pointer;';
+      toast.textContent = '⛵ マイふねに装備できるよ！';
+      toast.addEventListener('click', () => {
+        GameStore.setState('app.currentScreen', 'ship_build');
+        toast.remove();
+      });
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 4000);
+    }).catch(() => { /* ship パーツでなければ何もしない */ });
+  }
 
   _doPlace(itemId) {
     const item = getItemById(itemId);

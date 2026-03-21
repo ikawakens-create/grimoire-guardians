@@ -251,6 +251,12 @@ export class GameStore {
     ship: {
       /** 現在の船サイズ 'small' | 'medium' | 'large' */
       size: 'small',
+      /** 船の名前（最大12文字） */
+      name: 'グリモア号',
+      /** 名前を手動変更済みか（false = まだデフォルト） */
+      nameSetByUser: false,
+      /** 見た目サイズ上書き null | 'small'（null = 実際の size に追従） */
+      displaySize: null,
       /** 各パーツの装備中ID（null = デフォルト） */
       hull:       null,
       sail:       null,
@@ -260,6 +266,8 @@ export class GameStore {
       glow:       null,
       /** クラフト済みパーツIDの配列 */
       crafted: [],
+      /** テーマセット完成済みID配列（演出重複防止） */
+      completedThemeSets: [],
       /** 大型船艦クラフト完了済みか */
       largeCrafted: false,
       /** フラッシュモード解放済みワールドID配列 */
@@ -559,6 +567,9 @@ export class GameStore {
       },
       ship: {
         size: 'small',
+        name: 'グリモア号',
+        nameSetByUser: false,
+        displaySize: null,
         hull:       null,
         sail:       null,
         figurehead: null,
@@ -566,6 +577,7 @@ export class GameStore {
         deck:       null,
         glow:       null,
         crafted: [],
+        completedThemeSets: [],
         largeCrafted: false,
         flashUnlockedWorlds: [],
       },

@@ -9,7 +9,7 @@
  * @date 2026-03-04
  */
 
-const SW_VERSION   = '2.2.2';
+const SW_VERSION   = '2.2.3';
 const CACHE_NAME   = `grimoire-${SW_VERSION}`;
 
 /** キャッシュ対象ファイル（静的アセット） */
@@ -38,6 +38,7 @@ const ASSETS = [
   './src/screens/MemoryIsleScreen.js',
   './src/screens/HouseScreen.js',
   './src/screens/HouseBuildScreen.js',
+  './src/screens/ShipBuildScreen.js',
   './src/screens/PhotoScreen.js',
   './src/screens/CraftsmanScreen.js',
   './src/core/HouseManager.js',
@@ -50,6 +51,7 @@ const ASSETS = [
   './src/screens/ShopScreen.js',
   './src/screens/GuildScreen.js',
   './src/screens/FarmScreen.js',
+  './src/data/shipItems.js',
   // Phase 1-F スキンシステム
   './src/core/SkinManager.js',
   './src/data/skinItems.js',
