@@ -284,6 +284,19 @@ class BookshelfScreen {
       rightGroup.appendChild(townBtn);
     }
 
+    // マイふねボタン（Grade 2 解放後のみ表示）
+    if (Config.FEATURES.ENABLE_GRADE2) {
+      const shipBtn = document.createElement('button');
+      shipBtn.type = 'button';
+      shipBtn.className = 'button button-small bookshelf-ship-btn';
+      const hasCraftable = this._hasNewShipParts();
+      shipBtn.innerHTML = `⛵ マイふね${hasCraftable ? '<span class="memory-badge-dot"></span>' : ''}`;
+      shipBtn.addEventListener('click', () => {
+        GameStore.setState('app.currentScreen', 'ship_build');
+      });
+      rightGroup.appendChild(shipBtn);
+    }
+
     // もちものボタン
     const inventoryBtn = document.createElement('button');
     inventoryBtn.type = 'button';
@@ -566,6 +579,24 @@ class BookshelfScreen {
   }
 
   /**
+   * 「つくれる！」バッジ判定
+   * クラフト可能な未クラフト船パーツが1件以上あれば true
+   * @returns {boolean}
+   * @private
+   */
+  _hasNewShipParts() {
+    const ship      = GameStore.getState('ship');
+    const crafted   = ship?.crafted ?? [];
+    const materials = GameStore.getState('inventory.materials') ?? {};
+    // 動的 import を避けるため SHIP_PARTS は import 先で参照
+    // BookshelfScreen は shipItems を直接 import しないので
+    // GameStore だけで判断できる簡易チェック: 未クラフトかつ pearl 1個以上あるか
+    const hasPearl = (materials.pearl ?? 0) >= 1;
+    const allCrafted = crafted.length >= 13; // パーツ総数と一致したら全完成
+    return hasPearl && !allCrafted;
+  }
+
+  /**
    * グレードを切り替える（タブクリック時）
    * @param {number} grade - 1 | 2
    * @private
@@ -573,6 +604,14 @@ class BookshelfScreen {
   _switchGrade(grade) {
     if ((GameStore.getState('app.currentGrade') || 1) === grade) return;
     GameStore.setState('app.currentGrade', grade);
+
+    // Grade 2 に初めて切り替えた時: 船名未設定ならダイアログ表示
+    if (grade === 2 && !GameStore.getState('ship.nameSetByUser')) {
+      import('../screens/ShipBuildScreen.js').then(({ showShipNameDialog }) => {
+        showShipNameDialog(this.container);
+      });
+    }
+
     this._rebuildGradeView();
   }
 

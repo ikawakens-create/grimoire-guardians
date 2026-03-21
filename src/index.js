@@ -30,6 +30,7 @@ import { GrimoireLibraryScreen } from './screens/GrimoireLibraryScreen.js';
 import { ShopScreen } from './screens/ShopScreen.js';
 import { GuildScreen } from './screens/GuildScreen.js';
 import { FarmScreen } from './screens/FarmScreen.js';
+import { ShipBuildScreen } from './screens/ShipBuildScreen.js';
 import UnitIntroScreen from './screens/UnitIntroScreen.js';
 import ChantScreen from './screens/ChantScreen.js';
 import FinalBattleScreen from './screens/FinalBattleScreen.js';
@@ -117,6 +118,8 @@ let _houseScreen = null;
 let _houseBuildScreen = null;
 let _photoScreen = null;
 let _craftsmanScreen = null;
+/** 船カスタマイズ画面インスタンス */
+let _shipBuildScreen = null;
 /** 街のシステム画面インスタンス */
 let _townScreen = null;
 let _libraryScreen = null;
@@ -187,6 +190,7 @@ function showGameScreen() {
       _shopScreen?.hide?.();
       _guildScreen?.hide?.();
       _farmScreen?.hide?.();
+      _shipBuildScreen?.hide?.();
     };
 
     if (screen === 'house') {
@@ -216,6 +220,9 @@ function showGameScreen() {
     } else if (screen === 'farm') {
       hideAll();
       showFarm(gameScreen);
+    } else if (screen === 'ship_build') {
+      hideAll();
+      showShipBuild(gameScreen);
     } else if (screen === 'final_battle') {
       hideAll();
       showFinalBattle(gameScreen);
@@ -550,6 +557,16 @@ function showFarm(gameScreen) {
   if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
   if (!_farmScreen) _farmScreen = new FarmScreen();
   _farmScreen.show(gameScreen);
+}
+
+/**
+ * 船カスタマイズ画面を表示する
+ * @param {HTMLElement} gameScreen
+ */
+function showShipBuild(gameScreen) {
+  if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
+  if (!_shipBuildScreen) _shipBuildScreen = new ShipBuildScreen();
+  _shipBuildScreen.show(gameScreen);
 }
 
 /**
