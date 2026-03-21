@@ -1088,7 +1088,7 @@ export const WORLDS = [
     ],
     storyDesc: 'あさせを せいはした！\nさんごしょうが まっている……！',
     actMoment: 'zone2_start',
-    facilityUnlock: null,
+    facilityUnlock: 'takozou',
   },
 
   // ===== Zone 2 サンゴ礁（9本）— 数・量・時刻 =====
@@ -1316,7 +1316,7 @@ export const WORLDS = [
     ],
     storyDesc: 'さんごしょうを せいはした！\nなかがたの ふねが やってきた！',
     actMoment: 'zone3_start',
-    facilityUnlock: null,
+    facilityUnlock: 'rina',
   },
 
   // ===== Zone 3 外洋（11本）— 九九（totalQuestions:9 ＝ 全問出題） =====
@@ -1420,9 +1420,9 @@ export const WORLDS = [
     events: [
       { triggerAt: 6, type: 'treasure' }
     ],
-    storyDesc: '5のだんの ひかりが あたりを てらす！\nふなたびが もりあがってきた！',
+    storyDesc: '5のだんの ひかりが あたりを てらす！\nふかみ船長と なかまに なった！',
     actMoment: null,
-    facilityUnlock: null,
+    facilityUnlock: 'fukami',
   },
 
   // m2_10e: M2-10e 九九 6のだん

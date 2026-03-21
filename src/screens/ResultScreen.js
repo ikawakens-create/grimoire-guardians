@@ -828,7 +828,10 @@ class ResultScreen {
       banner.className = 'npc-firstmeet-banner';
       // NPC_FIRST_MEET のフィールド: title（絵文字入りタイトル）, npcText（台詞）
       // emoji は npcData.npc（'tanuki'/'guildmaster'/'fukurou'）で引く（'farm' など facilityId では取れないため）
-      const npcEmojis = { tanuki: '🦝', guildmaster: '⚔️', fukurou: '🦉' };
+      const npcEmojis = {
+        tanuki: '🦝', guildmaster: '⚔️', fukurou: '🦉',
+        takozou: '🐙', rina: '🧜', fukami: '🧭',
+      };
       const npcEmoji  = npcEmojis[npcData.npc] || npcEmojis[facilityId] || '👤';
       banner.innerHTML = `
         <div class="npc-fm-inner">
