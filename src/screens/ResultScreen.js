@@ -646,6 +646,8 @@ class ResultScreen {
     const grade2Moments = ['zone2_start', 'zone3_start', 'zone4_start', 'zone5_start', 'grade2_finale_unlock'];
     if (grade2Moments.includes(actMoment)) {
       GameStore.setState(`app.${actMoment}Shown`, true);
+      // Grade 2 ゾーン転換は専用の演出メソッドに委譲
+      return this._showZoneCutin(actMoment, cutin);
     }
 
     return new Promise((resolve) => {
@@ -668,6 +670,115 @@ class ResultScreen {
         overlay.classList.add('act-cutin-exit');
         setTimeout(() => { overlay.remove(); resolve(); }, 500);
       });
+
+      if (this._el) this._el.appendChild(overlay);
+      SoundManager.playSFX(SoundType.WORLD_CLEAR);
+    });
+  }
+
+  /**
+   * Grade 2 ゾーン転換カットインをステージ演出で表示する
+   * zone2/zone5 では船サイズアップアニメ＋GameStore 更新を行う
+   * @param {string} actMoment
+   * @param {Object} cutin - ACT_CUTINS のデータ
+   * @returns {Promise<void>}
+   * @private
+   */
+  _showZoneCutin(actMoment, cutin) {
+    // XSS エスケープ用ヘルパー（ResultScreen には _esc がないため定義）
+    const esc = (s) => String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    const shipName = GameStore.getState('ship.name') || 'グリモア号';
+    const isFinale = actMoment === 'grade2_finale_unlock';
+
+    // 船サイズアップ定義（zone2: small→medium, zone5: medium→large）
+    const UPGRADES = {
+      zone2: { from: '⛵', to: '🚢', newSize: 'medium' },
+      zone5: { from: '🚢', to: '🛳️', newSize: 'large' },
+    };
+    const upgrade = UPGRADES[actMoment] || null;
+
+    // npcText: {shipName} 置換（エスケープ後）
+    const rawNpc = (cutin.npcText || '').replace('{shipName}', esc(shipName));
+    const npcHtml = rawNpc.replace(/\n/g, '<br>');
+
+    // アクションボタンラベル
+    const btnLabel = isFinale ? 'けっせんへ！！' : 'しゅっこう！';
+
+    // タイムライン（秒）: upgrade 有り = 少し長め
+    const hasUpgrade = !!upgrade;
+    const T = {
+      label:  0.3,
+      ship:   hasUpgrade ? 0.8 : 0.6,
+      arrow:  1.1,
+      shipTo: 1.3,
+      name:   1.9,
+      bubble: hasUpgrade ? 2.2 : 1.4,
+      title:  hasUpgrade ? 3.0 : 2.3,
+      btn:    hasUpgrade ? 3.5 : 2.8,
+    };
+
+    // 中央部 HTML（船アップグレード / アイコン / ボス）
+    let midHtml;
+    if (upgrade) {
+      midHtml = `
+        <div class="zone-cutin-ship-wrap">
+          <div class="zone-cutin-ship-row">
+            <span class="zone-cutin-ship-from" style="animation-delay:${T.ship}s">${upgrade.from}</span>
+            <span class="zone-cutin-ship-arrow" style="animation-delay:${T.arrow}s">→</span>
+            <span class="zone-cutin-ship-to"   style="animation-delay:${T.shipTo}s">${upgrade.to}</span>
+          </div>
+          <div class="zone-cutin-ship-name" style="animation-delay:${T.name}s">${esc(shipName)}</div>
+        </div>`;
+    } else if (isFinale) {
+      midHtml = `<div class="zone-cutin-boss" style="animation-delay:${T.ship}s">🦑</div>`;
+    } else {
+      midHtml = `<div class="zone-cutin-icon-solo" style="animation-delay:${T.ship}s">${cutin.icon || '🌊'}</div>`;
+    }
+
+    return new Promise((resolve) => {
+      const overlay = document.createElement('div');
+      overlay.className = 'zone-cutin-overlay';
+      overlay.style.background = cutin.bgFallback || '#000428';
+
+      overlay.innerHTML = `
+        ${isFinale ? '<div class="zone-cutin-finale-flash"></div>' : ''}
+        <div class="zone-cutin-label" style="animation-delay:${T.label}s">${esc(cutin.actLabel || '')}</div>
+        ${midHtml}
+        <div class="zone-cutin-bubble" style="animation-delay:${T.bubble}s">
+          <div class="zone-cutin-npc-emoji">🦉</div>
+          <div class="zone-cutin-npc-text">${npcHtml}</div>
+        </div>
+        <div class="zone-cutin-title" style="animation-delay:${T.title}s">${esc(cutin.title || '')}</div>
+        <button class="zone-cutin-action-btn" style="animation-delay:${T.btn}s">${btnLabel}</button>
+      `;
+
+      // 船サイズ更新（アニメ後に反映）
+      if (upgrade) {
+        setTimeout(() => GameStore.setState('ship.size', upgrade.newSize), (T.shipTo + 0.7) * 1000);
+      }
+
+      // dismiss ハンドラ（多重呼び出し防止）
+      let dismissed = false;
+      const dismiss = () => {
+        if (dismissed) return;
+        dismissed = true;
+        overlay.classList.add('zone-cutin-exit');
+        setTimeout(() => { overlay.remove(); resolve(); }, 500);
+      };
+
+      // ボタン表示後にパルスアニメ追加 & オーバーレイ全体タップ可能に
+      const btn = overlay.querySelector('.zone-cutin-action-btn');
+      setTimeout(() => {
+        if (btn && btn.isConnected) btn.classList.add('zone-cutin-btn-pulse');
+        overlay.addEventListener('click', dismiss);
+      }, (T.btn + 0.1) * 1000);
+
+      btn.addEventListener('click', dismiss);
 
       if (this._el) this._el.appendChild(overlay);
       SoundManager.playSFX(SoundType.WORLD_CLEAR);

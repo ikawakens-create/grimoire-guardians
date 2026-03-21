@@ -247,7 +247,7 @@ export const ACT_CUTINS = {
     icon:       '🪸',
     actLabel:   'Zone 2 さんごしょう',
     title:      'さんごしょうに とうたつ！',
-    npcText:    'ふねが ちゅうがたに なったぞ！\nさんごしょうへ こぎだせ！',
+    npcText:    '{shipName}よ、\nちゅうがたのふねに なったぞ！\nさんごしょうへ こぎだせ！',
     npc:        'fukurou',
   },
   /** Zone 3 突入 = がいようゾーン開始 */
@@ -274,7 +274,7 @@ export const ACT_CUTINS = {
     icon:       '🏙️',
     actLabel:   'Zone 5 かいていとし',
     title:      'おおがたのふね かんせい！！',
-    npcText:    'ふねが かんせいしたぞ！！\nかいていとしが みえてきた……！',
+    npcText:    '{shipName}が かんせいしたぞ！！\nかいていとしが みえてきた……！',
     npc:        'fukurou',
   },
   /** Grade 2 finale解放 = 最終ワールドクリア後 */
