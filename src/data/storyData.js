@@ -41,6 +41,10 @@ export const STORY_IMAGES = {
     fukurou:     'assets/npcs/fukurou.png',
     tanuki:      'assets/npcs/tanuki.png',
     guildmaster: 'assets/npcs/guildmaster.png',
+    // Grade 2 NPCs
+    takozou:     'assets/npcs/takozou.png',
+    rina:        'assets/npcs/rina.png',
+    fukami:      'assets/npcs/fukami.png',
   },
 };
 
@@ -106,6 +110,24 @@ export const STORY_IMAGES = {
  * guildmaster:
  * "Heroic guild master knight character, wearing light armor, confident pose,
  *  kind strong expression, chibi kawaii style, Japanese children's game NPC"
+ *
+ * takozou:
+ * "Cute friendly octopus merchant character, wearing a small straw hat and
+ *  tiny apron, holding a treasure chest with one tentacle, bright cheerful
+ *  expression with big round eyes, underwater ocean theme, chibi kawaii style,
+ *  Japanese children's educational game NPC, soft pastel colors"
+ *
+ * rina:
+ * "Adorable young mermaid librarian character, holding an open glowing book,
+ *  light blue-green hair with a coral hairpin, curious and kind expression,
+ *  bubbles floating around, underwater library setting, chibi kawaii style,
+ *  Japanese children's educational game NPC"
+ *
+ * fukami:
+ * "Cool deep-sea explorer captain character, wearing a dark naval coat with
+ *  a compass badge, determined brave expression, one hand on a ship's wheel,
+ *  mysterious deep ocean atmosphere with bioluminescent highlights,
+ *  chibi kawaii style, Japanese children's educational game NPC"
  */
 
 // ─────────────────────────────────────────
@@ -322,6 +344,41 @@ export const NPC_FIRST_MEET = {
     npcText: 'グリモアの なかに たねが はいっておった！\nのうじょうで そだてて みよう！',
     actionLabel: 'のうじょうへ いく',
     actionScreen: 'farm',
+  },
+
+  // ── Grade 2 NPC 初登場 ────────────────────────────────────────
+
+  /** m2_04b クリア後（Zone 1 ひっさん完了）：タコぞう初登場 */
+  takozou: {
+    triggerAfterWorld: 'm2_04b',
+    npc: 'takozou',
+    characterEmotion: 'happy',
+    title: '🐙 タコぞうが まちに やってきた！',
+    npcText: 'ぼく タコぞう！\nふかいうみの たからものを\nとりあつかってるよ！\nよろしくね〜！',
+    actionLabel: 'ふねパーツを みる',
+    actionScreen: 'craftsman',
+  },
+
+  /** m2_09d クリア後（Zone 2 さんごしょう完了）：リーナ初登場 */
+  rina: {
+    triggerAfterWorld: 'm2_09d',
+    npc: 'rina',
+    characterEmotion: 'happy',
+    title: '🧜 リーナが あらわれた！',
+    npcText: 'わたし リーナ！\nかいていの ふしぎを しらべるのが\nだいすきなの！\nいっしょに しらべようよ！',
+    actionLabel: 'かいてい じゅんかんこへ',
+    actionScreen: 'library',
+  },
+
+  /** m2_10d クリア後（九九 5のだん完了）：ふかみ船長初登場 */
+  fukami: {
+    triggerAfterWorld: 'm2_10d',
+    npc: 'fukami',
+    characterEmotion: 'happy',
+    title: '🧭 ふかみ船長が あらわれた！',
+    npcText: '九九を 5のだんまで マスター……\nよし、おれが みとめた！\nもっと ふかいうみの\nちずを みせてやろう！',
+    actionLabel: 'ギルドへ いく',
+    actionScreen: 'guild',
   },
 };
 

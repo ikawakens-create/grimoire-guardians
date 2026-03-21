@@ -919,6 +919,7 @@ export const WORLDS = [
     title: '2けたの たしざん',
     description: 'ひっさんで たしざんを まなぼう',
     difficulty: 2,
+    dropRateMultiplier: 0.55,
     totalQuestions: 15,
     assets: {
       icon: 'assets/icons/worlds/m2_01.png',
@@ -942,6 +943,7 @@ export const WORLDS = [
     title: 'くりあがりの たしざん',
     description: 'くりあがりが ある たしざんに ちょうせん！',
     difficulty: 2,
+    dropRateMultiplier: 0.55,
     totalQuestions: 15,
     assets: {
       icon: 'assets/icons/worlds/m2_02.png',
@@ -967,6 +969,7 @@ export const WORLDS = [
     title: '2けた＋2けたの たしざん',
     description: 'おおきな たしざんに ちょうせん！',
     difficulty: 2,
+    dropRateMultiplier: 0.55,
     totalQuestions: 15,
     assets: {
       icon: 'assets/icons/worlds/m2_02b.png',
@@ -992,6 +995,7 @@ export const WORLDS = [
     title: '2けたの ひきざん',
     description: 'ひっさんで ひきざんを まなぼう',
     difficulty: 2,
+    dropRateMultiplier: 0.55,
     totalQuestions: 15,
     assets: {
       icon: 'assets/icons/worlds/m2_03.png',
@@ -1017,6 +1021,7 @@ export const WORLDS = [
     title: 'くりさがりの ひきざん',
     description: 'くりさがりが ある ひきざんに ちょうせん！',
     difficulty: 3,
+    dropRateMultiplier: 0.55,
     totalQuestions: 15,
     assets: {
       icon: 'assets/icons/worlds/m2_03b.png',
@@ -1042,6 +1047,7 @@ export const WORLDS = [
     title: '2けたの けいさん おうよう',
     description: 'たし・ひきを つかいこなそう！',
     difficulty: 3,
+    dropRateMultiplier: 0.55,
     totalQuestions: 15,
     assets: {
       icon: 'assets/icons/worlds/m2_04.png',
@@ -1067,6 +1073,7 @@ export const WORLDS = [
     title: 'ひっさん まとめ',
     description: 'たし・ひきざんを まとめて ふりかえろう',
     difficulty: 3,
+    dropRateMultiplier: 0.55,
     totalQuestions: 15,
     assets: {
       icon: 'assets/icons/worlds/m2_04b.png',
@@ -1081,7 +1088,7 @@ export const WORLDS = [
     ],
     storyDesc: 'あさせを せいはした！\nさんごしょうが まっている……！',
     actMoment: 'zone2_start',
-    facilityUnlock: null,
+    facilityUnlock: 'takozou',
   },
 
   // ===== Zone 2 サンゴ礁（9本）— 数・量・時刻 =====
@@ -1309,7 +1316,7 @@ export const WORLDS = [
     ],
     storyDesc: 'さんごしょうを せいはした！\nなかがたの ふねが やってきた！',
     actMoment: 'zone3_start',
-    facilityUnlock: null,
+    facilityUnlock: 'rina',
   },
 
   // ===== Zone 3 外洋（11本）— 九九（totalQuestions:9 ＝ 全問出題） =====
@@ -1323,6 +1330,7 @@ export const WORLDS = [
     title: '九九 2のだん',
     description: '2のだんを そらで いえるように なろう！',
     difficulty: 2,
+    dropRateMultiplier: 0.55,
     totalQuestions: 9,
     assets: {
       icon: 'assets/icons/worlds/m2_10a.png',
@@ -1348,6 +1356,7 @@ export const WORLDS = [
     title: '九九 3のだん',
     description: '3のだんを そらで いえるように なろう！',
     difficulty: 2,
+    dropRateMultiplier: 0.55,
     totalQuestions: 9,
     assets: {
       icon: 'assets/icons/worlds/m2_10b.png',
@@ -1373,6 +1382,7 @@ export const WORLDS = [
     title: '九九 4のだん',
     description: '4のだんを そらで いえるように なろう！',
     difficulty: 2,
+    dropRateMultiplier: 0.55,
     totalQuestions: 9,
     assets: {
       icon: 'assets/icons/worlds/m2_10c.png',
@@ -1398,6 +1408,7 @@ export const WORLDS = [
     title: '九九 5のだん',
     description: '5のだんを そらで いえるように なろう！',
     difficulty: 2,
+    dropRateMultiplier: 0.55,
     totalQuestions: 9,
     assets: {
       icon: 'assets/icons/worlds/m2_10d.png',
@@ -1409,9 +1420,9 @@ export const WORLDS = [
     events: [
       { triggerAt: 6, type: 'treasure' }
     ],
-    storyDesc: '5のだんの ひかりが あたりを てらす！\nふなたびが もりあがってきた！',
+    storyDesc: '5のだんの ひかりが あたりを てらす！\nふかみ船長と なかまに なった！',
     actMoment: null,
-    facilityUnlock: null,
+    facilityUnlock: 'fukami',
   },
 
   // m2_10e: M2-10e 九九 6のだん
@@ -1423,6 +1434,7 @@ export const WORLDS = [
     title: '九九 6のだん',
     description: '6のだんを そらで いえるように なろう！',
     difficulty: 3,
+    dropRateMultiplier: 0.55,
     totalQuestions: 9,
     assets: {
       icon: 'assets/icons/worlds/m2_10e.png',
@@ -1448,6 +1460,7 @@ export const WORLDS = [
     title: '九九 7のだん',
     description: '7のだんを そらで いえるように なろう！',
     difficulty: 3,
+    dropRateMultiplier: 0.55,
     totalQuestions: 9,
     assets: {
       icon: 'assets/icons/worlds/m2_10f.png',
@@ -1473,6 +1486,7 @@ export const WORLDS = [
     title: '九九 8のだん',
     description: '8のだんを そらで いえるように なろう！',
     difficulty: 3,
+    dropRateMultiplier: 0.55,
     totalQuestions: 9,
     assets: {
       icon: 'assets/icons/worlds/m2_10g.png',
@@ -1498,6 +1512,7 @@ export const WORLDS = [
     title: '九九 9のだん',
     description: '9のだんを そらで いえるように なろう！',
     difficulty: 3,
+    dropRateMultiplier: 0.55,
     totalQuestions: 9,
     assets: {
       icon: 'assets/icons/worlds/m2_10h.png',
@@ -1523,6 +1538,7 @@ export const WORLDS = [
     title: '九九 1のだん・0のかけざん',
     description: '1のだんと 0のかけざんを まなぼう',
     difficulty: 2,
+    dropRateMultiplier: 0.55,
     totalQuestions: 9,
     assets: {
       icon: 'assets/icons/worlds/m2_10i.png',
@@ -1548,6 +1564,7 @@ export const WORLDS = [
     title: 'かけざん もんだい',
     description: 'かけざんを つかった もんだいを といてみよう',
     difficulty: 3,
+    dropRateMultiplier: 0.55,
     totalQuestions: 15,
     assets: {
       icon: 'assets/icons/worlds/m2_10j.png',
@@ -1573,6 +1590,7 @@ export const WORLDS = [
     title: '九九 そうまとめ',
     description: '九九を ぜんぶ つかいこなそう！',
     difficulty: 4,
+    dropRateMultiplier: 0.55,
     totalQuestions: 15,
     assets: {
       icon: 'assets/icons/worlds/m2_10k.png',
@@ -1676,6 +1694,7 @@ export const WORLDS = [
     title: '3けたの たしざん',
     description: '3けたの ひっさんたしざんに ちょうせん！',
     difficulty: 4,
+    dropRateMultiplier: 0.55,
     totalQuestions: 15,
     assets: {
       icon: 'assets/icons/worlds/m2_13a.png',
@@ -1701,6 +1720,7 @@ export const WORLDS = [
     title: '3けたの ひきざん',
     description: '3けたの ひっさんひきざんに ちょうせん！',
     difficulty: 4,
+    dropRateMultiplier: 0.55,
     totalQuestions: 15,
     assets: {
       icon: 'assets/icons/worlds/m2_13b.png',
@@ -1726,6 +1746,7 @@ export const WORLDS = [
     title: '3けた ひっさん まとめ',
     description: '3けたの たし・ひきを まとめて たしかめよう',
     difficulty: 4,
+    dropRateMultiplier: 0.55,
     totalQuestions: 15,
     assets: {
       icon: 'assets/icons/worlds/m2_13c.png',
@@ -1751,6 +1772,7 @@ export const WORLDS = [
     title: 'ぶんすうの きほん',
     description: '1/2や 1/3を まなぼう',
     difficulty: 4,
+    dropRateMultiplier: 0.55,
     totalQuestions: 15,
     assets: {
       icon: 'assets/icons/worlds/m2_14a.png',
@@ -1776,6 +1798,7 @@ export const WORLDS = [
     title: 'ぶんすうの たしざん',
     description: 'ぶんすうを たしてみよう',
     difficulty: 4,
+    dropRateMultiplier: 0.55,
     totalQuestions: 15,
     assets: {
       icon: 'assets/icons/worlds/m2_14b.png',
@@ -1801,6 +1824,7 @@ export const WORLDS = [
     title: 'ぶんすうの ひきざん',
     description: 'ぶんすうを ひいてみよう',
     difficulty: 4,
+    dropRateMultiplier: 0.55,
     totalQuestions: 15,
     assets: {
       icon: 'assets/icons/worlds/m2_14c.png',
@@ -1826,6 +1850,7 @@ export const WORLDS = [
     title: 'ぶんすうの おうよう',
     description: 'ぶんすうの ぶんしょうもんだいを といてみよう',
     difficulty: 5,
+    dropRateMultiplier: 0.55,
     totalQuestions: 15,
     assets: {
       icon: 'assets/icons/worlds/m2_14d.png',
@@ -1851,6 +1876,7 @@ export const WORLDS = [
     title: 'ぶんすう まとめ',
     description: 'ぶんすうの まほうを まとめて たしかめよう',
     difficulty: 5,
+    dropRateMultiplier: 0.55,
     totalQuestions: 15,
     assets: {
       icon: 'assets/icons/worlds/m2_14e.png',
