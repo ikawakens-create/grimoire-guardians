@@ -216,13 +216,18 @@ class ResultScreen {
 
     const multiplier = GameStore.getState('currentSession.rewardMultiplier') ?? 1.0;
     const { correctCount } = this._result;
-    const baseRate  = Config.DROP.NORMAL_QUESTION_DROP_RATE;
     const drops     = [];
 
     // グレードに応じた素材プールを選択
     const isGrade2  = (GameStore.getState('app.currentGrade') || 1) === 2;
     const basicPool = isGrade2 ? G2_BASIC_MATERIALS : BASIC_MATERIALS;
     const rarePool  = isGrade2 ? G2_RARE_MATERIALS  : RARE_MATERIALS;
+
+    // ワールドごとのドロップ率乗数を取得（難しい単元は低め → 3〜4回プレイ誘導）
+    const worldId         = GameStore.getState('currentSession.worldId');
+    const worldData       = getWorldById(worldId);
+    const worldMultiplier = worldData?.dropRateMultiplier ?? 1.0;
+    const baseRate        = Config.DROP.NORMAL_QUESTION_DROP_RATE * worldMultiplier;
 
     // ① 倍率なしで基本ドロップを確率計算
     for (let i = 0; i < correctCount; i++) {

@@ -82,7 +82,7 @@ export const SHIP_PARTS = [
     emoji:      '🏴‍☠️',
     rarity:     RARITY.RARE,
     minSize:    'medium',
-    craftCost:  { pearl: 2, coral: 1 },
+    craftCost:  { pearl: 3, coral: 2 },
     themeSetId: 'pirate',
   },
   {
@@ -92,7 +92,7 @@ export const SHIP_PARTS = [
     emoji:      '💀',
     rarity:     RARITY.RARE,
     minSize:    'medium',
-    craftCost:  { coral: 2, seaglass: 1 },
+    craftCost:  { coral: 3, seaglass: 2 },
     themeSetId: 'pirate',
   },
   {
@@ -102,7 +102,7 @@ export const SHIP_PARTS = [
     emoji:      '🚩',
     rarity:     RARITY.RARE,
     minSize:    'medium',
-    craftCost:  { pearl: 1, seaglass: 2 },
+    craftCost:  { pearl: 2, seaglass: 2 },
     themeSetId: 'pirate',
   },
 
@@ -114,7 +114,7 @@ export const SHIP_PARTS = [
     emoji:      '🤍',
     rarity:     RARITY.RARE,
     minSize:    'medium',
-    craftCost:  { pearl: 3 },
+    craftCost:  { pearl: 4, seaglass: 1 },
     themeSetId: 'mermaid',
   },
   {
@@ -124,7 +124,7 @@ export const SHIP_PARTS = [
     emoji:      '🌊',
     rarity:     RARITY.RARE,
     minSize:    'medium',
-    craftCost:  { coral: 2, pearl: 1 },
+    craftCost:  { coral: 3, pearl: 2 },
     themeSetId: 'mermaid',
   },
   {
@@ -134,7 +134,7 @@ export const SHIP_PARTS = [
     emoji:      '🧜',
     rarity:     RARITY.EPIC,
     minSize:    'large',
-    craftCost:  { pearl: 3, deepstone: 1 },
+    craftCost:  { pearl: 4, deepstone: 2 },
     themeSetId: 'mermaid',
   },
 
@@ -146,7 +146,7 @@ export const SHIP_PARTS = [
     emoji:      '⛈️',
     rarity:     RARITY.RARE,
     minSize:    'medium',
-    craftCost:  { anchor: 2, seaglass: 1 },
+    craftCost:  { anchor: 2, seaglass: 2 },
     themeSetId: 'storm',
   },
   {
@@ -156,7 +156,7 @@ export const SHIP_PARTS = [
     emoji:      '🌑',
     rarity:     RARITY.RARE,
     minSize:    'medium',
-    craftCost:  { deepstone: 2 },
+    craftCost:  { deepstone: 2, seaglass: 1 },
     themeSetId: 'storm',
   },
   {
@@ -166,7 +166,7 @@ export const SHIP_PARTS = [
     emoji:      '⚡',
     rarity:     RARITY.RARE,
     minSize:    'medium',
-    craftCost:  { anchor: 1, deepstone: 1 },
+    craftCost:  { anchor: 2, deepstone: 1 },
     themeSetId: 'storm',
   },
 
@@ -178,7 +178,7 @@ export const SHIP_PARTS = [
     emoji:      '🪸',
     rarity:     RARITY.COMMON,
     minSize:    'medium',
-    craftCost:  { coral: 3 },
+    craftCost:  { coral: 4, pearl: 1 },
     themeSetId: 'coral',
   },
   {
@@ -188,7 +188,7 @@ export const SHIP_PARTS = [
     emoji:      '🪭',
     rarity:     RARITY.COMMON,
     minSize:    'medium',
-    craftCost:  { coral: 2, seaglass: 1 },
+    craftCost:  { coral: 3, seaglass: 1 },
     themeSetId: 'coral',
   },
   {
@@ -198,7 +198,7 @@ export const SHIP_PARTS = [
     emoji:      '🦀',
     rarity:     RARITY.RARE,
     minSize:    'large',
-    craftCost:  { coral: 3, anchor: 1 },
+    craftCost:  { coral: 4, anchor: 2 },
     themeSetId: 'coral',
   },
 
@@ -211,7 +211,7 @@ export const SHIP_PARTS = [
     emoji:      '⚓',
     rarity:     RARITY.COMMON,
     minSize:    'large',
-    craftCost:  { anchor: 2 },
+    craftCost:  { anchor: 2, seaglass: 1 },
     themeSetId: null,
   },
 ];
