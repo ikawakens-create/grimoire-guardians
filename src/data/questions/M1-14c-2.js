@@ -22,67 +22,55 @@ const questions = [
     id: 'M1-14c-2-Q01',
     unitId: 'M1-14c-2',
     step: 1,
-    type: 'hitsuzan',
-    operator: '+',
-    operand1: 21,
-    operand2: 3,
-    correctAnswer: '24',
-    hitsuzanMode: 'full-answer'
+    type: 'choice',
+    question: '21 ＋ 3 ＝ ？',
+    choices: ['21', '22', '23', '24'],
+    correctAnswer: '24'
   },
   {
     id: 'M1-14c-2-Q02',
     unitId: 'M1-14c-2',
     step: 1,
-    type: 'hitsuzan',
-    operator: '+',
-    operand1: 32,
-    operand2: 2,
-    correctAnswer: '34',
-    hitsuzanMode: 'full-answer'
+    type: 'choice',
+    question: '32 ＋ 2 ＝ ？',
+    choices: ['31', '32', '33', '34'],
+    correctAnswer: '34'
   },
   {
     id: 'M1-14c-2-Q03',
     unitId: 'M1-14c-2',
     step: 1,
-    type: 'hitsuzan',
-    operator: '+',
-    operand1: 43,
-    operand2: 1,
-    correctAnswer: '44',
-    hitsuzanMode: 'full-answer'
+    type: 'choice',
+    question: '43 ＋ 1 ＝ ？',
+    choices: ['41', '42', '43', '44'],
+    correctAnswer: '44'
   },
   {
     id: 'M1-14c-2-Q04',
     unitId: 'M1-14c-2',
     step: 1,
-    type: 'hitsuzan',
-    operator: '+',
-    operand1: 51,
-    operand2: 3,
-    correctAnswer: '54',
-    hitsuzanMode: 'full-answer'
+    type: 'choice',
+    question: '51 ＋ 3 ＝ ？',
+    choices: ['51', '52', '53', '54'],
+    correctAnswer: '54'
   },
   {
     id: 'M1-14c-2-Q05',
     unitId: 'M1-14c-2',
     step: 1,
-    type: 'hitsuzan',
-    operator: '+',
-    operand1: 62,
-    operand2: 2,
-    correctAnswer: '64',
-    hitsuzanMode: 'full-answer'
+    type: 'choice',
+    question: '62 ＋ 2 ＝ ？',
+    choices: ['61', '62', '63', '64'],
+    correctAnswer: '64'
   },
   {
     id: 'M1-14c-2-Q06',
     unitId: 'M1-14c-2',
     step: 1,
-    type: 'hitsuzan',
-    operator: '+',
-    operand1: 33,
-    operand2: 1,
-    correctAnswer: '34',
-    hitsuzanMode: 'full-answer'
+    type: 'choice',
+    question: '33 ＋ 1 ＝ ？',
+    choices: ['31', '32', '33', '34'],
+    correctAnswer: '34'
   },
 
   // Step2
@@ -90,67 +78,55 @@ const questions = [
     id: 'M1-14c-2-Q07',
     unitId: 'M1-14c-2',
     step: 2,
-    type: 'hitsuzan',
-    operator: '+',
-    operand1: 21,
-    operand2: 5,
-    correctAnswer: '26',
-    hitsuzanMode: 'full-answer'
+    type: 'choice',
+    question: '21 ＋ 5 ＝ ？',
+    choices: ['23', '24', '25', '26'],
+    correctAnswer: '26'
   },
   {
     id: 'M1-14c-2-Q08',
     unitId: 'M1-14c-2',
     step: 2,
-    type: 'hitsuzan',
-    operator: '+',
-    operand1: 32,
-    operand2: 5,
-    correctAnswer: '37',
-    hitsuzanMode: 'full-answer'
+    type: 'choice',
+    question: '32 ＋ 5 ＝ ？',
+    choices: ['34', '35', '36', '37'],
+    correctAnswer: '37'
   },
   {
     id: 'M1-14c-2-Q09',
     unitId: 'M1-14c-2',
     step: 2,
-    type: 'hitsuzan',
-    operator: '+',
-    operand1: 41,
-    operand2: 7,
-    correctAnswer: '48',
-    hitsuzanMode: 'full-answer'
+    type: 'choice',
+    question: '41 ＋ 7 ＝ ？',
+    choices: ['45', '46', '47', '48'],
+    correctAnswer: '48'
   },
   {
     id: 'M1-14c-2-Q10',
     unitId: 'M1-14c-2',
     step: 2,
-    type: 'hitsuzan',
-    operator: '+',
-    operand1: 50,
-    operand2: 9,
-    correctAnswer: '59',
-    hitsuzanMode: 'full-answer'
+    type: 'choice',
+    question: '50 ＋ 9 ＝ ？',
+    choices: ['56', '57', '58', '59'],
+    correctAnswer: '59'
   },
   {
     id: 'M1-14c-2-Q11',
     unitId: 'M1-14c-2',
     step: 2,
-    type: 'hitsuzan',
-    operator: '+',
-    operand1: 23,
-    operand2: 6,
-    correctAnswer: '29',
-    hitsuzanMode: 'full-answer'
+    type: 'choice',
+    question: '23 ＋ 6 ＝ ？',
+    choices: ['26', '27', '28', '29'],
+    correctAnswer: '29'
   },
   {
     id: 'M1-14c-2-Q12',
     unitId: 'M1-14c-2',
     step: 2,
-    type: 'hitsuzan',
-    operator: '+',
-    operand1: 60,
-    operand2: 8,
-    correctAnswer: '68',
-    hitsuzanMode: 'full-answer'
+    type: 'choice',
+    question: '60 ＋ 8 ＝ ？',
+    choices: ['65', '66', '67', '68'],
+    correctAnswer: '68'
   },
 
   // Step3
@@ -158,78 +134,64 @@ const questions = [
     id: 'M1-14c-2-Q13',
     unitId: 'M1-14c-2',
     step: 3,
-    type: 'hitsuzan',
-    operator: '+',
-    operand1: 24,
-    operand2: 3,
-    correctAnswer: '27',
-    hitsuzanMode: 'full-answer'
+    type: 'choice',
+    question: '24 ＋ 3 ＝ ？',
+    choices: ['24', '25', '26', '27'],
+    correctAnswer: '27'
   },
   {
     id: 'M1-14c-2-Q14',
     unitId: 'M1-14c-2',
     step: 3,
-    type: 'hitsuzan',
-    operator: '+',
-    operand1: 35,
-    operand2: 4,
-    correctAnswer: '39',
-    hitsuzanMode: 'full-answer'
+    type: 'choice',
+    question: '35 ＋ 4 ＝ ？',
+    choices: ['36', '37', '38', '39'],
+    correctAnswer: '39'
   },
   {
     id: 'M1-14c-2-Q15',
     unitId: 'M1-14c-2',
     step: 3,
-    type: 'hitsuzan',
-    operator: '+',
-    operand1: 42,
-    operand2: 6,
-    correctAnswer: '48',
-    hitsuzanMode: 'full-answer'
+    type: 'choice',
+    question: '42 ＋ 6 ＝ ？',
+    choices: ['45', '46', '47', '48'],
+    correctAnswer: '48'
   },
   {
     id: 'M1-14c-2-Q16',
     unitId: 'M1-14c-2',
     step: 3,
-    type: 'hitsuzan',
-    operator: '+',
-    operand1: 71,
-    operand2: 5,
-    correctAnswer: '76',
-    hitsuzanMode: 'full-answer'
+    type: 'choice',
+    question: '71 ＋ 5 ＝ ？',
+    choices: ['73', '74', '75', '76'],
+    correctAnswer: '76'
   },
   {
     id: 'M1-14c-2-Q17',
     unitId: 'M1-14c-2',
     step: 3,
-    type: 'hitsuzan',
-    operator: '+',
-    operand1: 53,
-    operand2: 4,
-    correctAnswer: '57',
-    hitsuzanMode: 'full-answer'
+    type: 'choice',
+    question: '53 ＋ 4 ＝ ？',
+    choices: ['54', '55', '56', '57'],
+    correctAnswer: '57'
   },
   {
     id: 'M1-14c-2-Q18',
     unitId: 'M1-14c-2',
     step: 3,
-    type: 'hitsuzan',
-    operator: '+',
-    operand1: 80,
-    operand2: 7,
-    correctAnswer: '87',
-    hitsuzanMode: 'full-answer'
+    type: 'choice',
+    question: '80 ＋ 7 ＝ ？',
+    choices: ['84', '85', '86', '87'],
+    correctAnswer: '87'
   },
   {
     id: 'M1-14c-2-Q19',
     unitId: 'M1-14c-2',
     step: 3,
-    type: 'hitsuzan',
-    operator: '+',
-    operand1: 61,
-    operand2: 8,
-    correctAnswer: '69',
-    hitsuzanMode: 'full-answer'
+    type: 'choice',
+    question: '61 ＋ 8 ＝ ？',
+    choices: ['66', '67', '68', '69'],
+    correctAnswer: '69'
   }
 ];
 
