@@ -1245,8 +1245,8 @@ export const WORLDS = [
     unitId: 'M2-01',
     grade: 2,
     zone: 'zone1',
-    title: '2けたの たしざん',
-    description: 'ひっさんで たしざんを まなぼう',
+    title: '2けたの たしざん（B+C）',
+    description: 'いちのくらい・じゅうのくらいを じゅんに こたえよう',
     difficulty: 2,
     dropRateMultiplier: 0.55,
     totalQuestions: 15,
@@ -1261,16 +1261,43 @@ export const WORLDS = [
     storyDesc: 'しんかいグリモアの とびらが ひらいた！\nたしざんの まほうを とりもどせ！',
     actMoment: null,
     facilityUnlock: null,
+    stepConfig: [{ step: 1, pick: 8 }, { step: 2, pick: 7 }],
   },
 
+
+  // m2_01_a: M2-01 2けたのたしざん（こたえを まるごと かく）
+  {
+    id: 'm2_01_a',
+    unitId: 'M2-01',
+    grade: 2,
+    zone: 'zone1',
+    title: '2けたの たしざん（A）',
+    description: 'こたえを まるごと かこう！',
+    difficulty: 2,
+    dropRateMultiplier: 0.55,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_01.png',
+      iconLocked: 'assets/icons/worlds/m2_01_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #00C9FF, #92FE9D)' },
+    order: 36,
+    freeToPlay: true,
+    events: [],
+    storyDesc: 'ひっさんの こたえを まるごと かこう！
+つぎの とびらが ひらく！',
+    actMoment: null,
+    facilityUnlock: null,
+    stepConfig: [{ step: 4, pick: 10 }, { step: 3, pick: 5 }],
+  },
   // m2_02: M2-02 くりあがりのたしざん（無料）
   {
     id: 'm2_02',
     unitId: 'M2-02',
     grade: 2,
     zone: 'zone1',
-    title: 'くりあがりの たしざん',
-    description: 'くりあがりが ある たしざんに ちょうせん！',
+    title: 'くりあがりたしざん（B+C）',
+    description: 'いちのくらいから じゅんに こたえよう！',
     difficulty: 2,
     dropRateMultiplier: 0.55,
     totalQuestions: 15,
@@ -1287,8 +1314,37 @@ export const WORLDS = [
     storyDesc: 'くりあがりの なみを こえろ！\nふねは まだ はしりつづける……！',
     actMoment: null,
     facilityUnlock: null,
+    stepConfig: [{ step: 1, pick: 8 }, { step: 2, pick: 7 }],
   },
 
+
+  // m2_02_a: M2-02 くりあがりのたしざん（こたえを まるごと かく）
+  {
+    id: 'm2_02_a',
+    unitId: 'M2-02',
+    grade: 2,
+    zone: 'zone1',
+    title: 'くりあがりたしざん（A）',
+    description: 'こたえを まるごと かこう！',
+    difficulty: 2,
+    dropRateMultiplier: 0.55,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_02.png',
+      iconLocked: 'assets/icons/worlds/m2_02_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #11998E, #38EF7D)' },
+    order: 37,
+    freeToPlay: true,
+    events: [
+      { triggerAt: 8, type: 'omikuji' }
+    ],
+    storyDesc: 'くりあがりの こたえを まるごと かこう！
+まほうが つよくなる！',
+    actMoment: null,
+    facilityUnlock: null,
+    stepConfig: [{ step: 4, pick: 10 }, { step: 3, pick: 5 }],
+  },
   // m2_02b: M2-02b 2けた+2けたのたしざん（無料）
   {
     id: 'm2_02b',
@@ -1313,6 +1369,7 @@ export const WORLDS = [
     storyDesc: 'あさせの かいじゅうが あらわれた！\nたしざんで たちむかえ！',
     actMoment: null,
     facilityUnlock: null,
+    stepConfig: [{ step: 1, pick: 8 }, { step: 2, pick: 7 }],
   },
 
   // m2_03: M2-03 2けたのひきざん きほん
@@ -1321,8 +1378,8 @@ export const WORLDS = [
     unitId: 'M2-03',
     grade: 2,
     zone: 'zone1',
-    title: '2けたの ひきざん',
-    description: 'ひっさんで ひきざんを まなぼう',
+    title: '2けたの ひきざん（B+C）',
+    description: 'いちのくらい・じゅうのくらいを じゅんに こたえよう',
     difficulty: 2,
     dropRateMultiplier: 0.55,
     totalQuestions: 15,
@@ -1339,16 +1396,45 @@ export const WORLDS = [
     storyDesc: 'ひきざんの まほうが めざめた！\nうみの そこへと すすんでいく……',
     actMoment: null,
     facilityUnlock: null,
+    stepConfig: [{ step: 1, pick: 8 }, { step: 2, pick: 7 }],
   },
 
+
+  // m2_03_a: M2-03 2けたのひきざん（こたえを まるごと かく）
+  {
+    id: 'm2_03_a',
+    unitId: 'M2-03',
+    grade: 2,
+    zone: 'zone1',
+    title: '2けたの ひきざん（A）',
+    description: 'こたえを まるごと かこう！',
+    difficulty: 2,
+    dropRateMultiplier: 0.55,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_03.png',
+      iconLocked: 'assets/icons/worlds/m2_03_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #74b9ff, #0984e3)' },
+    order: 39,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 8, type: 'three_paths' }
+    ],
+    storyDesc: 'ひきざんの こたえを まるごと かこう！
+うみの そこへと すすめ！',
+    actMoment: null,
+    facilityUnlock: null,
+    stepConfig: [{ step: 4, pick: 10 }, { step: 3, pick: 5 }],
+  },
   // m2_03b: M2-03b くりさがりのひきざん
   {
     id: 'm2_03b',
     unitId: 'M2-03b',
     grade: 2,
     zone: 'zone1',
-    title: 'くりさがりの ひきざん',
-    description: 'くりさがりが ある ひきざんに ちょうせん！',
+    title: 'くりさがりひきざん（B+C）',
+    description: 'いちのくらいから じゅんに こたえよう！',
     difficulty: 3,
     dropRateMultiplier: 0.55,
     totalQuestions: 15,
@@ -1365,8 +1451,37 @@ export const WORLDS = [
     storyDesc: 'くりさがりの なみが おそってきた！\nまけるな！ ふねを まもれ！',
     actMoment: null,
     facilityUnlock: null,
+    stepConfig: [{ step: 1, pick: 8 }, { step: 2, pick: 7 }],
   },
 
+
+  // m2_03b_a: M2-03b くりさがりのひきざん（こたえを まるごと かく）
+  {
+    id: 'm2_03b_a',
+    unitId: 'M2-03b',
+    grade: 2,
+    zone: 'zone1',
+    title: 'くりさがりひきざん（A）',
+    description: 'こたえを まるごと かこう！',
+    difficulty: 3,
+    dropRateMultiplier: 0.55,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/m2_03b.png',
+      iconLocked: 'assets/icons/worlds/m2_03b_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #4776E6, #8E54E9)' },
+    order: 40,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 10, type: 'monster' }
+    ],
+    storyDesc: 'くりさがりの こたえを まるごと かこう！
+まけるな！ ふねを まもれ！',
+    actMoment: null,
+    facilityUnlock: null,
+    stepConfig: [{ step: 4, pick: 10 }, { step: 3, pick: 5 }],
+  },
   // m2_04: M2-04 2けた±2けたのけいさん おうよう
   {
     id: 'm2_04',
@@ -1391,6 +1506,7 @@ export const WORLDS = [
     storyDesc: 'あさせの ラストバトル！\nたし・ひきを かんぺきに つかえ！',
     actMoment: null,
     facilityUnlock: null,
+    stepConfig: [{ step: 1, pick: 8 }, { step: 2, pick: 7 }],
   },
 
   // m2_04b: M2-04b Zone 1 ミニまとめ（筆算総まとめ）

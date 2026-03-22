@@ -493,6 +493,340 @@ const questions = [
     choices: ['34', '35', '36', '37'],
     correctAnswer: '36'
   }
+  // =====================================================
+  // Step4: こたえを まるごと かく（full-answer）
+  // Step1+2と同じ数式を hitsuzanMode:full-answer で出題
+  // =====================================================
+  {
+    id: 'M2-03b-FA01',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 21,
+    operand2: 4,
+    correctAnswer: '17',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA02',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 32,
+    operand2: 5,
+    correctAnswer: '27',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA03',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 43,
+    operand2: 7,
+    correctAnswer: '36',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA04',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 54,
+    operand2: 8,
+    correctAnswer: '46',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA05',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 65,
+    operand2: 9,
+    correctAnswer: '56',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA06',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 73,
+    operand2: 5,
+    correctAnswer: '68',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA07',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 82,
+    operand2: 4,
+    correctAnswer: '78',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA08',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 91,
+    operand2: 6,
+    correctAnswer: '85',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA09',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 24,
+    operand2: 7,
+    correctAnswer: '17',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA10',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 35,
+    operand2: 8,
+    correctAnswer: '27',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA11',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 46,
+    operand2: 9,
+    correctAnswer: '37',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA12',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 53,
+    operand2: 6,
+    correctAnswer: '47',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA13',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 64,
+    operand2: 7,
+    correctAnswer: '57',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA14',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 72,
+    operand2: 8,
+    correctAnswer: '64',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA15',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 81,
+    operand2: 3,
+    correctAnswer: '78',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA16',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 31,
+    operand2: 14,
+    correctAnswer: '17',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA17',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 53,
+    operand2: 27,
+    correctAnswer: '26',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA18',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 62,
+    operand2: 38,
+    correctAnswer: '24',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA19',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 74,
+    operand2: 45,
+    correctAnswer: '29',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA20',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 85,
+    operand2: 57,
+    correctAnswer: '28',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA21',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 43,
+    operand2: 16,
+    correctAnswer: '27',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA22',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 51,
+    operand2: 28,
+    correctAnswer: '23',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA23',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 72,
+    operand2: 39,
+    correctAnswer: '33',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA24',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 83,
+    operand2: 47,
+    correctAnswer: '36',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA25',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 94,
+    operand2: 58,
+    correctAnswer: '36',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA26',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 46,
+    operand2: 19,
+    correctAnswer: '27',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA27',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 61,
+    operand2: 34,
+    correctAnswer: '27',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA28',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 75,
+    operand2: 38,
+    correctAnswer: '37',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA29',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 84,
+    operand2: 46,
+    correctAnswer: '38',
+    hitsuzanMode: 'full-answer'
+  },
+  {
+    id: 'M2-03b-FA30',
+    unitId: 'M2-03b',
+    step: 4,
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 93,
+    operand2: 57,
+    correctAnswer: '36',
+    hitsuzanMode: 'full-answer'
+  }
 ];
 
 export const stepConfig = [
