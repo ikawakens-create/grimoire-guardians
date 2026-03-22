@@ -24,136 +24,166 @@ const questions = [
     id: 'M2-01-Q01',
     unitId: 'M2-01',
     step: 1,
-    type: 'choice',
-    question: '23 ＋ 4 ＝ ？',
-    choices: ['25', '26', '27', '28'],
-    correctAnswer: '27'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 23,
+    operand2: 4,
+    correctAnswer: '27',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q02',
     unitId: 'M2-01',
     step: 1,
-    type: 'choice',
-    question: '35 ＋ 2 ＝ ？',
-    choices: ['35', '36', '37', '38'],
-    correctAnswer: '37'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 35,
+    operand2: 2,
+    correctAnswer: '37',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q03',
     unitId: 'M2-01',
     step: 1,
-    type: 'choice',
-    question: '41 ＋ 6 ＝ ？',
-    choices: ['45', '46', '47', '48'],
-    correctAnswer: '47'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 41,
+    operand2: 6,
+    correctAnswer: '47',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q04',
     unitId: 'M2-01',
     step: 1,
-    type: 'choice',
-    question: '52 ＋ 3 ＝ ？',
-    choices: ['53', '54', '55', '56'],
-    correctAnswer: '55'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 52,
+    operand2: 3,
+    correctAnswer: '55',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q05',
     unitId: 'M2-01',
     step: 1,
-    type: 'choice',
-    question: '63 ＋ 4 ＝ ？',
-    choices: ['65', '66', '67', '68'],
-    correctAnswer: '67'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 63,
+    operand2: 4,
+    correctAnswer: '67',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q06',
     unitId: 'M2-01',
     step: 1,
-    type: 'choice',
-    question: '71 ＋ 5 ＝ ？',
-    choices: ['74', '75', '76', '77'],
-    correctAnswer: '76'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 71,
+    operand2: 5,
+    correctAnswer: '76',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q07',
     unitId: 'M2-01',
     step: 1,
-    type: 'choice',
-    question: '84 ＋ 2 ＝ ？',
-    choices: ['84', '85', '86', '87'],
-    correctAnswer: '86'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 84,
+    operand2: 2,
+    correctAnswer: '86',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q08',
     unitId: 'M2-01',
     step: 1,
-    type: 'choice',
-    question: '92 ＋ 6 ＝ ？',
-    choices: ['96', '97', '98', '99'],
-    correctAnswer: '98'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 92,
+    operand2: 6,
+    correctAnswer: '98',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q09',
     unitId: 'M2-01',
     step: 1,
-    type: 'choice',
-    question: '25 ＋ 3 ＝ ？',
-    choices: ['26', '27', '28', '29'],
-    correctAnswer: '28'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 25,
+    operand2: 3,
+    correctAnswer: '28',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q10',
     unitId: 'M2-01',
     step: 1,
-    type: 'choice',
-    question: '46 ＋ 2 ＝ ？',
-    choices: ['46', '47', '48', '49'],
-    correctAnswer: '48'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 46,
+    operand2: 2,
+    correctAnswer: '48',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q11',
     unitId: 'M2-01',
     step: 1,
-    type: 'choice',
-    question: '57 ＋ 1 ＝ ？',
-    choices: ['56', '57', '58', '59'],
-    correctAnswer: '58'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 57,
+    operand2: 1,
+    correctAnswer: '58',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q12',
     unitId: 'M2-01',
     step: 1,
-    type: 'choice',
-    question: '64 ＋ 5 ＝ ？',
-    choices: ['67', '68', '69', '70'],
-    correctAnswer: '69'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 64,
+    operand2: 5,
+    correctAnswer: '69',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q13',
     unitId: 'M2-01',
     step: 1,
-    type: 'choice',
-    question: '73 ＋ 3 ＝ ？',
-    choices: ['74', '75', '76', '77'],
-    correctAnswer: '76'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 73,
+    operand2: 3,
+    correctAnswer: '76',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q14',
     unitId: 'M2-01',
     step: 1,
-    type: 'choice',
-    question: '81 ＋ 6 ＝ ？',
-    choices: ['85', '86', '87', '88'],
-    correctAnswer: '87'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 81,
+    operand2: 6,
+    correctAnswer: '87',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q15',
     unitId: 'M2-01',
     step: 1,
-    type: 'choice',
-    question: '90 ＋ 7 ＝ ？',
-    choices: ['95', '96', '97', '98'],
-    correctAnswer: '97'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 90,
+    operand2: 7,
+    correctAnswer: '97',
+    hitsuzanMode: 'digit-by-digit'
   },
 
   // =====================================================
@@ -163,136 +193,166 @@ const questions = [
     id: 'M2-01-Q16',
     unitId: 'M2-01',
     step: 2,
-    type: 'choice',
-    question: '21 ＋ 13 ＝ ？',
-    choices: ['32', '33', '34', '35'],
-    correctAnswer: '34'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 21,
+    operand2: 13,
+    correctAnswer: '34',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q17',
     unitId: 'M2-01',
     step: 2,
-    type: 'choice',
-    question: '32 ＋ 14 ＝ ？',
-    choices: ['44', '45', '46', '47'],
-    correctAnswer: '46'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 32,
+    operand2: 14,
+    correctAnswer: '46',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q18',
     unitId: 'M2-01',
     step: 2,
-    type: 'choice',
-    question: '43 ＋ 12 ＝ ？',
-    choices: ['53', '54', '55', '56'],
-    correctAnswer: '55'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 43,
+    operand2: 12,
+    correctAnswer: '55',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q19',
     unitId: 'M2-01',
     step: 2,
-    type: 'choice',
-    question: '54 ＋ 23 ＝ ？',
-    choices: ['75', '76', '77', '78'],
-    correctAnswer: '77'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 54,
+    operand2: 23,
+    correctAnswer: '77',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q20',
     unitId: 'M2-01',
     step: 2,
-    type: 'choice',
-    question: '65 ＋ 21 ＝ ？',
-    choices: ['84', '85', '86', '87'],
-    correctAnswer: '86'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 65,
+    operand2: 21,
+    correctAnswer: '86',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q21',
     unitId: 'M2-01',
     step: 2,
-    type: 'choice',
-    question: '23 ＋ 34 ＝ ？',
-    choices: ['55', '56', '57', '58'],
-    correctAnswer: '57'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 23,
+    operand2: 34,
+    correctAnswer: '57',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q22',
     unitId: 'M2-01',
     step: 2,
-    type: 'choice',
-    question: '11 ＋ 25 ＝ ？',
-    choices: ['34', '35', '36', '37'],
-    correctAnswer: '36'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 11,
+    operand2: 25,
+    correctAnswer: '36',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q23',
     unitId: 'M2-01',
     step: 2,
-    type: 'choice',
-    question: '41 ＋ 32 ＝ ？',
-    choices: ['71', '72', '73', '74'],
-    correctAnswer: '73'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 41,
+    operand2: 32,
+    correctAnswer: '73',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q24',
     unitId: 'M2-01',
     step: 2,
-    type: 'choice',
-    question: '53 ＋ 14 ＝ ？',
-    choices: ['65', '66', '67', '68'],
-    correctAnswer: '67'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 53,
+    operand2: 14,
+    correctAnswer: '67',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q25',
     unitId: 'M2-01',
     step: 2,
-    type: 'choice',
-    question: '62 ＋ 21 ＝ ？',
-    choices: ['81', '82', '83', '84'],
-    correctAnswer: '83'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 62,
+    operand2: 21,
+    correctAnswer: '83',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q26',
     unitId: 'M2-01',
     step: 2,
-    type: 'choice',
-    question: '14 ＋ 23 ＝ ？',
-    choices: ['35', '36', '37', '38'],
-    correctAnswer: '37'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 14,
+    operand2: 23,
+    correctAnswer: '37',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q27',
     unitId: 'M2-01',
     step: 2,
-    type: 'choice',
-    question: '25 ＋ 31 ＝ ？',
-    choices: ['54', '55', '56', '57'],
-    correctAnswer: '56'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 25,
+    operand2: 31,
+    correctAnswer: '56',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q28',
     unitId: 'M2-01',
     step: 2,
-    type: 'choice',
-    question: '36 ＋ 42 ＝ ？',
-    choices: ['76', '77', '78', '79'],
-    correctAnswer: '78'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 36,
+    operand2: 42,
+    correctAnswer: '78',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q29',
     unitId: 'M2-01',
     step: 2,
-    type: 'choice',
-    question: '47 ＋ 21 ＝ ？',
-    choices: ['66', '67', '68', '69'],
-    correctAnswer: '68'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 47,
+    operand2: 21,
+    correctAnswer: '68',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-01-Q30',
     unitId: 'M2-01',
     step: 2,
-    type: 'choice',
-    question: '50 ＋ 38 ＝ ？',
-    choices: ['86', '87', '88', '89'],
-    correctAnswer: '88'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 50,
+    operand2: 38,
+    correctAnswer: '88',
+    hitsuzanMode: 'digit-by-digit'
   },
 
   // =====================================================
