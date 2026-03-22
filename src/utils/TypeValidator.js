@@ -250,16 +250,33 @@ export class TypeValidator {
   static validateQuestion(question) {
     if (!this.isObject(question, 'question')) return false;
 
-    // 必須フィールド（choices は distractorPool モードでは不要）
-    const requiredSchema = {
+    // 必須フィールド（question 文字列は hitsuzan では不要なので type 判定後に確認）
+    const baseSchema = {
       id:            (v) => this.isString(v, 'question.id'),
       unitId:        (v) => this.isString(v, 'question.unitId'),
       type:          (v) => this.isString(v, 'question.type'),
-      question:      (v) => this.isString(v, 'question.question'),
       correctAnswer: (v) => this.isString(v, 'question.correctAnswer')
     };
 
-    if (!this.matchesSchema(question, requiredSchema, 'question')) return false;
+    if (!this.matchesSchema(question, baseSchema, 'question')) return false;
+
+    // --- type:'hitsuzan' モード ---
+    if (question.type === 'hitsuzan') {
+      if (!this.isNumber(question.operand1, 'question.operand1')) return false;
+      if (!this.isNumber(question.operand2, 'question.operand2')) return false;
+      if (question.operator !== '+' && question.operator !== '-') {
+        Logger.error('[Validation] question.operator must be "+" or "-"');
+        return false;
+      }
+      if (question.hitsuzanMode !== 'digit-by-digit' && question.hitsuzanMode !== 'full-answer') {
+        Logger.error('[Validation] question.hitsuzanMode must be "digit-by-digit" or "full-answer"');
+        return false;
+      }
+      return true;
+    }
+
+    // hitsuzan 以外は question 文字列が必須
+    if (!this.isString(question.question, 'question.question')) return false;
 
     // distractorPool モード vs 通常 choices モード
     if (question.distractorPool != null) {

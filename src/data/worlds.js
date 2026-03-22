@@ -759,6 +759,30 @@ export const WORLDS = [
     facilityUnlock: null,
   },
 
+  // world_14c_1: M1-14c-1 2桁のたしざん①（ひっ算 B+C モード）
+  // ============================================================
+  {
+    id: 'world_14c_1',
+    unitId: 'M1-14c-1',
+    title: '2桁のたしざん①',
+    description: 'ひっ算で いちのくらいから こたえよう！',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/world_14c.png',
+      iconLocked: 'assets/icons/worlds/world_14c_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #fdcb6e, #e17055)' },
+    order: 29,
+    freeToPlay: false,
+    events: [
+      { triggerAt: 8, type: 'omikuji' }
+    ],
+    storyDesc: 'ひっ算の グリモア！\nいちのくらいから じゅんばんに こたえよう！！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
   // world_14c: M1-14c おおきい かず の たしざん
   // ============================================================
   {
@@ -783,6 +807,160 @@ export const WORLDS = [
     facilityUnlock: null,
   },
 
+  // world_14c_2: M1-14c-2 2桁のたしざん②（ひっ算 A モード）
+  // ============================================================
+  {
+    id: 'world_14c_2',
+    unitId: 'M1-14c-2',
+    title: '2桁のたしざん②',
+    description: 'ひっ算の かたちで こたえを えらぼう！',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/world_14c.png',
+      iconLocked: 'assets/icons/worlds/world_14c_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #fdcb6e, #e17055)' },
+    order: 30,
+    freeToPlay: false,
+    events: [{ triggerAt: 8, type: 'monster' }],
+    storyDesc: 'ひっ算 チャレンジ！\nこんどは こたえを まるごと えらぼう！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // world_14c_big: M1-14c-big 2桁＋2桁のたしざん（B+C のみ）
+  // ============================================================
+  {
+    id: 'world_14c_big',
+    unitId: 'M1-14c-big',
+    title: '2桁＋2桁のたしざん',
+    description: '2桁どうしの たしざんに ちょうせん！',
+    difficulty: 4,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/world_14c.png',
+      iconLocked: 'assets/icons/worlds/world_14c_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #e17055, #d63031)' },
+    order: 31,
+    freeToPlay: false,
+    events: [{ triggerAt: 8, type: 'omikuji' }],
+    storyDesc: '2桁＋2桁！\nひっ算で しっかり けいさんしよう！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // world_10a_1: M1-10a-1 くりあがりのたしざん①（9のせかい）B+C
+  // ============================================================
+  {
+    id: 'world_10a_1',
+    unitId: 'M1-10a-1',
+    title: 'くりあがり①（9のせかい）',
+    description: 'ひっ算で くりあがりを けいさんしよう！',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/world_10a.png',
+      iconLocked: 'assets/icons/worlds/world_10a_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #a29bfe, #6c5ce7)' },
+    order: 32,
+    freeToPlay: false,
+    events: [{ triggerAt: 8, type: 'omikuji' }],
+    storyDesc: 'くりあがりの グリモア！\nひっ算で いちのくらいから こたえよう！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // world_10a_2: M1-10a-2 くりあがりのたしざん②（9のせかい）A
+  // ============================================================
+  {
+    id: 'world_10a_2',
+    unitId: 'M1-10a-2',
+    title: 'くりあがり②（9のせかい）',
+    description: 'ひっ算の かたちで こたえを えらぼう！',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/world_10a.png',
+      iconLocked: 'assets/icons/worlds/world_10a_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #a29bfe, #6c5ce7)' },
+    order: 33,
+    freeToPlay: false,
+    events: [{ triggerAt: 10, type: 'monster' }],
+    storyDesc: 'くりあがりチャレンジ！\nこんどは こたえを まるごと えらぼう！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
+  // world_10b_1/2 くりあがり8
+  // ============================================================
+  {
+    id: 'world_10b_1',
+    unitId: 'M1-10b-1',
+    title: 'くりあがり①（8のせかい）',
+    description: 'ひっ算で くりあがりを けいさんしよう！',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: { icon: 'assets/icons/worlds/world_10b.png', iconLocked: 'assets/icons/worlds/world_10b_locked.png' },
+    theme: { gradient: 'linear-gradient(135deg, #74b9ff, #0984e3)' },
+    order: 34,
+    freeToPlay: false,
+    events: [{ triggerAt: 8, type: 'omikuji' }],
+    storyDesc: '8のせかいの くりあがり！\nひっ算で こたえよう！',
+    actMoment: null, facilityUnlock: null,
+  },
+  {
+    id: 'world_10b_2',
+    unitId: 'M1-10b-2',
+    title: 'くりあがり②（8のせかい）',
+    description: 'ひっ算の かたちで こたえを えらぼう！',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: { icon: 'assets/icons/worlds/world_10b.png', iconLocked: 'assets/icons/worlds/world_10b_locked.png' },
+    theme: { gradient: 'linear-gradient(135deg, #74b9ff, #0984e3)' },
+    order: 35,
+    freeToPlay: false,
+    events: [{ triggerAt: 10, type: 'monster' }],
+    storyDesc: '8のせかい チャレンジ！\nこたえを まるごと えらぼう！',
+    actMoment: null, facilityUnlock: null,
+  },
+
+  // world_10c_1/2 くりあがり7・6
+  // ============================================================
+  {
+    id: 'world_10c_1',
+    unitId: 'M1-10c-1',
+    title: 'くりあがり①（7・6のせかい）',
+    description: 'ひっ算で くりあがりを けいさんしよう！',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: { icon: 'assets/icons/worlds/world_10c.png', iconLocked: 'assets/icons/worlds/world_10c_locked.png' },
+    theme: { gradient: 'linear-gradient(135deg, #55efc4, #00b894)' },
+    order: 36,
+    freeToPlay: false,
+    events: [{ triggerAt: 8, type: 'omikuji' }],
+    storyDesc: '7と6のせかいの くりあがり！',
+    actMoment: null, facilityUnlock: null,
+  },
+  {
+    id: 'world_10c_2',
+    unitId: 'M1-10c-2',
+    title: 'くりあがり②（7・6のせかい）',
+    description: 'ひっ算の かたちで こたえを えらぼう！',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: { icon: 'assets/icons/worlds/world_10c.png', iconLocked: 'assets/icons/worlds/world_10c_locked.png' },
+    theme: { gradient: 'linear-gradient(135deg, #55efc4, #00b894)' },
+    order: 37,
+    freeToPlay: false,
+    events: [{ triggerAt: 10, type: 'monster' }],
+    storyDesc: '7と6のせかい チャレンジ！\nこたえを まるごと えらぼう！',
+    actMoment: null, facilityUnlock: null,
+  },
+
   // world_14d: M1-14d おおきい かず の ひきざん
   // ============================================================
   {
@@ -805,6 +983,120 @@ export const WORLDS = [
     storyDesc: 'おおきいかず ひきざんの グリモア！\nやみの ちからが よわまってきた！！',
     actMoment: null,
     facilityUnlock: null,
+  },
+
+  // world_14d_1/2 2桁のひきざん
+  // ============================================================
+  {
+    id: 'world_14d_1',
+    unitId: 'M1-14d-1',
+    title: '2桁のひきざん①',
+    description: 'ひっ算で いちのくらいから こたえよう！',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: { icon: 'assets/icons/worlds/world_14d.png', iconLocked: 'assets/icons/worlds/world_14d_locked.png' },
+    theme: { gradient: 'linear-gradient(135deg, #fd79a8, #e84393)' },
+    order: 38,
+    freeToPlay: false,
+    events: [{ triggerAt: 8, type: 'omikuji' }],
+    storyDesc: 'ひっ算の ひきざん！\nいちのくらいから じゅんばんに こたえよう！',
+    actMoment: null, facilityUnlock: null,
+  },
+  {
+    id: 'world_14d_2',
+    unitId: 'M1-14d-2',
+    title: '2桁のひきざん②',
+    description: 'ひっ算の かたちで こたえを えらぼう！',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: { icon: 'assets/icons/worlds/world_14d.png', iconLocked: 'assets/icons/worlds/world_14d_locked.png' },
+    theme: { gradient: 'linear-gradient(135deg, #fd79a8, #e84393)' },
+    order: 39,
+    freeToPlay: false,
+    events: [{ triggerAt: 10, type: 'monster' }],
+    storyDesc: 'ひっ算 ひきざんチャレンジ！\nこたえを まるごと えらぼう！',
+    actMoment: null, facilityUnlock: null,
+  },
+  {
+    id: 'world_14d_big',
+    unitId: 'M1-14d-big',
+    title: '2桁－2桁のひきざん',
+    description: '2桁どうしの ひきざんに ちょうせん！',
+    difficulty: 4,
+    totalQuestions: 15,
+    assets: { icon: 'assets/icons/worlds/world_14d.png', iconLocked: 'assets/icons/worlds/world_14d_locked.png' },
+    theme: { gradient: 'linear-gradient(135deg, #e84393, #d63031)' },
+    order: 40,
+    freeToPlay: false,
+    events: [{ triggerAt: 8, type: 'omikuji' }],
+    storyDesc: '2桁－2桁！\nひっ算で しっかり けいさんしよう！',
+    actMoment: null, facilityUnlock: null,
+  },
+
+  // world_11b_1/2 くりさがり11・12
+  // ============================================================
+  {
+    id: 'world_11b_1',
+    unitId: 'M1-11b-1',
+    title: 'くりさがり①（11・12のせかい）',
+    description: 'ひっ算で くりさがりを けいさんしよう！',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: { icon: 'assets/icons/worlds/world_11b.png', iconLocked: 'assets/icons/worlds/world_11b_locked.png' },
+    theme: { gradient: 'linear-gradient(135deg, #fdcb6e, #e17055)' },
+    order: 41,
+    freeToPlay: false,
+    events: [{ triggerAt: 8, type: 'omikuji' }],
+    storyDesc: 'くりさがりの グリモア！\nひっ算で いちのくらいから こたえよう！',
+    actMoment: null, facilityUnlock: null,
+  },
+  {
+    id: 'world_11b_2',
+    unitId: 'M1-11b-2',
+    title: 'くりさがり②（11・12のせかい）',
+    description: 'ひっ算の かたちで こたえを えらぼう！',
+    difficulty: 3,
+    totalQuestions: 15,
+    assets: { icon: 'assets/icons/worlds/world_11b.png', iconLocked: 'assets/icons/worlds/world_11b_locked.png' },
+    theme: { gradient: 'linear-gradient(135deg, #fdcb6e, #e17055)' },
+    order: 42,
+    freeToPlay: false,
+    events: [{ triggerAt: 10, type: 'monster' }],
+    storyDesc: 'くりさがりチャレンジ！\nこたえを まるごと えらぼう！',
+    actMoment: null, facilityUnlock: null,
+  },
+
+  // world_11c_1/2 くりさがり13〜18
+  // ============================================================
+  {
+    id: 'world_11c_1',
+    unitId: 'M1-11c-1',
+    title: 'くりさがり①（13〜18のせかい）',
+    description: 'ひっ算で くりさがりを けいさんしよう！',
+    difficulty: 4,
+    totalQuestions: 15,
+    assets: { icon: 'assets/icons/worlds/world_11c.png', iconLocked: 'assets/icons/worlds/world_11c_locked.png' },
+    theme: { gradient: 'linear-gradient(135deg, #fab1a0, #e17055)' },
+    order: 43,
+    freeToPlay: false,
+    events: [{ triggerAt: 8, type: 'omikuji' }],
+    storyDesc: '13〜18の くりさがり！\nひっ算で いちのくらいから こたえよう！',
+    actMoment: null, facilityUnlock: null,
+  },
+  {
+    id: 'world_11c_2',
+    unitId: 'M1-11c-2',
+    title: 'くりさがり②（13〜18のせかい）',
+    description: 'ひっ算の かたちで こたえを えらぼう！',
+    difficulty: 4,
+    totalQuestions: 15,
+    assets: { icon: 'assets/icons/worlds/world_11c.png', iconLocked: 'assets/icons/worlds/world_11c_locked.png' },
+    theme: { gradient: 'linear-gradient(135deg, #fab1a0, #e17055)' },
+    order: 44,
+    freeToPlay: false,
+    events: [{ triggerAt: 10, type: 'monster' }],
+    storyDesc: '13〜18チャレンジ！\nこたえを まるごと えらぼう！',
+    actMoment: null, facilityUnlock: null,
   },
 
   // world_15a: M1-15a なんじ なんぷん（〜30ぷん）

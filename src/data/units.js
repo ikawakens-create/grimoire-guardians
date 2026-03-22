@@ -185,10 +185,90 @@ export const UNITS = {
     title: 'おおきい かず の たしざん',
     loader: () => import('./questions/M1-14c.js')
   },
+  'M1-14c-1': {
+    unitId: 'M1-14c-1',
+    title: '2桁のたしざん①（ひっ算 B+C）',
+    loader: () => import('./questions/M1-14c-1.js')
+  },
+  'M1-14c-2': {
+    unitId: 'M1-14c-2',
+    title: '2桁のたしざん②（ひっ算 A）',
+    loader: () => import('./questions/M1-14c-2.js')
+  },
+  'M1-14c-big': {
+    unitId: 'M1-14c-big',
+    title: '2桁＋2桁のたしざん（ひっ算）',
+    loader: () => import('./questions/M1-14c-big.js')
+  },
+  'M1-10a-1': {
+    unitId: 'M1-10a-1',
+    title: 'くりあがりのたしざん①（9）',
+    loader: () => import('./questions/M1-10a-1.js')
+  },
+  'M1-10a-2': {
+    unitId: 'M1-10a-2',
+    title: 'くりあがりのたしざん②（9）',
+    loader: () => import('./questions/M1-10a-2.js')
+  },
+  'M1-10b-1': {
+    unitId: 'M1-10b-1',
+    title: 'くりあがりのたしざん①（8）',
+    loader: () => import('./questions/M1-10b-1.js')
+  },
+  'M1-10b-2': {
+    unitId: 'M1-10b-2',
+    title: 'くりあがりのたしざん②（8）',
+    loader: () => import('./questions/M1-10b-2.js')
+  },
+  'M1-10c-1': {
+    unitId: 'M1-10c-1',
+    title: 'くりあがりのたしざん①（7・6）',
+    loader: () => import('./questions/M1-10c-1.js')
+  },
+  'M1-10c-2': {
+    unitId: 'M1-10c-2',
+    title: 'くりあがりのたしざん②（7・6）',
+    loader: () => import('./questions/M1-10c-2.js')
+  },
   'M1-14d': {
     unitId: 'M1-14d',
     title: 'おおきい かず の ひきざん',
     loader: () => import('./questions/M1-14d.js')
+  },
+  'M1-14d-1': {
+    unitId: 'M1-14d-1',
+    title: '2桁のひきざん①（ひっ算 B+C）',
+    loader: () => import('./questions/M1-14d-1.js')
+  },
+  'M1-14d-2': {
+    unitId: 'M1-14d-2',
+    title: '2桁のひきざん②（ひっ算 A）',
+    loader: () => import('./questions/M1-14d-2.js')
+  },
+  'M1-14d-big': {
+    unitId: 'M1-14d-big',
+    title: '2桁－2桁のひきざん（ひっ算）',
+    loader: () => import('./questions/M1-14d-big.js')
+  },
+  'M1-11b-1': {
+    unitId: 'M1-11b-1',
+    title: 'くりさがりのひきざん①（11・12）',
+    loader: () => import('./questions/M1-11b-1.js')
+  },
+  'M1-11b-2': {
+    unitId: 'M1-11b-2',
+    title: 'くりさがりのひきざん②（11・12）',
+    loader: () => import('./questions/M1-11b-2.js')
+  },
+  'M1-11c-1': {
+    unitId: 'M1-11c-1',
+    title: 'くりさがりのひきざん①（13〜18）',
+    loader: () => import('./questions/M1-11c-1.js')
+  },
+  'M1-11c-2': {
+    unitId: 'M1-11c-2',
+    title: 'くりさがりのひきざん②（13〜18）',
+    loader: () => import('./questions/M1-11c-2.js')
   },
   'M1-15a': {
     unitId: 'M1-15a',

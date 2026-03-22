@@ -1897,3 +1897,35 @@
 .theme-complete-badge {
   animation: theme-complete-burst 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
+
+/* ==========================================================================
+   ひっ算アニメーション
+   ========================================================================== */
+
+/* 繰り上がり / 繰り下がり出現 */
+@keyframes carry-appear {
+  0%   { transform: translateY(-14px) scale(0.5); opacity: 0; }
+  60%  { transform: translateY(3px) scale(1.25); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+.carry-appear {
+  animation: carry-appear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  will-change: transform, opacity;
+}
+
+/* 桁確定時のポップイン */
+@keyframes hitsuzan-fill {
+  0%   { transform: scale(1.4); }
+  60%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+.hitsuzan-fill-in {
+  animation: hitsuzan-fill 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  will-change: transform;
+}
+
+/* アクティブな□の点滅 */
+@keyframes hitsuzan-blink {
+  0%, 100% { border-color: #f39c12; background: rgba(243, 156, 18, 0.12); }
+  50%       { border-color: var(--color-primary); background: rgba(100, 120, 255, 0.08); }
+}
