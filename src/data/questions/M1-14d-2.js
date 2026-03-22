@@ -4,25 +4,177 @@
  * @version 1.0 @date 2026-03-22
  */
 const questions = [
-  { id: 'M1-14d-2-Q01', unitId: 'M1-14d-2', step: 1, type: 'hitsuzan', operator: '-', operand1: 24, operand2: 3, correctAnswer: '21', hitsuzanMode: 'full-answer' },
-  { id: 'M1-14d-2-Q02', unitId: 'M1-14d-2', step: 1, type: 'hitsuzan', operator: '-', operand1: 35, operand2: 2, correctAnswer: '33', hitsuzanMode: 'full-answer' },
-  { id: 'M1-14d-2-Q03', unitId: 'M1-14d-2', step: 1, type: 'hitsuzan', operator: '-', operand1: 47, operand2: 4, correctAnswer: '43', hitsuzanMode: 'full-answer' },
-  { id: 'M1-14d-2-Q04', unitId: 'M1-14d-2', step: 1, type: 'hitsuzan', operator: '-', operand1: 56, operand2: 3, correctAnswer: '53', hitsuzanMode: 'full-answer' },
-  { id: 'M1-14d-2-Q05', unitId: 'M1-14d-2', step: 1, type: 'hitsuzan', operator: '-', operand1: 68, operand2: 5, correctAnswer: '63', hitsuzanMode: 'full-answer' },
-  { id: 'M1-14d-2-Q06', unitId: 'M1-14d-2', step: 1, type: 'hitsuzan', operator: '-', operand1: 79, operand2: 6, correctAnswer: '73', hitsuzanMode: 'full-answer' },
-  { id: 'M1-14d-2-Q07', unitId: 'M1-14d-2', step: 2, type: 'hitsuzan', operator: '-', operand1: 49, operand2: 7, correctAnswer: '42', hitsuzanMode: 'full-answer' },
-  { id: 'M1-14d-2-Q08', unitId: 'M1-14d-2', step: 2, type: 'hitsuzan', operator: '-', operand1: 58, operand2: 6, correctAnswer: '52', hitsuzanMode: 'full-answer' },
-  { id: 'M1-14d-2-Q09', unitId: 'M1-14d-2', step: 2, type: 'hitsuzan', operator: '-', operand1: 67, operand2: 5, correctAnswer: '62', hitsuzanMode: 'full-answer' },
-  { id: 'M1-14d-2-Q10', unitId: 'M1-14d-2', step: 2, type: 'hitsuzan', operator: '-', operand1: 89, operand2: 7, correctAnswer: '82', hitsuzanMode: 'full-answer' },
-  { id: 'M1-14d-2-Q11', unitId: 'M1-14d-2', step: 2, type: 'hitsuzan', operator: '-', operand1: 96, operand2: 4, correctAnswer: '92', hitsuzanMode: 'full-answer' },
-  { id: 'M1-14d-2-Q12', unitId: 'M1-14d-2', step: 2, type: 'hitsuzan', operator: '-', operand1: 75, operand2: 3, correctAnswer: '72', hitsuzanMode: 'full-answer' },
-  { id: 'M1-14d-2-Q13', unitId: 'M1-14d-2', step: 3, type: 'hitsuzan', operator: '-', operand1: 37, operand2: 4, correctAnswer: '33', hitsuzanMode: 'full-answer' },
-  { id: 'M1-14d-2-Q14', unitId: 'M1-14d-2', step: 3, type: 'hitsuzan', operator: '-', operand1: 64, operand2: 2, correctAnswer: '62', hitsuzanMode: 'full-answer' },
-  { id: 'M1-14d-2-Q15', unitId: 'M1-14d-2', step: 3, type: 'hitsuzan', operator: '-', operand1: 85, operand2: 3, correctAnswer: '82', hitsuzanMode: 'full-answer' },
-  { id: 'M1-14d-2-Q16', unitId: 'M1-14d-2', step: 3, type: 'hitsuzan', operator: '-', operand1: 46, operand2: 5, correctAnswer: '41', hitsuzanMode: 'full-answer' },
-  { id: 'M1-14d-2-Q17', unitId: 'M1-14d-2', step: 3, type: 'hitsuzan', operator: '-', operand1: 98, operand2: 6, correctAnswer: '92', hitsuzanMode: 'full-answer' },
-  { id: 'M1-14d-2-Q18', unitId: 'M1-14d-2', step: 3, type: 'hitsuzan', operator: '-', operand1: 53, operand2: 1, correctAnswer: '52', hitsuzanMode: 'full-answer' },
-  { id: 'M1-14d-2-Q19', unitId: 'M1-14d-2', step: 3, type: 'hitsuzan', operator: '-', operand1: 77, operand2: 4, correctAnswer: '73', hitsuzanMode: 'full-answer' }
+  {
+    id: 'M1-14d-2-Q01',
+    unitId: 'M1-14d-2',
+    step: 1,
+    type: 'choice',
+    question: '24 － 3 ＝ ？',
+    choices: ['18', '19', '20', '21'],
+    correctAnswer: '21'
+  },
+  {
+    id: 'M1-14d-2-Q02',
+    unitId: 'M1-14d-2',
+    step: 1,
+    type: 'choice',
+    question: '35 － 2 ＝ ？',
+    choices: ['30', '31', '32', '33'],
+    correctAnswer: '33'
+  },
+  {
+    id: 'M1-14d-2-Q03',
+    unitId: 'M1-14d-2',
+    step: 1,
+    type: 'choice',
+    question: '47 － 4 ＝ ？',
+    choices: ['40', '41', '42', '43'],
+    correctAnswer: '43'
+  },
+  {
+    id: 'M1-14d-2-Q04',
+    unitId: 'M1-14d-2',
+    step: 1,
+    type: 'choice',
+    question: '56 － 3 ＝ ？',
+    choices: ['50', '51', '52', '53'],
+    correctAnswer: '53'
+  },
+  {
+    id: 'M1-14d-2-Q05',
+    unitId: 'M1-14d-2',
+    step: 1,
+    type: 'choice',
+    question: '68 － 5 ＝ ？',
+    choices: ['60', '61', '62', '63'],
+    correctAnswer: '63'
+  },
+  {
+    id: 'M1-14d-2-Q06',
+    unitId: 'M1-14d-2',
+    step: 1,
+    type: 'choice',
+    question: '79 － 6 ＝ ？',
+    choices: ['70', '71', '72', '73'],
+    correctAnswer: '73'
+  },
+  {
+    id: 'M1-14d-2-Q07',
+    unitId: 'M1-14d-2',
+    step: 2,
+    type: 'choice',
+    question: '49 － 7 ＝ ？',
+    choices: ['39', '40', '41', '42'],
+    correctAnswer: '42'
+  },
+  {
+    id: 'M1-14d-2-Q08',
+    unitId: 'M1-14d-2',
+    step: 2,
+    type: 'choice',
+    question: '58 － 6 ＝ ？',
+    choices: ['49', '50', '51', '52'],
+    correctAnswer: '52'
+  },
+  {
+    id: 'M1-14d-2-Q09',
+    unitId: 'M1-14d-2',
+    step: 2,
+    type: 'choice',
+    question: '67 － 5 ＝ ？',
+    choices: ['59', '60', '61', '62'],
+    correctAnswer: '62'
+  },
+  {
+    id: 'M1-14d-2-Q10',
+    unitId: 'M1-14d-2',
+    step: 2,
+    type: 'choice',
+    question: '89 － 7 ＝ ？',
+    choices: ['79', '80', '81', '82'],
+    correctAnswer: '82'
+  },
+  {
+    id: 'M1-14d-2-Q11',
+    unitId: 'M1-14d-2',
+    step: 2,
+    type: 'choice',
+    question: '96 － 4 ＝ ？',
+    choices: ['89', '90', '91', '92'],
+    correctAnswer: '92'
+  },
+  {
+    id: 'M1-14d-2-Q12',
+    unitId: 'M1-14d-2',
+    step: 2,
+    type: 'choice',
+    question: '75 － 3 ＝ ？',
+    choices: ['69', '70', '71', '72'],
+    correctAnswer: '72'
+  },
+  {
+    id: 'M1-14d-2-Q13',
+    unitId: 'M1-14d-2',
+    step: 3,
+    type: 'choice',
+    question: '37 － 4 ＝ ？',
+    choices: ['30', '31', '32', '33'],
+    correctAnswer: '33'
+  },
+  {
+    id: 'M1-14d-2-Q14',
+    unitId: 'M1-14d-2',
+    step: 3,
+    type: 'choice',
+    question: '64 － 2 ＝ ？',
+    choices: ['59', '60', '61', '62'],
+    correctAnswer: '62'
+  },
+  {
+    id: 'M1-14d-2-Q15',
+    unitId: 'M1-14d-2',
+    step: 3,
+    type: 'choice',
+    question: '85 － 3 ＝ ？',
+    choices: ['79', '80', '81', '82'],
+    correctAnswer: '82'
+  },
+  {
+    id: 'M1-14d-2-Q16',
+    unitId: 'M1-14d-2',
+    step: 3,
+    type: 'choice',
+    question: '46 － 5 ＝ ？',
+    choices: ['38', '39', '40', '41'],
+    correctAnswer: '41'
+  },
+  {
+    id: 'M1-14d-2-Q17',
+    unitId: 'M1-14d-2',
+    step: 3,
+    type: 'choice',
+    question: '98 － 6 ＝ ？',
+    choices: ['89', '90', '91', '92'],
+    correctAnswer: '92'
+  },
+  {
+    id: 'M1-14d-2-Q18',
+    unitId: 'M1-14d-2',
+    step: 3,
+    type: 'choice',
+    question: '53 － 1 ＝ ？',
+    choices: ['49', '50', '51', '52'],
+    correctAnswer: '52'
+  },
+  {
+    id: 'M1-14d-2-Q19',
+    unitId: 'M1-14d-2',
+    step: 3,
+    type: 'choice',
+    question: '77 － 4 ＝ ？',
+    choices: ['70', '71', '72', '73'],
+    correctAnswer: '73'
+  }
 ];
 const stepConfig = [{ step: 1, pick: 4 }, { step: 2, pick: 4 }, { step: 3, pick: 7 }];
 export { questions, stepConfig };
