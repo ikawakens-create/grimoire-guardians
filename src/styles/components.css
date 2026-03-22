@@ -4880,16 +4880,21 @@
 .hitsuzan-carry-row {
   height: 1.8rem;
   display: flex;
-  justify-content: flex-start;
   align-items: center;
-  padding-right: 0.2em;
+}
+
+/* 各桁と同幅のカラム（em は .hitsuzan-box の 2.4rem を継承） */
+.hitsuzan-carry-col {
+  display: inline-flex;
+  width: 1.5em;
+  align-items: center;
+  justify-content: center;
 }
 
 .hitsuzan-carry-num {
   font-size: 1.1rem;
   font-weight: bold;
   color: #e67e22;
-  padding: 0 0.15em;
 }
 
 .hitsuzan-carry-num.hidden {
