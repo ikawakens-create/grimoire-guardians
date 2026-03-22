@@ -1,50 +1,49 @@
 # セッション引き継ぎ
 
-**保存日時**: 2026-03-22
+**保存日時**: 2026-03-22 （morning session）
 
 ## 今日やったこと
 
-（本日はチェックポイント更新のみ）
+- **バグ確認（2視点）**
+  - 静的解析: M2-01/02/03/03b の Step3 末尾カンマ抜け → 修正済み
+  - 静的解析: worlds.js 改行入り文字列 → 修正済み
+  - TownManager の `SaveManager.save()` に await/.catch なし（6箇所）→ 修正済み
+  - SW バージョン 2.2.6 → 2.2.7 に更新（古いキャッシュ削除のため）
+  - 実行フロー確認: hitsuzan/M2ユニット/worlds-units対応/BookshelfGrade2/TownManager連携 → 全て問題なし
 
-## 前回セッション（3/21）でやったこと
-
-- **Grade 2 ゾーン転換カットイン演出** を実装
-  - `_showZoneCutin()` メソッド（ResultScreen）: zone2〜zone5・grade2_finale_unlock に対応
-  - 船サイズアップアニメ（zone2: ⛵→🚢、zone5: 🚢→🛳️）
-  - GameStore に表示フラグ追加（`zone2_startShown` 等）
-  - effects.css に `.zone-cutin-*` スタイル追加
-
-- **Grade 2 ShipBuildScreen（マイふねカスタマイズ）** を実装
-  - `src/screens/ShipBuildScreen.js` 新規作成
-  - ShipBuildScreen バグ修正 6件
-
-- **Grade 2 素材ドロップシステム** を実装
-  - 難易度別ドロップ率 & 船パーツコスト調整
-
-- **Grade 2 NPC 初登場イベント** を実装
-  - タコゾウ・リナ・ふかみ 等の初登場バナー演出
+- **ひっ算の繰り上がり位置バグ修正**
+  - `1` が1の位の上に出ていた → 十の位の上に表示するよう修正
+  - `HitsuzanRenderer.js`: carry-row を `hitsuzan-carry-col` カラム構造に変更（末尾スペーサーで列ズレ防止）
+  - `components.css`: `.hitsuzan-carry-col` 追加、carry-row の padding-right 削除
 
 ## 未コミットの変更
 
-なし（working tree clean）
+なし（全コミット・プッシュ済み）
+
+## 直近コミット
+
+```
+b520554 fix: ひっ算の繰り上がり「1」を十の位の上に表示するよう修正
+d77f2f1 fix: TownManager の SaveManager.save() に .catch() を追加
+5dd5c66 fix: SWバージョンを2.2.7に更新して古いキャッシュを削除
+194bdd7 fix: M2-01/02/03/03bのStep3末尾カンマ抜けを修正
+82bb341 fix: worlds.js の改行入りシングルクォート文字列を修正
+```
 
 ## 次にやること（優先順）
 
-1. **スキン画像生成** — `.claude/tasks/skin-images-plan.md` に 25 件の Gemini プロンプト準備済み、`assets/skins/` は空
-2. **Phase 1 音声** — SoundManager は現在モック実装（Web Audio API 未着手）
-3. **Grade 2 コンテンツ追加** — M2 シリーズの問題ファイル拡充
+1. 実機でひっ算の繰り上がり位置を確認（十の位に出るか）
+2. キャラクタースキン画像の作成（.claude/tasks/skin-images-plan.md に詳細計画あり）
+3. assets/skins/ へのスキン PNG 配置
 
 ## 未解決のバグ・問題
 
-なし
+- `InventoryScreen.js` が index.js のルーターに未接続（画面として到達不能）
+  → 意図的な未実装の可能性あり、要確認
 
 ## 重要なメモ
 
 - ブランチ: `claude/morning-session-3-22-H5ukZ`
-- SW_VERSION: `2.2.3`
-- `Config.FEATURES.ENABLE_GRADE2 = true` — Grade 2 有効
-- `Config.FEATURES.ENABLE_FLASH_MODE = true` — フラッシュモード有効
-- フラッシュ解放ワールド: `m2_10a`〜`m2_10i`（9ワールド）
-- `loadUnitQuestions()` の戻り値は `{ questions, stepConfig }` オブジェクト — 直接 `.slice()` 不可（要分解）
-- Grade 2 zone actMoment はすべて実装済み（Logger.info ではなく演出あり）
-- SaveManager の `ship` 永続化は修正済み
+- GitHub Pages は main から配信。feature ブランチの変更は別途デプロイが必要
+- SW キャッシュ問題が出たら DevTools → Application → Service Workers → Unregister → リロード
+- hitsuzan の carry 表示: `data-carry="ones"` = 十の位上、`data-carry="tens"` = 百の位上
