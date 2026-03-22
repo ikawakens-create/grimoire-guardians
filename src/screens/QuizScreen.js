@@ -114,6 +114,9 @@ export class QuizScreen {
 
     /** @type {number|null} ひっ算で確定した一の位の値 */
     this._hitsuzanOnesValue = null;
+
+    /** @type {number|null} ひっ算で確定した十の位の値 */
+    this._hitsuzanTensValue = null;
   }
 
   // ============================================================
@@ -439,9 +442,10 @@ export class QuizScreen {
     // ひっ算タイプの場合は縦式を表示する
     const hitsuzanDisplayEl = this._el.querySelector('.quiz-hitsuzan-display');
     if (q.type === 'hitsuzan') {
-      // ひっ算ステップの初期化
+      // ひっ算ステップの初期化（3桁問題は ones→tens→hundreds の3ステップ）
       this._hitsuzanStep = q.hitsuzanMode === 'digit-by-digit' ? 'ones' : null;
       this._hitsuzanOnesValue = null;
+      this._hitsuzanTensValue = null;
       hitsuzanDisplayEl.innerHTML = HitsuzanRenderer.renderHTML(
         q.operand1, q.operand2, q.operator,
         { onesState: 'blank', tensState: 'blank', carryVisible: false, activeDigit: 'ones' }
@@ -586,9 +590,10 @@ export class QuizScreen {
     let pool;
     if (hitsuzanMode === 'digit-by-digit') {
       // 現在のステップに合わせた桁選択肢
-      const correctDigit = this._hitsuzanStep === 'ones'
-        ? computed.onesDigit
-        : computed.tensDigit;
+      const correctDigit =
+        this._hitsuzanStep === 'ones'     ? computed.onesDigit
+        : this._hitsuzanStep === 'tens'   ? computed.tensDigit
+        :                                   computed.hundredsDigit;
       pool = HitsuzanRenderer.generateDigitChoices(correctDigit);
     } else {
       // full-answer: 答え全体
@@ -628,7 +633,14 @@ export class QuizScreen {
 
     const hitsuzanDisplayEl = this._el.querySelector('.quiz-hitsuzan-display');
     const currentStep = this._hitsuzanStep;
-    const correctDigit = currentStep === 'ones' ? computed.onesDigit : computed.tensDigit;
+    const is3digit = question.operand1 >= 100 || question.operand2 >= 100;
+
+    // 現在のステップの正解桁
+    const correctDigit =
+      currentStep === 'ones'     ? computed.onesDigit
+      : currentStep === 'tens'   ? computed.tensDigit
+      :                            computed.hundredsDigit;
+
     const isCorrect = selectedChoice === String(correctDigit);
 
     Logger.debug(`[QuizScreen] Hitsuzan ${currentStep}: "${selectedChoice}" → ${isCorrect ? '正解' : '不正解'}`);
@@ -644,44 +656,51 @@ export class QuizScreen {
       }
     });
 
-    if (isCorrect && currentStep === 'ones') {
-      // ---- 一の位 正解 → 繰り上がりアニメーション後に十の位へ ----
+    // 最終ステップの判定（2桁は tens、3桁は hundreds が最終）
+    const isFinalStep = is3digit ? currentStep === 'hundreds' : currentStep === 'tens';
+
+    if (isCorrect && !isFinalStep) {
+      // ---- 中間ステップ正解 → 繰り上がりアニメーション後に次の桁へ ----
       SoundManager.playSFX(SoundType.CORRECT_ANSWER);
       HapticFeedback.light();
 
-      // 一の位を確定表示
-      HitsuzanRenderer.fillDigit(hitsuzanDisplayEl, 'ones', computed.onesDigit);
-      this._hitsuzanOnesValue = computed.onesDigit;
+      // 現在の桁を確定表示
+      HitsuzanRenderer.fillDigit(hitsuzanDisplayEl, currentStep, correctDigit);
+      if (currentStep === 'ones')  this._hitsuzanOnesValue = correctDigit;
+      if (currentStep === 'tens')  this._hitsuzanTensValue = correctDigit;
 
-      // 繰り上がり/繰り下がりがあればアニメーション表示
-      if (computed.hasCarry || computed.hasBorrow) {
-        await new Promise(resolve => {
-          this._feedbackTimer = setTimeout(resolve, 200);
-        });
-        HitsuzanRenderer.showCarry(hitsuzanDisplayEl);
-        // アニメーション終了まで待機
-        await new Promise(resolve => {
-          this._feedbackTimer = setTimeout(resolve, 700);
-        });
+      // 繰り上がり/繰り下がりアニメーション
+      const hasStepCarry = currentStep === 'ones'
+        ? (computed.hasOnesCarry || computed.hasOnesBorrow)
+        : (computed.hasTensCarry || computed.hasTensBorrow);
+
+      if (hasStepCarry) {
+        await new Promise(resolve => { this._feedbackTimer = setTimeout(resolve, 200); });
+        if (currentStep === 'ones') HitsuzanRenderer.showCarry(hitsuzanDisplayEl);
+        if (currentStep === 'tens') HitsuzanRenderer.showTensCarry(hitsuzanDisplayEl);
+        await new Promise(resolve => { this._feedbackTimer = setTimeout(resolve, 700); });
       } else {
-        await new Promise(resolve => {
-          this._feedbackTimer = setTimeout(resolve, 300);
-        });
+        await new Promise(resolve => { this._feedbackTimer = setTimeout(resolve, 300); });
       }
 
-      // 十の位入力に切り替え
-      this._hitsuzanStep = 'tens';
-      HitsuzanRenderer.activateTens(hitsuzanDisplayEl);
+      // 次の桁へ切り替え
+      if (currentStep === 'ones') {
+        this._hitsuzanStep = 'tens';
+        HitsuzanRenderer.activateTens(hitsuzanDisplayEl);
+      } else {
+        this._hitsuzanStep = 'hundreds';
+        HitsuzanRenderer.activateHundreds(hitsuzanDisplayEl);
+      }
       this._isAnswered = false;
       this._buildHitsuzanChoices(question);
 
     } else {
-      // ---- 不正解 or 十の位の回答 → 通常フローへ ----
-      const isFinalCorrect = isCorrect && currentStep === 'tens';
+      // ---- 最終ステップ or 不正解 → 通常フローへ ----
+      const isFinalCorrect = isCorrect && isFinalStep;
 
       if (isFinalCorrect) {
         this._correctStreak++;
-        HitsuzanRenderer.fillDigit(hitsuzanDisplayEl, 'tens', computed.tensDigit);
+        HitsuzanRenderer.fillDigit(hitsuzanDisplayEl, currentStep, correctDigit);
         SoundManager.playSFX(SoundType.CORRECT_ANSWER);
         HapticFeedback.success();
       } else {

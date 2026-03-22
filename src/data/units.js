@@ -200,6 +200,11 @@ export const UNITS = {
     title: '2桁＋2桁のたしざん（ひっ算）',
     loader: () => import('./questions/M1-14c-big.js')
   },
+  'M1-14c-3dig': {
+    unitId: 'M1-14c-3dig',
+    title: '3桁のたしざん（ひっ算）',
+    loader: () => import('./questions/M1-14c-3dig.js')
+  },
   'M1-10a-1': {
     unitId: 'M1-10a-1',
     title: 'くりあがりのたしざん①（9）',
@@ -249,6 +254,11 @@ export const UNITS = {
     unitId: 'M1-14d-big',
     title: '2桁－2桁のひきざん（ひっ算）',
     loader: () => import('./questions/M1-14d-big.js')
+  },
+  'M1-14d-3dig': {
+    unitId: 'M1-14d-3dig',
+    title: '3桁のひきざん（ひっ算）',
+    loader: () => import('./questions/M1-14d-3dig.js')
   },
   'M1-11b-1': {
     unitId: 'M1-11b-1',

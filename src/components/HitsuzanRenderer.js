@@ -3,15 +3,15 @@
  * ひっ算（筆算）表示コンポーネント
  *
  * 機能:
- *   - 縦式レイアウトの HTML 文字列を生成
+ *   - 縦式レイアウトの HTML 文字列を生成（2桁・3桁を自動判別）
  *   - 桁ごとの □（未回答）/ 確定済み数字を表示
- *   - 繰り上がり / 繰り下がりアニメーション
+ *   - 繰り上がり / 繰り下がりアニメーション（一の位→十の位、十の位→百の位）
  *   - digit-by-digit モード用の桁選択肢生成
  *   - full-answer モード用の全体選択肢生成
  *
- * 対応桁数: 最大3桁の計算結果まで
+ * 対応桁数: 2桁・3桁（operand1 >= 100 または operand2 >= 100 で自動的に3桁モード）
  *
- * @version 1.0
+ * @version 2.0
  * @date 2026-03-22
  */
 
@@ -43,12 +43,28 @@ export class HitsuzanRenderer {
     const tensDigit     = Math.floor(result / 10) % 10;
     const hundredsDigit = Math.floor(result / 100);
 
-    // 繰り上がり: 一の位どうしの合計が 10 以上
-    const hasCarry  = operator === '+' && (operand1 % 10 + operand2 % 10) >= 10;
-    // 繰り下がり: 引かれる一の位が引く一の位より小さい
-    const hasBorrow = operator === '-' && (operand1 % 10) < (operand2 % 10);
+    // 一の位の繰り上がり/繰り下がり
+    const hasOnesCarry  = operator === '+' && (operand1 % 10 + operand2 % 10) >= 10;
+    const hasOnesBorrow = operator === '-' && (operand1 % 10) < (operand2 % 10);
 
-    return { result, onesDigit, tensDigit, hundredsDigit, hasCarry, hasBorrow };
+    // 十の位の繰り上がり/繰り下がり（一の位の桁上がりを考慮）
+    const op1Tens = Math.floor(operand1 / 10) % 10;
+    const op2Tens = Math.floor(operand2 / 10) % 10;
+    const hasTensCarry  = operator === '+'
+      && (op1Tens + op2Tens + (hasOnesCarry ? 1 : 0)) >= 10;
+    const hasTensBorrow = operator === '-'
+      && (op1Tens - (hasOnesBorrow ? 1 : 0)) < op2Tens;
+
+    // 後方互換: hasCarry / hasBorrow は一の位分
+    const hasCarry  = hasOnesCarry;
+    const hasBorrow = hasOnesBorrow;
+
+    return {
+      result, onesDigit, tensDigit, hundredsDigit,
+      hasCarry, hasBorrow,
+      hasOnesCarry, hasOnesBorrow,
+      hasTensCarry, hasTensBorrow
+    };
   }
 
   // ============================================================
@@ -57,8 +73,9 @@ export class HitsuzanRenderer {
 
   /**
    * ひっ算ボックスの HTML 文字列を生成する
+   * operand1 または operand2 が 100 以上なら自動的に3桁モードで描画する。
    *
-   * state.onesState / tensState:
+   * state の各フィールド:
    *   'blank'  → □（未回答）
    *   number   → 確定済みの数字
    *
@@ -68,78 +85,99 @@ export class HitsuzanRenderer {
    * @param {{
    *   onesState?: 'blank'|number,
    *   tensState?: 'blank'|number,
+   *   hundredsState?: 'blank'|number,
    *   carryVisible?: boolean,
-   *   activeDigit?: 'ones'|'tens'|null
+   *   tensCarryVisible?: boolean,
+   *   activeDigit?: 'ones'|'tens'|'hundreds'|null
    * }} [state]
    * @returns {string} HTML 文字列
    */
   static renderHTML(operand1, operand2, operator, state = {}) {
     const {
-      onesState    = 'blank',
-      tensState    = 'blank',
-      carryVisible = false,
-      activeDigit  = 'ones'
+      onesState        = 'blank',
+      tensState        = 'blank',
+      hundredsState    = 'blank',
+      carryVisible     = false,     // 一の位 → 十の位 の繰り上がり
+      tensCarryVisible = false,     // 十の位 → 百の位 の繰り上がり
+      activeDigit      = 'ones'
     } = state;
 
-    const { hasCarry, hasBorrow } = this.compute(operand1, operand2, operator);
+    const is3digit = operand1 >= 100 || operand2 >= 100;
 
-    // operand1 の桁
-    const op1Tens = Math.floor(operand1 / 10);
-    const op1Ones = operand1 % 10;
+    // operand1 の各桁
+    const op1Hundreds = Math.floor(operand1 / 100);
+    const op1Tens     = Math.floor(operand1 / 10) % 10;
+    const op1Ones     = operand1 % 10;
 
-    // operand2 の桁（1桁か2桁か）
-    const op2Tens       = Math.floor(operand2 / 10);
-    const hasTwoDigitOp2 = operand2 >= 10;
+    // operand2 の各桁
+    const op2Hundreds = Math.floor(operand2 / 100);
+    const op2Tens     = Math.floor(operand2 / 10) % 10;
 
-    // キャリー/ボロー表示
-    const carryHidden = carryVisible ? '' : 'hidden';
-    const carryLabel  = operator === '+' ? '1' : '1';
+    // 答え欄セルを生成するヘルパー
+    const makeAnswerCell = (digitName, digitState) => {
+      const isActive = activeDigit === digitName ? ' hitsuzan-active' : '';
+      return digitState === 'blank'
+        ? `<span class="hitsuzan-digit hitsuzan-blank${isActive}" data-digit="${digitName}">□</span>`
+        : `<span class="hitsuzan-digit hitsuzan-confirmed" data-digit="${digitName}">${digitState}</span>`;
+    };
 
-    // 答え欄の一の位セル
-    const onesActive = activeDigit === 'ones' ? ' hitsuzan-active' : '';
-    const onesCell = onesState === 'blank'
-      ? `<span class="hitsuzan-digit hitsuzan-blank${onesActive}" data-digit="ones">□</span>`
-      : `<span class="hitsuzan-digit hitsuzan-confirmed" data-digit="ones">${onesState}</span>`;
+    const onesCell     = makeAnswerCell('ones',     onesState);
+    const tensCell     = makeAnswerCell('tens',     tensState);
+    const hundredsCell = makeAnswerCell('hundreds', hundredsState);
 
-    // 答え欄の十の位セル
-    const tensActive = activeDigit === 'tens' ? ' hitsuzan-active' : '';
-    const tensCell = tensState === 'blank'
-      ? `<span class="hitsuzan-digit hitsuzan-blank${tensActive}" data-digit="tens">□</span>`
-      : `<span class="hitsuzan-digit hitsuzan-confirmed" data-digit="tens">${tensState}</span>`;
-
-    // operand2 の十の位セル（1桁なら空白スペーサー）
-    const op2TensCell = hasTwoDigitOp2
-      ? `<span class="hitsuzan-digit">${op2Tens}</span>`
-      : `<span class="hitsuzan-digit hitsuzan-spacer">0</span>`;
-
-    // operand1 の十の位セル（1桁の場合はスペーサー）
-    const op1TensCell = op1Tens > 0
+    // operand1 行
+    const op1HundredsCell = is3digit
+      ? (op1Hundreds > 0 ? `<span class="hitsuzan-digit">${op1Hundreds}</span>`
+                         : `<span class="hitsuzan-digit hitsuzan-spacer">0</span>`)
+      : '';
+    const op1TensCell = (is3digit || op1Tens > 0 || Math.floor(operand1 / 10) > 0)
       ? `<span class="hitsuzan-digit">${op1Tens}</span>`
       : `<span class="hitsuzan-digit hitsuzan-spacer">0</span>`;
 
+    // operand2 行
+    const op2HundredsCell = is3digit
+      ? (op2Hundreds > 0 ? `<span class="hitsuzan-digit">${op2Hundreds}</span>`
+                         : `<span class="hitsuzan-digit hitsuzan-spacer">0</span>`)
+      : '';
+    const op2TensCell = (is3digit || operand2 >= 10)
+      ? `<span class="hitsuzan-digit">${op2Tens}</span>`
+      : `<span class="hitsuzan-digit hitsuzan-spacer">0</span>`;
+
+    // 繰り上がり行（3桁は2か所、2桁は1か所）
+    const carryHidden      = carryVisible     ? 'carry-appear' : 'hidden';
+    const tensCarryHidden  = tensCarryVisible ? 'carry-appear' : 'hidden';
+
+    const carryRow = is3digit
+      ? `<div class="hitsuzan-carry-row">
+           <span class="hitsuzan-carry-num ${tensCarryHidden}" data-carry="tens">1</span>
+           <span class="hitsuzan-carry-num ${carryHidden}"     data-carry="ones">1</span>
+         </div>`
+      : `<div class="hitsuzan-carry-row">
+           <span class="hitsuzan-carry-num ${carryHidden}" data-carry="ones">1</span>
+         </div>`;
+
+    // 答え行
+    const answerRow = is3digit
+      ? `${hundredsCell}${tensCell}${onesCell}`
+      : `${tensCell}${onesCell}`;
+
     return `
       <div class="hitsuzan-box">
-        <!-- 繰り上がり/繰り下がり行 -->
-        <div class="hitsuzan-carry-row">
-          <span class="hitsuzan-carry-num ${carryHidden}">${carryLabel}</span>
-        </div>
-        <!-- 上の数（operand1）行 -->
+        ${carryRow}
         <div class="hitsuzan-row">
+          ${op1HundredsCell}
           ${op1TensCell}
           <span class="hitsuzan-digit">${op1Ones}</span>
         </div>
-        <!-- 演算子 + 下の数（operand2）行 -->
         <div class="hitsuzan-row">
           <span class="hitsuzan-operator">${operator === '+' ? '＋' : '－'}</span>
+          ${op2HundredsCell}
           ${op2TensCell}
           <span class="hitsuzan-digit">${operand2 % 10}</span>
         </div>
-        <!-- 横線 -->
         <div class="hitsuzan-line"></div>
-        <!-- 答え行 -->
         <div class="hitsuzan-row hitsuzan-answer-row">
-          ${tensCell}
-          ${onesCell}
+          ${answerRow}
         </div>
       </div>
     `;
@@ -165,15 +203,30 @@ export class HitsuzanRenderer {
   }
 
   /**
-   * 繰り上がり / 繰り下がりをアニメーション付きで表示する
+   * 一の位 → 十の位 の繰り上がりをアニメーション付きで表示する
+   * （data-carry="ones" の要素を対象にする）
    *
    * @param {HTMLElement} containerEl
    */
   static showCarry(containerEl) {
-    const carry = containerEl.querySelector('.hitsuzan-carry-num');
+    const carry = containerEl.querySelector('[data-carry="ones"]');
     if (!carry) return;
     carry.classList.remove('hidden');
-    // アニメーションリセット → 再生
+    carry.classList.remove('carry-appear');
+    void carry.offsetHeight;
+    carry.classList.add('carry-appear');
+  }
+
+  /**
+   * 十の位 → 百の位 の繰り上がりをアニメーション付きで表示する
+   * （data-carry="tens" の要素を対象にする）
+   *
+   * @param {HTMLElement} containerEl
+   */
+  static showTensCarry(containerEl) {
+    const carry = containerEl.querySelector('[data-carry="tens"]');
+    if (!carry) return;
+    carry.classList.remove('hidden');
     carry.classList.remove('carry-appear');
     void carry.offsetHeight;
     carry.classList.add('carry-appear');
@@ -189,6 +242,18 @@ export class HitsuzanRenderer {
     const tensCell = containerEl.querySelector('[data-digit="tens"]');
     if (onesCell) onesCell.classList.remove('hitsuzan-active');
     if (tensCell) tensCell.classList.add('hitsuzan-active');
+  }
+
+  /**
+   * 百の位の□をアクティブ（点滅）状態にする
+   *
+   * @param {HTMLElement} containerEl
+   */
+  static activateHundreds(containerEl) {
+    const tensCell     = containerEl.querySelector('[data-digit="tens"]');
+    const hundredsCell = containerEl.querySelector('[data-digit="hundreds"]');
+    if (tensCell)     tensCell.classList.remove('hitsuzan-active');
+    if (hundredsCell) hundredsCell.classList.add('hitsuzan-active');
   }
 
   // ============================================================

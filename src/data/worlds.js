@@ -851,6 +851,28 @@ export const WORLDS = [
     facilityUnlock: null,
   },
 
+  // world_14c_3dig: M1-14c-3dig 3桁のたしざん（B+C のみ）
+  // ============================================================
+  {
+    id: 'world_14c_3dig',
+    unitId: 'M1-14c-3dig',
+    title: '3桁のたしざん',
+    description: '3桁の たしざんに ちょうせん！',
+    difficulty: 4,
+    totalQuestions: 15,
+    assets: {
+      icon: 'assets/icons/worlds/world_14c.png',
+      iconLocked: 'assets/icons/worlds/world_14c_locked.png'
+    },
+    theme: { gradient: 'linear-gradient(135deg, #d63031, #c0392b)' },
+    order: 32,
+    freeToPlay: false,
+    events: [{ triggerAt: 8, type: 'omikuji' }],
+    storyDesc: '3桁の ひっ算！\nひゃくのくらいまで こたえよう！',
+    actMoment: null,
+    facilityUnlock: null,
+  },
+
   // world_10a_1: M1-10a-1 くりあがりのたしざん①（9のせかい）B+C
   // ============================================================
   {
@@ -1030,6 +1052,21 @@ export const WORLDS = [
     freeToPlay: false,
     events: [{ triggerAt: 8, type: 'omikuji' }],
     storyDesc: '2桁－2桁！\nひっ算で しっかり けいさんしよう！',
+    actMoment: null, facilityUnlock: null,
+  },
+  {
+    id: 'world_14d_3dig',
+    unitId: 'M1-14d-3dig',
+    title: '3桁のひきざん',
+    description: '3桁の ひきざんを ひっ算で ときあかせ！',
+    difficulty: 5,
+    totalQuestions: 15,
+    assets: { icon: 'assets/icons/worlds/world_14d.png', iconLocked: 'assets/icons/worlds/world_14d_locked.png' },
+    theme: { gradient: 'linear-gradient(135deg, #d63031, #b71c1c)' },
+    order: 41,
+    freeToPlay: false,
+    events: [{ triggerAt: 8, type: 'omikuji' }],
+    storyDesc: '3桁のひきざん！\nひっ算で いちのくらいから じゅんに こたえよう！',
     actMoment: null, facilityUnlock: null,
   },
 
