@@ -31,6 +31,7 @@ import { ShopScreen } from './screens/ShopScreen.js';
 import { GuildScreen } from './screens/GuildScreen.js';
 import { FarmScreen } from './screens/FarmScreen.js';
 import { ShipBuildScreen } from './screens/ShipBuildScreen.js';
+import InventoryScreen from './screens/InventoryScreen.js';
 import UnitIntroScreen from './screens/UnitIntroScreen.js';
 import ChantScreen from './screens/ChantScreen.js';
 import FinalBattleScreen from './screens/FinalBattleScreen.js';
@@ -126,6 +127,8 @@ let _libraryScreen = null;
 let _shopScreen = null;
 let _guildScreen = null;
 let _farmScreen = null;
+/** インベントリモーダルインスタンス */
+let _inventoryScreen = null;
 
 /**
  * ミュートボタンを初期化する（クリックハンドラ登録・初期状態反映）
@@ -191,6 +194,8 @@ function showGameScreen() {
       _guildScreen?.hide?.();
       _farmScreen?.hide?.();
       _shipBuildScreen?.hide?.();
+      _inventoryScreen?.close?.();
+      _inventoryScreen = null;
     };
 
     if (screen === 'house') {
@@ -223,6 +228,13 @@ function showGameScreen() {
     } else if (screen === 'ship_build') {
       hideAll();
       showShipBuild(gameScreen);
+    } else if (screen === 'inventory') {
+      // インベントリはモーダルオーバーレイ — hideAll() しない
+      _inventoryScreen = new InventoryScreen(() => {
+        _inventoryScreen = null;
+        GameStore.setState('app.currentScreen', 'bookshelf');
+      });
+      _inventoryScreen.open();
     } else if (screen === 'final_battle') {
       hideAll();
       showFinalBattle(gameScreen);
