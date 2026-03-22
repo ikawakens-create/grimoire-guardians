@@ -9,7 +9,7 @@
  * @date 2026-03-04
  */
 
-const SW_VERSION   = '2.2.5';
+const SW_VERSION   = '2.2.6';
 const CACHE_NAME   = `grimoire-${SW_VERSION}`;
 
 /** キャッシュ対象ファイル（静的アセット） */
