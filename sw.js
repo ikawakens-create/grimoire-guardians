@@ -9,7 +9,7 @@
  * @date 2026-03-04
  */
 
-const SW_VERSION   = '2.2.5';
+const SW_VERSION   = '2.2.6';
 const CACHE_NAME   = `grimoire-${SW_VERSION}`;
 
 /** キャッシュ対象ファイル（静的アセット） */
@@ -132,9 +132,6 @@ const ASSETS = [
   './src/data/questions/M2-03b.js',
   './src/data/questions/M2-04.js',
   './src/data/questions/M2-04b.js',
-  './src/data/questions/M2-04c.js',
-  './src/data/questions/M2-04d.js',
-  './src/data/questions/M2-04e.js',
   './src/data/questions/M2-05.js',
   './src/data/questions/M2-06a.js',
   './src/data/questions/M2-06b.js',

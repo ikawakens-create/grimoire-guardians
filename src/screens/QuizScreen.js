@@ -145,8 +145,8 @@ export class QuizScreen {
     SoundManager.playBGM(SoundType.BGM_QUIZ);
 
     try {
-      // 問題データを動的ロード
-      await this._loadQuestions(worldData.unitId);
+      // 問題データを動的ロード（ワールドに stepConfig があれば優先）
+      await this._loadQuestions(worldData.unitId, worldData.stepConfig ?? null);
 
       // GameStore セッション開始
       GameStore.startQuizSession(worldData.id, worldData.unitId, this._questions);
@@ -345,11 +345,11 @@ export class QuizScreen {
    * @private
    * @param {string} unitId
    */
-  async _loadQuestions(unitId) {
+  async _loadQuestions(unitId, worldStepConfig = null) {
     Logger.info(`[QuizScreen] Loading questions for unit: ${unitId}`);
     Logger.time(`loadUnit_${unitId}`);
 
-    const { questions: raw, stepConfig } = await loadUnitQuestions(unitId);
+    const { questions: raw, stepConfig: fileStepConfig } = await loadUnitQuestions(unitId);
 
     // バリデーション
     const validated = raw.filter((q, i) => {
@@ -362,7 +362,8 @@ export class QuizScreen {
       throw new Error(`ユニット ${unitId} に有効な問題がありません`);
     }
 
-    // stepConfig があればステップ別シャッフル選出、なければ全問そのまま
+    // ワールド側の stepConfig を優先（なければファイルの stepConfig を使用）
+    const stepConfig = worldStepConfig ?? fileStepConfig;
     this._questions = stepConfig
       ? this._pickByStep(validated, stepConfig)
       : validated;
