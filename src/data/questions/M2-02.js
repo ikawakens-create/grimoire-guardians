@@ -492,7 +492,7 @@ const questions = [
     question: '□ ＋ 27 ＝ 43\n□は いくつ？',
     choices: ['14', '15', '16', '17'],
     correctAnswer: '16'
-  }
+  },
   // =====================================================
   // Step4: こたえを まるごと かく（full-answer）
   // Step1+2と同じ数式を hitsuzanMode:full-answer で出題
