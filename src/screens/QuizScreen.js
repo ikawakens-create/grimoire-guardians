@@ -440,6 +440,7 @@ export class QuizScreen {
     }
 
     // ひっ算タイプの場合は縦式を表示する
+    const questionContainerEl = this._el.querySelector('.question-container');
     const hitsuzanDisplayEl = this._el.querySelector('.quiz-hitsuzan-display');
     if (q.type === 'hitsuzan') {
       // ひっ算ステップの初期化（3桁問題は ones→tens→hundreds の3ステップ）
@@ -452,9 +453,11 @@ export class QuizScreen {
         { onesState: 'blank', tensState: 'blank', carryVisible: false, activeDigit: initActiveDigit }
       );
       hitsuzanDisplayEl.classList.remove('hidden');
+      questionContainerEl.classList.add('hitsuzan-mode');
     } else {
       hitsuzanDisplayEl.innerHTML = '';
       hitsuzanDisplayEl.classList.add('hidden');
+      questionContainerEl.classList.remove('hitsuzan-mode');
       this._hitsuzanStep = null;
       this._hitsuzanOnesValue = null;
     }

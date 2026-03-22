@@ -4966,3 +4966,52 @@
   align-items: center;
   margin: var(--spacing-sm) 0 var(--spacing-md);
 }
+
+/* ────────────────────────────────────────────────
+   ひっ算モード：ランドスケープ横並びレイアウト
+   [Q01バッジ]  (全幅)
+   [ひっ算ボックス] | [ガイドテキスト]
+                    | [選択肢グリッド]
+   ──────────────────────────────────────────────── */
+.question-container.hitsuzan-mode {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto auto;
+  column-gap: var(--spacing-xl);
+  align-items: center;
+  max-width: 900px;
+}
+
+/* 問題番号バッジ：最上段・全幅 */
+.question-container.hitsuzan-mode .quiz-question-num {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  margin-bottom: var(--spacing-sm);
+}
+
+/* ひっ算ボックス：左列・2行分 */
+.question-container.hitsuzan-mode .quiz-hitsuzan-display {
+  grid-column: 1;
+  grid-row: 2 / 4;
+  margin: 0;
+}
+
+/* ひっ算ラッパー内のマージンをリセット */
+.question-container.hitsuzan-mode .quiz-hitsuzan-wrap {
+  margin: 0;
+}
+
+/* ガイドテキスト（いちのくらいから〜）：右上 */
+.question-container.hitsuzan-mode .question-text {
+  grid-column: 2;
+  grid-row: 2;
+  margin-bottom: var(--spacing-sm);
+  text-align: left;
+}
+
+/* 選択肢グリッド：右下 */
+.question-container.hitsuzan-mode .question-choices {
+  grid-column: 2;
+  grid-row: 3;
+  align-self: start;
+}
