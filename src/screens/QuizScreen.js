@@ -107,8 +107,8 @@ export class QuizScreen {
 
     /**
      * ひっ算（digit-by-digit）の現在ステップ
-     * null: hitsuzan 問題でない、'ones': 一の位入力中、'tens': 十の位入力中
-     * @type {null|'ones'|'tens'}
+     * null: hitsuzan 問題でない、'ones': 一の位入力中、'tens': 十の位入力中、'hundreds': 百の位入力中
+     * @type {null|'ones'|'tens'|'hundreds'}
      */
     this._hitsuzanStep = null;
 
@@ -446,9 +446,10 @@ export class QuizScreen {
       this._hitsuzanStep = q.hitsuzanMode === 'digit-by-digit' ? 'ones' : null;
       this._hitsuzanOnesValue = null;
       this._hitsuzanTensValue = null;
+      const initActiveDigit = q.hitsuzanMode === 'digit-by-digit' ? 'ones' : null;
       hitsuzanDisplayEl.innerHTML = HitsuzanRenderer.renderHTML(
         q.operand1, q.operand2, q.operator,
-        { onesState: 'blank', tensState: 'blank', carryVisible: false, activeDigit: 'ones' }
+        { onesState: 'blank', tensState: 'blank', carryVisible: false, activeDigit: initActiveDigit }
       );
       hitsuzanDisplayEl.classList.remove('hidden');
     } else {
