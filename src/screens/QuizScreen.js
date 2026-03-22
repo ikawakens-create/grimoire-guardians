@@ -26,6 +26,7 @@ import { loadUnitQuestions } from '../data/units.js';
 import EventManager from '../core/EventManager.js';
 import ClockFace from '../components/ClockFace.js';
 import ShapeFace from '../components/ShapeFace.js';
+import HitsuzanRenderer from '../components/HitsuzanRenderer.js';
 
 /** フィードバック待機時間（ms） */
 const FEEDBACK_DELAY = {
@@ -103,6 +104,19 @@ export class QuizScreen {
 
     /** @type {number|null} ローディングオーバーレイの fadeout タイマー */
     this._loadingTimer = null;
+
+    /**
+     * ひっ算（digit-by-digit）の現在ステップ
+     * null: hitsuzan 問題でない、'ones': 一の位入力中、'tens': 十の位入力中
+     * @type {null|'ones'|'tens'}
+     */
+    this._hitsuzanStep = null;
+
+    /** @type {number|null} ひっ算で確定した一の位の値 */
+    this._hitsuzanOnesValue = null;
+
+    /** @type {number|null} ひっ算で確定した十の位の値 */
+    this._hitsuzanTensValue = null;
   }
 
   // ============================================================
@@ -241,6 +255,8 @@ export class QuizScreen {
             align-items: center;
             margin-bottom: var(--spacing-sm);
           "></div>
+          <!-- ひっ算表示エリア（type:'hitsuzan' の問題のみ表示） -->
+          <div class="quiz-hitsuzan-display hidden"></div>
           <!-- 問題画像エリア（image フィールドがある問題のみ表示 / nanobanana 対応） -->
           <div class="question-image-wrap hidden">
             <img class="question-image" src="" alt="" />
@@ -423,6 +439,25 @@ export class QuizScreen {
       clockDisplayEl.classList.add('hidden');
     }
 
+    // ひっ算タイプの場合は縦式を表示する
+    const hitsuzanDisplayEl = this._el.querySelector('.quiz-hitsuzan-display');
+    if (q.type === 'hitsuzan') {
+      // ひっ算ステップの初期化（3桁問題は ones→tens→hundreds の3ステップ）
+      this._hitsuzanStep = q.hitsuzanMode === 'digit-by-digit' ? 'ones' : null;
+      this._hitsuzanOnesValue = null;
+      this._hitsuzanTensValue = null;
+      hitsuzanDisplayEl.innerHTML = HitsuzanRenderer.renderHTML(
+        q.operand1, q.operand2, q.operator,
+        { onesState: 'blank', tensState: 'blank', carryVisible: false, activeDigit: 'ones' }
+      );
+      hitsuzanDisplayEl.classList.remove('hidden');
+    } else {
+      hitsuzanDisplayEl.innerHTML = '';
+      hitsuzanDisplayEl.classList.add('hidden');
+      this._hitsuzanStep = null;
+      this._hitsuzanOnesValue = null;
+    }
+
     // 問題画像（nanobanana 対応: image フィールドがある場合のみ表示）
     const questionImageWrapEl = this._el.querySelector('.question-image-wrap');
     const questionImageEl     = this._el.querySelector('.question-image');
@@ -435,11 +470,17 @@ export class QuizScreen {
     }
 
     // 問題文（アニメーション付きで差し替え）
+    // hitsuzan は縦式を表示するため問題文は出さない
     const questionTextEl = this._el.querySelector('.question-text');
     questionTextEl.style.animation = 'none';
-    // 再フロー強制でアニメーションをリセット
     void questionTextEl.offsetHeight;
-    questionTextEl.textContent = q.question;
+    if (q.type === 'hitsuzan') {
+      questionTextEl.textContent = q.hitsuzanMode === 'digit-by-digit'
+        ? 'いちのくらいから こたえよう！'
+        : 'こたえを えらぼう！';
+    } else {
+      questionTextEl.textContent = q.question;
+    }
     questionTextEl.style.animation = 'slide-in-up var(--transition-normal) ease both';
 
     // 選択肢を構築（シャッフル）
@@ -469,6 +510,12 @@ export class QuizScreen {
   _buildChoices(question) {
     const choicesEl = this._el.querySelector('.question-choices');
     choicesEl.innerHTML = '';
+
+    // --- hitsuzan モードの選択肢生成 ---
+    if (question.type === 'hitsuzan') {
+      this._buildHitsuzanChoices(question);
+      return;
+    }
 
     // --- 選択肢プールの構築 ---
     let pool;
@@ -526,6 +573,162 @@ export class QuizScreen {
 
       choicesEl.appendChild(btn);
     });
+  }
+
+  /**
+   * ひっ算用の選択肢ボタンを構築する
+   * digit-by-digit: 現在のステップ（一の位 or 十の位）に合わせた桁選択肢4択
+   * full-answer:    答え全体の4択
+   * @private
+   * @param {Object} question
+   */
+  _buildHitsuzanChoices(question) {
+    const choicesEl = this._el.querySelector('.question-choices');
+    const { operand1, operand2, operator, hitsuzanMode } = question;
+    const computed = HitsuzanRenderer.compute(operand1, operand2, operator);
+
+    let pool;
+    if (hitsuzanMode === 'digit-by-digit') {
+      // 現在のステップに合わせた桁選択肢
+      const correctDigit =
+        this._hitsuzanStep === 'ones'     ? computed.onesDigit
+        : this._hitsuzanStep === 'tens'   ? computed.tensDigit
+        :                                   computed.hundredsDigit;
+      pool = HitsuzanRenderer.generateDigitChoices(correctDigit);
+    } else {
+      // full-answer: 答え全体
+      pool = HitsuzanRenderer.generateFullChoices(computed.result);
+    }
+
+    pool.forEach((choice) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'choice-button';
+      btn.dataset.choice = choice;
+      btn.textContent = choice;
+      btn.addEventListener('click', () => {
+        if (this._isAnswered) return;
+        if (hitsuzanMode === 'digit-by-digit') {
+          this._handleHitsuzanDigitAnswer(choice, question, computed);
+        } else {
+          this._handleAnswer(choice, question);
+        }
+      });
+      choicesEl.appendChild(btn);
+    });
+  }
+
+  /**
+   * ひっ算 digit-by-digit の桁回答処理
+   * 一の位が正解なら繰り上がりアニメーション後に十の位へ進む。
+   * 不正解なら即終了（通常の不正解フローへ）。
+   * @private
+   * @param {string} selectedChoice
+   * @param {Object} question
+   * @param {Object} computed - HitsuzanRenderer.compute の結果
+   */
+  async _handleHitsuzanDigitAnswer(selectedChoice, question, computed) {
+    this._isAnswered = true;
+    this._lockAllChoices();
+
+    const hitsuzanDisplayEl = this._el.querySelector('.quiz-hitsuzan-display');
+    const currentStep = this._hitsuzanStep;
+    const is3digit = question.operand1 >= 100 || question.operand2 >= 100;
+
+    // 現在のステップの正解桁
+    const correctDigit =
+      currentStep === 'ones'     ? computed.onesDigit
+      : currentStep === 'tens'   ? computed.tensDigit
+      :                            computed.hundredsDigit;
+
+    const isCorrect = selectedChoice === String(correctDigit);
+
+    Logger.debug(`[QuizScreen] Hitsuzan ${currentStep}: "${selectedChoice}" → ${isCorrect ? '正解' : '不正解'}`);
+
+    // 選択ボタンのビジュアルフィードバック
+    this._el.querySelectorAll('.choice-button').forEach((btn) => {
+      if (btn.dataset.choice === selectedChoice && isCorrect) {
+        btn.classList.add('correct');
+      } else if (btn.dataset.choice === selectedChoice && !isCorrect) {
+        btn.classList.add('wrong');
+      } else if (btn.dataset.choice === String(correctDigit) && !isCorrect) {
+        btn.classList.add('correct');
+      }
+    });
+
+    // 最終ステップの判定（2桁は tens、3桁は hundreds が最終）
+    const isFinalStep = is3digit ? currentStep === 'hundreds' : currentStep === 'tens';
+
+    if (isCorrect && !isFinalStep) {
+      // ---- 中間ステップ正解 → 繰り上がりアニメーション後に次の桁へ ----
+      SoundManager.playSFX(SoundType.CORRECT_ANSWER);
+      HapticFeedback.light();
+
+      // 現在の桁を確定表示
+      HitsuzanRenderer.fillDigit(hitsuzanDisplayEl, currentStep, correctDigit);
+      if (currentStep === 'ones')  this._hitsuzanOnesValue = correctDigit;
+      if (currentStep === 'tens')  this._hitsuzanTensValue = correctDigit;
+
+      // 繰り上がり/繰り下がりアニメーション
+      const hasStepCarry = currentStep === 'ones'
+        ? (computed.hasOnesCarry || computed.hasOnesBorrow)
+        : (computed.hasTensCarry || computed.hasTensBorrow);
+
+      if (hasStepCarry) {
+        await new Promise(resolve => { this._feedbackTimer = setTimeout(resolve, 200); });
+        if (currentStep === 'ones') HitsuzanRenderer.showCarry(hitsuzanDisplayEl);
+        if (currentStep === 'tens') HitsuzanRenderer.showTensCarry(hitsuzanDisplayEl);
+        await new Promise(resolve => { this._feedbackTimer = setTimeout(resolve, 700); });
+      } else {
+        await new Promise(resolve => { this._feedbackTimer = setTimeout(resolve, 300); });
+      }
+
+      // 次の桁へ切り替え
+      if (currentStep === 'ones') {
+        this._hitsuzanStep = 'tens';
+        HitsuzanRenderer.activateTens(hitsuzanDisplayEl);
+      } else {
+        this._hitsuzanStep = 'hundreds';
+        HitsuzanRenderer.activateHundreds(hitsuzanDisplayEl);
+      }
+      this._isAnswered = false;
+      this._buildHitsuzanChoices(question);
+
+    } else {
+      // ---- 最終ステップ or 不正解 → 通常フローへ ----
+      const isFinalCorrect = isCorrect && isFinalStep;
+
+      if (isFinalCorrect) {
+        this._correctStreak++;
+        HitsuzanRenderer.fillDigit(hitsuzanDisplayEl, currentStep, correctDigit);
+        SoundManager.playSFX(SoundType.CORRECT_ANSWER);
+        HapticFeedback.success();
+      } else {
+        this._correctStreak = 0;
+        SoundManager.playSFX(SoundType.WRONG_ANSWER);
+        HapticFeedback.error();
+      }
+
+      // GameStore に記録（1問として）
+      GameStore.recordAnswer(this._currentIndex, selectedChoice, isFinalCorrect);
+
+      this._showMascot(isFinalCorrect);
+
+      if (isFinalCorrect && this._correctStreak >= 3) {
+        this._showStreakBadge(this._correctStreak);
+        this._applyStreakEffect(this._correctStreak);
+      }
+
+      await this._showFeedback(isFinalCorrect);
+
+      const feedbackEl = this._el?.querySelector('.quiz-feedback');
+      if (feedbackEl) feedbackEl.classList.add('hidden');
+
+      const answeredNum = this._currentIndex + 1;
+      await EventManager.checkAndTrigger(answeredNum, this._worldData);
+
+      this._nextQuestion();
+    }
   }
 
   // ============================================================
