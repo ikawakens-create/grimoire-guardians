@@ -311,6 +311,9 @@ export const UNITS = {
   'M2-03b': { unitId: 'M2-03b', title: 'くりさがりの ひきざん',      loader: () => import('./questions/M2-03b.js') },
   'M2-04':  { unitId: 'M2-04',  title: '2けたの けいさん おうよう',  loader: () => import('./questions/M2-04.js') },
   'M2-04b': { unitId: 'M2-04b', title: 'ひっさん まとめ',            loader: () => import('./questions/M2-04b.js') },
+  'M2-04c': { unitId: 'M2-04c', title: '3桁のたしざん',             loader: () => import('./questions/M2-04c.js') },
+  'M2-04d': { unitId: 'M2-04d', title: '3桁のひきざん',             loader: () => import('./questions/M2-04d.js') },
+  'M2-04e': { unitId: 'M2-04e', title: '3桁のひっさん まとめ',      loader: () => import('./questions/M2-04e.js') },
 
   // Zone 2 サンゴ礁（9本）— 数・量・時刻（仮実装）
   'M2-05':  { unitId: 'M2-05',  title: 'ながさを はかろう',   loader: () => import('./questions/M2-05.js') },

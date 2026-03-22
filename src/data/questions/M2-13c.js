@@ -12,64 +12,78 @@ const questions = [
     id: 'M2-13c-Q01',
     unitId: 'M2-13c',
     step: 1,
-    type: 'text',
-    question: '234 + 521 = ？',
-    choices: ['745', '755', '765', '775'],
-    correctAnswer: '755'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 234,
+    operand2: 521,
+    correctAnswer: '755',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-13c-Q02',
     unitId: 'M2-13c',
     step: 1,
-    type: 'text',
-    question: '876 - 543 = ？',
-    choices: ['323', '333', '343', '353'],
-    correctAnswer: '333'
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 876,
+    operand2: 543,
+    correctAnswer: '333',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-13c-Q03',
     unitId: 'M2-13c',
     step: 1,
-    type: 'text',
-    question: '300 + 400 = ？',
-    choices: ['600', '700', '800', '900'],
-    correctAnswer: '700'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 300,
+    operand2: 400,
+    correctAnswer: '700',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-13c-Q04',
     unitId: 'M2-13c',
     step: 1,
-    type: 'text',
-    question: '600 - 300 = ？',
-    choices: ['200', '300', '400', '900'],
-    correctAnswer: '300'
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 600,
+    operand2: 300,
+    correctAnswer: '300',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-13c-Q05',
     unitId: 'M2-13c',
     step: 1,
-    type: 'text',
-    question: '152 + 437 = ？',
-    choices: ['579', '589', '599', '609'],
-    correctAnswer: '589'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 152,
+    operand2: 437,
+    correctAnswer: '589',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-13c-Q06',
     unitId: 'M2-13c',
     step: 1,
-    type: 'text',
-    question: '987 - 654 = ？',
-    choices: ['323', '333', '343', '353'],
-    correctAnswer: '333'
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 987,
+    operand2: 654,
+    correctAnswer: '333',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-13c-Q07',
     unitId: 'M2-13c',
     step: 1,
-    type: 'text',
-    question: '413 + 286 = ？',
-    choices: ['689', '699', '709', '719'],
-    correctAnswer: '699'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 413,
+    operand2: 286,
+    correctAnswer: '699',
+    hitsuzanMode: 'digit-by-digit'
   },
 
   // ── Step 2: 繰り上がり/繰り下がりあり 混合 ──
@@ -77,64 +91,78 @@ const questions = [
     id: 'M2-13c-Q08',
     unitId: 'M2-13c',
     step: 2,
-    type: 'text',
-    question: '347 + 285 = ？',
-    choices: ['622', '632', '642', '652'],
-    correctAnswer: '632'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 347,
+    operand2: 285,
+    correctAnswer: '632',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-13c-Q09',
     unitId: 'M2-13c',
     step: 2,
-    type: 'text',
-    question: '731 - 258 = ？',
-    choices: ['463', '473', '483', '493'],
-    correctAnswer: '473'
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 731,
+    operand2: 258,
+    correctAnswer: '473',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-13c-Q10',
     unitId: 'M2-13c',
     step: 2,
-    type: 'text',
-    question: '468 + 375 = ？',
-    choices: ['823', '833', '843', '853'],
-    correctAnswer: '843'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 468,
+    operand2: 375,
+    correctAnswer: '843',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-13c-Q11',
     unitId: 'M2-13c',
     step: 2,
-    type: 'text',
-    question: '824 - 367 = ？',
-    choices: ['447', '457', '467', '477'],
-    correctAnswer: '457'
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 824,
+    operand2: 367,
+    correctAnswer: '457',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-13c-Q12',
     unitId: 'M2-13c',
     step: 2,
-    type: 'text',
-    question: '256 + 489 = ？',
-    choices: ['735', '745', '755', '765'],
-    correctAnswer: '745'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 256,
+    operand2: 489,
+    correctAnswer: '745',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-13c-Q13',
     unitId: 'M2-13c',
     step: 2,
-    type: 'text',
-    question: '500 - 238 = ？',
-    choices: ['252', '262', '272', '282'],
-    correctAnswer: '262'
+    type: 'hitsuzan',
+    operator: '-',
+    operand1: 500,
+    operand2: 238,
+    correctAnswer: '262',
+    hitsuzanMode: 'digit-by-digit'
   },
   {
     id: 'M2-13c-Q14',
     unitId: 'M2-13c',
     step: 2,
-    type: 'text',
-    question: '374 + 259 = ？',
-    choices: ['623', '633', '643', '653'],
-    correctAnswer: '633'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 374,
+    operand2: 259,
+    correctAnswer: '633',
+    hitsuzanMode: 'digit-by-digit'
   },
 
   // ── Step 3: 文章題・発展 ──
@@ -196,10 +224,12 @@ const questions = [
     id: 'M2-13c-Q21',
     unitId: 'M2-13c',
     step: 3,
-    type: 'text',
-    question: '576 + 248 = ？',
-    choices: ['814', '824', '834', '844'],
-    correctAnswer: '824'
+    type: 'hitsuzan',
+    operator: '+',
+    operand1: 576,
+    operand2: 248,
+    correctAnswer: '824',
+    hitsuzanMode: 'digit-by-digit'
   }
 ];
 
