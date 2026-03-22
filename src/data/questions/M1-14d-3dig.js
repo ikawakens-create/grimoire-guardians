@@ -17,29 +17,181 @@
 const questions = [
 
   // Step1: 3桁-1桁（繰り下がりなし）
-  { id: 'M1-14d-3dig-Q01', unitId: 'M1-14d-3dig', step: 1, type: 'hitsuzan', operator: '-', operand1: 127, operand2: 4, correctAnswer: '123', hitsuzanMode: 'digit-by-digit' },
-  { id: 'M1-14d-3dig-Q02', unitId: 'M1-14d-3dig', step: 1, type: 'hitsuzan', operator: '-', operand1: 236, operand2: 5, correctAnswer: '231', hitsuzanMode: 'digit-by-digit' },
-  { id: 'M1-14d-3dig-Q03', unitId: 'M1-14d-3dig', step: 1, type: 'hitsuzan', operator: '-', operand1: 345, operand2: 3, correctAnswer: '342', hitsuzanMode: 'digit-by-digit' },
-  { id: 'M1-14d-3dig-Q04', unitId: 'M1-14d-3dig', step: 1, type: 'hitsuzan', operator: '-', operand1: 419, operand2: 6, correctAnswer: '413', hitsuzanMode: 'digit-by-digit' },
-  { id: 'M1-14d-3dig-Q05', unitId: 'M1-14d-3dig', step: 1, type: 'hitsuzan', operator: '-', operand1: 528, operand2: 7, correctAnswer: '521', hitsuzanMode: 'digit-by-digit' },
-  { id: 'M1-14d-3dig-Q06', unitId: 'M1-14d-3dig', step: 1, type: 'hitsuzan', operator: '-', operand1: 638, operand2: 8, correctAnswer: '630', hitsuzanMode: 'digit-by-digit' },
+  {
+    id: 'M1-14d-3dig-Q01',
+    unitId: 'M1-14d-3dig',
+    step: 1,
+    type: 'choice',
+    question: '127 － 4 ＝ ？',
+    choices: ['121', '122', '123', '124'],
+    correctAnswer: '123'
+  },
+  {
+    id: 'M1-14d-3dig-Q02',
+    unitId: 'M1-14d-3dig',
+    step: 1,
+    type: 'choice',
+    question: '236 － 5 ＝ ？',
+    choices: ['229', '230', '231', '232'],
+    correctAnswer: '231'
+  },
+  {
+    id: 'M1-14d-3dig-Q03',
+    unitId: 'M1-14d-3dig',
+    step: 1,
+    type: 'choice',
+    question: '345 － 3 ＝ ？',
+    choices: ['340', '341', '342', '343'],
+    correctAnswer: '342'
+  },
+  {
+    id: 'M1-14d-3dig-Q04',
+    unitId: 'M1-14d-3dig',
+    step: 1,
+    type: 'choice',
+    question: '419 － 6 ＝ ？',
+    choices: ['411', '412', '413', '414'],
+    correctAnswer: '413'
+  },
+  {
+    id: 'M1-14d-3dig-Q05',
+    unitId: 'M1-14d-3dig',
+    step: 1,
+    type: 'choice',
+    question: '528 － 7 ＝ ？',
+    choices: ['519', '520', '521', '522'],
+    correctAnswer: '521'
+  },
+  {
+    id: 'M1-14d-3dig-Q06',
+    unitId: 'M1-14d-3dig',
+    step: 1,
+    type: 'choice',
+    question: '638 － 8 ＝ ？',
+    choices: ['628', '629', '630', '631'],
+    correctAnswer: '630'
+  },
 
   // Step2: 3桁-2桁（繰り下がりなし）
-  { id: 'M1-14d-3dig-Q07', unitId: 'M1-14d-3dig', step: 2, type: 'hitsuzan', operator: '-', operand1: 168, operand2: 45, correctAnswer: '123', hitsuzanMode: 'digit-by-digit' },
-  { id: 'M1-14d-3dig-Q08', unitId: 'M1-14d-3dig', step: 2, type: 'hitsuzan', operator: '-', operand1: 287, operand2: 53, correctAnswer: '234', hitsuzanMode: 'digit-by-digit' },
-  { id: 'M1-14d-3dig-Q09', unitId: 'M1-14d-3dig', step: 2, type: 'hitsuzan', operator: '-', operand1: 358, operand2: 46, correctAnswer: '312', hitsuzanMode: 'digit-by-digit' },
-  { id: 'M1-14d-3dig-Q10', unitId: 'M1-14d-3dig', step: 2, type: 'hitsuzan', operator: '-', operand1: 456, operand2: 35, correctAnswer: '421', hitsuzanMode: 'digit-by-digit' },
-  { id: 'M1-14d-3dig-Q11', unitId: 'M1-14d-3dig', step: 2, type: 'hitsuzan', operator: '-', operand1: 567, operand2: 64, correctAnswer: '503', hitsuzanMode: 'digit-by-digit' },
-  { id: 'M1-14d-3dig-Q12', unitId: 'M1-14d-3dig', step: 2, type: 'hitsuzan', operator: '-', operand1: 638, operand2: 27, correctAnswer: '611', hitsuzanMode: 'digit-by-digit' },
+  {
+    id: 'M1-14d-3dig-Q07',
+    unitId: 'M1-14d-3dig',
+    step: 2,
+    type: 'choice',
+    question: '168 － 45 ＝ ？',
+    choices: ['121', '122', '123', '124'],
+    correctAnswer: '123'
+  },
+  {
+    id: 'M1-14d-3dig-Q08',
+    unitId: 'M1-14d-3dig',
+    step: 2,
+    type: 'choice',
+    question: '287 － 53 ＝ ？',
+    choices: ['232', '233', '234', '235'],
+    correctAnswer: '234'
+  },
+  {
+    id: 'M1-14d-3dig-Q09',
+    unitId: 'M1-14d-3dig',
+    step: 2,
+    type: 'choice',
+    question: '358 － 46 ＝ ？',
+    choices: ['310', '311', '312', '313'],
+    correctAnswer: '312'
+  },
+  {
+    id: 'M1-14d-3dig-Q10',
+    unitId: 'M1-14d-3dig',
+    step: 2,
+    type: 'choice',
+    question: '456 － 35 ＝ ？',
+    choices: ['419', '420', '421', '422'],
+    correctAnswer: '421'
+  },
+  {
+    id: 'M1-14d-3dig-Q11',
+    unitId: 'M1-14d-3dig',
+    step: 2,
+    type: 'choice',
+    question: '567 － 64 ＝ ？',
+    choices: ['501', '502', '503', '504'],
+    correctAnswer: '503'
+  },
+  {
+    id: 'M1-14d-3dig-Q12',
+    unitId: 'M1-14d-3dig',
+    step: 2,
+    type: 'choice',
+    question: '638 － 27 ＝ ？',
+    choices: ['609', '610', '611', '612'],
+    correctAnswer: '611'
+  },
 
   // Step3: 3桁-2桁（繰り下がりあり）
-  { id: 'M1-14d-3dig-Q13', unitId: 'M1-14d-3dig', step: 3, type: 'hitsuzan', operator: '-', operand1: 171, operand2: 48, correctAnswer: '123', hitsuzanMode: 'digit-by-digit' },
-  { id: 'M1-14d-3dig-Q14', unitId: 'M1-14d-3dig', step: 3, type: 'hitsuzan', operator: '-', operand1: 291, operand2: 57, correctAnswer: '234', hitsuzanMode: 'digit-by-digit' },
-  { id: 'M1-14d-3dig-Q15', unitId: 'M1-14d-3dig', step: 3, type: 'hitsuzan', operator: '-', operand1: 421, operand2: 76, correctAnswer: '345', hitsuzanMode: 'digit-by-digit' },
-  { id: 'M1-14d-3dig-Q16', unitId: 'M1-14d-3dig', step: 3, type: 'hitsuzan', operator: '-', operand1: 524, operand2: 68, correctAnswer: '456', hitsuzanMode: 'digit-by-digit' },
-  { id: 'M1-14d-3dig-Q17', unitId: 'M1-14d-3dig', step: 3, type: 'hitsuzan', operator: '-', operand1: 611, operand2: 84, correctAnswer: '527', hitsuzanMode: 'digit-by-digit' },
-  { id: 'M1-14d-3dig-Q18', unitId: 'M1-14d-3dig', step: 3, type: 'hitsuzan', operator: '-', operand1: 713, operand2: 75, correctAnswer: '638', hitsuzanMode: 'digit-by-digit' },
-  { id: 'M1-14d-3dig-Q19', unitId: 'M1-14d-3dig', step: 3, type: 'hitsuzan', operator: '-', operand1: 832, operand2: 83, correctAnswer: '749', hitsuzanMode: 'digit-by-digit' }
+  {
+    id: 'M1-14d-3dig-Q13',
+    unitId: 'M1-14d-3dig',
+    step: 3,
+    type: 'choice',
+    question: '171 － 48 ＝ ？',
+    choices: ['121', '122', '123', '124'],
+    correctAnswer: '123'
+  },
+  {
+    id: 'M1-14d-3dig-Q14',
+    unitId: 'M1-14d-3dig',
+    step: 3,
+    type: 'choice',
+    question: '291 － 57 ＝ ？',
+    choices: ['232', '233', '234', '235'],
+    correctAnswer: '234'
+  },
+  {
+    id: 'M1-14d-3dig-Q15',
+    unitId: 'M1-14d-3dig',
+    step: 3,
+    type: 'choice',
+    question: '421 － 76 ＝ ？',
+    choices: ['343', '344', '345', '346'],
+    correctAnswer: '345'
+  },
+  {
+    id: 'M1-14d-3dig-Q16',
+    unitId: 'M1-14d-3dig',
+    step: 3,
+    type: 'choice',
+    question: '524 － 68 ＝ ？',
+    choices: ['454', '455', '456', '457'],
+    correctAnswer: '456'
+  },
+  {
+    id: 'M1-14d-3dig-Q17',
+    unitId: 'M1-14d-3dig',
+    step: 3,
+    type: 'choice',
+    question: '611 － 84 ＝ ？',
+    choices: ['525', '526', '527', '528'],
+    correctAnswer: '527'
+  },
+  {
+    id: 'M1-14d-3dig-Q18',
+    unitId: 'M1-14d-3dig',
+    step: 3,
+    type: 'choice',
+    question: '713 － 75 ＝ ？',
+    choices: ['636', '637', '638', '639'],
+    correctAnswer: '638'
+  },
+  {
+    id: 'M1-14d-3dig-Q19',
+    unitId: 'M1-14d-3dig',
+    step: 3,
+    type: 'choice',
+    question: '832 － 83 ＝ ？',
+    choices: ['747', '748', '749', '750'],
+    correctAnswer: '749'
+  }
 ];
 
 const stepConfig = [
