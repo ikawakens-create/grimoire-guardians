@@ -85,7 +85,7 @@ class TownManagerClass {
     }
 
     if (newlyUnlocked.length) {
-      SaveManager.save();
+      SaveManager.save().catch(e => Logger.warn('[TownManager] save失敗', e));
     }
     return newlyUnlocked;
   }
@@ -129,7 +129,7 @@ class TownManagerClass {
     this._consumeMaterials(cost);
     const newLevel = level + 1;
     GameStore.setState(`town.buildings.${buildingId}.level`, newLevel);
-    SaveManager.save();
+    SaveManager.save().catch(e => Logger.warn('[TownManager] save失敗', e));
 
     Logger.info(`[TownManager] アップグレード: ${buildingId} Lv${level}→${newLevel}`);
     return { success: true, newLevel };
@@ -174,7 +174,7 @@ class TownManagerClass {
     GameStore.addMaterial(item, 1);
     const today = new Date().toISOString().slice(0, 10);
     GameStore.setState('town.shop.dailyFreeClaimedDate', today);
-    SaveManager.save();
+    SaveManager.save().catch(e => Logger.warn('[TownManager] save失敗', e));
     Logger.info(`[TownManager] 無料アイテム受取: ${item}`);
     return { success: true, material: item };
   }
@@ -205,7 +205,7 @@ class TownManagerClass {
 
     GameStore.addMaterial(give.material, -give.amount);
     GameStore.addMaterial(receive.material, receive.amount);
-    SaveManager.save();
+    SaveManager.save().catch(e => Logger.warn('[TownManager] save失敗', e));
     Logger.info(`[TownManager] トレード: ${give.material}×${give.amount} → ${receive.material}×${receive.amount}`);
     return { success: true };
   }
@@ -257,7 +257,7 @@ class TownManagerClass {
       readyQuizTotal: quizTotal + Config.TOWN.FARM.HARVEST_QUIZ_COUNT,
     };
     GameStore.setState('town.farm.plots', plots);
-    SaveManager.save();
+    SaveManager.save().catch(e => Logger.warn('[TownManager] save失敗', e));
     Logger.info(`[TownManager] 種まき: [${plotIndex}] ${material}`);
     return { success: true };
   }
@@ -288,7 +288,7 @@ class TownManagerClass {
     const plots = [...(GameStore.getState('town.farm.plots') || [])];
     plots[plotIndex] = null;
     GameStore.setState('town.farm.plots', plots);
-    SaveManager.save();
+    SaveManager.save().catch(e => Logger.warn('[TownManager] save失敗', e));
 
     Logger.info(`[TownManager] 収穫: [${plotIndex}] ${gives}${bonusMaterial ? ' + '+bonusMaterial : ''}`);
     return { success: true, material: gives, bonus: bonusMaterial };
