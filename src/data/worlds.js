@@ -1284,8 +1284,7 @@ export const WORLDS = [
     order: 36,
     freeToPlay: true,
     events: [],
-    storyDesc: 'ひっさんの こたえを まるごと かこう！
-つぎの とびらが ひらく！',
+    storyDesc: 'ひっさんの こたえを まるごと かこう！\nつぎの とびらが ひらく！',
     actMoment: null,
     facilityUnlock: null,
     stepConfig: [{ step: 4, pick: 10 }, { step: 3, pick: 5 }],
@@ -1339,8 +1338,7 @@ export const WORLDS = [
     events: [
       { triggerAt: 8, type: 'omikuji' }
     ],
-    storyDesc: 'くりあがりの こたえを まるごと かこう！
-まほうが つよくなる！',
+    storyDesc: 'くりあがりの こたえを まるごと かこう！\nまほうが つよくなる！',
     actMoment: null,
     facilityUnlock: null,
     stepConfig: [{ step: 4, pick: 10 }, { step: 3, pick: 5 }],
@@ -1421,8 +1419,7 @@ export const WORLDS = [
     events: [
       { triggerAt: 8, type: 'three_paths' }
     ],
-    storyDesc: 'ひきざんの こたえを まるごと かこう！
-うみの そこへと すすめ！',
+    storyDesc: 'ひきざんの こたえを まるごと かこう！\nうみの そこへと すすめ！',
     actMoment: null,
     facilityUnlock: null,
     stepConfig: [{ step: 4, pick: 10 }, { step: 3, pick: 5 }],
@@ -1476,8 +1473,7 @@ export const WORLDS = [
     events: [
       { triggerAt: 10, type: 'monster' }
     ],
-    storyDesc: 'くりさがりの こたえを まるごと かこう！
-まけるな！ ふねを まもれ！',
+    storyDesc: 'くりさがりの こたえを まるごと かこう！\nまけるな！ ふねを まもれ！',
     actMoment: null,
     facilityUnlock: null,
     stepConfig: [{ step: 4, pick: 10 }, { step: 3, pick: 5 }],
