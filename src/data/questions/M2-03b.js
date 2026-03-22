@@ -492,7 +492,7 @@ const questions = [
     question: 'いちごが 93こ あります。57こ たべました。\nのこりは なんこ？',
     choices: ['34', '35', '36', '37'],
     correctAnswer: '36'
-  }
+  },
   // =====================================================
   // Step4: こたえを まるごと かく（full-answer）
   // Step1+2と同じ数式を hitsuzanMode:full-answer で出題

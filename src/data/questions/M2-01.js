@@ -492,7 +492,7 @@ const questions = [
     question: '□ ＋ 7 ＝ 97\n□は いくつ？',
     choices: ['88', '89', '90', '91'],
     correctAnswer: '90'
-  }
+  },
   // =====================================================
   // Step4: こたえを まるごと かく（full-answer）
   // Step1+2と同じ数式を hitsuzanMode:full-answer で出題

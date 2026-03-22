@@ -492,7 +492,7 @@ const questions = [
     question: 'くれよんが 95ほん あります。42ほん つかいました。\nのこりは なんぼん？',
     choices: ['51', '52', '53', '54'],
     correctAnswer: '53'
-  }
+  },
   // =====================================================
   // Step4: こたえを まるごと かく（full-answer）
   // Step1+2と同じ数式を hitsuzanMode:full-answer で出題
