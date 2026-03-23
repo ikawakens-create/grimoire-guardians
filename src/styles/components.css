@@ -4881,6 +4881,7 @@
   height: 1.8rem;
   display: flex;
   align-items: center;
+  gap: 0.1em;
 }
 
 /* 各桁と同幅のカラム（em は .hitsuzan-box の 2.4rem を継承） */
