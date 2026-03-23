@@ -5015,16 +5015,9 @@
   text-align: left;
 }
 
-/* 選択肢グリッド：右下（4列に広げてボタンを小さく） */
+/* 選択肢グリッド：右下 */
 .question-container.hitsuzan-mode .question-choices {
   grid-column: 2;
   grid-row: 3;
   align-self: start;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--spacing-sm);
-}
-
-.question-container.hitsuzan-mode .choice-button {
-  padding: var(--spacing-sm) var(--spacing-md);
-  font-size: var(--font-size-xl);
 }
