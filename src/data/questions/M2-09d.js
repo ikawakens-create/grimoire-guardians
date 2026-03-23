@@ -2,7 +2,7 @@
  * M2-09d.js - Grimoire Guardians 問題データ（仮）
  * ユニット: M2-09d「さんごしょう まとめ（Zone 2 そうまとめ）」
  * ※ 仮実装 — 子供の理解度に応じて問題を差し替える可能性あり
- * @version 1.0-draft
+ * @version 1.0
  * @date 2026-03-19
  */
 
