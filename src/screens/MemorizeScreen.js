@@ -229,8 +229,9 @@ class MemorizeScreen {
     cardEl.classList.add('memorize-card-revealed');
     cardEl.onclick = null;
 
-    // 最後のカードなら「クイズにちょうせん！」ボタンを出現させる
+    // 最後のカードなら「つぎへ」を隠して「クイズにちょうせん！」ボタンを出現させる
     if (this._currentIndex === this._cards.length - 1) {
+      this._el.querySelector('#memorize-btn-next').classList.add('hidden');
       setTimeout(() => {
         if (!this._el) return;
         this._el.querySelector('#memorize-challenge-wrap').classList.remove('hidden');

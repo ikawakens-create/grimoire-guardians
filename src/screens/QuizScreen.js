@@ -589,6 +589,7 @@ export class QuizScreen {
    */
   _buildHitsuzanChoices(question) {
     const choicesEl = this._el.querySelector('.question-choices');
+    choicesEl.innerHTML = '';  // 前の桁の選択肢をクリア
     const { operand1, operand2, operator, hitsuzanMode } = question;
     const computed = HitsuzanRenderer.compute(operand1, operand2, operator);
 
