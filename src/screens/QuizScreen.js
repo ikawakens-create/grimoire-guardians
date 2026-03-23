@@ -731,7 +731,11 @@ export class QuizScreen {
       if (feedbackEl) feedbackEl.classList.add('hidden');
 
       const answeredNum = this._currentIndex + 1;
-      await EventManager.checkAndTrigger(answeredNum, this._worldData);
+      try {
+        await EventManager.checkAndTrigger(answeredNum, this._worldData);
+      } catch (err) {
+        Logger.error('[QuizScreen] イベント中にエラー（スキップして続行）:', err);
+      }
 
       this._nextQuestion();
     }
@@ -800,7 +804,11 @@ export class QuizScreen {
 
     // イベントチェック（triggerAt が一致すれば演出完了まで待機）
     const answeredNum = this._currentIndex + 1;  // 1始まり
-    await EventManager.checkAndTrigger(answeredNum, this._worldData);
+    try {
+      await EventManager.checkAndTrigger(answeredNum, this._worldData);
+    } catch (err) {
+      Logger.error('[QuizScreen] イベント中にエラー（スキップして続行）:', err);
+    }
 
     // 次へ進む
     this._nextQuestion();
@@ -1135,6 +1143,7 @@ export class QuizScreen {
   _hideLoadingOverlay() {
     const overlay = this._el?.querySelector('.quiz-loading-overlay');
     if (overlay) {
+      overlay.style.pointerEvents = 'none';
       overlay.style.opacity = '0';
       overlay.style.transition = 'opacity var(--transition-normal)';
       this._loadingTimer = setTimeout(() => {
