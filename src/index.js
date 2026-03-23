@@ -39,6 +39,7 @@ import { TownManager } from './core/TownManager.js';
 import { SkinManager } from './core/SkinManager.js';
 import MultiTableScreen from './screens/MultiTableScreen.js';
 import MemorizeScreen from './screens/MemorizeScreen.js';
+import SequentialPracticeScreen from './screens/SequentialPracticeScreen.js';
 
 /**
  * アプリケーション初期化
@@ -433,14 +434,50 @@ function showMemorize(gameScreen, worldData) {
   const screen = new MemorizeScreen(
     gameScreen,
     worldData,
-    // クイズにちょうせん！ → QuizScreen
+    // クイズにちょうせん！ → SequentialPracticeScreen
     () => {
-      Logger.info('[App] Memorize → Quiz:', worldData.id);
-      showQuiz(gameScreen, worldData);
+      Logger.info('[App] Memorize → SequentialPractice:', worldData.id);
+      showSequentialPractice(gameScreen, worldData);
     },
     // スキップ → QuizScreen
     () => {
       Logger.info('[App] Memorize skipped → Quiz:', worldData.id);
+      showQuiz(gameScreen, worldData);
+    }
+  );
+
+  screen.render();
+  _activeScreen = screen;
+
+  if (Config.IS_DEBUG) {
+    window.GG._screen = screen;
+  }
+}
+
+/**
+ * SequentialPracticeScreen（じゅんばん練習）を描画する
+ * @param {HTMLElement} gameScreen
+ * @param {Object}      worldData
+ */
+function showSequentialPractice(gameScreen, worldData) {
+  if (_activeScreen) {
+    _activeScreen.destroy();
+    _activeScreen = null;
+  }
+
+  GameStore.setState('app.currentScreen', 'sequential_practice');
+
+  const screen = new SequentialPracticeScreen(
+    gameScreen,
+    worldData,
+    // 本番クイズへ！ → QuizScreen
+    () => {
+      Logger.info('[App] SequentialPractice → Quiz:', worldData.id);
+      showQuiz(gameScreen, worldData);
+    },
+    // スキップ → QuizScreen
+    () => {
+      Logger.info('[App] SequentialPractice skipped → Quiz:', worldData.id);
       showQuiz(gameScreen, worldData);
     }
   );

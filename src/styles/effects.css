@@ -2164,3 +2164,212 @@
   0%, 100% { border-color: #f39c12; background: rgba(243, 156, 18, 0.12); }
   50%       { border-color: var(--color-primary); background: rgba(100, 120, 255, 0.08); }
 }
+
+/* ─── MultiTableScreen: 読み方テキスト ────────────────────────── */
+
+.multitable-reading {
+  display: block;
+  font-size: clamp(10px, 1.6vw, 13px);
+  color: rgba(255, 224, 130, 0.75);   /* ffe082 の透過版 */
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  margin-top: 1px;
+  padding-left: 0.3em;
+  font-weight: normal;
+}
+
+/* ─── SequentialPracticeScreen（じゅんばん練習） ───────────────── */
+
+.seqprac-screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(160deg, #4a148c 0%, #6a1b9a 55%, #7b1fa2 100%);
+  color: #fff;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  z-index: 10;
+  overflow: hidden;
+}
+.seqprac-screen.seqprac-visible { opacity: 1; }
+
+/* ヘッダー */
+.seqprac-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(0,0,0,0.25);
+  flex-shrink: 0;
+  gap: 12px;
+}
+.seqprac-title {
+  font-size: 15px;
+  font-weight: bold;
+  color: #e1bee7;
+  flex: 1;
+  text-align: center;
+}
+.seqprac-progress {
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+  min-width: 48px;
+  text-align: right;
+}
+.seqprac-btn-skip {
+  font-size: 12px;
+  opacity: 0.85;
+  white-space: nowrap;
+}
+
+/* ボディ */
+.seqprac-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 20px;
+  gap: 16px;
+}
+
+/* ヒントテキスト */
+.seqprac-hint {
+  font-size: clamp(14px, 2.2vw, 18px);
+  color: #ce93d8;
+  background: rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 8px 18px;
+  text-align: center;
+  min-height: 40px;
+  width: 100%;
+  max-width: 480px;
+}
+.seqprac-hint.hidden { display: none; }
+
+/* 問題文 */
+.seqprac-question {
+  font-size: clamp(22px, 4.5vw, 38px);
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  line-height: 1.4;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+/* 選択肢グリッド */
+.seqprac-choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+  max-width: 420px;
+}
+.seqprac-choice {
+  font-size: clamp(20px, 3.8vw, 32px);
+  font-weight: bold;
+  background: rgba(255,255,255,0.15);
+  border: 2px solid rgba(255,255,255,0.3);
+  color: #fff;
+  border-radius: 16px;
+  padding: 14px 8px;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.12s ease;
+  touch-action: manipulation;
+}
+.seqprac-choice:active { transform: scale(0.94); }
+.seqprac-choice.seqprac-choice-correct {
+  background: rgba(76, 175, 80, 0.6);
+  border-color: #81c784;
+  animation: seqprac-correct-pop 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+.seqprac-choice.seqprac-choice-wrong {
+  background: rgba(244, 67, 54, 0.5);
+  border-color: #e57373;
+  animation: seqprac-shake 0.35s ease both;
+}
+
+@keyframes seqprac-correct-pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+@keyframes seqprac-shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-6px); }
+  40%       { transform: translateX(6px); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
+}
+
+/* フィードバック */
+.seqprac-feedback {
+  font-size: clamp(15px, 2.4vw, 20px);
+  font-weight: bold;
+  text-align: center;
+  padding: 8px 16px;
+  border-radius: 12px;
+  min-height: 36px;
+}
+.seqprac-feedback.hidden { display: none; }
+.seqprac-fb-correct {
+  color: #a5d6a7;
+  background: rgba(76, 175, 80, 0.2);
+}
+.seqprac-fb-wrong {
+  color: #ef9a9a;
+  background: rgba(244, 67, 54, 0.2);
+}
+
+/* 進捗ドット */
+.seqprac-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 0 10px;
+  flex-shrink: 0;
+}
+.seqprac-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.seqprac-dot-done   { background: rgba(255,255,255,0.5); }
+.seqprac-dot-active { background: #f48fb1; transform: scale(1.5); }
+
+/* 完了パネル */
+.seqprac-finish-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 24px;
+  background: linear-gradient(160deg, #4a148c 0%, #6a1b9a 55%, #7b1fa2 100%);
+  z-index: 1;
+}
+.seqprac-finish-wrap.hidden { display: none; }
+.seqprac-finish-msg {
+  font-size: clamp(16px, 2.8vw, 22px);
+  font-weight: bold;
+  color: #f3e5f5;
+  text-align: center;
+  line-height: 1.7;
+}
+.seqprac-btn-finish {
+  font-size: clamp(18px, 3vw, 24px);
+  padding: 16px 36px;
+  background: linear-gradient(135deg, #f06292, #e91e63);
+  border: none;
+  box-shadow: 0 4px 20px rgba(233, 30, 99, 0.5);
+  animation: seqprac-bounce-in 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes seqprac-bounce-in {
+  0%   { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1);   opacity: 1; }
+}
