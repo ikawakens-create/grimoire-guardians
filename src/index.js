@@ -37,6 +37,8 @@ import ChantScreen from './screens/ChantScreen.js';
 import FinalBattleScreen from './screens/FinalBattleScreen.js';
 import { TownManager } from './core/TownManager.js';
 import { SkinManager } from './core/SkinManager.js';
+import MultiTableScreen from './screens/MultiTableScreen.js';
+import MemorizeScreen from './screens/MemorizeScreen.js';
 
 /**
  * アプリケーション初期化
@@ -317,13 +319,20 @@ function showUnitIntro(gameScreen, worldData) {
 
   GameStore.setState('app.currentScreen', 'unit_intro');
 
+  // 九九ワールドかどうか判定
+  const isKuku = Config.GRADE2.FLASH_MODE.ENABLED_WORLD_IDS.includes(worldData.id);
+
   const intro = new UnitIntroScreen(
     gameScreen,
     worldData.id,
     // はじめる！
     () => {
       Logger.info('[App] UnitIntro start:', worldData.id);
-      showQuiz(gameScreen, worldData);
+      if (isKuku) {
+        showMultiTable(gameScreen, worldData);
+      } else {
+        showQuiz(gameScreen, worldData);
+      }
     },
     // もどる
     () => {
@@ -369,6 +378,78 @@ function showChant(gameScreen, worldData) {
 
   if (Config.IS_DEBUG) {
     window.GG._screen = chant;
+  }
+}
+
+/**
+ * MultiTableScreen（九九全体表）を描画する
+ * @param {HTMLElement} gameScreen
+ * @param {Object}      worldData
+ */
+function showMultiTable(gameScreen, worldData) {
+  if (_activeScreen) {
+    _activeScreen.destroy();
+    _activeScreen = null;
+  }
+
+  GameStore.setState('app.currentScreen', 'multi_table');
+
+  const screen = new MultiTableScreen(
+    gameScreen,
+    worldData,
+    // つぎへ → MemorizeScreen
+    () => {
+      Logger.info('[App] MultiTable → Memorize:', worldData.id);
+      showMemorize(gameScreen, worldData);
+    },
+    // スキップ → QuizScreen
+    () => {
+      Logger.info('[App] MultiTable skipped → Quiz:', worldData.id);
+      showQuiz(gameScreen, worldData);
+    }
+  );
+
+  screen.render();
+  _activeScreen = screen;
+
+  if (Config.IS_DEBUG) {
+    window.GG._screen = screen;
+  }
+}
+
+/**
+ * MemorizeScreen（フラッシュカード確認）を描画する
+ * @param {HTMLElement} gameScreen
+ * @param {Object}      worldData
+ */
+function showMemorize(gameScreen, worldData) {
+  if (_activeScreen) {
+    _activeScreen.destroy();
+    _activeScreen = null;
+  }
+
+  GameStore.setState('app.currentScreen', 'memorize');
+
+  const screen = new MemorizeScreen(
+    gameScreen,
+    worldData,
+    // クイズにちょうせん！ → QuizScreen
+    () => {
+      Logger.info('[App] Memorize → Quiz:', worldData.id);
+      showQuiz(gameScreen, worldData);
+    },
+    // スキップ → QuizScreen
+    () => {
+      Logger.info('[App] Memorize skipped → Quiz:', worldData.id);
+      showQuiz(gameScreen, worldData);
+    }
+  );
+
+  screen.render();
+  _activeScreen = screen;
+
+  if (Config.IS_DEBUG) {
+    window.GG._screen = screen;
   }
 }
 
