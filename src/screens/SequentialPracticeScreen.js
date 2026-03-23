@@ -315,7 +315,7 @@ class SequentialPracticeScreen {
 
   _showFinish() {
     if (!this._el) return;
-    SoundManager.playSFX(SoundType.STAGE_CLEAR);
+    SoundManager.playSFX(SoundType.WORLD_CLEAR);
     HapticFeedback.success();
     this._el.querySelector('#seqprac-finish-wrap').classList.remove('hidden');
     this._el.querySelector('.seqprac-body').classList.add('hidden');
@@ -356,7 +356,7 @@ class SequentialPracticeScreen {
 
     // 本番クイズへ
     this._el.querySelector('.seqprac-btn-finish').addEventListener('click', () => {
-      SoundManager.playSFX(SoundType.STAGE_CLEAR);
+      SoundManager.playSFX(SoundType.WORLD_CLEAR);
       HapticFeedback.success();
       this.destroy();
       if (typeof this._onFinish === 'function') this._onFinish();
