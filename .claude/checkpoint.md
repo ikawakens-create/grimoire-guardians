@@ -1,49 +1,61 @@
 # セッション引き継ぎ
 
-**保存日時**: 2026-03-22 （morning session）
+**保存日時**: 2026-03-23
 
 ## 今日やったこと
 
-- **バグ確認（2視点）**
-  - 静的解析: M2-01/02/03/03b の Step3 末尾カンマ抜け → 修正済み
-  - 静的解析: worlds.js 改行入り文字列 → 修正済み
-  - TownManager の `SaveManager.save()` に await/.catch なし（6箇所）→ 修正済み
-  - SW バージョン 2.2.6 → 2.2.7 に更新（古いキャッシュ削除のため）
-  - 実行フロー確認: hitsuzan/M2ユニット/worlds-units対応/BookshelfGrade2/TownManager連携 → 全て問題なし
+- **M2-10a〜i 九九ワールドに3ステップ構成を導入**（コミット `75fbe96`, `26f543d`）
+  - MultiTableScreen（九九表）→ MemorizeScreen（タップ暗記）→ SequentialPracticeScreen（ヒント付き9問）→ QuizScreen の4段階フローに拡充
 
-- **ひっ算の繰り上がり位置バグ修正**
-  - `1` が1の位の上に出ていた → 十の位の上に表示するよう修正
-  - `HitsuzanRenderer.js`: carry-row を `hitsuzan-carry-col` カラム構造に変更（末尾スペーサーで列ズレ防止）
-  - `components.css`: `.hitsuzan-carry-col` 追加、carry-row の padding-right 削除
+- **MultiTableScreen に九九読み方を追加**（コミット `103e1d7`）
+  - 1〜9のだん全81式の伝統的な読み方（ににんがし / さぶろくじゅうはち / くくはちじゅういち など）
+  - 各行の式の下に薄いゴールドで表示
+
+- **SequentialPracticeScreen を新規作成**（コミット `103e1d7`）
+  - ×1→×9 固定順番・ヒント付き9問（前の式の答えをヒントに表示）
+  - 0のかけざん・1のだんの特殊ケースも4択正常動作
+  - 全問完了後「本番クイズへ！」ボタン、スキップ→Quiz直行も対応
+
+- **バグ修正**（コミット `48e72c2`）
+  - `SoundType.STAGE_CLEAR` → `SoundType.WORLD_CLEAR` に修正（未定義定数）
 
 ## 未コミットの変更
 
-なし（全コミット・プッシュ済み）
+なし（working tree clean）
 
 ## 直近コミット
 
 ```
-b520554 fix: ひっ算の繰り上がり「1」を十の位の上に表示するよう修正
-d77f2f1 fix: TownManager の SaveManager.save() に .catch() を追加
-5dd5c66 fix: SWバージョンを2.2.7に更新して古いキャッシュを削除
-194bdd7 fix: M2-01/02/03/03bのStep3末尾カンマ抜けを修正
-82bb341 fix: worlds.js の改行入りシングルクォート文字列を修正
+48e72c2 fix: SoundType.STAGE_CLEAR → WORLD_CLEAR に修正
+103e1d7 feat: 九九学習フローに読み方表示・じゅんばん練習を追加
+75fbe96 feat: 九九ワールド M2-10a〜i を3ステップ構成に拡充
+26f543d feat: 九九ワールドに3ステップ導入フローを追加
+bd65f31 docs: M2プランを改訂（暗記前の子供向けStep1設計を追加）
 ```
 
 ## 次にやること（優先順）
 
-1. 実機でひっ算の繰り上がり位置を確認（十の位に出るか）
-2. キャラクタースキン画像の作成（.claude/tasks/skin-images-plan.md に詳細計画あり）
-3. assets/skins/ へのスキン PNG 配置
+1. **M2-10a〜i の Step2・Step3 問題ファイル拡充**
+   - Step1（じゅんばん練習）= SequentialPracticeScreen で実装済み
+   - Step2（ヒントなしバラバラ出題）= 現行 QuizScreen の問題プールに追加が必要
+   - Step3（逆向き / 文章題 3問）= 同上
+   - `.claude/tasks/m2-plan.md` に設計詳細あり
+
+2. **M2-10j の `draft` ラベル除去**
+   - 内容は完成済み、ファイル内の draft フラグだけ残存
+
+3. **skin-images-plan.md のタスク**（`.claude/tasks/skin-images-plan.md` 参照）
+
+4. 実機でひっ算の繰り上がり位置を確認（前セッション積み残し）
 
 ## 未解決のバグ・問題
 
-- `InventoryScreen.js` が index.js のルーターに未接続（画面として到達不能）
-  → 意図的な未実装の可能性あり、要確認
+- `InventoryScreen.js` が index.js のルーターに未接続（前セッション積み残し・意図的な未実装の可能性あり）
 
 ## 重要なメモ
 
-- ブランチ: `claude/morning-session-3-22-H5ukZ`
-- GitHub Pages は main から配信。feature ブランチの変更は別途デプロイが必要
-- SW キャッシュ問題が出たら DevTools → Application → Service Workers → Unregister → リロード
-- hitsuzan の carry 表示: `data-carry="ones"` = 十の位上、`data-carry="tens"` = 百の位上
+- SequentialPracticeScreen は `m2_10a〜m2_10i` 専用（`WORLD_TO_DANS` でマッピング）
+- フロー: MultiTable → Memorize → **SequentialPractice（new）** → Quiz
+- 0のかけざん（m2_10i の後半）の選択肢: [0, n, n*2, n*3] の形式
+- 九九読み方データは `MultiTableScreen.js` 冒頭の `KUKU_READINGS` 定数
+- ブランチ: `claude/morning-session-march-23-Li9Vd`
