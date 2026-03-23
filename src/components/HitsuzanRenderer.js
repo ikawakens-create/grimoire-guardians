@@ -150,14 +150,15 @@ export class HitsuzanRenderer {
     // 繰り上がり行: 各桁と同幅のカラムで構成し、
     // ones carry は十の位カラム・tens carry は百の位カラムに配置。
     // 末尾スペーサーで1の位分を確保することで列ズレを防ぐ。
+    const carryLabel = operator === '-' ? '－1' : '1';
     const carryRow = is3digit
       ? `<div class="hitsuzan-carry-row">
-           <span class="hitsuzan-carry-col"><span class="hitsuzan-carry-num ${tensCarryHidden}" data-carry="tens">1</span></span>
-           <span class="hitsuzan-carry-col"><span class="hitsuzan-carry-num ${carryHidden}"     data-carry="ones">1</span></span>
+           <span class="hitsuzan-carry-col"><span class="hitsuzan-carry-num ${tensCarryHidden}" data-carry="tens">${carryLabel}</span></span>
+           <span class="hitsuzan-carry-col"><span class="hitsuzan-carry-num ${carryHidden}"     data-carry="ones">${carryLabel}</span></span>
            <span class="hitsuzan-carry-col"></span>
          </div>`
       : `<div class="hitsuzan-carry-row">
-           <span class="hitsuzan-carry-col"><span class="hitsuzan-carry-num ${carryHidden}" data-carry="ones">1</span></span>
+           <span class="hitsuzan-carry-col"><span class="hitsuzan-carry-num ${carryHidden}" data-carry="ones">${carryLabel}</span></span>
            <span class="hitsuzan-carry-col"></span>
          </div>`;
 
