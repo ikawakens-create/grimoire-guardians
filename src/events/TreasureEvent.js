@@ -56,7 +56,7 @@ function shuffle(arr) {
 function pickQuestion() {
   const questions = GameStore.getState('currentSession.questions') || [];
   // clock 問題は除外（モーダル内で時計SVGを表示できないため）
-  const eligible = questions.filter(q => q.type !== 'clock');
+  const eligible = questions.filter(q => q.type !== 'clock' && q.type !== 'hitsuzan');
   if (eligible.length === 0) return null;
   const q = eligible[Math.floor(Math.random() * eligible.length)];
 
