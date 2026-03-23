@@ -31,6 +31,7 @@ const ASSETS = [
   './src/screens/UnitIntroScreen.js',
   './src/screens/MultiTableScreen.js',
   './src/screens/MemorizeScreen.js',
+  './src/screens/SequentialPracticeScreen.js',
   './src/screens/ChantScreen.js',
   './src/screens/FinalBattleScreen.js',
   // ストーリーシステム
