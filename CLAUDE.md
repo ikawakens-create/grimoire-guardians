@@ -425,7 +425,7 @@ GG._screen                     // Current active screen instance
 | 1-F | ✅ Complete | Skin system (24 skins, fragment drops, streak/milestone unlocks) |
 | 1-H | ✅ Complete | Memory Isle (40 monsters, 4 layers) — feature-flagged off |
 | 1 (Audio) | ⬜ Planned | Web Audio API (SoundManager is currently a mock) |
-| 2 | ⬜ Planned | Grade 2 math (M2 series) |
+| 2 | ✅ Complete | Grade 2 math (M2 series) — 42 units (M2-01〜M2-15d), 1000+ questions |
 
 ## Key Files for Common Tasks
 
