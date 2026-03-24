@@ -14,7 +14,7 @@
 
 | 項目 | 仕様 |
 |------|------|
-| ファイル形式 | PNG（**透過背景 必須**） |
+| ファイル形式 | PNG（**白背景で生成 → 背景除去ツールで透過化**） |
 | 最終サイズ | **240 × 360 px** |
 | Gemini生成サイズ | **480 × 720 px**（2倍で生成 → 縮小） |
 | アスペクト比 | **2 : 3（縦長）** |
@@ -31,7 +31,7 @@
 - **太い黒アウトライン**（240px換算で2〜3px相当の太さ）
 - **フラットカラー + 1段階セルシェーディング**（シンプルな塗り、影色1色のみ）
 - **鮮やかな高彩度**（くすみ・モノトーン・パステル過多は NG）
-- **完全透過背景**（背景なし・影なし・グラデ背景 NG）
+- **真っ白な単色背景**（#FFFFFF・影なし・グラデ背景 NG）
 - **正面向き全身立ちポーズ**（両足で立つ・カメラ目線）
 - 表情は**元気・ポジティブ**（暗い・怖い顔は NG。笑顔・ウィンク・ドヤ顔 OK）
 - 参照スタイル：**妖怪ウォッチ × ポケモン不思議のダンジョン × スプラトゥーン**
@@ -50,19 +50,19 @@
 **全プロンプトの先頭に必ずこの固定文を入れる：**
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
 ```
 
-**ネガティブプロンプト（毎回同じ）：**
+**Negative prompt (same every time):**
 ```
-realistic, 3D render, photorealistic, dark background, gradient background,
-shadow under feet, thin outline, muted colors, scary face, adult content,
-weapon too detailed, blurry, low quality, watermark, text
+realistic, 3D render, photorealistic, dark background, colored background, gradient background,
+shadow under feet, thin outline, muted colors, dull palette, scary face, adult content,
+overly detailed weapon, blurry, low quality, watermark, text, multiple characters
 ```
 
 ---
@@ -80,16 +80,17 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：ネイビーブルー × ゴールド
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：魔法使いの子供。紺色のふかふかローブに金色の星模様がたくさん散りばめられている。
-大きなとんがり帽子（紺色）、先端に輝く金色の星がついた魔法の杖を右手で高く掲げている。
-目はキラキラ輝く大きな丸目、満面のわくわく笑顔。体のまわりに小さな金色の星がきらきらと舞っている。
-このキャラクターがゲームの主人公なので、明るくてヒーロー感のあるデザインにすること。
+Character: A cheerful young wizard child in a plush deep-navy robe covered in scattered glittering gold star patterns.
+Tall pointed navy hat with a brilliant gold star at the tip. Right arm raised high holding a glowing magic staff topped with a sparkling gold star.
+Giant sparkly round eyes wide with pure excitement, the biggest most joyful grin imaginable.
+Small golden stars twinkle and orbit around the entire body.
+Design this as the game's protagonist — bright, iconic, unmistakably heroic. This character must make kids think "I want to be THIS one!"
 ```
 
 ---
@@ -100,15 +101,16 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：シルバー × ロイヤルブルー
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：銀色のキラキラ全身鎧を着た騎士の子供。鎧はぴかぴかに輝いていてとてもかっこいい。
-青いマント、まんまる可愛い形の盾（銀色）、短くて光る剣を構えている。
-ヒーローポーズ、超ドヤ顔で「俺が守る！」という表情。体から銀色のキラキラが飛び散っている。
+Character: A tiny chibi knight child in full gleaming silver plate armor that shines like a polished mirror.
+Royal blue flowing cape, an adorably round silver shield, and a short glowing sword raised in a triumphant hero pose.
+Expression: maximum smug confidence — "I will protect EVERYONE!!" — chest puffed out with pure pride.
+Silver sparkles and glints explode outward from the armor in all directions. Built different.
 ```
 
 ---
@@ -117,15 +119,17 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：赤・オレンジ × 黒
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：炎の魔法使いの子供。赤オレンジのグラデーションのローブ、黒いとんがり帽子。
-杖の先から激しい炎がメラメラと燃え上がっている。体の周りに炎のオーラがゆらゆら。
-目を輝かせてワクワクした「魔法かけるぞー！」という表情。炎の色で全体が明るく照らされている。
+Character: A fiery young mage child in a vivid red-orange robe with flame patterns and a sleek black pointed hat.
+Staff tip erupting with massive roaring flames — blazing orange and hot red.
+Intense fire aura wrapping the entire body like a living inferno.
+Eyes wide open and gleaming with reckless excitement — "MAGIC TIIIIME!!!" energy.
+The whole figure glows as if lit from within by fire. Absolutely scorching.
 ```
 
 ---
@@ -134,15 +138,16 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：ホワイト × アイスブルー
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：氷の魔法使いの子供。白銀の氷の結晶模様ローブ（キラキラ輝いている）。
-杖の先に大きな青い氷の結晶がついていて、体の周りに6角形の雪の結晶がゆっくり舞っている。
-クールでキリッとした「余裕です」という自信満々の表情。全体がひんやり爽やかな青白い雰囲気。
+Character: A composed young ice mage child in a shimmering silver-white robe covered in intricate snowflake and crystal patterns.
+Staff topped with a large glowing blue ice crystal. Perfect hexagonal snowflakes drift slowly all around the body.
+Expression: supremely cool, slightly smug "I've already won" face — effortlessly confident, zero stress.
+The entire design radiates crisp, frosty, elegant blue-white energy. Untouchably cool.
 ```
 
 ---
@@ -151,16 +156,17 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：黒 × 赤
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：全身まっ黒の忍者装束の子供。顔は布で覆われていて、目だけが赤くキラリと光っている。
-両手に大きめの手裏剣を1枚ずつ持っている。ちょっと腰を落として忍者っぽいポーズ。
-「シュッ！」という感じの素早そうでかっこいいミステリアスな雰囲気。赤い目だけが見える。
-子供が見てかっこいいと思えるように、暗すぎず適度に赤のアクセントカラーを入れること。
+Character: A stealthy ninja child in a deep charcoal-dark ninja outfit, crouched in a dynamic low ninja stance.
+Face completely wrapped in dark cloth — only a pair of glowing SCARLET red eyes visible. Pure mystery.
+Holding a large shuriken in each hand, blades glinting with red-tinted light.
+Red accent details throughout: blazing red eyes, red cord on shoulders, red-reflected blade edges — boosting visual contrast.
+IMPORTANT: The dark outfit sits on white background — draw EXTRA THICK, clearly defined black outline so the full silhouette reads perfectly. Body radiates shadowy speed-blur lines suggesting supernatural quickness.
 ```
 
 ---
@@ -169,16 +175,17 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：赤 × 黒 × ゴールド
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：ドラゴンの騎士の子供。赤い竜鱗模様のかっこいい鎧、頭に竜の角がついた兜。
-背中から小さいドラゴンの翼が生えている。炎をまとった赤いランスを高く掲げている。
-体のまわりにオレンジ・赤の炎のオーラがメラメラ。「最強だ！」という超かっこいいドヤ顔。
-金のアクセントで豪華さを演出すること。
+Character: A fierce young dragon knight child in magnificent red dragon-scale armor with a ferocious dragon-head helmet sporting real horns.
+Compact but menacing dragon wings spread open from the back. Blazing red lance raised triumphantly overhead, wrapped in actual fire.
+Explosive orange-red flame aura roaring around the entire body.
+Expression: the most legendary "I AM THE STRONGEST IN THE WORLD!!" swagger face ever put on a chibi.
+Gold trim on every edge — maximum ferocity, maximum glory.
 ```
 
 ---
@@ -187,16 +194,18 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：黒 × 紫 × 黄（稲妻）
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：雷の剣士の子供。漆黒のかっこいい剣士の服。
-体中に紫と黄色の稲妻がバチバチと走っている。大きくて存在感のある黒い剣を片手で構えている。
-体から雷のオーラがドバっと放出されていてめちゃくちゃかっこいい。クールな横目でちょっと上を見る表情。
-黒・紫・黄の3色が映えるように、背景なしでもオーラがくっきり見えるように描くこと。
+Character: An electrifying young swordsman child in jet-black cool combat outfit.
+Purple and yellow lightning bolts CRACKLE and ZAP violently all over the entire body.
+One hand gripping a massive, imposing black greatsword with electric arcs dancing along the blade.
+Wild thunder aura erupting outward like a controlled explosion of pure energy.
+Expression: cool sideways glance toward the upper distance — radiating "We are not on the same level" absolute confidence.
+Black + purple + electric yellow pop dramatically on white background. Make the lightning POP.
 ```
 
 ---
@@ -207,16 +216,17 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：桜ピンク × 白
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：桜の踊り子の子供。鮮やかな桜ピンクの和風いしょう（踊り子スタイル）。
-髪に大きくてかわいい花リボンをつけている。右手におうぎを広げて持っている。
-体の周りにひらひらと桜の花びらがたくさん舞っている。キラキラ輝くにっこり満面スマイル。
-日本の伝統美と可愛さが合わさったデザイン。ピンクと白でとても明るく華やかに。
+Character: A graceful young sakura dancer child in a gorgeous vivid cherry-blossom pink Japanese dancer outfit with layered flowing fabric.
+Large adorable flower ribbon hair accessory — pink and white. Right hand gracefully holding an open decorative fan.
+Hundreds of cherry blossom petals flutter and swirl all around the body in a beautiful storm of pink.
+Expression: radiant, sparkling ear-to-ear smile that lights up the whole design.
+Traditional Japanese beauty + irresistible kawaii energy. Bright, pure pink-and-white joy.
 ```
 
 ---
@@ -225,15 +235,17 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：クリーム × ブラウン
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：うさぎ旅人の子供。ふわっとしたクリーム色のフードつきマント、フードにうさぎ耳がついている。
-茶色の旅人ベスト、小さくてかわいい短剣（腰につけてる）、背中にちっさいリュック。
-「どこでも行くよ！」という元気でわくわくした笑顔。うさぎ耳がぴょこんと立っていてとてもかわいい。
+Character: An adventurous young rabbit traveler child in a fluffy cream-colored hooded cloak with bunny ears sticking up perkily from the hood.
+Brown traveler's vest, a tiny adorable dagger at the hip, and the cutest little backpack on the back.
+Expression: unstoppable "I'm going EVERYWHERE and I'll be fine!!" mega-energetic grin.
+Bunny ears perked up tall, radiating pure wanderlust and readiness for adventure.
+Cozy + cute + ready-for-anything. Irresistibly huggable adventurer.
 ```
 
 ---
@@ -242,17 +254,18 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：ラベンダー × 白 × エメラルドグリーン（翼）
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：妖精のひめの子供。ラベンダー色のふわふわドレス。
-背中に半透明でキラキラした大きい妖精の羽が2対（4枚）ついていてとてもきれい。
-頭にかわいい花のかんむり、星の先端がキラリ光るステッキを持っている。
-地面からちょっとだけふわっと浮いているポーズ。夢のようなうっとり笑顔。
-体の周りに小さな星のキラキラが飛び散っている。
+Character: A magical young fairy princess child in a gorgeous, airy lavender fluffy dress.
+Two pairs (4 wings total) of large, shimmering translucent emerald-green fairy wings spread beautifully behind — each wing catching imaginary light.
+Cute flower crown on head. Star-tipped wand sparkling brilliantly in hand.
+Floating just slightly above the ground in a dreamy, weightless hover pose.
+Expression: enchanted, starry-eyed blissful smile — like living in a fairy tale.
+Golden stars and glittering motes scatter all around. Pure dream energy.
 ```
 
 ---
@@ -261,16 +274,17 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：ピンク × ゴールド × ホワイト
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：魔法のプリンセスの子供。キラッキラなピンクのドレス（ふわふわのスカート）。
-頭に大きくて豪華な金のティアラ、先端が虹色に輝く星のステッキを右手でかわいく持っている。
-体の周りにハート型や星型のキラキラがいっぱい飛んでいる。片目をウィンクしたキュートな表情。
-「わたしが1番！」という自信満々でかわいいプリンセスオーラ全開のデザイン。
+Character: A dazzling young magic princess child in an absolutely SPARKLING pink dress with a massive, impossibly fluffy skirt.
+Huge gorgeous gold tiara on head. Right hand holding a rainbow-tipped star wand with stylish flair.
+Hearts ♥ and stars ★ bursting and glittering in every direction around the body.
+Expression: one eye winked adorably — "I'm NUMBER ONE and I know it!!" — pure princess power radiating from every single pixel.
+Maximum sparkle. Maximum confidence. This is what royalty looks like.
 ```
 
 ---
@@ -279,16 +293,17 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：ティール × 水色 × ゴールド
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：人魚の魔法使いの子供。上半身は水色の魚鱗模様（かわいいトップス）。
-下半身は青緑のキラキラ人魚のしっぽだけど、ちゃんと立てている（足の代わりにしっぽで立つ）。
-貝殻の飾りのついた杖を持っていて、周りに丸い泡がぷかぷか浮いている。水のキラキラオーラ。
-「みてみて！」という楽しそうなにっこり笑顔。青×緑×金でとても鮮やかにすること。
+Character: A bright young mermaid mage child with a cute teal fish-scale patterned top half and a shimmering blue-green sparkling mermaid tail — standing upright on the tail fin as if it were legs.
+Holding a beautiful staff decorated with sea shells and coral. Iridescent round bubbles float and drift all around.
+Aqua sparkle aura shimmering across the whole body like sunlight through water.
+Expression: "LOOK AT ME, LOOK AT ME!!" beaming, absolutely delighted smile.
+Vivid teal + sky blue + gold — lush, vibrant, and absolutely stunning.
 ```
 
 ---
@@ -297,16 +312,17 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：パステルピンク × ホワイト
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：バレリーナの子供。ふわっふわのパステルピンクのチュチュスカート（とにかくボリューミーにふくらんでいる）。
-白いバレエシューズ（つま先で立つポワント）、両手にバラの花束を持っている。
-片足でつま先立ちしたバレリーナポーズ。「やったー！」という最高に華やかなガッツポーズ笑顔。
-周りに花びらと星のキラキラが舞っていてとてもかわいい。
+Character: A graceful young ballerina child in an absolutely ENORMOUS fluffy pastel pink tutu skirt — maximum volume, maximum puffiness, like a pink cloud.
+White ballet shoes en pointe (standing on tiptoes). Holding a gorgeous bouquet of roses in both hands.
+Classic one-leg ballerina en pointe pose, perfectly balanced.
+Expression: "YAAAAY!!!" triumphant glow-up smile radiating pure joy and achievement.
+Rose petals and glittering stars swirling softly all around. The ultimate cute and elegant combo.
 ```
 
 ---
@@ -317,16 +333,17 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：クリーム × ブラウン
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：くまの着ぐるみを着た子供。ふわっふわのクリーム色の着ぐるみ、頭にくまの耳ぴょこん。
-おなかがまるくぷっくりふくらんでいてとてもかわいい。ちっちゃいまんまるな手がキュート。
-最高にごきげんなにっこにこ笑顔。「ぐるるー！」という感じのゆるかわいいポーズ。
-くまの顔（鼻と目）は服についた刺繍みたいな感じでかわいくプリントされているとよりキュート。
+Character: A supremely cozy young child wearing the fluffiest, softest cream-colored bear onesie ever made.
+Tiny round bear ears poking up from the hood. Tummy perfectly round and poofy like a ball. Tiny chubby round mitten-hands peeking out from the sleeves.
+A cute bear face (embroidered-style dot-eyes and small nose) printed as a design on the tummy.
+Expression: the single most content, blissful, happy "grrrr~!!" grin in existence — this character has ZERO problems in life.
+Utter softness. Peak comfort. Completely irresistible.
 ```
 
 ---
@@ -335,16 +352,17 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：ぼろぼろブラウン × ベージュ
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：ボロボロの服を着た冒険者の子供。服には穴があいていてつぎはぎだらけ。
-体のあちこちに絆創膏（ばんそうこう）がいっぱい貼ってある。両手でめちゃくちゃでっかい木の棒を構えている。
-でも表情は「俺こそ最強！」という信じられないくらい自信まんまんなドヤ顔（ギャップが笑える）。
-ボロいのに妙にかっこよく決まってる感じの面白いキャラクター。
+Character: A hilariously determined young adventurer child in a completely destroyed outfit — multiple torn holes, patches sewn on top of other patches, literally falling apart.
+Band-aids stuck ALL over the body: face, arms, legs, everywhere.
+Holding an absurdly oversized wooden club in both tiny hands — way too big for this child.
+Expression: unshakeable, jaw-droppingly smug "I AM UNDEFEATED" grin — completely oblivious to being an absolute disaster.
+The comedy is the gap: the outfit looks like they lost every fight, but the face says they won every single one.
 ```
 
 ---
@@ -353,16 +371,17 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：グリーン × イエロー
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：T-REXの着ぐるみを着た子供。鮮やかな緑色の恐竜着ぐるみ、おなかは黄色。
-着ぐるみのちっちゃいT-REXの腕が両わきから少しだけにょきっと出ている（かわいい）。
-着ぐるみの下から子供っぽいスニーカーがちらっと見えている（これが笑えるポイント）。
-「ガオー！」という感じのめちゃくちゃ楽しそうでテンション最高のワクワク顔。
+Character: An extremely excited young child wearing a bright vivid green T-Rex dinosaur onesie with a yellow belly, complete with a tail and a little spiky back ridge.
+Tiny hilarious stubby T-Rex arms sticking out helplessly from both sides of the onesie (they're practically useless and that's the point).
+Regular kids' sneakers peeking out from the bottom hem of the costume — the punchline of the whole design.
+Expression: wide open "RAAAWR!!! I'M A T-REX!!!" face with maximum chaos and joyful energy.
+This design must make people laugh the second they see it.
 ```
 
 ---
@@ -371,17 +390,18 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：ホワイト × ライトグレー
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：白いシーツのおばけコスをした子供。白いシーツをすっぽりかぶっている。
-シーツに2つの丸い目の穴があいていて、そこからかわいい大きな目がのぞいている（笑顔の目）。
-シーツの下から小さい足（靴）がにょきっと2本出ている（これが可愛いポイント）。
-怖くなくてかわいいコミカルなおばけ表現。「わあ！」という感じの愉快な雰囲気。
-シーツはふんわりとした柔らかいシルエット。
+Character: An adorable young child completely hidden under a soft, rounded white sheet ghost costume draped over the whole body.
+Two perfectly round eyeholes cut into the sheet, with wide, cheerful, sparkling happy eyes peering out.
+Two small feet with shoes sticking out from the bottom of the sheet — the ultimate adorable detail.
+The sheet has a soft, puffy, rounded ghost silhouette — gentle, friendly, zero scary.
+Expression: pure "BOO!!" joyful energy — a ghost that is 100% cute and 0% frightening.
+NOTE: The white sheet must have visible grey shading/outline so it reads against the white background.
 ```
 
 ---
@@ -390,16 +410,18 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：シルバー × イエロー × レッド（ボタン）
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：手作りロボットのよろいを着たはかせの子供。段ボール素材感のシルバーのロボットよろい。
-頭の上からモクモクと煙が出ている。胸に赤・黄・青のカラフルなボタンがいっぱいならんでいる。
-頭からアンテナが2本でている。「ふははは！完成したぞ！」という最高にドヤ顔のはかせ表情。
-手作り感・かわいさ・コミカルさを大事にしたデザイン。
+Character: A gleeful young mad-scientist child wearing a homemade robot armor built from cardboard and scrap — silver-painted with visible dents and tape marks.
+Steam/smoke puffing energetically from the top of the boxy helmet head.
+Chest panel covered in a glorious array of colorful buttons and switches: red, yellow, blue, green — totally random.
+Two wobbly antennae on top of the head, one slightly bent.
+Expression: the ultimate "MWAHAHAHA!! IT IS COMPLETE!!!" evil-genius triumph grin — arms spread wide.
+Handmade charm + cute chaos + peak comedy scientist energy. Absolutely delightful.
 ```
 
 ---
@@ -408,16 +430,17 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：レッド × グリーン（へた）
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：まんまるトマトの着ぐるみを着た子供。全身が鮮やかな真っ赤の丸いトマト形。
-頭のてっぺんに緑のへた（葉っぱ）がついている。着ぐるみから手足だけにょきっと出ている。
-口を大きく開けた「やっほー！！！」という世界一ごきげんな最高の笑顔（満面の笑み）。
-「なんでそのコスチュームなの！？」というツッコミ必至のとびきりコミカルでかわいいデザイン。
+Character: A joyfully unhinged young child wearing a round, perfectly spherical vivid red tomato onesie — a full tomato shape, bright and red and round.
+Green tomato stem and leaf cluster on top of the head. Tiny arms and tiny legs poking straight out from the big round tomato body.
+Expression: the single most deliriously, uncontrollably happy "YAHOOOOO!!!!!!" wide-open grin ever rendered in digital art.
+This design DEMANDS the reaction "Wait... why are you a tomato?!" — and the answer is: why NOT?
+Pure comedic gold. Guaranteed to be someone's favorite skin.
 ```
 
 ---
@@ -428,16 +451,17 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：ブラック × ゴールド × レッド
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：海賊キャプテンの子供。でっかい海賊帽（骸骨マーク・たっぷりの金の飾り）。
-赤と黒のド派手なコート、全体に金の飾りがじゃらじゃらついている。
-右手にキラリ光るカトラス（剣）、左手に宝の地図を広げて持っている。
-「お宝はわしのものじゃー！」という威風堂々で超かっこいい船長表情。
+Character: A swaggering young pirate captain child in a massive skull-and-crossbones tricorn hat absolutely dripping with gold ornaments.
+Flamboyant red-and-black captain's coat covered in clanking gold chains, medals, and decorations.
+Right hand: a gleaming cutlass catching the light. Left hand: a dramatically unrolled treasure map.
+Expression: commanding, larger-than-life "THAT TREASURE IS MINE!!!" legendary captain face — oozing pure confidence and sea-dog charisma.
+This is what a 2-head chibi pirate king looks like. Iconic.
 ```
 
 ---
@@ -446,16 +470,18 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：ホワイト × シルバー × ライトブルー（バイザー）
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：宇宙飛行士の子供。白いぷっくりした宇宙服（まるくてかわいいシルエット）。
-丸い宇宙ヘルメット、水色のバイザー越しに笑顔が見えている。
-体の周りに小さな星・惑星のアイコンがふわふわ浮いている。
-足元からちょっとだけぷかぷか浮いているポーズ。「宇宙に行くよー！」という夢いっぱいワクワク表情。
+Character: A dreamy young astronaut child in a puffy, rounded white spacesuit — perfectly soft and round like a marshmallow.
+Perfectly circular helmet with a light blue visor, revealing a huge beaming smile inside.
+NOTE: White spacesuit needs visible grey cel-shading and thick outline to separate from white background.
+Tiny planets, stars, and a little rocket icon floating gently all around the body.
+Floating just slightly off the ground, feet dangling — zero gravity vibes.
+Expression: "WE ARE GOING TO SPAAAACE!!!" — pure wonder, pure dreams, pure excitement.
 ```
 
 ---
@@ -464,16 +490,17 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：レインボーグラデーション（赤・橙・黄・緑・青・紫）
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：虹の魔女の子供。ドレス・マント・とんがり帽子がぜんぶ虹色グラデーション（7色）。
-虹色の杖を持っていて、先端から小さい虹のアーチが飛び出している。
-体の周りに小さい虹色のキラキラと星が飛び散っている。「きれいでしょ！」といううっとり自慢顔。
-とにかく色が多くてにぎやかで楽しい、目を引くデザインにすること。
+Character: A wildly colorful young rainbow witch child. Dress, cape, AND pointed hat all display a full 7-color rainbow gradient: red → orange → yellow → green → blue → indigo → violet.
+Holding a rainbow staff that shoots a tiny perfect rainbow arc from its sparkling tip.
+Rainbow sparkles, glitter, and stars EXPLODING in all directions around the body.
+Expression: proud, self-satisfied "Isn't this BEAUTIFUL?! Look at me!!" dazzling show-off smile.
+Maximally loud, maximally colorful, maximally eye-catching. A visual fireworks display. The most colorful thing in any room.
 ```
 
 ---
@@ -482,16 +509,18 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：ゴールド × マルチカラー宝石（パープル・ルビー・サファイア）
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：宝石と金でできた永遠の王様（ちびキャラ）。全身が金色でできた豪華な王族の衣装。
-服の至るところに紫・赤・青・緑の宝石がちりばめられてキラッキラ。
-頭に超でかい王冠（これでもかというくらいゴージャス）。体から眩しいほどのゴールドオーラが放出。
-「ふっ、これが余の力よ」という超ドヤの威厳ある王者の表情。圧倒的豪華さを表現すること。
+Character: An overwhelmingly majestic chibi young eternal king. Full royal outfit made entirely of shimmering gold — top to bottom, pure gold.
+Jewels encrusting every inch of the outfit: purple amethyst, ruby red, sapphire blue, emerald green — all blazing with light.
+Comically enormous crown on head — absurdly huge, impossibly gorgeous, dripping with more jewels.
+Blinding gold aura radiating from the body like a second sun.
+Expression: supreme, unassailable "Hmph. THIS... is my power." legendary swagger face — one eyebrow raised, completely unbothered.
+Over-the-top luxury. This character IS wealth.
 ```
 
 ---
@@ -500,16 +529,18 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：ブラック × ダークパープル × レッド（目・オーラ）
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：2頭身ちびの魔王さま。黒マントに大きな悪魔の角（立派）、背中に小さい悪魔の翼。
-目が赤く光っている。体から濃い紫の闇のオーラがもわもわ出ている。
-「ふははは！」という感じだけど、顔はちびキャラなのでどこかかわいい（強さとかわいさの両立）。
-怖すぎず、「このキャラ使いたい！」と子供が思えるかっこかわいいデザインにすること。
+Character: A chibi young demon king radiating dark power. Sweeping black cloak, impressive pointed demon horns (properly big and menacing), small but dramatic demon wings on the back.
+Eyes glowing a vivid, brilliant crimson red — the most striking feature.
+Dense swirling dark purple shadow aura churning and flowing from the body like living darkness.
+Expression: "MWAHAHAHA!!" — but because it's a 2-head chibi with a huge round head, somehow simultaneously adorable.
+This is the perfect balance: dangerously cool on the outside, secretly cute on the inside.
+Kids must look at this and immediately think "I NEED this skin."
 ```
 
 ---
@@ -518,17 +549,18 @@ weapon too detailed, blurry, low quality, watermark, text
 テーマ色：ディープネイビー × ゴールド × ホワイト（光）
 
 ```
-2頭身のちびキャラクター、子供向けモバイルゲーム「グリモアガーディアンズ」のキャラクタースキン。
-太い黒アウトライン、フラットカラー＋1段階セルシェーディング、鮮やかで明るい配色。
-正面向き全身立ちポーズ、完全透過背景（背景なし・影なし）。
-縦長構図2:3、生成サイズ480×720px。
-妖怪ウォッチ・ポケモン風の日本の子供向けゲームアート。
+2-head chibi character, skin for kids mobile game "Grimoire Guardians".
+Thick black outline, flat color + single-layer cel shading, vivid and bright color palette.
+Front-facing full-body standing pose, pure white background (#FFFFFF), no shadows.
+Vertical 2:3 composition, generate at 480×720px.
+Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-キャラクター：グリモアガーディアンの真の姿（ゲームのシンボルスキン）。
-深い紺の外套に金色の魔法陣の紋様が輝いている。体の周りに金色に輝く魔法書のページがドバッと舞い上がっている。
-体全体から白い眩しい光があふれ出ていてオーラ最大。
-「すべてを守ってみせる！」という誇らかで力強い、このゲーム最高の笑顔。
-ゲームのタイトルキャラとして最も象徴的でかっこいい最強スキンとしてデザインすること。
+Character: The true form of the Grimoire Guardian — the ultimate symbol of this entire game.
+Deep navy outer robe blazing with glowing golden magic circle inscriptions and ancient rune patterns across every surface.
+Glowing pages from an ancient grimoire BURST outward from the body in all directions like wings made of light and knowledge.
+The entire body radiates blinding white radiant aura — at maximum, overflowing power.
+Expression: proud, brilliant, unbreakable "I will protect EVERYTHING!!" smile — the most beautiful, most powerful smile in the entire game.
+This is the FINAL skin. It must be the most iconic, most awe-inspiring, most legendary design possible. Make it perfect. Make it unforgettable.
 ```
 
 ---
@@ -559,7 +591,7 @@ weapon too detailed, blurry, low quality, watermark, text
 | チェック項目 | OK の基準 |
 |-------------|-----------|
 | 頭身 | 2〜2.5頭身（頭がとにかく大きい） |
-| 背景 | 完全透過（白ピクセル残り NG） |
+| 背景 | 白単色（生成時） → 背景除去後に透過PNGにする |
 | 40px表示 | 40pxに縮小してもキャラが認識できる |
 | アウトライン | 太くてはっきりしている |
 | テーマカラー | そのスキンの色が一目でわかる |
@@ -571,7 +603,8 @@ weapon too detailed, blurry, low quality, watermark, text
 
 ## ⚠️ 注意点
 
-- Gemini で生成後、背景が白い場合は **remove.bg** で透過処理すること
+- Gemini で生成後、**rembg**（ローカル・無制限・無料）または **remove.bg**（月50枚まで）で透過処理すること
+- `ninja_dark` など黒系は背景除去後に輪郭を目視確認すること
 - 画像は **480×720px で生成 → 240×360px に縮小**（画質劣化防止）
 - 1枚ごとに `CharacterAvatar.lg`（120px）で実機確認してから次へ
 - 全25枚完成後：**sw.js の `ASSETS[]` に全パスを追加 → `SW_VERSION` を上げる**
