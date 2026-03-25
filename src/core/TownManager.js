@@ -15,6 +15,7 @@ import { GameStore } from './GameStore.js';
 import { Config } from './Config.js';
 import Logger from './Logger.js';
 import { SaveManager } from './SaveManager.js';
+import { getQuestById, getDailyPool } from '../data/questData.js';
 
 // ─── 定数 ─────────────────────────────────────────────
 const MATERIAL_EMOJI = {
@@ -22,6 +23,11 @@ const MATERIAL_EMOJI = {
   star_fragment: '✨', cloth: '🧶', paint: '🎨',
   crown: '👑', cape: '🧣', magic_orb: '🔮',
 };
+
+/** 時計系ワールド ID 集合（__clock__ 進捗カウント対象） */
+const CLOCK_WORLD_IDS = new Set([
+  'world_8a', 'world_8b', 'world_8c', 'world_15a', 'world_15b',
+]);
 
 class TownManagerClass {
 
@@ -69,13 +75,13 @@ class TownManagerClass {
    * @returns {string[]} 新たに解放された施設IDの配列
    */
   checkAndUnlockBuildings() {
-    const clearedCount = this._getClearedWorldCount();
+    const clearedCount  = this._getClearedWorldCount();
     const newlyUnlocked = [];
 
-    // craftsman/library は最初から解放、house_build/house は GameStore 管理外
-    const SKIP_IDS = new Set(['craftsman', 'library', 'house_build', 'house']);
     for (const cfg of Config.TOWN.BUILDINGS) {
-      if (SKIP_IDS.has(cfg.id)) continue;
+      // unlockWorlds=0 は初期から解放済み、null はクエストゲート → どちらもスキップ
+      if (!cfg.unlockWorlds) continue;
+
       const currentLevel = GameStore.getState(`town.buildings.${cfg.id}.level`) || 0;
       if (currentLevel === 0 && clearedCount >= cfg.unlockWorlds) {
         GameStore.setState(`town.buildings.${cfg.id}.level`, 1);
@@ -295,16 +301,90 @@ class TownManagerClass {
   }
 
   /**
-   * クイズ完了時に呼ぶ（農場カウンタを更新）
+   * クイズ完了時に呼ぶ（施設解放・農場・クエスト進捗を更新）
+   * @param {string} [worldId] - 完了したワールドID
    */
-  onQuizCompleted() {
-    // 施設解放チェックは farm の状態に関わらず常に実行
+  onQuizCompleted(worldId) {
+    // ① 施設解放チェック（ワールド数ベース）
     this.checkAndUnlockBuildings();
 
+    // ② 農場カウンタ更新
     const farmLevel = GameStore.getState('town.buildings.farm.level') || 0;
-    if (farmLevel === 0) return;
-    const current = GameStore.getState('town.farm.quizTotal') || 0;
-    GameStore.setState('town.farm.quizTotal', current + 1);
+    if (farmLevel > 0) {
+      const current = GameStore.getState('town.farm.quizTotal') || 0;
+      GameStore.setState('town.farm.quizTotal', current + 1);
+    }
+
+    // ③ ギルドクエスト進捗更新
+    if (worldId) {
+      this._updateQuestProgress(worldId);
+    }
+  }
+
+  /**
+   * アクティブクエストの進捗を worldId に基づいて更新する
+   * @param {string} worldId - 完了したワールドID
+   * @private
+   */
+  _updateQuestProgress(worldId) {
+    const activeQuests = GameStore.getState('guild.activeQuests');
+    if (!activeQuests || activeQuests.length === 0) return;
+
+    const isClock = CLOCK_WORLD_IDS.has(worldId);
+    let changed = false;
+
+    const updated = activeQuests.map(entry => {
+      const def = this._findQuestDef(entry.questId);
+      if (!def) return entry;
+
+      const newProgress  = { ...entry.progress };
+      let   entryChanged = false;
+
+      for (const req of def.requirements) {
+        if (req.worldId === '__any__') {
+          // どのワールドでもカウント
+          newProgress['__any__'] = (newProgress['__any__'] || 0) + 1;
+          entryChanged = true;
+
+        } else if (req.worldId === '__clock__' && isClock) {
+          // 時計系ワールドのみカウント
+          newProgress['__clock__'] = (newProgress['__clock__'] || 0) + 1;
+          entryChanged = true;
+
+        } else if (req.type === 'multi_clear' && req.worldId === worldId) {
+          // 特定ワールドの複数クリア
+          newProgress[worldId] = (newProgress[worldId] || 0) + 1;
+          entryChanged = true;
+        }
+      }
+
+      if (entryChanged) {
+        changed = true;
+        return { ...entry, progress: newProgress };
+      }
+      return entry;
+    });
+
+    if (changed) {
+      GameStore.setState('guild.activeQuests', updated);
+      Logger.info(`[TownManager] クエスト進捗更新: ${worldId}`);
+    }
+  }
+
+  /** ALL_QUESTS と DAILY_POOL の両方からクエスト定義を検索 */
+  _findQuestDef(questId) {
+    return getQuestById(questId) || getDailyPool().find(q => q.id === questId);
+  }
+
+  /** ギルド通知バッジが必要かどうか */
+  _hasGuildNotification() {
+    // 受注中クエストがあれば通知
+    const active = GameStore.getState('guild.activeQuests') || [];
+    if (active.length > 0) return true;
+    // 未完了デイリーがあれば通知
+    const daily = GameStore.getState('guild.daily');
+    if (daily?.missions?.some(m => !m.done)) return true;
+    return false;
   }
 
   // ─────────────────────────────────────────
@@ -333,10 +413,11 @@ class TownManagerClass {
     result.shop = !!this.getDailyFreeItem();
     // 農場: 収穫可能プロット
     result.farm = this.getFarmPlots().some(p => p.state === 'ready');
-    // 合成屋・書庫・ギルド: 常にfalse（今後拡張）
+    // 合成屋・書庫: 常にfalse（今後拡張）
     result.craftsman = false;
     result.library   = false;
-    result.guild     = false;
+    // ギルド: 受注中クエストがある、またはデイリーが未完了なら通知
+    result.guild     = this._hasGuildNotification();
     return result;
   }
 
@@ -346,8 +427,10 @@ class TownManagerClass {
 
   _getBuildingState(cfg, clearedCount) {
     const level = GameStore.getState(`town.buildings.${cfg.id}.level`) || 0;
-    const isUnlocked = level > 0;
-    const isLockedByWorlds = !isUnlocked && clearedCount < cfg.unlockWorlds;
+    const isUnlocked      = level > 0;
+    // unlockWorlds=null はクエストゲート、unlockWorlds=0 は常時解放
+    const isLockedByWorlds = !isUnlocked && cfg.unlockWorlds != null && clearedCount < cfg.unlockWorlds;
+    const isLockedByQuest  = !isUnlocked && cfg.unlockWorlds == null && !!cfg.unlockQuest;
     const maxLevel = Config.TOWN.MAX_BUILDING_LEVEL;
     const maxAllowed = cfg.isUpgradeHub ? maxLevel : this.getMaxAllowedLevel();
 
@@ -357,7 +440,7 @@ class TownManagerClass {
 
     const canUpgrade = isUnlocked && level < maxLevel && level < maxAllowed && !!cost;
     const nextPerk = (Config.TOWN.LEVEL_PERKS[cfg.id] || {})[level + 1] || null;
-    const worldsLeft = Math.max(0, cfg.unlockWorlds - clearedCount);
+    const worldsLeft = cfg.unlockWorlds != null ? Math.max(0, cfg.unlockWorlds - clearedCount) : 0;
     const buildingImagePath = `assets/town/buildings/${cfg.id}_lv${Math.max(1, level)}.png`;
 
     return {
@@ -365,6 +448,7 @@ class TownManagerClass {
       level,
       isUnlocked,
       isLockedByWorlds,
+      isLockedByQuest,
       worldsLeft,
       canUpgrade,
       canAfford,

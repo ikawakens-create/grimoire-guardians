@@ -473,7 +473,7 @@ class ResultScreen {
         }
       }
     }
-    TownManager.onQuizCompleted();
+    TownManager.onQuizCompleted(this._result?.worldId);
     SkinManager.checkMilestoneUnlocks();
 
     // 非同期でセーブ（エラーは握りつぶさない）
