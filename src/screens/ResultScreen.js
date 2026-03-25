@@ -510,9 +510,10 @@ class ResultScreen {
    * @param {boolean} cleared
    */
   async _playAnimations(stars, cleared) {
-    // クリア時は WORLD_CLEAR SE を最初に鳴らす
+    // クリア時は WORLD_CLEAR SE を鳴らし、グリモア輝き演出を先行させる
     if (cleared) {
       SoundManager.playSFX(SoundType.WORLD_CLEAR);
+      await this._animateClearOpening(this._result.worldId);
     }
 
     // ① 星を順番にポップさせる
@@ -551,6 +552,75 @@ class ResultScreen {
     if (cleared) {
       this._checkPhaseComplete();
     }
+  }
+
+  /**
+   * クリア開幕演出：グリモアが輝き、封印ゲージ+1 とフクロウコメントを表示する
+   * Grade 1 のみ封印ゲージを表示。フクロウコメントがない場合はスキップ。
+   * @param {string} worldId
+   * @returns {Promise<void>}
+   * @private
+   */
+  _animateClearOpening(worldId) {
+    return new Promise((resolve) => {
+      if (!this._el) { resolve(); return; }
+
+      const worldDef    = getWorldById(worldId);
+      const isGrade1    = !worldDef?.grade || worldDef.grade === 1;
+      const sealStrength = isGrade1 ? (GameStore.getState('app.sealStrength') || 0) : 0;
+      const comment     = FUKUROU_CLEAR_COMMENTS[worldId] || null;
+
+      // コメントも封印表示もない Grade 2 ワールド等はスキップ
+      if (!isGrade1 && !comment) { resolve(); return; }
+
+      const overlay = document.createElement('div');
+      overlay.className = 'clear-opening-overlay';
+
+      // グリモアアイコン（輝きアニメ付き）
+      const grimoireEl = document.createElement('div');
+      grimoireEl.className = 'clear-opening-grimoire';
+      grimoireEl.textContent = '📖';
+      overlay.appendChild(grimoireEl);
+
+      // Grade 1：封印回復カウンター
+      if (isGrade1) {
+        const sealEl = document.createElement('div');
+        sealEl.className = 'clear-opening-seal';
+        sealEl.textContent = `ふういん かいふく！  ${sealStrength} / 33`;
+        overlay.appendChild(sealEl);
+      }
+
+      // フクロウ先生コメント（データがある場合のみ）
+      if (comment) {
+        const fukurouWrap = document.createElement('div');
+        fukurouWrap.className = 'clear-opening-fukurou';
+
+        const npcEl = document.createElement('span');
+        npcEl.className = 'clear-opening-npc';
+        npcEl.textContent = '🦉';
+
+        const textEl = document.createElement('div');
+        textEl.className = 'clear-opening-comment';
+        textEl.textContent = comment;  // textContent で XSS 対策
+
+        fukurouWrap.appendChild(npcEl);
+        fukurouWrap.appendChild(textEl);
+        overlay.appendChild(fukurouWrap);
+      }
+
+      this._el.appendChild(overlay);
+      HapticFeedback.success();
+
+      // 1.8秒表示 → フェードアウト → resolve
+      setTimeout(() => {
+        if (!this._el) { resolve(); return; }
+        overlay.classList.add('clear-opening-exit');
+        setTimeout(() => {
+          overlay.remove();
+          resolve();
+        }, 400);
+      }, 1800);
+    });
   }
 
   /**
