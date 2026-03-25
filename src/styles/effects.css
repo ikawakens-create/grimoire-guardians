@@ -751,6 +751,55 @@
 }
 
 /* ══════════════════════════════════════════════════════
+   キャラクターの「心の声」吹き出し
+   ══════════════════════════════════════════════════════ */
+
+.player-voice-bubble {
+  position: absolute;
+  bottom: calc(100% + 8px);   /* アバタースロットの上に重ねる */
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.97);
+  color: #2a2040;
+  font-size: 0.82rem;
+  font-weight: bold;
+  line-height: 1.4;
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: 2px solid #c4a8f0;
+  box-shadow: 0 4px 12px rgba(100, 60, 180, 0.25);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 50;
+  animation: voice-bubble-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* 吹き出しの尾 */
+.player-voice-bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #c4a8f0;
+}
+
+.player-voice-bubble--out {
+  animation: voice-bubble-out 0.4s ease-in forwards;
+}
+
+@keyframes voice-bubble-in {
+  0%   { opacity: 0; transform: translateX(-50%) translateY(8px) scale(0.88); }
+  100% { opacity: 1; transform: translateX(-50%) translateY(0)   scale(1); }
+}
+
+@keyframes voice-bubble-out {
+  0%   { opacity: 1; transform: translateX(-50%) translateY(0)   scale(1); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-6px) scale(0.92); }
+}
+
+/* ══════════════════════════════════════════════════════
    きおくのいせき アニメーション
    ══════════════════════════════════════════════════════ */
 
