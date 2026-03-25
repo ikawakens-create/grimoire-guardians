@@ -21,7 +21,7 @@ import { SoundManager, SoundType } from '../core/SoundManager.js';
 import HapticFeedback from '../utils/HapticFeedback.js';
 import { CharacterAvatar } from '../components/CharacterAvatar.js';
 import WORLDS, { getWorldById } from '../data/worlds.js';
-import { FUKUROU_CLEAR_COMMENTS, ACT_CUTINS, NPC_FIRST_MEET, STORY_IMAGES } from '../data/storyData.js';
+import { FUKUROU_CLEAR_COMMENTS, ACT_CUTINS, NPC_FIRST_MEET, STORY_IMAGES, PLAYER_VOICE } from '../data/storyData.js';
 import { getMonsterByWorldId } from '../data/memory-monsters.js';
 import { HouseManager } from '../core/HouseManager.js';
 import { TownManager } from '../core/TownManager.js';
@@ -167,6 +167,11 @@ class ResultScreen {
       avatarSlot.appendChild(this._avatar.render());
     }
 
+    // 初クリア判定（_persistResult が cleared フラグを書き込む前に確認）
+    const _worldIdForCheck = this._result.worldId;
+    this._isFirstClear = cleared &&
+      !GameStore.getState(`progress.worlds.${_worldIdForCheck}.cleared`);
+
     // 進捗・インベントリを更新してセーブ
     this._persistResult(cleared);
 
@@ -183,6 +188,10 @@ class ResultScreen {
    * 画面を破棄する
    */
   destroy() {
+    if (this._voiceTimer) {
+      clearTimeout(this._voiceTimer);
+      this._voiceTimer = null;
+    }
     if (this._el) {
       this._el.remove();
       this._el = null;
@@ -510,13 +519,17 @@ class ResultScreen {
    * @param {boolean} cleared
    */
   async _playAnimations(stars, cleared) {
-    // クリア時は WORLD_CLEAR SE を最初に鳴らす
+    // クリア時は WORLD_CLEAR SE を鳴らし、グリモア輝き演出を先行させる
     if (cleared) {
       SoundManager.playSFX(SoundType.WORLD_CLEAR);
+      await this._animateClearOpening(this._result.worldId);
     }
 
     // ① 星を順番にポップさせる
     await this._animateStars(stars);
+
+    // ①' キャラクターの「心の声」（ノンブロッキング — 他の演出と並走）
+    this._animatePlayerVoice(stars, cleared);
 
     // ② クリア時はドロップアイテムを順番に表示
     if (cleared && this._drops.length > 0) {
@@ -551,6 +564,122 @@ class ResultScreen {
     if (cleared) {
       this._checkPhaseComplete();
     }
+  }
+
+  /**
+   * キャラクターの「心の声」吹き出しを表示する（ノンブロッキング）
+   * 初クリア → firstClear、3★ → perfect、2★ → great、1★ → cleared、失敗 → failed
+   * @param {number}  stars
+   * @param {boolean} cleared
+   * @private
+   */
+  _animatePlayerVoice(stars, cleared) {
+    if (!this._el) return;
+
+    // カテゴリ選択
+    let category;
+    if (!cleared) {
+      category = 'failed';
+    } else if (this._isFirstClear) {
+      category = 'firstClear';
+    } else if (stars === 3) {
+      category = 'perfect';
+    } else if (stars === 2) {
+      category = 'great';
+    } else {
+      category = 'cleared';
+    }
+
+    const lines = PLAYER_VOICE[category];
+    if (!lines || lines.length === 0) return;
+    const line = lines[Math.floor(Math.random() * lines.length)];
+
+    // アバター領域の直後に吹き出しを差し込む
+    const avatarSlot = this._el.querySelector('.result-avatar-slot');
+    if (!avatarSlot) return;
+
+    const bubble = document.createElement('div');
+    bubble.className = 'player-voice-bubble';
+    bubble.textContent = line;   // XSS 対策: textContent 使用
+    avatarSlot.appendChild(bubble);
+
+    // 2.8s 後にフェードアウト → 削除
+    this._voiceTimer = setTimeout(() => {
+      if (!bubble.parentNode) return;
+      bubble.classList.add('player-voice-bubble--out');
+      setTimeout(() => {
+        if (bubble.parentNode) bubble.parentNode.removeChild(bubble);
+      }, 400);
+    }, 2800);
+  }
+
+  /**
+   * クリア開幕演出：グリモアが輝き、封印ゲージ+1 とフクロウコメントを表示する
+   * Grade 1 のみ封印ゲージを表示。フクロウコメントがない場合はスキップ。
+   * @param {string} worldId
+   * @returns {Promise<void>}
+   * @private
+   */
+  _animateClearOpening(worldId) {
+    return new Promise((resolve) => {
+      if (!this._el) { resolve(); return; }
+
+      const worldDef    = getWorldById(worldId);
+      const isGrade1    = !worldDef?.grade || worldDef.grade === 1;
+      const sealStrength = isGrade1 ? (GameStore.getState('app.sealStrength') || 0) : 0;
+      const comment     = FUKUROU_CLEAR_COMMENTS[worldId] || null;
+
+      // コメントも封印表示もない Grade 2 ワールド等はスキップ
+      if (!isGrade1 && !comment) { resolve(); return; }
+
+      const overlay = document.createElement('div');
+      overlay.className = 'clear-opening-overlay';
+
+      // グリモアアイコン（輝きアニメ付き）
+      const grimoireEl = document.createElement('div');
+      grimoireEl.className = 'clear-opening-grimoire';
+      grimoireEl.textContent = '📖';
+      overlay.appendChild(grimoireEl);
+
+      // Grade 1：封印回復カウンター
+      if (isGrade1) {
+        const sealEl = document.createElement('div');
+        sealEl.className = 'clear-opening-seal';
+        sealEl.textContent = `ふういん かいふく！  ${sealStrength} / 33`;
+        overlay.appendChild(sealEl);
+      }
+
+      // フクロウ先生コメント（データがある場合のみ）
+      if (comment) {
+        const fukurouWrap = document.createElement('div');
+        fukurouWrap.className = 'clear-opening-fukurou';
+
+        const npcEl = document.createElement('span');
+        npcEl.className = 'clear-opening-npc';
+        npcEl.textContent = '🦉';
+
+        const textEl = document.createElement('div');
+        textEl.className = 'clear-opening-comment';
+        textEl.textContent = comment;  // textContent で XSS 対策
+
+        fukurouWrap.appendChild(npcEl);
+        fukurouWrap.appendChild(textEl);
+        overlay.appendChild(fukurouWrap);
+      }
+
+      this._el.appendChild(overlay);
+      HapticFeedback.success();
+
+      // 1.8秒表示 → フェードアウト → resolve
+      setTimeout(() => {
+        if (!this._el) { resolve(); return; }
+        overlay.classList.add('clear-opening-exit');
+        setTimeout(() => {
+          overlay.remove();
+          resolve();
+        }, 400);
+      }, 1800);
+    });
   }
 
   /**

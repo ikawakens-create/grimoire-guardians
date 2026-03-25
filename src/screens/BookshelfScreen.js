@@ -399,9 +399,19 @@ class BookshelfScreen {
     const currentGrade  = GameStore.getState('app.currentGrade') || 1;
     const gradeWorlds   = this._gradeWorlds();
 
+    // ── 段階表示：クリア済み最大 order + PROGRESSIVE_REVEAL_AHEAD 先まで表示 ──
+    const ahead = Config.GAME.PROGRESSIVE_REVEAL_AHEAD;
+    const highestClearedOrder = gradeWorlds.reduce(
+      (max, w) => (worldProgress[w.id]?.cleared ? Math.max(max, w.order) : max), 0
+    );
+    const maxVisibleOrder = highestClearedOrder + ahead;
+    const visibleWorlds   = gradeWorlds.filter(w => w.order <= maxVisibleOrder);
+    const hiddenCount     = gradeWorlds.length - visibleWorlds.length;
+    // ────────────────────────────────────────────────────────────────────────
+
     // 「つぎはここ！」バッジを付けるワールドを特定する
     let nextWorldId = null;
-    for (const worldDef of gradeWorlds) {
+    for (const worldDef of visibleWorlds) {
       const locked = !worldDef.freeToPlay && !licensed;
       if (locked) continue;
       const prog = worldProgress[worldDef.id];
@@ -414,7 +424,7 @@ class BookshelfScreen {
     // Grade 2 はゾーンヘッダーを挿入する
     let lastZone = null;
 
-    gradeWorlds.forEach(worldDef => {
+    visibleWorlds.forEach(worldDef => {
       // Grade 2 ゾーンヘッダー
       if (currentGrade === 2 && worldDef.zone && worldDef.zone !== lastZone) {
         lastZone = worldDef.zone;
@@ -457,6 +467,20 @@ class BookshelfScreen {
       card.render();
       this.cards.push(card);
     });
+
+    // ??? カード：まだ封印されているグリモアの存在を示す（cards には追加しない）
+    if (hiddenCount > 0) {
+      const mysteryCard = document.createElement('div');
+      mysteryCard.className = 'bookshelf-mystery-card';
+      mysteryCard.setAttribute('aria-hidden', 'true');
+      mysteryCard.innerHTML = `
+        <div class="mystery-icon">🌫️</div>
+        <div class="mystery-title">??? グリモア</div>
+        <div class="mystery-desc">まだ ふういんされた まま……</div>
+        <div class="mystery-count">あと ${hiddenCount} さつ</div>
+      `;
+      grid.appendChild(mysteryCard);
+    }
 
     // 最終決戦ドア（Grade 1 のみ: world_16b クリア後に出現）
     if (currentGrade === 1) {

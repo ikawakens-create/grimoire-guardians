@@ -278,11 +278,13 @@ export class GameStore {
     town: {
       // 施設レベル（0=ロック中 / 1以上=解放済み）
       buildings: {
-        craftsman: { level: 1 },
-        library:   { level: 1 },
-        shop:      { level: 0 },
-        guild:     { level: 0 },
-        farm:      { level: 0 },
+        craftsman:   { level: 1 },
+        library:     { level: 1 },
+        guild:       { level: 1 },  // 最初から解放
+        house:       { level: 1 },
+        house_build: { level: 0 },  // Q1-3 クエストで解放
+        shop:        { level: 0 },  // Q1-2 クエストで解放
+        farm:        { level: 0 },
       },
       // 商店状態
       shop: {
@@ -294,7 +296,22 @@ export class GameStore {
         plots: [],
         quizTotal: 0,  // 累計クイズ完了数（収穫判定用）
       },
-    }
+    },
+
+    // ギルドシステム（Phase E）
+    guild: {
+      // 受注中クエスト: [{ questId, acceptedAt, progress: { worldId: count } }]
+      activeQuests: [],
+      // 完了済みクエスト ID の配列
+      completedQuests: [],
+      // クエストアイテム所持: { quest_item_id: count }
+      questItems: {},
+      // デイリーミッション状態
+      daily: {
+        date: null,               // 最後に生成した日付 'YYYY-MM-DD'
+        missions: [],             // [{ questId, done }]
+      },
+    },
   };
 
   // 状態変更の監視者
@@ -583,15 +600,23 @@ export class GameStore {
       },
       town: {
         buildings: {
-          craftsman: { level: 1 },
-          library:   { level: 1 },
-          shop:      { level: 0 },
-          guild:     { level: 0 },
-          farm:      { level: 0 },
+          craftsman:   { level: 1 },
+          library:     { level: 1 },
+          guild:       { level: 1 },
+          house:       { level: 1 },
+          house_build: { level: 0 },
+          shop:        { level: 0 },
+          farm:        { level: 0 },
         },
         shop: { dailyFreeClaimedDate: null },
         farm: { plots: [], quizTotal: 0 },
-      }
+      },
+      guild: {
+        activeQuests:   [],
+        completedQuests: [],
+        questItems:     {},
+        daily: { date: null, missions: [] },
+      },
     };
 
     this.notifyObservers('*', this.state, null);

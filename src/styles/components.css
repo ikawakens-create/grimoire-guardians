@@ -4095,6 +4095,7 @@
 
 /* リザルト画面スロット */
 .result-avatar-slot {
+  position: relative;   /* 心の声バブルの absolute 配置の基点 */
   display: flex;
   justify-content: center;
   margin: 8px 0;

@@ -18,6 +18,7 @@
 
 import Logger from '../core/Logger.js';
 import { GameStore } from '../core/GameStore.js';
+import { Config } from '../core/Config.js';
 import { SoundManager, SoundType } from '../core/SoundManager.js';
 import ProgressBar from '../components/ProgressBar.js';
 import HapticFeedback from '../utils/HapticFeedback.js';
@@ -27,6 +28,7 @@ import EventManager from '../core/EventManager.js';
 import ClockFace from '../components/ClockFace.js';
 import ShapeFace from '../components/ShapeFace.js';
 import HitsuzanRenderer from '../components/HitsuzanRenderer.js';
+import { BOSS_TAUNT_LINES } from '../data/storyData.js';
 
 /** フィードバック待機時間（ms） */
 const FEEDBACK_DELAY = {
@@ -117,6 +119,11 @@ export class QuizScreen {
 
     /** @type {number|null} ひっ算で確定した十の位の値 */
     this._hitsuzanTensValue = null;
+
+    /** @type {number|null} ボス邪魔セリフの自動消去タイマー ID */
+    this._bossTauntTimer = null;
+    /** @type {boolean} セリフ表示中フラグ（二重表示防止） */
+    this._isBossTauntActive = false;
   }
 
   // ============================================================
@@ -184,15 +191,18 @@ export class QuizScreen {
       this._buffUnsubscribe = null;
     }
 
-    // タイマーを全て解除（フィードバック待機 / ローディング / マスコット / ストリーク）
+    // タイマーを全て解除（フィードバック待機 / ローディング / マスコット / ストリーク / ボス）
     if (this._feedbackTimer)    clearTimeout(this._feedbackTimer);
     if (this._loadingTimer)     clearTimeout(this._loadingTimer);
     if (this._mascotTimer)      clearTimeout(this._mascotTimer);
     if (this._streakBadgeTimer) clearTimeout(this._streakBadgeTimer);
+    if (this._bossTauntTimer)   clearTimeout(this._bossTauntTimer);
     this._feedbackTimer    = null;
     this._loadingTimer     = null;
     this._mascotTimer      = null;
     this._streakBadgeTimer = null;
+    this._bossTauntTimer   = null;
+    this._isBossTauntActive = false;
 
     if (this._el && this._el.parentNode) {
       this._el.parentNode.removeChild(this._el);
@@ -494,6 +504,14 @@ export class QuizScreen {
     // フィードバックオーバーレイを非表示
     this._el.querySelector('.quiz-feedback').classList.add('hidden');
     this._el.querySelector('.quiz-feedback').style.background = '';
+
+    // ボス邪魔セリフ（Act 3 以降・Grade 1 のみ・特定問題番号で非ブロッキング表示）
+    const TAUNT_INDICES = new Set([2, 6, 11]); // Q3・Q7・Q12（0始まり）
+    const storyAct = GameStore.getState('app.storyAct') || 1;
+    const isGrade1 = !this._worldData?.grade || this._worldData.grade === 1;
+    if (storyAct >= 3 && isGrade1 && TAUNT_INDICES.has(index) && !this._isBossTauntActive) {
+      this._showBossTaunt();
+    }
   }
 
   /**
@@ -928,6 +946,50 @@ export class QuizScreen {
         percentage
       });
     }
+  }
+
+  // ============================================================
+  // Private — ボス邪魔セリフ演出
+  // ============================================================
+
+  /**
+   * やみのまじんの邪魔セリフをクイズ画面上部に非ブロッキングで表示する。
+   * Act 3 以降・Grade 1 限定・Q3/Q7/Q12 のみ呼ばれる。
+   * @private
+   */
+  _showBossTaunt() {
+    if (!this._el || this._isBossTauntActive) return;
+
+    this._isBossTauntActive = true;
+
+    const line = BOSS_TAUNT_LINES[Math.floor(Math.random() * BOSS_TAUNT_LINES.length)];
+
+    const el = document.createElement('div');
+    el.className = 'boss-taunt';
+    el.setAttribute('aria-hidden', 'true');
+
+    const icon = document.createElement('span');
+    icon.className = 'boss-taunt-icon';
+    icon.textContent = '👁️';
+
+    const text = document.createElement('span');
+    text.className = 'boss-taunt-text';
+    text.textContent = line;  // textContent で XSS 対策
+
+    el.appendChild(icon);
+    el.appendChild(text);
+    this._el.appendChild(el);
+
+    // 2.5秒後にフェードアウト → 削除 → フラグ解除
+    this._bossTauntTimer = setTimeout(() => {
+      if (!this._el) { this._isBossTauntActive = false; return; }
+      el.classList.add('boss-taunt-exit');
+      setTimeout(() => {
+        el.remove();
+        this._isBossTauntActive = false;
+        this._bossTauntTimer = null;
+      }, 400);
+    }, 2500);
   }
 
   // ============================================================
