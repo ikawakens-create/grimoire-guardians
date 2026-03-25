@@ -341,14 +341,15 @@ export const Config = {
   // ─── 街のシステム（Phase 1-E） ───────────────────────────────────────
   TOWN: {
     // 施設定義レジストリ（拡張は配列末尾に追加するだけでOK）
+    // unlockWorlds: null かつ unlockQuest が設定されている施設はクエストで解放
     BUILDINGS: [
-      { id: 'craftsman',  name: '合成屋',    emoji: '🔨', screen: 'craftsman',  unlockWorlds: 0,  isUpgradeHub: true },
-      { id: 'library',    name: '魔導書庫',  emoji: '🏛️', screen: 'library',    unlockWorlds: 0  },
-      { id: 'house_build',name: 'いえをつくる', emoji: '🏠', screen: 'house_build', unlockWorlds: 0  },
-      { id: 'house',      name: 'マイハウス', emoji: '🏡', screen: 'house',      unlockWorlds: 0  },
-      { id: 'shop',       name: '商店',      emoji: '🛒', screen: 'shop',       unlockWorlds: 5  },
-      { id: 'guild',      name: 'ギルド',    emoji: '⚔️', screen: 'guild',      unlockWorlds: 10 },
-      { id: 'farm',       name: '魔法農場',  emoji: '🌱', screen: 'farm',       unlockWorlds: 8  },
+      { id: 'craftsman',   name: '合成屋',       emoji: '🔨', screen: 'craftsman',   unlockWorlds: 0,    isUpgradeHub: true },
+      { id: 'library',     name: '魔導書庫',     emoji: '🏛️', screen: 'library',     unlockWorlds: 0    },
+      { id: 'guild',       name: 'ギルド',       emoji: '⚔️', screen: 'guild',       unlockWorlds: 0    },  // 最初から解放
+      { id: 'house',       name: 'マイハウス',   emoji: '🏡', screen: 'house',       unlockWorlds: 0    },
+      { id: 'house_build', name: 'いえをつくる', emoji: '🏠', screen: 'house_build', unlockWorlds: null, unlockQuest: 'Q1-3' },  // 木の家の鍵クエスト
+      { id: 'shop',        name: '商店',         emoji: '🛒', screen: 'shop',        unlockWorlds: null, unlockQuest: 'Q1-2' },  // タヌキ商人クエスト
+      { id: 'farm',        name: '魔法農場',     emoji: '🌱', screen: 'farm',        unlockWorlds: 8    },
     ],
 
     MAX_BUILDING_LEVEL: 5,
@@ -433,6 +434,24 @@ export const Config = {
       { id: 'tanuki_merchant', name: 'タヌキ商人',   building: 'shop',      image: 'assets/npcs/tanuki_merchant.png', emoji: '🦝', color: '#b87333' },
       { id: 'guild_master',    name: 'ギルドマスター', building: 'guild',   image: 'assets/npcs/guild_master.png',    emoji: '⚔️', color: '#c0392b' },
     ],
+  },
+
+  // ─── ギルドシステム設定（Phase E） ───────────────────────────────────
+  GUILD: {
+    // デイリーミッション
+    DAILY_MISSION_COUNT: 3,   // 毎日表示するデイリー数
+    DAILY_RESET_HOUR:    4,   // リセット時刻（午前4時）
+
+    // クエスト管理
+    MAX_ACTIVE_QUESTS: 2,     // 同時受注できるクエスト上限
+
+    // クエストアイテム（施設解放キーなど）
+    QUEST_ITEMS: {
+      house_key:    { name: '木の家の鍵',     emoji: '🗝️',  unlocks: 'house_build' },
+      shop_noren:   { name: 'タヌキの暖簾',   emoji: '🏮',  unlocks: 'shop'        },
+      clock_gear:   { name: '封印の歯車',     emoji: '⚙️',  unlocks: null          },  // 合成屋レシピ素材
+      flame_emblem: { name: '炎の紋章',       emoji: '🔥',  unlocks: null          },  // レアスキン素材
+    },
   },
 
   // ─── Grade 2 深海グリモア設定（Phase 2） ──────────────────────────────
@@ -546,6 +565,8 @@ Object.freeze(Config.TOWN.UPGRADE_COSTS);
 Object.freeze(Config.TOWN.SHOP);
 Object.freeze(Config.TOWN.FARM);
 Object.freeze(Config.SKIN);
+Object.freeze(Config.GUILD);
+Object.freeze(Config.GUILD.QUEST_ITEMS);
 Object.freeze(Config.GRADE2);
 Object.freeze(Config.GRADE2.FLASH_MODE);
 Object.freeze(Config.GRADE2.LARGE_SHIP_CRAFT_COST);
