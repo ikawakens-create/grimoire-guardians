@@ -3900,14 +3900,74 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.07);
   border: 2px solid rgba(74,111,165,0.15);
 }
-.guild-quest-row.preview { border: 2px dashed rgba(74,111,165,0.25); }
-.quest-emoji { font-size: 1.8rem; }
-.quest-info  { flex: 1; }
-.quest-name  { font-size: 0.9rem; font-weight: 700; color: #222; }
-.quest-diff  { font-size: 0.72rem; color: #666; margin-top: 2px; }
-.quest-reward { text-align: right; }
-.reward-label { font-size: 0.65rem; color: #888; display: block; }
-.reward-value { font-size: 0.92rem; color: #d97706; font-weight: 800; }
+/* ── ギルド クエストボード v2 ── */
+.guild-board { display: flex; flex-direction: column; gap: 0; overflow-y: auto; }
+
+.guild-section { padding: 10px 14px 4px; }
+.guild-section-title {
+  font-size: 0.82rem; font-weight: 800;
+  color: #4a6fa5; margin-bottom: 8px;
+  border-bottom: 2px solid rgba(74,111,165,0.18);
+  padding-bottom: 4px;
+}
+
+/* クエストカード 共通 */
+.guild-quest-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  border: 2px solid rgba(74,111,165,0.15);
+}
+.guild-quest-card--daily    { border-color: rgba(99,179,237,0.5);  background: #f0f8ff; }
+.guild-quest-card--active   { border-color: rgba(237,137,54,0.5);  background: #fffaf0; }
+.guild-quest-card--available{ border-color: rgba(74,111,165,0.25); }
+.guild-quest-card--done     { opacity: 0.55; border-color: rgba(0,0,0,0.1); }
+
+.quest-card-title {
+  font-size: 0.9rem; font-weight: 800;
+  color: #1a2540; margin: 0 0 4px;
+}
+.quest-card-npc {
+  font-size: 0.72rem; color: #888;
+  margin: 0 0 6px;
+}
+
+/* 条件リスト */
+.quest-req-list {
+  list-style: none; padding: 0; margin: 0 0 6px;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.quest-req-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.78rem; color: #444;
+}
+.quest-req-check     { font-size: 0.85rem; flex-shrink: 0; }
+.quest-req-check--met{ color: #38a169; }
+
+.quest-card-reward {
+  font-size: 0.76rem; color: #d97706;
+  font-weight: 700; margin: 4px 0 6px;
+}
+.quest-card-action { display: flex; justify-content: flex-end; }
+
+/* ボタン */
+.guild-btn {
+  font-size: 0.8rem; font-weight: 800;
+  border: none; border-radius: 10px;
+  padding: 6px 14px; cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+.guild-btn:active { transform: scale(0.96); }
+.guild-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+.guild-btn--accept  { background: #4a6fa5; color: #fff; }
+.guild-btn--report  { background: #38a169; color: #fff; }
+
+/* 状態テキスト */
+.guild-done-badge  { font-size: 0.82rem; color: #38a169; font-weight: 800; }
+.guild-inprogress  { font-size: 0.78rem; color: #888; }
+.guild-empty-msg   { font-size: 0.82rem; color: #999; padding: 6px 2px; }
 
 /* ── 農場 ── */
 .farm-hint {
