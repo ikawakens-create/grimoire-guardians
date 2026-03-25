@@ -793,6 +793,20 @@ export const NG_PLUS = {
   introText:          'しんの グリモアが あらわれた……！\nより つよい ふういんが のこっておったのじゃ！',
 };
 
+// ─────────────────────────────────────────
+// ボスの邪魔セリフ（Act 3 クイズ中に非ブロッキング表示）
+// ─────────────────────────────────────────
+
+/** Act 3〜4 のクイズ中にランダムで表示するやみのまじんの短いセリフ */
+export const BOSS_TAUNT_LINES = [
+  'ふふ……まちがえろ……！',
+  'ちしきの ひかりが うっとうしいぞ……！',
+  'まだまだ ワシには かてぬ……！',
+  'つかれてきたか？ あきらめろ……！',
+  'ふははは……よわい よわい……！',
+  'きさまの ちしきなど たいしたことない……！',
+];
+
 export default {
   STORY_IMAGES,
   PROLOGUE_SLIDES,
@@ -803,6 +817,7 @@ export default {
   GRAND_FINALE,
   UNIT_INTROS,
   SEAL_GAUGE_TEXT,
+  BOSS_TAUNT_LINES,
   DAILY_MISSIONS,
   NG_PLUS,
 };
