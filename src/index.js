@@ -40,6 +40,7 @@ import { SkinManager } from './core/SkinManager.js';
 import MultiTableScreen from './screens/MultiTableScreen.js';
 import MemorizeScreen from './screens/MemorizeScreen.js';
 import SequentialPracticeScreen from './screens/SequentialPracticeScreen.js';
+import { ParentDashboardScreen } from './screens/ParentDashboardScreen.js';
 
 /**
  * アプリケーション初期化
@@ -132,6 +133,8 @@ let _guildScreen = null;
 let _farmScreen = null;
 /** インベントリモーダルインスタンス */
 let _inventoryScreen = null;
+/** 保護者ダッシュボードインスタンス */
+let _parentDashboardScreen = null;
 
 /**
  * ミュートボタンを初期化する（クリックハンドラ登録・初期状態反映）
@@ -197,6 +200,7 @@ function showGameScreen() {
       _guildScreen?.hide?.();
       _farmScreen?.hide?.();
       _shipBuildScreen?.hide?.();
+      _parentDashboardScreen?.hide?.();
       _inventoryScreen?.close?.();
       _inventoryScreen = null;
     };
@@ -241,6 +245,9 @@ function showGameScreen() {
     } else if (screen === 'final_battle') {
       hideAll();
       showFinalBattle(gameScreen);
+    } else if (screen === 'parent_dashboard') {
+      hideAll();
+      showParentDashboard(gameScreen);
     } else if (screen === 'bookshelf') {
       hideAll();
       // まち等のサブ画面から戻ってきた場合はブックシェルフを再描画
@@ -697,6 +704,16 @@ function showShipBuild(gameScreen) {
   if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
   if (!_shipBuildScreen) _shipBuildScreen = new ShipBuildScreen();
   _shipBuildScreen.show(gameScreen);
+}
+
+/**
+ * ParentDashboardScreen（保護者ダッシュボード）を描画する
+ * @param {HTMLElement} gameScreen
+ */
+function showParentDashboard(gameScreen) {
+  if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
+  if (!_parentDashboardScreen) _parentDashboardScreen = new ParentDashboardScreen();
+  _parentDashboardScreen.show(gameScreen);
 }
 
 /**

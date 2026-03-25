@@ -333,6 +333,17 @@ class BookshelfScreen {
     `;
     rightGroup.appendChild(statsBadge);
 
+    // 保護者ボタン（目立たないよう最後に配置）
+    const parentBtn = document.createElement('button');
+    parentBtn.type = 'button';
+    parentBtn.className = 'button button-small bookshelf-parent-btn';
+    parentBtn.textContent = '🔒';
+    parentBtn.title = '保護者ダッシュボード';
+    parentBtn.addEventListener('click', () => {
+      GameStore.setState('app.currentScreen', 'parent_dashboard');
+    });
+    rightGroup.appendChild(parentBtn);
+
     header.appendChild(title);
     header.appendChild(playerInfo);
     header.appendChild(avatar);
