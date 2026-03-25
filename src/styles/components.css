@@ -5315,3 +5315,170 @@
 .bookshelf-parent-btn:hover {
   opacity: 1;
 }
+
+/* ==========================================================================
+   NG+ ビジュアル演出 (Phase I)
+   ========================================================================== */
+
+/* ──── NG+ カットインオーバーレイ（ResultScreen） ──── */
+.ng-plus-cutin-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fade-in 0.4s ease both;
+}
+
+.ng-plus-cutin-overlay.ng-plus-cutin-exit {
+  animation: fade-out 0.5s ease both;
+}
+
+.ng-plus-cutin-content {
+  text-align: center;
+  padding: 32px 24px;
+  max-width: 380px;
+  width: 90%;
+}
+
+.ng-plus-cutin-icon {
+  font-size: 3.5rem;
+  animation: pulse 1.2s ease-in-out infinite;
+  margin-bottom: 12px;
+}
+
+.ng-plus-cutin-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  color: #f9e07b;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.ng-plus-cutin-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 20px;
+  line-height: 1.4;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+
+.ng-plus-cutin-npc {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 14px 16px;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.ng-plus-cutin-npc-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.ng-plus-cutin-npc-text {
+  color: #ffffff;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.ng-plus-cutin-tap {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.6);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+/* ──── NG+ セクション（BookshelfScreen） ──── */
+.ng-plus-section {
+  margin: 24px 0 16px;
+  padding: 0 8px;
+}
+
+.ng-plus-banner {
+  background: linear-gradient(135deg, #2d1b69 0%, #9b59b6 60%, #f39c12 100%);
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 20px rgba(155,89,182,0.4);
+}
+
+.ng-plus-banner-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.ng-plus-banner-title {
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: #ffffff;
+  letter-spacing: 0.06em;
+}
+
+.ng-plus-banner-sub {
+  width: 100%;
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.85);
+  margin: 0;
+}
+
+.ng-plus-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.ng-plus-card {
+  background: linear-gradient(135deg, rgba(45,27,105,0.8), rgba(155,89,182,0.5));
+  border: 1px solid rgba(155,89,182,0.5);
+  border-radius: 10px;
+  padding: 10px 6px 8px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.ng-plus-card-lock {
+  font-size: 1.2rem;
+  margin-bottom: 2px;
+  opacity: 0.7;
+}
+
+.ng-plus-card-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: #f39c12;
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: bold;
+  border-radius: 4px;
+  padding: 1px 4px;
+}
+
+.ng-plus-card-title {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.7);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.ng-plus-coming-soon {
+  text-align: center;
+  color: rgba(155,89,182,0.9);
+  font-size: 0.82rem;
+  margin: 4px 0 0;
+}

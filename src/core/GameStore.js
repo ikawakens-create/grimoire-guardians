@@ -46,6 +46,8 @@ export class GameStore {
       grade2_finale_unlockShown: false,
       /** 最終決戦をクリア済みか */
       finalBattleCleared: false,
+      /** NG+ モードが解放済みか（全33ワールドクリア + カットイン表示後にtrue） */
+      ngPlusUnlocked: false,
       /** 封印回復数（0〜33）。Grade 1 クリアワールド数と同期 */
       sealStrength: 0,
       /** 現在表示中のグレード 1 | 2 */
@@ -445,6 +447,7 @@ export class GameStore {
         zone5_startShown:          false,
         grade2_finale_unlockShown: false,
         finalBattleCleared: false,
+        ngPlusUnlocked: false,
         sealStrength: 0,
         currentGrade: 1,
         currentDimension: 'dim1',
