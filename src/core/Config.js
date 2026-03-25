@@ -40,7 +40,10 @@ export const Config = {
     TIME_LIMIT_PER_QUESTION: 30,  // 秒
 
     // distractorPool 方式で出題する不正解の数（正解1 + DISTRACTOR_COUNT = 選択肢総数）
-    DISTRACTOR_COUNT: 2
+    DISTRACTOR_COUNT: 2,
+
+    // 本棚の段階表示：クリア済み最大 order + この数だけ先まで見せる
+    PROGRESSIVE_REVEAL_AHEAD: 2
   },
   
   // イベント設定
