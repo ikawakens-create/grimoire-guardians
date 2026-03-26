@@ -21,7 +21,7 @@ import { SoundManager, SoundType } from '../core/SoundManager.js';
 import HapticFeedback from '../utils/HapticFeedback.js';
 import { CharacterAvatar } from '../components/CharacterAvatar.js';
 import WORLDS, { getWorldById } from '../data/worlds.js';
-import { FUKUROU_CLEAR_COMMENTS, ACT_CUTINS, NPC_FIRST_MEET, STORY_IMAGES, PLAYER_VOICE } from '../data/storyData.js';
+import { FUKUROU_CLEAR_COMMENTS, ACT_CUTINS, NPC_FIRST_MEET, STORY_IMAGES, PLAYER_VOICE, NG_PLUS_CUTIN } from '../data/storyData.js';
 import { getMonsterByWorldId } from '../data/memory-monsters.js';
 import { HouseManager } from '../core/HouseManager.js';
 import { TownManager } from '../core/TownManager.js';
@@ -473,7 +473,7 @@ class ResultScreen {
         }
       }
     }
-    TownManager.onQuizCompleted();
+    TownManager.onQuizCompleted(this._result?.worldId);
     SkinManager.checkMilestoneUnlocks();
 
     // 非同期でセーブ（エラーは握りつぶさない）
@@ -1010,24 +1010,110 @@ class ResultScreen {
 
     const overlay = document.createElement('div');
     overlay.className = 'phase-complete-overlay';
-    overlay.innerHTML = `
-      <div class="phase-complete-content">
-        <div class="phase-complete-icon">🏆</div>
-        <div class="phase-complete-title">おめでとう！</div>
-        <div class="phase-complete-sub">ぜんぶの ワールドを クリア！</div>
-        <div class="phase-complete-stars">⭐⭐⭐</div>
-      </div>
-    `;
 
-    // タップで閉じる
+    const content = document.createElement('div');
+    content.className = 'phase-complete-content';
+
+    const iconEl = document.createElement('div');
+    iconEl.className = 'phase-complete-icon';
+    iconEl.textContent = '🏆';
+
+    const titleEl = document.createElement('div');
+    titleEl.className = 'phase-complete-title';
+    titleEl.textContent = 'おめでとう！';
+
+    const subEl = document.createElement('div');
+    subEl.className = 'phase-complete-sub';
+    subEl.textContent = 'ぜんぶの ワールドを クリア！';
+
+    const starsEl = document.createElement('div');
+    starsEl.className = 'phase-complete-stars';
+    starsEl.textContent = '⭐⭐⭐';
+
+    content.appendChild(iconEl);
+    content.appendChild(titleEl);
+    content.appendChild(subEl);
+    content.appendChild(starsEl);
+    overlay.appendChild(content);
+
+    // タップで閉じる → その後 NG+ カットインへ
     overlay.addEventListener('click', () => {
       overlay.classList.add('phase-complete-exit');
-      setTimeout(() => overlay.remove(), 600);
+      setTimeout(() => {
+        overlay.remove();
+        this._showNgPlusCutin();
+      }, 600);
     });
 
     if (this._el) {
       this._el.appendChild(overlay);
     }
+  }
+
+  /**
+   * NG+ 解放カットインを1回だけ表示し、app.ngPlusUnlocked を true にする
+   * @private
+   */
+  _showNgPlusCutin() {
+    if (!this._el) return;
+    if (GameStore.getState('app.ngPlusUnlocked')) return;
+
+    GameStore.setState('app.ngPlusUnlocked', true);
+    SaveManager.save().catch(e => Logger.warn('[ResultScreen] NG+ save failed:', e));
+
+    Logger.info('[ResultScreen] 🌟 NG+ unlocked!');
+
+    const cutin = NG_PLUS_CUTIN;
+    const overlay = document.createElement('div');
+    overlay.className = 'ng-plus-cutin-overlay';
+    overlay.style.background = cutin.bgFallback;
+
+    const content = document.createElement('div');
+    content.className = 'ng-plus-cutin-content';
+
+    const iconEl = document.createElement('div');
+    iconEl.className = 'ng-plus-cutin-icon';
+    iconEl.textContent = cutin.icon;
+
+    const labelEl = document.createElement('div');
+    labelEl.className = 'ng-plus-cutin-label';
+    labelEl.textContent = cutin.actLabel;
+
+    const titleEl = document.createElement('div');
+    titleEl.className = 'ng-plus-cutin-title';
+    titleEl.textContent = cutin.title;
+
+    const npcWrap = document.createElement('div');
+    npcWrap.className = 'ng-plus-cutin-npc';
+
+    const npcIcon = document.createElement('span');
+    npcIcon.className = 'ng-plus-cutin-npc-icon';
+    npcIcon.textContent = '🦉';
+
+    const npcText = document.createElement('div');
+    npcText.className = 'ng-plus-cutin-npc-text';
+    npcText.textContent = cutin.npcText;
+
+    npcWrap.appendChild(npcIcon);
+    npcWrap.appendChild(npcText);
+
+    const tapHint = document.createElement('div');
+    tapHint.className = 'ng-plus-cutin-tap';
+    tapHint.textContent = 'タップして つづける';
+
+    content.appendChild(iconEl);
+    content.appendChild(labelEl);
+    content.appendChild(titleEl);
+    content.appendChild(npcWrap);
+    content.appendChild(tapHint);
+    overlay.appendChild(content);
+
+    overlay.addEventListener('click', () => {
+      overlay.classList.add('ng-plus-cutin-exit');
+      setTimeout(() => overlay.remove(), 500);
+    });
+
+    this._el.appendChild(overlay);
   }
 
   /**

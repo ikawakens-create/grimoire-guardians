@@ -18,7 +18,7 @@ import { SoundManager, SoundType } from '../core/SoundManager.js';
 import BookCard from '../components/BookCard.js';
 import { CharacterAvatar } from '../components/CharacterAvatar.js';
 import WORLDS from '../data/worlds.js';
-import { SEAL_GAUGE_TEXT, FINAL_BATTLE } from '../data/storyData.js';
+import { SEAL_GAUGE_TEXT, FINAL_BATTLE, NG_PLUS } from '../data/storyData.js';
 import InventoryScreen from './InventoryScreen.js';
 import MemoryIsleScreen from './MemoryIsleScreen.js';
 
@@ -95,6 +95,11 @@ class BookshelfScreen {
 
     // カードを生成
     this._buildCards(grid);
+
+    // NG+ セクション（Grade 1 かつ ngPlusUnlocked のときのみ）
+    if (currentGrade === 1 && GameStore.getState('app.ngPlusUnlocked')) {
+      screen.appendChild(this._buildNgPlusSection());
+    }
 
     // GameStore の変更を購読（ライセンス変更でロック状態を同期）
     this._unsubscribe = GameStore.subscribe((path) => {
@@ -333,12 +338,93 @@ class BookshelfScreen {
     `;
     rightGroup.appendChild(statsBadge);
 
+    // 保護者ボタン（目立たないよう最後に配置）
+    const parentBtn = document.createElement('button');
+    parentBtn.type = 'button';
+    parentBtn.className = 'button button-small bookshelf-parent-btn';
+    parentBtn.textContent = '🔒';
+    parentBtn.title = '保護者ダッシュボード';
+    parentBtn.addEventListener('click', () => {
+      GameStore.setState('app.currentScreen', 'parent_dashboard');
+    });
+    rightGroup.appendChild(parentBtn);
+
     header.appendChild(title);
     header.appendChild(playerInfo);
     header.appendChild(avatar);
     header.appendChild(rightGroup);
 
     return header;
+  }
+
+  /**
+   * NG+ セクションを生成する（全33ワールドクリア後のみ表示）
+   * NG+ ワールドデータは未実装のため、現在はロック状態のティーザー表示
+   * @returns {HTMLElement}
+   * @private
+   */
+  _buildNgPlusSection() {
+    const section = document.createElement('div');
+    section.className = 'ng-plus-section';
+
+    // バナー
+    const banner = document.createElement('div');
+    banner.className = 'ng-plus-banner';
+
+    const bannerIcon = document.createElement('span');
+    bannerIcon.className = 'ng-plus-banner-icon';
+    bannerIcon.textContent = '🌟';
+
+    const bannerTitle = document.createElement('span');
+    bannerTitle.className = 'ng-plus-banner-title';
+    bannerTitle.textContent = 'NG+ モード';
+
+    const bannerSub = document.createElement('p');
+    bannerSub.className = 'ng-plus-banner-sub';
+    bannerSub.textContent = NG_PLUS.introText.replace(/\n/g, ' ');
+
+    banner.appendChild(bannerIcon);
+    banner.appendChild(bannerTitle);
+    banner.appendChild(bannerSub);
+    section.appendChild(banner);
+
+    // ロックされたワールドカード群（G1 全33ワールドを NG+ カードとして表示）
+    const grid = document.createElement('div');
+    grid.className = 'ng-plus-grid';
+
+    const g1Worlds = WORLDS.filter(w => !w.grade || w.grade === 1);
+    g1Worlds.forEach(w => {
+      const card = document.createElement('div');
+      card.className = 'ng-plus-card';
+      card.setAttribute('aria-label', `${w.title || w.id} NG+（準備中）`);
+
+      const lockIcon = document.createElement('div');
+      lockIcon.className = 'ng-plus-card-lock';
+      lockIcon.textContent = '🔒';
+
+      const ngBadge = document.createElement('div');
+      ngBadge.className = 'ng-plus-card-badge';
+      ngBadge.textContent = 'NG+';
+
+      const titleEl = document.createElement('div');
+      titleEl.className = 'ng-plus-card-title';
+      titleEl.textContent = w.title || w.id;
+
+      card.appendChild(lockIcon);
+      card.appendChild(ngBadge);
+      card.appendChild(titleEl);
+      grid.appendChild(card);
+    });
+
+    section.appendChild(grid);
+
+    // 準備中の案内テキスト
+    const coming = document.createElement('p');
+    coming.className = 'ng-plus-coming-soon';
+    coming.textContent = '🚧 まもなく かいほう！ たのしみに まっていてね！';
+    section.appendChild(coming);
+
+    return section;
   }
 
   /**

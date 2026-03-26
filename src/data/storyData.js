@@ -793,6 +793,21 @@ export const NG_PLUS = {
   introText:          'しんの グリモアが あらわれた……！\nより つよい ふういんが のこっておったのじゃ！',
 };
 
+/**
+ * NG+ 解放カットイン定義（全33ワールドクリア後に1回のみ表示）
+ * ResultScreen._showNgPlusCutin() で使用
+ */
+export const NG_PLUS_CUTIN = {
+  bgFallback:       'linear-gradient(135deg, #2d1b69 0%, #9b59b6 60%, #f39c12 100%)',
+  icon:             '🌟',
+  actLabel:         'NG+ モード かいほう！',
+  title:            'しんの グリモアが あらわれた……！',
+  npc:              'fukurou',
+  npcText:          'おどろくな……！\nじつは もっと ふかい ふういんが のこっておった！\nNG+ で、より むずかしく ちょうせんせよ！',
+  characterEmotion: 'happy',
+  showCharacter:    true,
+};
+
 // ─────────────────────────────────────────
 // キャラクターの「心の声」（ResultScreen でアバター横に表示）
 // ─────────────────────────────────────────
@@ -862,4 +877,5 @@ export default {
   BOSS_TAUNT_LINES,
   DAILY_MISSIONS,
   NG_PLUS,
+  NG_PLUS_CUTIN,
 };
