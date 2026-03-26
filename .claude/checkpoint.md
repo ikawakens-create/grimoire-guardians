@@ -1,56 +1,53 @@
 # セッション引き継ぎ
 
-**保存日時**: 2026-03-23（morning session 続き）
+**保存日時**: 2026-03-26 13:35
 
 ## 今日やったこと
 
-- **引き算ひっ算の繰り下がり補助数字バグ修正**
-  `HitsuzanRenderer.js` の carry 行に `carryLabel = operator === '-' ? '－1' : '1'` を追加
+- **ボス画像 3枚** 取得・リネーム・透過処理完了
+  - `yami_normal.png` / `yami_damaged.png` / `yami_defeated.png`
+  - isnet-anime モデルで透過処理済み、`*_orig.png` バックアップあり
 
-- **モンスターバトルで「たたかう」を押すと固まるバグ修正**
-  `MonsterBattleEvent.js` の `pickQuestion()` に `q.type !== 'hitsuzan'` フィルタを追加
+- **ストーリー背景画像 10枚** 生成プロンプト作成・確認・リネーム完了
+  - `prologue/`: slide_01〜04, 06（5枚）
+  - `act_events/`: act2_town, act3_fog, act4_light（3枚）
+  - `finale/`: light_burst, certificate_bg（2枚）
 
-- **TreasureEvent / ThreePathsEvent の同じバグも修正**
-  両ファイルの `pickQuestion()` に hitsuzan 除外フィルタを追加（横展開）
-
-- **2年生さんすう全体バグ調査**
-  - hitsuzan correctAnswer・choice 計算ミスなし（スクリプト検証）
-  - worlds.js の stepConfig override 設定も正常確認
-  - `triggerAt: -1, type: 'phase_complete'` は仕様通り（EventManager で意図的スキップ）
-
-- **クイズ画面のボタン無反応バグ2件修正**
-  1. `checkAndTrigger()` を try-catch で囲む（イベントエラー時のフリーズ防止）
-  2. `_hideLoadingOverlay()` に `pointer-events: none` を追加（起動直後300ms間のタップブロック解消）
+- **全画像パス確認**: storyData.js の全パスが実ファイルと一致 ✅
+- **構文チェック**: 主要 JS ファイル全て波括弧バランス OK ✅
 
 ## 未コミットの変更
 
-なし（全て push 済み）
-ブランチ: `claude/morning-session-march-23-Li9Vd`
+なし（ワーキングツリーはクリーン）
 
 直近コミット:
 ```
-32d4f43 fix: クイズ画面のボタン無反応バグを2件修正
-0cf2753 fix: イベントのpickQuestion()でhitsuzan問題を除外
-c8dcd34 fix: 引き算ひっ算の繰り下がり補助数字を-1表示に修正 & モンスターバトルのhitsuzan除外
+b3405b3 add act_events and finale background images
+131302e add prologue slide backgrounds (5 images)
+9575b57 add boss images: rename and apply background removal
 ```
 
 ## 次にやること（優先順）
 
-1. **skin-images-plan.md のタスク**（`.claude/tasks/skin-images-plan.md` 参照）
-   - `assets/skins/` へのスキン PNG 配置
-2. 音声実装（Phase 1 Audio — SoundManager の Web Audio API 化）
-
-※ M2-10a〜j は全て完成済み（draft ラベルも解消済み）。m2-plan.md は完了タスク。
+1. **スキン画像生成・透過処理**（`.claude/tasks/skin-images-plan.md` 参照）
+   - 全25スキンのプロンプト作成 → Gemini生成 → 透過処理 → `assets/skins/` へ配置
+2. **docs/画像生成プロンプト集_v1.0.md にボス共通スタイルを追記**
+   - ボス STYLE ANCHOR がまだドキュメントに未保存
+3. **sw.js キャッシュ更新** — 新規追加した全画像ファイルを ASSETS[] に追加
+4. **PR 作成** — `claude/morning-session-3-25-0D19i` → main
+5. 音声実装（Phase 1 Audio — SoundManager の Web Audio API 化）
 
 ## 未解決のバグ・問題
 
-なし（今日の調査で判明したバグは全て修正済み）
+なし（バグチェック済み）
 
 ## 重要なメモ
 
-- ブランチ: `claude/morning-session-march-23-Li9Vd`
+- ブランチ: `claude/morning-session-3-25-0D19i`
+- Phase H（保護者ダッシュボード）/ Phase I（NG+カットイン）は前セッションで実装済み
+- `assets/story/boss/*_orig.png` はバックアップ用（必要なければ後で削除OK）
+- `scripts/remove_bg.py --only boss` または `--only npcs` で個別再実行可能
+- セットアップフック（`pip install rembg[cpu]`）は `.claude/hooks/session-start.sh` に設定済み
 - hitsuzan carry-row: gap は 0.1em（digit-row と同値にすること）
 - イベント（MonsterBattle / Treasure / ThreePaths）の `pickQuestion()` は
   `type: 'clock'` と `type: 'hitsuzan'` を除外する必要あり（モーダル内表示不可のため）
-- `EventManager.checkAndTrigger()` の呼び出し元には必ず try-catch が必要
-- QuizScreen のローディングオーバーレイは `pointer-events: none` を先に設定してからフェードアウト
