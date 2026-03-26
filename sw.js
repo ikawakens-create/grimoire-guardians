@@ -9,7 +9,7 @@
  * @date 2026-03-04
  */
 
-const SW_VERSION   = '2.3.0';
+const SW_VERSION   = '2.3.1';
 const CACHE_NAME   = `grimoire-${SW_VERSION}`;
 
 /** キャッシュ対象ファイル（静的アセット） */
@@ -193,6 +193,8 @@ const ASSETS = [
   './assets/houses/style_jewel/spritesheet.png',
   './assets/houses/style_star/spritesheet.png',
   // NPC画像
+  './assets/npcs/meister.png',
+  './assets/npcs/tailor.png',
   './assets/npcs/fukurou.png',
   './assets/npcs/tanuki.png',
   './assets/npcs/guildmaster.png',
@@ -207,10 +209,13 @@ const ASSETS = [
   './assets/story/prologue/slide_02.png',
   './assets/story/prologue/slide_03.png',
   './assets/story/prologue/slide_04.png',
+  './assets/story/prologue/slide_05.png',
   './assets/story/prologue/slide_06.png',
+  './assets/story/act_events/act1_craftsman.png',
   './assets/story/act_events/act2_town.png',
   './assets/story/act_events/act3_fog.png',
   './assets/story/act_events/act4_light.png',
+  './assets/story/act_events/act5_maze.png',
   './assets/story/finale/light_burst.png',
   './assets/story/finale/certificate_bg.png',
 ];

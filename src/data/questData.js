@@ -419,6 +419,197 @@ export const TANUKI_QUESTS = [
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
+// 第4章「くりさがりの迷宮」
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** @type {QuestDef[]} */
+export const CHAPTER4_QUESTS = [
+  {
+    id: 'Q4-1',
+    type: 'main',
+    chapter: 'ch4',
+    title: '迷宮への入口',
+    npcId: 'guild_master',
+    openingText:
+      '将軍の言い残した言葉通り、\n' +
+      'くりさがりの迷宮があった。\n' +
+      '入口だけで頭がくらくらする……\n' +
+      '10から引く技を磨いて突破してこい！',
+    closingText:
+      '入口を突破した！\n' +
+      'だが……中はもっと深い。\n' +
+      '迷宮の罠はまだ先にある。',
+    requirements: [
+      { type: 'clear', worldId: 'world_11a' },
+    ],
+    rewards: {
+      completion: [
+        { type: 'material', id: 'gem',   amount: 2 },
+        { type: 'material', id: 'brick', amount: 2 },
+      ],
+    },
+    unlockAfter: ['Q3-3'],
+  },
+
+  {
+    id: 'Q4-2',
+    type: 'main',
+    chapter: 'ch4',
+    title: '深部の罠',
+    npcId: 'guild_master',
+    openingText:
+      '罠が連続で発動している！\n' +
+      '11・12……13から18まで、\n' +
+      'パターンが全部違う。\n' +
+      '一つ一つ確実に解除していくしかない！',
+    closingText:
+      'ほとんどの罠を解除した……\n' +
+      'でも深部でまだ何かが動いている。\n' +
+      '最深部への道が見えてきた。',
+    requirements: [
+      { type: 'multi_clear', worldId: 'world_11b', count: 2 },
+      { type: 'clear',       worldId: 'world_11c' },
+    ],
+    rewards: {
+      completion: [
+        { type: 'material', id: 'gem',           amount: 3 },
+        { type: 'material', id: 'star_fragment', amount: 1 },
+      ],
+    },
+    unlockAfter: ['Q4-1'],
+  },
+
+  {
+    id: 'Q4-3',
+    type: 'main',
+    chapter: 'ch4',
+    title: 'くりさがりの守護者',
+    npcId: 'guild_master',
+    openingText:
+      '現れた！迷宮の最深部に\n' +
+      '「くりさがりの守護者」が待ち構えていた！\n' +
+      'こいつを倒すにはくりさがり全てを\n' +
+      '完璧に使いこなす必要がある。\n' +
+      '全部90%以上でクリアしてこい！',
+    closingText:
+      '守護者を倒した！！\n' +
+      '守護者「……奥に進む前に、一つ教えよう。\n' +
+      'やみのまじんの本体は……この先だ……」\n' +
+      '最後の道が、ついに開けた。',
+    requirements: [
+      { type: 'score', worldId: 'world_11a', minScore: 0.9 },
+      { type: 'score', worldId: 'world_11b', minScore: 0.9 },
+      { type: 'score', worldId: 'world_11c', minScore: 0.9 },
+      { type: 'score', worldId: 'world_11d', minScore: 0.9 },
+    ],
+    rewards: {
+      completion: [
+        { type: 'material', id: 'star_fragment', amount: 3 },
+        { type: 'material', id: 'magic_orb',     amount: 1 },
+        { type: 'material', id: 'crown',         amount: 1 },
+      ],
+      firstClear: [
+        { type: 'material', id: 'magic_orb', amount: 1 },
+      ],
+    },
+    unlockAfter: ['Q4-2'],
+  },
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 合成屋サブクエスト「ガルドとピコの物語」
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** @type {QuestDef[]} */
+export const CRAFTSMAN_QUESTS = [
+  {
+    id: 'MQ-1',
+    type: 'sub',
+    chapter: 'sub_craftsman',
+    title: 'ガルドの弟子になりたい',
+    npcId: 'meister',
+    openingText:
+      '……お、はじめて来たか。\n' +
+      'まあ、まずは見てろ。\n' +
+      '合成とはな、小さい力を組み合わせて\n' +
+      '大きな力にすること。算数と同じだ。',
+    closingText:
+      'ほぅ……なかなかやるな。\n' +
+      'お前なら弟子にしてやってもいいぞ。\n' +
+      'ゆっくりと、だが確実に来い。',
+    requirements: [
+      { type: 'clear', worldId: 'world_9' },
+    ],
+    rewards: {
+      completion: [
+        { type: 'material', id: 'stone', amount: 3 },
+        { type: 'material', id: 'brick', amount: 2 },
+      ],
+    },
+    unlockAfter: ['Q1-2'],
+  },
+
+  {
+    id: 'MQ-2',
+    type: 'sub',
+    chapter: 'sub_craftsman',
+    title: 'ピコの設計図',
+    npcId: 'tailor',
+    openingText:
+      'ねえ聞いて！夢のスキンの設計図を描いたの！\n' +
+      'でもガルドじいさんに見せたら\n' +
+      '「素材が足りん」って……\n' +
+      'お願い！完璧にこなして素材集めを手伝って！',
+    closingText:
+      'できた〜〜！！これがあれば\n' +
+      '最高のスキンが作れる！\n' +
+      'ガルドじいさんも褒めてくれたよ！',
+    requirements: [
+      { type: 'score', worldId: 'world_12c', minScore: 0.8 },
+    ],
+    rewards: {
+      completion: [
+        { type: 'material', id: 'cloth', amount: 3 },
+        { type: 'material', id: 'paint', amount: 2 },
+      ],
+    },
+    unlockAfter: ['MQ-1'],
+  },
+
+  {
+    id: 'MQ-3',
+    type: 'sub',
+    chapter: 'sub_craftsman',
+    title: 'ふたりの最高傑作',
+    npcId: 'meister',
+    openingText:
+      '……ピコが言っとった。\n' +
+      'お前のことを「友達」だって。\n' +
+      'ワシも久々に、本気で作りたくなった。\n' +
+      '最後まで頼むぞ。',
+    closingText:
+      'ガルド「……できた。これが、最高傑作だ」\n' +
+      'ピコ「やった〜〜！！みんなで作ったんだよ！\n' +
+      'これ、ずっと飾っておこうね！！」',
+    requirements: [
+      { type: 'clear', worldId: 'world_16a' },
+      { type: 'clear', worldId: 'world_16b' },
+    ],
+    rewards: {
+      completion: [
+        { type: 'material', id: 'magic_orb',     amount: 1 },
+        { type: 'material', id: 'crown',         amount: 1 },
+        { type: 'material', id: 'star_fragment', amount: 3 },
+      ],
+      firstClear: [
+        { type: 'material', id: 'cape', amount: 1 },
+      ],
+    },
+    unlockAfter: ['MQ-2'],
+  },
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
 // デイリーミッション プール
 // （毎日 Config.GUILD.DAILY_MISSION_COUNT 件をランダムに選出）
 // ─────────────────────────────────────────────────────────────────────────────
@@ -519,6 +710,52 @@ export const DAILY_POOL = [
       ],
     },
   },
+
+  // ── 合成屋NPCデイリー（既存と内容が被らないもののみ）─────────────────
+  {
+    id: 'D-tailor-double',
+    type: 'daily_pool',
+    chapter: 'daily',
+    title: 'ピコのおつかい',
+    npcId: 'tailor',
+    openingText:
+      '素材が2つ必要なの！\n' +
+      'どれでもいいから2回クリアしてきて！',
+    closingText:
+      'ありがとう〜〜！！これで作れる！！',
+    requirements: [
+      { type: 'multi_clear', worldId: '__any__', count: 2 },
+    ],
+    rewards: {
+      completion: [
+        { type: 'material', id: 'cloth', amount: 2 },
+        { type: 'material', id: 'gem',   amount: 1 },
+      ],
+    },
+  },
+
+  {
+    id: 'D-shape',
+    type: 'daily_pool',
+    chapter: 'daily',
+    title: 'フクロウ先生の形の宿題',
+    npcId: 'owl_librarian',
+    openingText:
+      '「かたちあそび」の世界へ行きなさい。\n' +
+      '形の知識は全ての学問の基礎よ。',
+    closingText:
+      'よくできました。形を覚えておくと、\n' +
+      'いつか必ず役に立つわよ。',
+    requirements: [
+      { type: 'clear', worldId: 'world_13' },
+    ],
+    rewards: {
+      completion: [
+        { type: 'material', id: 'paint', amount: 2 },
+        { type: 'material', id: 'gem',   amount: 1 },
+      ],
+    },
+  },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -530,7 +767,9 @@ export const ALL_QUESTS = [
   ...CHAPTER1_QUESTS,
   ...CHAPTER2_QUESTS,
   ...CHAPTER3_QUESTS,
+  ...CHAPTER4_QUESTS,
   ...TANUKI_QUESTS,
+  ...CRAFTSMAN_QUESTS,
 ];
 
 /**
