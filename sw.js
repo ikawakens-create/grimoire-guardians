@@ -9,7 +9,7 @@
  * @date 2026-03-04
  */
 
-const SW_VERSION   = '2.2.8';
+const SW_VERSION   = '2.2.9';
 const CACHE_NAME   = `grimoire-${SW_VERSION}`;
 
 /** キャッシュ対象ファイル（静的アセット） */
@@ -192,6 +192,20 @@ const ASSETS = [
   './assets/houses/style_moon/spritesheet.png',
   './assets/houses/style_jewel/spritesheet.png',
   './assets/houses/style_star/spritesheet.png',
+  // ストーリー画像
+  './assets/story/boss/yami_normal.png',
+  './assets/story/boss/yami_damaged.png',
+  './assets/story/boss/yami_defeated.png',
+  './assets/story/prologue/slide_01.png',
+  './assets/story/prologue/slide_02.png',
+  './assets/story/prologue/slide_03.png',
+  './assets/story/prologue/slide_04.png',
+  './assets/story/prologue/slide_06.png',
+  './assets/story/act_events/act2_town.png',
+  './assets/story/act_events/act3_fog.png',
+  './assets/story/act_events/act4_light.png',
+  './assets/story/finale/light_burst.png',
+  './assets/story/finale/certificate_bg.png',
 ];
 
 // ─── インストール ──────────────────────────────────────────
