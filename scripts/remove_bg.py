@@ -31,11 +31,12 @@ from pathlib import Path
 # ──────────────────────────────────────────
 
 # 透過処理するフォルダ（プロジェクトルートからの相対パス）
-# ストーリー背景は不要、NPC・ボスのみ
-TARGET_DIRS = [
-    'assets/npcs',         # NPC 6 キャラクター
-    'assets/story/boss',   # ボスキャラクター 3 枚
-]
+# 値: None = リサイズなし / (w, h) = 透過後にこのサイズに縮小
+TARGET_DIRS = {
+    'assets/npcs':        None,          # NPC 6 キャラクター（リサイズなし）
+    'assets/story/boss':  None,          # ボスキャラクター 3 枚（リサイズなし）
+    'assets/skins':       (240, 360),    # スキン 25 種（480×720 → 240×360 に縮小）
+}
 
 # アニメ・イラスト向けモデル（chibi キャラクターに最適）
 REMBG_MODEL = 'isnet-anime'
@@ -81,7 +82,7 @@ def is_processed(img_path: Path) -> bool:
 # 透過処理
 # ──────────────────────────────────────────
 
-def process_image(input_path: Path, output_path: Path) -> bool:
+def process_image(input_path: Path, output_path: Path, resize: tuple | None = None) -> bool:
     """
     単一画像の背景を透過処理して保存する。
     input_path  : 処理元（バックアップ済みオリジナル）
@@ -109,6 +110,10 @@ def process_image(input_path: Path, output_path: Path) -> bool:
         if max(alpha.getdata()) == 255 and min(alpha.getdata()) == 255:
             print(' ⚠️ アルファが全不透明（背景除去できていない可能性）', end='')
 
+        # リサイズ（スキンのみ）
+        if resize:
+            img = img.resize(resize, Image.LANCZOS)
+
         img.save(output_path, 'PNG')
         return True
 
@@ -130,13 +135,13 @@ def run_process(project_root: Path, only: str | None = None) -> tuple[int, int]:
 
     dirs = TARGET_DIRS
     if only:
-        dirs = [d for d in TARGET_DIRS if only in d]
+        dirs = {d: v for d, v in TARGET_DIRS.items() if only in d}
         if not dirs:
             print(f'⚠️  --only "{only}" に一致するフォルダがありません')
-            print(f'   指定可能: npcs, boss')
+            print(f'   指定可能: npcs, boss, skins')
             return 0, 0
 
-    for rel_dir in dirs:
+    for rel_dir, resize in dirs.items():
         target_dir = project_root / rel_dir
 
         if not target_dir.exists():
@@ -151,7 +156,8 @@ def run_process(project_root: Path, only: str | None = None) -> tuple[int, int]:
             print('   ⚠️  PNG が見つかりません — 画像を配置後に再実行してください')
             continue
 
-        print(f'\n📁 {rel_dir}  ({len(png_files)} 枚)')
+        resize_note = f' → {resize[0]}×{resize[1]}px にリサイズ' if resize else ''
+        print(f'\n📁 {rel_dir}  ({len(png_files)} 枚){resize_note}')
 
         for img_path in png_files:
             if is_processed(img_path):
@@ -165,7 +171,7 @@ def run_process(project_root: Path, only: str | None = None) -> tuple[int, int]:
             shutil.copy2(img_path, bp)
 
             total += 1
-            ok = process_image(bp, img_path)
+            ok = process_image(bp, img_path, resize=resize)
 
             if ok:
                 success += 1
@@ -184,7 +190,7 @@ def run_process(project_root: Path, only: str | None = None) -> tuple[int, int]:
 def run_restore(project_root: Path) -> int:
     """バックアップ (*_orig.png) からオリジナルを復元する"""
     restored = 0
-    for rel_dir in TARGET_DIRS:
+    for rel_dir in TARGET_DIRS.keys():
         target_dir = project_root / rel_dir
         if not target_dir.exists():
             continue
@@ -221,7 +227,7 @@ def main():
     print('=' * 52)
     print('🎮 Grimoire Guardians — 透過処理スクリプト')
     print(f'   モデル  : {REMBG_MODEL}  (アニメ/イラスト向け)')
-    print(f'   対象    : {", ".join(TARGET_DIRS)}')
+    print(f'   対象    : {", ".join(TARGET_DIRS.keys())}')
     print('=' * 52)
 
     # ── 復元モード ──────────────────────────
