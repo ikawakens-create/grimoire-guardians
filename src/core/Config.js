@@ -430,9 +430,9 @@ export const Config = {
 
     // NPCレジストリ（画像・色は統一サイズ 120×120px）
     NPCS: [
-      { id: 'owl_librarian',   name: 'フクロウ先生', building: 'library',   image: 'assets/npcs/owl_librarian.png',   emoji: '🦉', color: '#7b5ea7' },
-      { id: 'tanuki_merchant', name: 'タヌキ商人',   building: 'shop',      image: 'assets/npcs/tanuki_merchant.png', emoji: '🦝', color: '#b87333' },
-      { id: 'guild_master',    name: 'ギルドマスター', building: 'guild',   image: 'assets/npcs/guild_master.png',    emoji: '⚔️', color: '#c0392b' },
+      { id: 'owl_librarian',   name: 'フクロウ先生', building: 'library',   image: 'assets/npcs/fukurou.png',    emoji: '🦉', color: '#7b5ea7' },
+      { id: 'tanuki_merchant', name: 'タヌキ商人',   building: 'shop',      image: 'assets/npcs/tanuki.png',     emoji: '🦝', color: '#b87333' },
+      { id: 'guild_master',    name: 'ギルドマスター', building: 'guild',   image: 'assets/npcs/guildmaster.png', emoji: '⚔️', color: '#c0392b' },
     ],
   },
 
