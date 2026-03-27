@@ -1,44 +1,64 @@
 /**
  * ShipBuildScreen.js - Grimoire Guardians
- * 船カスタマイズ画面（マイふね）
+ * 船カスタマイズ画面（マイふね）Phase B
  *
- * show/hide 方式（index.js の _shipBuildScreen で一度だけ生成して使い回す）。
- * 船体の各部位をタップして選択 → パーツ一覧から即時装備。
- * 素材が揃ったパーツはその場でクラフト可能。
+ * Phase B の変更:
+ *   - 絵文字ベースプレビュー → ShipRenderer（PNG レイヤー合成）
+ *   - スロット名を新名称に統一（katachi/suishin/senshu/senbi/hata/oura）
+ *   - 初回オンボーディング（katachi ホットスポットをパルスアニメ）
+ *   - 大型艦ロードマップ UI（largeBlueprintObtained 時）
+ *   - テーマ達成演出を completedThemeSets でニ重発火防止
  *
- * @version 1.0
- * @date 2026-03-21
+ * show/hide 方式（index.js で一度だけ生成して使い回す）。
+ *
+ * @version 2.0
+ * @date 2026-03-28
  */
 
-import { GameStore } from '../core/GameStore.js';
-import { Config } from '../core/Config.js';
-import Logger from '../core/Logger.js';
+import { GameStore }        from '../core/GameStore.js';
+import { Config }           from '../core/Config.js';
+import Logger               from '../core/Logger.js';
 import { SoundManager, SoundType } from '../core/SoundManager.js';
+import ShipRenderer         from '../components/ShipRenderer.js';
 import {
   SHIP_PARTS,
   SMALL_SKINS,
   RARITY_LABEL,
-  getPartsByType,
+  getPartsBySlot,
   filterBySize,
 } from '../data/shipItems.js';
 
-// 船サイズに応じて使用できるスロット
+// 船サイズに応じて使用できるスロット（新スロット名）
 const SLOTS_BY_SIZE = {
-  small:  [],
-  medium: ['hull', 'sail', 'figurehead', 'flag'],
-  large:  ['hull', 'sail', 'figurehead', 'flag', 'deck', 'glow'],
+  small:  ['katachi'],
+  medium: ['katachi', 'suishin', 'hata'],
+  large:  ['katachi', 'suishin', 'senshu', 'senbi', 'hata', 'oura'],
+};
+
+// スロット日本語ラベル
+const SLOT_LABEL = {
+  katachi: 'ふねがら',
+  suishin: 'すいしん・ほ',
+  senshu:  'へさきかざり',
+  senbi:   'とものかざり',
+  hata:    'はた',
+  oura:    'オーラ',
 };
 
 export class ShipBuildScreen {
   constructor() {
     /** @type {HTMLElement|null} */
-    this._container = null;
+    this._container  = null;
     /** @type {HTMLElement|null} */
-    this._el = null;
+    this._el         = null;
     /** @type {string|null} 現在選択中のスロット */
     this._activeSlot = null;
     /** @type {Function|null} GameStore 購読解除関数 */
     this._unsubscribe = null;
+    /** @type {ShipRenderer|null} */
+    this._renderer   = null;
+    /** @type {HTMLElement|null} */
+    this._rendererEl = null;
   }
 
   // ─────────────────────────────────────────────
@@ -52,7 +72,6 @@ export class ShipBuildScreen {
   show(container) {
     this._container = container;
 
-    // 既存購読があれば先に解除（多重登録防止）
     if (this._unsubscribe) {
       this._unsubscribe();
       this._unsubscribe = null;
@@ -67,12 +86,20 @@ export class ShipBuildScreen {
     }
 
     this._activeSlot = null;
+    this._renderer   = null;
+    this._rendererEl = null;
     this._render();
 
-    // GameStore の変化を監視して再描画（素材が増えた時など）
+    // GameStore の変化を監視（素材増加・スロット更新など）
     this._unsubscribe = GameStore.subscribe((path) => {
       if (path.startsWith('ship.') || path.startsWith('inventory.')) {
-        this._render();
+        const ship = GameStore.getState('ship');
+        // ShipRenderer の差分更新（フル再描画を避ける）
+        if (this._rendererEl && this._renderer) {
+          this._renderer.update(ship, this._rendererEl);
+        }
+        // パネル部分のみ再描画
+        this._updatePanels(ship);
       }
     });
 
@@ -90,23 +117,34 @@ export class ShipBuildScreen {
   }
 
   // ─────────────────────────────────────────────
-  // 描画
+  // 描画（フル再描画）
   // ─────────────────────────────────────────────
 
   _render() {
     if (!this._el) return;
 
     const ship     = GameStore.getState('ship');
-    const dispSize = ship.displaySize ?? ship.size;   // 「ちいさくみせる」上書き考慮
+    const dispSize = ship.displaySize ?? ship.size;
     const slots    = SLOTS_BY_SIZE[ship.size] ?? [];
 
     this._el.innerHTML = `
       <div class="ship-build-inner">
 
         ${this._renderHeader(ship)}
-        ${this._renderShipPreview(ship, dispSize)}
+        ${ship.largeBlueprintObtained ? this._renderBlueprintProgress(ship) : ''}
+
+        <div class="ship-build-preview-wrap">
+          <div id="ship-renderer-mount"></div>
+          <div class="ship-hotspots" id="ship-hotspots"></div>
+          <div class="ship-size-label">${this._sizeLabelText(ship.size)}</div>
+        </div>
+
         ${this._renderThemeSets(ship)}
-        ${this._renderSlotPanel(ship, dispSize, slots)}
+
+        <div id="ship-slot-panel">
+          ${this._renderSlotPanel(ship, dispSize, slots)}
+        </div>
+
         ${ship.size === 'large' ? this._renderDisplayToggle(ship) : ''}
 
         <div class="ship-build-footer">
@@ -115,10 +153,47 @@ export class ShipBuildScreen {
       </div>
     `;
 
+    // ShipRenderer をマウント
+    const mountEl = this._el.querySelector('#ship-renderer-mount');
+    if (mountEl) {
+      this._renderer   = new ShipRenderer(ship, dispSize);
+      this._rendererEl = this._renderer.render();
+      mountEl.appendChild(this._rendererEl);
+    }
+
+    // ホットスポットを生成
+    this._renderHotspots(ship, slots);
+
     this._bindEvents(ship, dispSize, slots);
+
+    // 初回オンボーディング
+    if (!ship.shipBuildGuideShown && ship.size !== 'small') {
+      this._showOnboarding();
+    }
   }
 
-  // ─── ヘッダー（船名 + 名前変更ボタン）─────────
+  // ─── パネル部分のみ更新（差分再描画）──────────
+
+  _updatePanels(ship) {
+    if (!this._el) return;
+    const dispSize = ship.displaySize ?? ship.size;
+    const slots    = SLOTS_BY_SIZE[ship.size] ?? [];
+
+    const panelEl = this._el.querySelector('#ship-slot-panel');
+    if (panelEl) {
+      panelEl.innerHTML = this._renderSlotPanel(ship, dispSize, slots);
+      this._bindPanelEvents(ship);
+    }
+
+    // ホットスポット更新（アクティブ状態の反映）
+    this._renderHotspots(ship, slots);
+  }
+
+  // ─────────────────────────────────────────────
+  // 各セクション描画
+  // ─────────────────────────────────────────────
+
+  // ─── ヘッダー ──────────────────────────────
 
   _renderHeader(ship) {
     return `
@@ -129,45 +204,60 @@ export class ShipBuildScreen {
     `;
   }
 
-  // ─── 船プレビュー（絵文字ベース + アニメーション）────
+  // ─── 大型艦ロードマップ UI ─────────────────
 
-  _renderShipPreview(ship, dispSize) {
-    // アニメーションクラス
-    let animClass = 'ship-anim-bob';
-    if (ship.size === 'medium' || ship.size === 'large') animClass += ' ship-anim-sail';
+  _renderBlueprintProgress(ship) {
+    const cost = Config.GRADE2.LARGE_SHIP_CRAFT_COST;
+    const mats = GameStore.getState('inventory.materials') ?? {};
+    const canCraft = Object.entries(cost).every(([m, n]) => (mats[m] ?? 0) >= n);
 
-    // 装備パーツの表示絵文字を組み立て
-    const hullEmoji = this._getEquippedEmoji(ship, 'hull', '🛥️');
-    const sailEmoji = this._getEquippedEmoji(ship, 'sail', '🎌');
-    const flagEmoji = this._getEquippedEmoji(ship, 'flag', '🚩');
-    const fhdEmoji  = this._getEquippedEmoji(ship, 'figurehead', '🐬');
-
-    // small（または「ちいさくみせる」ON）は skin のみ表示
-    if (dispSize === 'small') {
-      const skinId    = ship.hull ?? 'skin_default';
-      const skin      = SMALL_SKINS.find(s => s.id === skinId) ?? SMALL_SKINS[0];
+    const barsHTML = Object.entries(cost).map(([mat, need]) => {
+      const have  = mats[mat] ?? 0;
+      const pct   = Math.min(100, Math.floor((have / need) * 100));
+      const ok    = have >= need;
       return `
-        <div class="ship-preview-area ${animClass}">
-          <div class="ship-emoji-large">${skin.emoji}</div>
-          <div class="ship-size-label">小型船</div>
+        <div class="blueprint-mat-row">
+          <span class="blueprint-mat-name">${mat}</span>
+          <div class="blueprint-progress">
+            <div class="blueprint-progress-bar${ok ? ' blueprint-bar-done' : ''}"
+                 style="width:${pct}%"></div>
+          </div>
+          <span class="blueprint-mat-count${ok ? ' blueprint-count-ok' : ''}">${have}/${need}</span>
         </div>
       `;
-    }
+    }).join('');
 
-    // medium / large
-    const hasGlow  = ship.size === 'large' && ship.glow;
-    const glowClass = hasGlow ? 'ship-glow-part' : '';
-    const sizeLabel = ship.size === 'medium' ? '中型船' : '大型船艦';
+    return `
+      <div class="blueprint-section">
+        <div class="blueprint-title">🗺️ たいがたかんけんぞう</div>
+        <div class="blueprint-bars">${barsHTML}</div>
+        ${canCraft && !ship.largeCrafted
+          ? `<button type="button" class="button button-success blueprint-craft-btn">⚓ かんけんぞうをつくる！</button>`
+          : ship.largeCrafted
+            ? `<div class="blueprint-done-badge">✅ かんけんぞう かんせい！</div>`
+            : ''
+        }
+      </div>
+    `;
+  }
 
-    // ホットスポット: 各部位をタップ可能に
-    const slots = SLOTS_BY_SIZE[ship.size] ?? [];
-    const hotspotsHTML = slots.map(slotId => {
-      const def = Config.GRADE2.SHIP_PARTS.find(p => p.id === slotId);
-      const label = def?.name ?? slotId;
+  // ─── ホットスポット ────────────────────────
+
+  _renderHotspots(ship, slots) {
+    const hotspotsEl = this._el?.querySelector('#ship-hotspots');
+    if (!hotspotsEl) return;
+
+    // small は「かたち」1スロットのみ
+    const visibleSlots = ship.size === 'small' ? [] : slots;
+
+    hotspotsEl.innerHTML = visibleSlots.map(slotId => {
+      const label    = SLOT_LABEL[slotId] ?? slotId;
       const isActive = this._activeSlot === slotId;
+      // 初回オンボーディング中は katachi だけパルス
+      const isPulse  = !ship.shipBuildGuideShown && slotId === 'katachi';
       return `
         <button type="button"
-          class="ship-hotspot${isActive ? ' ship-hotspot-active' : ''}"
+          class="ship-hotspot${isActive ? ' active' : ''}${isPulse ? ' pulse' : ''}"
           data-slot="${slotId}"
           aria-label="${label}を選択">
           ${label}
@@ -175,37 +265,39 @@ export class ShipBuildScreen {
       `;
     }).join('');
 
-    return `
-      <div class="ship-preview-area ${animClass}">
-        <div class="ship-preview-emoji ${glowClass}">
-          <span class="ship-hull-part">${hullEmoji}</span>
-          <span class="ship-sail-part">${sailEmoji}</span>
-          <span class="ship-flag-part">${flagEmoji}</span>
-          ${ship.size === 'large' ? `<span class="ship-fhd-part">${fhdEmoji}</span>` : ''}
-        </div>
-        <div class="ship-hotspots">${hotspotsHTML}</div>
-        <div class="ship-size-label">${sizeLabel}</div>
-      </div>
-    `;
+    // ホットスポットイベント
+    hotspotsEl.querySelectorAll('.ship-hotspot').forEach(btn => {
+      btn.addEventListener('click', () => {
+        SoundManager.playSFX(SoundType.BUTTON_CLICK);
+        this._activeSlot = btn.dataset.slot;
+        // オンボーディング中なら完了させる
+        if (!ship.shipBuildGuideShown) {
+          GameStore.setState('ship.shipBuildGuideShown', true);
+        }
+        this._updatePanels(GameStore.getState('ship'));
+      });
+    });
   }
 
-  // ─── テーマセット進捗 ──────────────────────────
+  // ─── テーマセット進捗 ──────────────────────
 
   _renderThemeSets(ship) {
     const equippedIds = new Set(
-      ['hull','sail','figurehead','flag','deck','glow']
+      ['katachi','suishin','senshu','senbi','hata','oura']
         .map(s => ship[s])
         .filter(Boolean)
     );
     const completedSets = ship.completedThemeSets ?? [];
 
     const setHTML = Config.GRADE2.THEME_SETS.map(set => {
-      const owned  = set.parts.filter(id => (ship.crafted ?? []).includes(id)).length;
+      const owned    = set.parts.filter(id => (ship.crafted ?? []).includes(id)).length;
       const equipped = set.parts.filter(id => equippedIds.has(id)).length;
-      const total  = set.parts.length;
-      const done   = completedSets.includes(set.id);
+      const total    = set.parts.length;
+      const done     = completedSets.includes(set.id);
 
-      const stars = set.parts.map((_, i) => `<span class="theme-star${i < owned ? ' theme-star-filled' : ''}">★</span>`).join('');
+      const stars = set.parts.map((_, i) =>
+        `<span class="theme-star${i < owned ? ' theme-star-filled' : ''}">★</span>`
+      ).join('');
 
       return `
         <div class="theme-set-item${done ? ' theme-set-done' : ''}">
@@ -215,7 +307,7 @@ export class ShipBuildScreen {
           ${owned < total
             ? `<span class="theme-set-hint">あと${total - owned}つ</span>`
             : equipped === total
-              ? `<span class="theme-set-badge theme-complete-badge">✨かんせい！</span>`
+              ? `<span class="theme-badge theme-badge-done">✨かんせい！</span>`
               : `<span class="theme-set-hint">そうびしよう！</span>`
           }
         </div>
@@ -225,7 +317,7 @@ export class ShipBuildScreen {
     return `<div class="theme-sets-row">${setHTML}</div>`;
   }
 
-  // ─── スロットパネル ────────────────────────────
+  // ─── スロットパネル ────────────────────────
 
   _renderSlotPanel(ship, dispSize, slots) {
     // small はスキン選択
@@ -237,26 +329,25 @@ export class ShipBuildScreen {
       return `<div class="slot-panel slot-panel-hint">ふねのぶぶんをタップしてえらんでね</div>`;
     }
 
-    const def      = Config.GRADE2.SHIP_PARTS.find(p => p.id === this._activeSlot);
-    const slotLabel = def?.name ?? this._activeSlot;
-    const candidates = filterBySize(getPartsByType(this._activeSlot), ship.size);
+    const slotLabel  = SLOT_LABEL[this._activeSlot] ?? this._activeSlot;
+    const candidates = filterBySize(getPartsBySlot(this._activeSlot), ship.size);
     const materials  = GameStore.getState('inventory.materials') ?? {};
     const equipped   = ship[this._activeSlot];
     const crafted    = ship.crafted ?? [];
 
     const partsHTML = candidates.map(part => {
-      const isEquipped  = equipped === part.id;
-      const isCrafted   = crafted.includes(part.id);
-      const canCraft    = !isCrafted && this._canAfford(part.craftCost, materials);
-      const costHTML    = this._renderCostBadge(part.craftCost, materials, isCrafted);
+      const isEquipped = equipped === part.id;
+      const isCrafted  = crafted.includes(part.id);
+      const canCraft   = !isCrafted && this._canAfford(part.craftCost, materials);
+      const costHTML   = this._renderCostBadge(part.craftCost, materials, isCrafted);
       const rarityLabel = RARITY_LABEL[part.rarity] ?? '';
 
-      let btnClass = 'ship-part-card';
-      if (isEquipped)   btnClass += ' ship-part-equipped';
-      if (!isCrafted)   btnClass += ' ship-part-locked';
+      let cardClass = 'part-card';
+      if (isEquipped) cardClass += ' part-card-equipped';
+      if (!isCrafted) cardClass += ' part-card-locked';
 
       return `
-        <div class="${btnClass}" data-part-id="${part.id}">
+        <div class="${cardClass}" data-part-id="${part.id}">
           <div class="part-emoji">${part.emoji}</div>
           <div class="part-name">${part.name}</div>
           <div class="part-rarity">${rarityLabel}</div>
@@ -281,12 +372,12 @@ export class ShipBuildScreen {
     `;
   }
 
-  // ─── 小型スキンパネル ──────────────────────────
+  // ─── 小型スキンパネル ──────────────────────
 
   _renderSkinPanel(ship) {
     const materials = GameStore.getState('inventory.materials') ?? {};
     const crafted   = ship.crafted ?? [];
-    const equipped  = ship.hull ?? 'skin_default';
+    const equipped  = ship.katachi ?? 'skin_default';
 
     const skinsHTML = SMALL_SKINS.map(skin => {
       const isEquipped = equipped === skin.id;
@@ -294,10 +385,13 @@ export class ShipBuildScreen {
       const canCraft   = skin.craftCost && !isCrafted && this._canAfford(skin.craftCost, materials);
       const costHTML   = skin.craftCost ? this._renderCostBadge(skin.craftCost, materials, isCrafted) : '';
 
+      // CSS filter でスキン色をプレビュー
+      const filterStyle = skin.filter ? `style="filter:${skin.filter}"` : '';
+
       return `
-        <div class="ship-part-card${isEquipped ? ' ship-part-equipped' : ''}${!isCrafted ? ' ship-part-locked' : ''}"
+        <div class="part-card${isEquipped ? ' part-card-equipped' : ''}${!isCrafted ? ' part-card-locked' : ''}"
              data-part-id="${skin.id}">
-          <div class="part-emoji">${skin.emoji}</div>
+          <div class="part-emoji" ${filterStyle}>${skin.emoji}</div>
           <div class="part-name">${skin.name}</div>
           ${costHTML}
           ${isEquipped
@@ -320,7 +414,7 @@ export class ShipBuildScreen {
     `;
   }
 
-  // ─── 表示サイズトグル（大型船のみ）────────────
+  // ─── 表示サイズトグル（大型船のみ）──────────
 
   _renderDisplayToggle(ship) {
     const isSmall = ship.displaySize === 'small';
@@ -359,14 +453,17 @@ export class ShipBuildScreen {
       GameStore.setState('ship.displaySize', current === 'small' ? null : 'small');
     });
 
-    // ホットスポット（部位選択）
-    this._el.querySelectorAll('.ship-hotspot').forEach(btn => {
-      btn.addEventListener('click', () => {
-        SoundManager.playSFX(SoundType.BUTTON_CLICK);
-        this._activeSlot = btn.dataset.slot;
-        this._render();
-      });
+    // 大型艦クラフトボタン
+    this._el.querySelector('.blueprint-craft-btn')?.addEventListener('click', () => {
+      SoundManager.playSFX(SoundType.BUTTON_CLICK);
+      this._showLargeCraftConfirm();
     });
+
+    this._bindPanelEvents(ship);
+  }
+
+  _bindPanelEvents(ship) {
+    if (!this._el) return;
 
     // パーツ装備ボタン
     this._el.querySelectorAll('.part-equip-btn').forEach(btn => {
@@ -394,10 +491,10 @@ export class ShipBuildScreen {
    * @param {string} partId
    */
   _equipPart(partId) {
-    // スキンの場合は hull スロットに入れる
+    // スキンの場合は katachi スロットに入れる
     const skinDef = SMALL_SKINS.find(s => s.id === partId);
     if (skinDef) {
-      GameStore.setState('ship.hull', partId);
+      GameStore.setState('ship.katachi', partId);
       this._showEquipEffect();
       return;
     }
@@ -405,10 +502,10 @@ export class ShipBuildScreen {
     const part = SHIP_PARTS.find(p => p.id === partId);
     if (!part) return;
 
-    GameStore.setState(`ship.${part.partType}`, partId);
+    GameStore.setState(`ship.${part.slotId}`, partId);
     this._showEquipEffect();
     this._checkThemeSetCompletion();
-    Logger.info(`[ShipBuildScreen] equipped: ${partId} → ${part.partType}`);
+    Logger.info(`[ShipBuildScreen] equipped: ${partId} → ${part.slotId}`);
   }
 
   /**
@@ -457,12 +554,10 @@ export class ShipBuildScreen {
     const materials = GameStore.getState('inventory.materials') ?? {};
     if (!this._canAfford(part.craftCost, materials)) return;
 
-    // 素材消費
     Object.entries(part.craftCost).forEach(([mat, cnt]) => {
       GameStore.setState(`inventory.materials.${mat}`, (materials[mat] ?? 0) - cnt);
     });
 
-    // クラフト済みリストに追加
     const crafted = [...(GameStore.getState('ship.crafted') ?? [])];
     if (!crafted.includes(part.id)) crafted.push(part.id);
     GameStore.setState('ship.crafted', crafted);
@@ -473,6 +568,54 @@ export class ShipBuildScreen {
     Logger.info(`[ShipBuildScreen] crafted: ${part.id}`);
   }
 
+  // ─── 大型艦クラフト ────────────────────────
+
+  _showLargeCraftConfirm() {
+    const cost = Config.GRADE2.LARGE_SHIP_CRAFT_COST;
+    const materials = GameStore.getState('inventory.materials') ?? {};
+    const costLines = Object.entries(cost)
+      .map(([mat, cnt]) => `${mat} × ${cnt}`)
+      .join('<br>');
+
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay ship-craft-modal';
+    overlay.innerHTML = `
+      <div class="modal-content">
+        <div class="modal-title">⚓ たいがたかんけんぞうをつくる？</div>
+        <div class="modal-body">${costLines}</div>
+        <div class="modal-actions">
+          <button type="button" class="button button-success large-craft-confirm-btn">つくる！</button>
+          <button type="button" class="button button-secondary large-craft-cancel-btn">やめる</button>
+        </div>
+      </div>
+    `;
+
+    overlay.querySelector('.large-craft-confirm-btn').addEventListener('click', () => {
+      this._doLargeCraft(cost, materials);
+      overlay.remove();
+    });
+    overlay.querySelector('.large-craft-cancel-btn').addEventListener('click', () => {
+      overlay.remove();
+    });
+
+    (this._el ?? document.body).appendChild(overlay);
+  }
+
+  _doLargeCraft(cost, materials) {
+    if (!Object.entries(cost).every(([m, n]) => (materials[m] ?? 0) >= n)) return;
+
+    Object.entries(cost).forEach(([mat, cnt]) => {
+      GameStore.setState(`inventory.materials.${mat}`, (materials[mat] ?? 0) - cnt);
+    });
+
+    GameStore.setState('ship.size', 'large');
+    GameStore.setState('ship.largeCrafted', true);
+
+    SoundManager.playSFX(SoundType.ITEM_GET);
+    Logger.info('[ShipBuildScreen] 大型艦 crafted');
+    this._render();
+  }
+
   // ─────────────────────────────────────────────
   // テーマセット完成チェック
   // ─────────────────────────────────────────────
@@ -480,11 +623,11 @@ export class ShipBuildScreen {
   _checkThemeSetCompletion() {
     const ship     = GameStore.getState('ship');
     const equipped = new Set(
-      ['hull','sail','figurehead','flag','deck','glow']
+      ['katachi','suishin','senshu','senbi','hata','oura']
         .map(s => ship[s])
         .filter(Boolean)
     );
-    const completed = [...(ship.completedThemeSets ?? [])];
+    const completed   = [...(ship.completedThemeSets ?? [])];
     let newlyCompleted = null;
 
     for (const set of Config.GRADE2.THEME_SETS) {
@@ -501,6 +644,41 @@ export class ShipBuildScreen {
       GameStore.setState('ship.completedThemeSets', completed);
       this._showThemeCompleteEffect(newlyCompleted);
     }
+  }
+
+  // ─────────────────────────────────────────────
+  // オンボーディング（初回）
+  // ─────────────────────────────────────────────
+
+  _showOnboarding() {
+    const hotspotsEl = this._el?.querySelector('#ship-hotspots');
+    if (!hotspotsEl) return;
+
+    // katachi 以外をオーバーレイで暗くする
+    const overlay = document.createElement('div');
+    overlay.className = 'ship-onboarding-overlay';
+    overlay.innerHTML = `
+      <div class="ship-onboarding-hint">
+        <span class="ship-onboarding-arrow">↓</span>
+        「ふねがら」をタップしてみよう！
+      </div>
+    `;
+    this._el.appendChild(overlay);
+
+    // katachi ホットスポットだけ前面に出す
+    const katachiBtn = hotspotsEl.querySelector('[data-slot="katachi"]');
+    if (katachiBtn) {
+      katachiBtn.style.zIndex = '201';
+      katachiBtn.addEventListener('click', () => {
+        overlay.remove();
+      }, { once: true });
+    }
+
+    // オーバーレイタップで閉じる
+    overlay.addEventListener('click', () => {
+      GameStore.setState('ship.shipBuildGuideShown', true);
+      overlay.remove();
+    });
   }
 
   // ─────────────────────────────────────────────
@@ -533,11 +711,9 @@ export class ShipBuildScreen {
     const input   = overlay.querySelector('.ship-name-input');
     const lenSpan = overlay.querySelector('.ship-name-len');
 
-    // フォーカス時に全選択（iOS は setTimeout(0) が必要）
     input.addEventListener('focus', () => {
       setTimeout(() => input.select(), 0);
     });
-
     input.addEventListener('input', () => {
       lenSpan.textContent = input.value.length;
     });
@@ -547,17 +723,13 @@ export class ShipBuildScreen {
       GameStore.setState('ship.name', newName);
       GameStore.setState('ship.nameSetByUser', true);
       overlay.remove();
-      // GameStore subscriber が自動で _render() を呼ぶため明示呼び出し不要
       Logger.info(`[ShipBuildScreen] ship renamed: ${newName}`);
     });
-
     overlay.querySelector('.name-cancel-btn').addEventListener('click', () => {
       overlay.remove();
     });
 
     (this._el ?? document.body).appendChild(overlay);
-
-    // 少し遅らせてフォーカス（モーダルが DOM に追加された後）
     requestAnimationFrame(() => input.focus());
   }
 
@@ -565,23 +737,19 @@ export class ShipBuildScreen {
   // 演出
   // ─────────────────────────────────────────────
 
-  /** パーツ装備時のきらきらエフェクト */
   _showEquipEffect() {
-    const preview = this._el?.querySelector('.ship-preview-area');
-    if (!preview) return;
-    preview.classList.remove('ship-equip-flash');
-    // reflow を挟んで animation を再起動
-    void preview.offsetWidth;
-    preview.classList.add('ship-equip-flash');
-    setTimeout(() => preview.classList.remove('ship-equip-flash'), 600);
+    if (!this._rendererEl) return;
+    this._rendererEl.classList.remove('ship-equip-flash');
+    void this._rendererEl.offsetWidth;
+    this._rendererEl.classList.add('ship-equip-flash');
+    setTimeout(() => this._rendererEl?.classList.remove('ship-equip-flash'), 600);
   }
 
-  /** テーマセット完成演出 */
   _showThemeCompleteEffect(set) {
     const banner = document.createElement('div');
     banner.className = 'theme-complete-overlay';
     banner.innerHTML = `
-      <div class="theme-complete-content theme-complete-badge">
+      <div class="theme-complete-content theme-badge theme-badge-done">
         <div class="theme-complete-emoji">${set.emoji}</div>
         <div class="theme-complete-name">${set.name}</div>
         <div class="theme-complete-msg">✨ かんせい！</div>
@@ -596,52 +764,24 @@ export class ShipBuildScreen {
   // ヘルパー
   // ─────────────────────────────────────────────
 
-  /**
-   * 素材が足りるか判定
-   * @param {Object} cost
-   * @param {Object} materials
-   * @returns {boolean}
-   */
+  _sizeLabelText(size) {
+    return { small: '小型船', medium: '中型船', large: '大型艦' }[size] ?? '';
+  }
+
   _canAfford(cost, materials) {
     return Object.entries(cost).every(([mat, cnt]) => (materials[mat] ?? 0) >= cnt);
   }
 
-  /**
-   * クラフトコスト表示 HTML
-   * @param {Object} cost
-   * @param {Object} materials
-   * @param {boolean} isCrafted
-   * @returns {string}
-   */
   _renderCostBadge(cost, materials, isCrafted) {
     if (isCrafted) return '';
     const lines = Object.entries(cost).map(([mat, cnt]) => {
-      const have    = materials[mat] ?? 0;
-      const enough  = have >= cnt;
+      const have   = materials[mat] ?? 0;
+      const enough = have >= cnt;
       return `<span class="cost-item${enough ? ' cost-ok' : ' cost-ng'}">${mat}×${cnt}</span>`;
     }).join(' ');
     return `<div class="part-cost">${lines}</div>`;
   }
 
-  /**
-   * 装備中パーツの絵文字を返す（未装備はデフォルト値）
-   * @param {Object} ship
-   * @param {string} slotId
-   * @param {string} fallback
-   * @returns {string}
-   */
-  _getEquippedEmoji(ship, slotId, fallback) {
-    const partId = ship[slotId];
-    if (!partId) return fallback;
-    const part = SHIP_PARTS.find(p => p.id === partId);
-    return part?.emoji ?? fallback;
-  }
-
-  /**
-   * XSS 対策: 文字列をエスケープ
-   * @param {string} str
-   * @returns {string}
-   */
   _esc(str) {
     return String(str ?? '')
       .replace(/&/g, '&amp;')
@@ -662,9 +802,8 @@ export class ShipBuildScreen {
  * @param {HTMLElement} container
  */
 export function showShipNameDialog(container) {
-  const maxLen = Config.GRADE2.SHIP_NAME_MAX_LENGTH;
+  const maxLen      = Config.GRADE2.SHIP_NAME_MAX_LENGTH;
   const currentName = GameStore.getState('ship.name') ?? 'グリモア号';
-  // XSS 対策: value 属性に埋め込む前にエスケープ
   const escapedName = String(currentName)
     .replace(/&/g, '&amp;')
     .replace(/"/g, '&quot;')
@@ -688,7 +827,6 @@ export function showShipNameDialog(container) {
       />
       <div class="ship-name-counter"><span class="ship-name-len">${currentName.length}</span> / ${maxLen}</div>
       <button type="button" class="button button-success ship-intro-confirm-btn">これにする！</button>
-
     </div>
   `;
 

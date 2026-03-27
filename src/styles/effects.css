@@ -2544,3 +2544,50 @@
   0%   { transform: scale(0.5); opacity: 0; }
   100% { transform: scale(1);   opacity: 1; }
 }
+
+/* ═══════════════════════════════════════════════
+   船ビルド アニメーション（Phase B）
+   ═══════════════════════════════════════════════ */
+
+@keyframes waterWave {
+  0%, 100% { background-position: 0 0; }
+  50%       { background-position: 0 6px; }
+}
+
+@keyframes ouraFire {
+  0%   { opacity: 0.6; transform: scale(1.0); }
+  100% { opacity: 1.0; transform: scale(1.08); }
+}
+@keyframes ouraBubble {
+  0%, 100% { opacity: 0.5; transform: scale(1.0); }
+  50%       { opacity: 0.9; transform: scale(1.05); }
+}
+@keyframes ouraStar {
+  0%   { opacity: 0.7; transform: rotate(0deg) scale(1.0); }
+  100% { opacity: 1.0; transform: rotate(5deg) scale(1.06); }
+}
+@keyframes ouraFog {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 0.7; }
+}
+
+@keyframes shipEquipFlash {
+  0%   { filter: brightness(1.0); }
+  25%  { filter: brightness(2.0); }
+  100% { filter: brightness(1.0); }
+}
+
+@keyframes hotspotPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(74,144,217,0.7); }
+  50%       { box-shadow: 0 0 0 8px rgba(74,144,217,0); }
+}
+
+@keyframes themeGlow {
+  0%, 100% { box-shadow: 0 0 4px rgba(243,156,18,0.5); }
+  50%       { box-shadow: 0 0 12px rgba(243,156,18,0.9); }
+}
+
+@keyframes fadeInScale {
+  0%   { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1.0); }
+}

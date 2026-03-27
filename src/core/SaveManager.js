@@ -213,34 +213,74 @@ class SaveManagerClass {
 
   /**
    * 船 state のマイグレーション
-   * Phase A: 新フィールドのデフォルト値を補完する
-   * Phase B: スロットキー名変換（hull→katachi 等）をここに追記する
+   * Phase A (v1): 新フィールドのデフォルト値を補完
+   * Phase B (v2): スロットキー名変換（hull→katachi 等）
    *
    * localStorage フラグで二重実行を防ぐ。
    * @param {Object} saveData - ロード直後の生データ（破壊的変更OK）
    */
   _migrateShipState(saveData) {
-    const MIGRATED_KEY = 'gg_ship_migrated_v1';
-    if (localStorage.getItem(MIGRATED_KEY)) return;
-
     const ship = saveData.ship;
     if (!ship) return;
 
     // Phase A: 新フィールドが存在しない旧セーブに初期値を補完
-    if (ship.shipBuildGuideShown === undefined) {
-      ship.shipBuildGuideShown = false;
+    const V1_KEY = 'gg_ship_migrated_v1';
+    if (!localStorage.getItem(V1_KEY)) {
+      if (ship.shipBuildGuideShown === undefined) {
+        ship.shipBuildGuideShown = false;
+      }
+      localStorage.setItem(V1_KEY, '1');
+      Logger.info('[SaveManager] ship state migration v1 完了');
     }
 
-    // Phase B でここに追記:
-    // const keyMap = { hull:'katachi', sail:'suishin',
-    //                  figurehead:'senshu', deck:'senbi',
-    //                  flag:'hata', glow:'oura' };
-    // Object.entries(keyMap).forEach(([oldKey, newKey]) => {
-    //   if (oldKey in ship) { ship[newKey] = ship[oldKey]; delete ship[oldKey]; }
-    // });
-
-    localStorage.setItem(MIGRATED_KEY, '1');
-    Logger.info('[SaveManager] ship state migration v1 完了');
+    // Phase B: 旧スロットキー名 → 新スロットキー名に変換
+    const V2_KEY = 'gg_ship_migrated_v2';
+    if (!localStorage.getItem(V2_KEY)) {
+      const keyMap = {
+        hull:       'katachi',
+        sail:       'suishin',
+        figurehead: 'senshu',
+        deck:       'senbi',
+        flag:       'hata',
+        glow:       'oura',
+      };
+      Object.entries(keyMap).forEach(([oldKey, newKey]) => {
+        if (oldKey in ship) {
+          if (ship[newKey] === undefined || ship[newKey] === null) {
+            ship[newKey] = ship[oldKey];
+          }
+          delete ship[oldKey];
+        }
+      });
+      // 旧 partId に旧スロット名が含まれている場合は新 ID に変換
+      const idMap = {
+        hull_pirate:  'katachi_pirate',
+        hull_pearl:   'katachi_pearl',
+        hull_thunder: 'katachi_thunder',
+        hull_coral:   'katachi_coral',
+        sail_skull:   'suishin_skull',
+        sail_wave:    'suishin_wave',
+        sail_dark:    'suishin_dark',
+        sail_fan:     'suishin_fan',
+        flag_jolly:   'hata_jolly',
+        flag_storm:   'hata_storm',
+        figurehead_mermaid: 'senshu_mermaid',
+        figurehead_crab:    'senshu_crab',
+        deck_anchor:        'senbi_anchor',
+      };
+      // 装備スロット値を新IDに変換
+      ['katachi','suishin','senshu','senbi','hata'].forEach(slot => {
+        if (ship[slot] && idMap[ship[slot]]) {
+          ship[slot] = idMap[ship[slot]];
+        }
+      });
+      // crafted 配列内のIDも変換
+      if (Array.isArray(ship.crafted)) {
+        ship.crafted = ship.crafted.map(id => idMap[id] ?? id);
+      }
+      localStorage.setItem(V2_KEY, '1');
+      Logger.info('[SaveManager] ship state migration v2 完了');
+    }
   }
 
   /**
