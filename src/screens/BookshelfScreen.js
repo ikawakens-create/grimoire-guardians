@@ -111,12 +111,19 @@ class BookshelfScreen {
     Logger.info('[BookshelfScreen] Rendered');
     SoundManager.playBGM(SoundType.BGM_BOOKSHELF);
 
-    // クリア直後のカードをアニメーション
-    if (this._newlyClearedWorldId) {
-      // 次フレームで実行（DOM 完成後に適用）
+    // 次フレームで非同期演出を処理（DOM完成後に適用）
+    const needsClearAnim  = !!this._newlyClearedWorldId;
+    const pendingUpgrade  = GameStore.getState('app.pendingShipUpgrade');
+    if (needsClearAnim || pendingUpgrade) {
       this._rafId = requestAnimationFrame(() => {
         this._rafId = null;
-        this._animateWorldClear(this._newlyClearedWorldId);
+        // クリア直後カードアニメーション
+        if (needsClearAnim) this._animateWorldClear(this._newlyClearedWorldId);
+        // 船アップグレード演出（async・fire-and-forget）
+        if (pendingUpgrade) {
+          GameStore.setState('app.pendingShipUpgrade', null);
+          this._showShipUpgradeCutin(pendingUpgrade);
+        }
       });
     }
 
@@ -282,7 +289,9 @@ class BookshelfScreen {
       const townBtn = document.createElement('button');
       townBtn.type = 'button';
       townBtn.className = 'button button-small bookshelf-town-btn';
-      townBtn.innerHTML = '🏘️ まち';
+      const guildBadge = GameStore.getState('guild.newQuestBadge')
+        ? '<span class="memory-badge-dot"></span>' : '';
+      townBtn.innerHTML = `🏘️ まち${guildBadge}`;
       townBtn.addEventListener('click', () => {
         GameStore.setState('app.currentScreen', 'town');
       });
@@ -782,6 +791,53 @@ class BookshelfScreen {
     if (statsBadge) {
       statsBadge.innerHTML = `<span class="stats-badge">⭐ ${clearedCount} / ${gradeWorlds.length} クリア</span>`;
     }
+  }
+
+  /**
+   * 船アップグレード演出を表示する（Phase A: 絵文字のみ版）
+   * Phase B で ShipRenderer.renderMini() を使った本格版に差し替え予定
+   * @param {'medium'|'large_blueprint'} type
+   * @returns {Promise<void>}
+   * @private
+   */
+  async _showShipUpgradeCutin(type) {
+    if (!this.element) return;
+
+    const isMedium = type === 'medium';
+    const emoji    = isMedium ? '⛴️' : '🚢';
+    const title    = isMedium ? 'ふねが おおきくなった！' : 'だいがたかんせんの せっけいずを てにいれた！';
+    const body     = isMedium
+      ? 'ちゅうがたふね に なったぞ！\nパーツスロットが ふえたよ！'
+      : 'ギルドで クラフトすると\nおおきな ふねに なれるぞ！';
+
+    const overlay = document.createElement('div');
+    overlay.className = 'ship-upgrade-cutin';
+    overlay.innerHTML = `
+      <div class="ship-upgrade-cutin-box">
+        <div class="ship-upgrade-cutin-ship">${emoji}</div>
+        <div class="ship-upgrade-cutin-title">${title}</div>
+        <div class="ship-upgrade-cutin-body">${body.replace(/\n/g, '<br>')}</div>
+        <div class="ship-upgrade-cutin-npc">タコぞう「すごいぞ！」</div>
+        <button class="button button-large ship-upgrade-cutin-ok">つぎへ ▶</button>
+      </div>
+    `;
+    this.element.appendChild(overlay);
+
+    // ボタンタップ or オーバーレイ外タップで閉じる
+    await new Promise(resolve => {
+      overlay.querySelector('.ship-upgrade-cutin-ok')
+        .addEventListener('click', resolve, { once: true });
+      overlay.addEventListener('click', e => {
+        if (e.target === overlay) resolve();
+      });
+    });
+
+    overlay.classList.add('ship-upgrade-cutin-out');
+    await new Promise(r => {
+      const tid = setTimeout(r, 300);
+      this._timers.push(tid);
+    });
+    overlay.remove();
   }
 
   /**

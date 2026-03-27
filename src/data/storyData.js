@@ -310,17 +310,17 @@ export const ACT_CUTINS = {
     icon:       '🪸',
     actLabel:   'Zone 2 さんごしょう',
     title:      'さんごしょうに とうたつ！',
-    npcText:    '{shipName}よ、\nちゅうがたのふねに なったぞ！\nさんごしょうへ こぎだせ！',
-    npc:        'fukurou',
+    npcText:    'やったぞ {shipName}！\nちゅうがたふねに なった！\nさんごしょうへ こぎだせ！',
+    npc:        'tako_zo',
   },
   /** Zone 3 突入 = がいようゾーン開始 */
   zone3: {
     bgFallback: 'linear-gradient(135deg, #1565C0, #0D47A1)',
     icon:       '🌊',
     actLabel:   'Zone 3 がいよう',
-    title:      'おおうみへ こぎだせ！',
-    npcText:    'ちゅうがたのふねで がいようを めざすんじゃ！\nおおきな うみが まっているぞ！',
-    npc:        'fukurou',
+    title:      'だいがたかんせんの せっけいず！',
+    npcText:    'これを 見ろ……！\nだいがたかんせんの せっけいずだ！\nギルドで クラフトすると 伝説の ふねに なれるぞ！',
+    npc:        'tako_zo',
   },
   /** Zone 4 突入 = しんかいゾーン開始 */
   zone4: {

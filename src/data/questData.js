@@ -610,6 +610,100 @@ export const CRAFTSMAN_QUESTS = [
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
+// 船クエスト「タコぞうと深海の旅」（Grade 2 専用）
+// SQ-1: 小型船デビュー / SQ-2: 中型船改造 / SQ-3: 大型艦設計図
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** @type {QuestDef[]} */
+export const SHIP_QUESTS = [
+  {
+    id: 'SQ-1',
+    type: 'sub',
+    chapter: 'sub_ship',
+    title: 'はじめての ふね！',
+    npcId: 'tako_zo',
+    openingText:
+      'おお！2年生の グリモアに 来たか！\n' +
+      'ここは 深海の 世界だぞ！\n' +
+      'まずは ぼくの 小型船を 貸してやる。\n' +
+      'さあ、最初の ワールドに 挑戦してみろ！',
+    closingText:
+      'やったな！これが お前の ふねだ！\n' +
+      'マイふねから カスタマイズできるぞ。\n' +
+      'どんどん クリアして ふねを 強くしよう！',
+    requirements: [
+      { type: 'clear', worldId: '__any_g2__' },  // 任意のGrade 2ワールド
+    ],
+    rewards: {
+      completion: [
+        { type: 'material', id: 'pearl', amount: 2 },
+        { type: 'material', id: 'coral', amount: 2 },
+      ],
+    },
+  },
+
+  {
+    id: 'SQ-2',
+    type: 'sub',
+    chapter: 'sub_ship',
+    title: 'ちゅうがたふねに 改造だ！',
+    npcId: 'tako_zo',
+    openingText:
+      'ここまで 来たか！すごいぞ！\n' +
+      'この 深さまで 来たなら……\n' +
+      'ふねを ちゅうがたに 改造する 時だ！\n' +
+      'もっと 速く、もっと カッコよくなるぞ！',
+    closingText:
+      'きたぁ〜〜！！ちゅうがたふねだ！！\n' +
+      'パーツスロットが ふえたぞ！\n' +
+      'マイふねで 新しい スロットを 試してみよう！',
+    requirements: [
+      { type: 'multi_clear', worldId: '__any_g2__', count: 7 },  // G2を7ワールドクリア
+    ],
+    rewards: {
+      completion: [
+        { type: 'material', id: 'pearl',   amount: 3 },
+        { type: 'material', id: 'coral',   amount: 3 },
+        { type: 'material', id: 'seaglass', amount: 1 },
+      ],
+    },
+    unlockAfter: ['SQ-1'],
+  },
+
+  {
+    id: 'SQ-3',
+    type: 'sub',
+    chapter: 'sub_ship',
+    title: 'だいがたかんせんの せっけいず！',
+    npcId: 'tako_zo',
+    openingText:
+      '信じられない……ここまで 到達するとは。\n' +
+      '深海の 最奥まで あと少しだ。\n' +
+      'この せっけいず……大型艦の 設計図だ。\n' +
+      'ギルドで クラフトすると……想像してみろ！',
+    closingText:
+      'ついに 大型艦の 設計図を 手に入れた！\n' +
+      'ギルドで クラフトすれば\n' +
+      'だいがた かんせん に なれるぞ！\n' +
+      'お前の ふねが 伝説になる日も 近い！',
+    requirements: [
+      { type: 'multi_clear', worldId: '__any_g2__', count: 16 },  // G2を16ワールドクリア
+    ],
+    rewards: {
+      completion: [
+        { type: 'material', id: 'seaglass',  amount: 2 },
+        { type: 'material', id: 'anchor',    amount: 2 },
+        { type: 'material', id: 'deepstone', amount: 1 },
+      ],
+      firstClear: [
+        { type: 'material', id: 'pearl', amount: 2 },
+      ],
+    },
+    unlockAfter: ['SQ-2'],
+  },
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
 // デイリーミッション プール
 // （毎日 Config.GUILD.DAILY_MISSION_COUNT 件をランダムに選出）
 // ─────────────────────────────────────────────────────────────────────────────
@@ -770,6 +864,7 @@ export const ALL_QUESTS = [
   ...CHAPTER4_QUESTS,
   ...TANUKI_QUESTS,
   ...CRAFTSMAN_QUESTS,
+  ...SHIP_QUESTS,
 ];
 
 /**

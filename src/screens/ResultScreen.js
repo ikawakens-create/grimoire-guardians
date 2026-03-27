@@ -19,6 +19,7 @@ import { SaveManager } from '../core/SaveManager.js';
 import { Config } from '../core/Config.js';
 import { SoundManager, SoundType } from '../core/SoundManager.js';
 import HapticFeedback from '../utils/HapticFeedback.js';
+import { MATERIAL_NAMES, MATERIAL_EMOJIS } from '../utils/materialUtils.js';
 import { CharacterAvatar } from '../components/CharacterAvatar.js';
 import WORLDS, { getWorldById } from '../data/worlds.js';
 import { FUKUROU_CLEAR_COMMENTS, ACT_CUTINS, NPC_FIRST_MEET, STORY_IMAGES, PLAYER_VOICE, NG_PLUS_CUTIN } from '../data/storyData.js';
@@ -39,56 +40,13 @@ const STAR_THRESHOLDS = [
   { stars: 0, min: 0    }   // それ以下 → ☆☆☆
 ];
 
-/** 素材の表示名（日本語） */
-const MATERIAL_NAMES = {
-  // Grade 1
-  wood:          'まるた',
-  stone:         'いし',
-  brick:         'れんが',
-  gem:           'ほうせき',
-  star_fragment: 'ほしのかけら',
-  cloth:         'ぬの',
-  paint:         'えのぐ',
-  crown:         'おうかん',
-  cape:          'マント',
-  magic_orb:     'まほうだま',
-  // Grade 2
-  pearl:         'しんじゅ',
-  coral:         'さんご',
-  seaglass:      'うみのガラス',
-  anchor:        'いかり',
-  deepstone:     'しんかいいし',
-};
-
-/** 素材の絵文字 */
-const MATERIAL_EMOJIS = {
-  // Grade 1
-  wood:          '🌲',
-  stone:         '⛰️',
-  brick:         '🧱',
-  gem:           '💎',
-  star_fragment: '✨',
-  cloth:         '🧶',
-  paint:         '🎨',
-  crown:         '👑',
-  cape:          '🧣',
-  magic_orb:     '🔮',
-  // Grade 2
-  pearl:         '🦪',
-  coral:         '🪸',
-  seaglass:      '💠',
-  anchor:        '⚓',
-  deepstone:     '🪨',
-};
+// MATERIAL_NAMES / MATERIAL_EMOJIS は materialUtils.js から import 済み
 
 /** Grade 1 基本素材プール */
 const BASIC_MATERIALS = ['wood', 'stone', 'brick'];
 /** Grade 1 レア素材プール */
 const RARE_MATERIALS  = ['gem', 'star_fragment', 'cloth'];
-/** Grade 2 基本素材プール */
-const G2_BASIC_MATERIALS = ['pearl', 'coral', 'seaglass'];
-/** Grade 2 レア素材プール */
-const G2_RARE_MATERIALS  = ['anchor', 'deepstone'];
+// Grade 2 素材プールは Config.GRADE2.ZONE_DROP_POOLS をゾーンIDで参照（_calcDrops 内）
 
 // ─────────────────────────────────────────
 // ResultScreen クラス
@@ -227,10 +185,21 @@ class ResultScreen {
     const { correctCount } = this._result;
     const drops     = [];
 
-    // グレードに応じた素材プールを選択
-    const isGrade2  = (GameStore.getState('app.currentGrade') || 1) === 2;
-    const basicPool = isGrade2 ? G2_BASIC_MATERIALS : BASIC_MATERIALS;
-    const rarePool  = isGrade2 ? G2_RARE_MATERIALS  : RARE_MATERIALS;
+    // グレードとゾーンに応じた素材プールを選択
+    const isGrade2 = (GameStore.getState('app.currentGrade') || 1) === 2;
+    let basicPool, rarePool;
+    if (isGrade2) {
+      // ワールドの zone を使ってプールを決定（存在しない場合は zone1 フォールバック）
+      const worldId_pre = GameStore.getState('currentSession.worldId');
+      const zoneId      = getWorldById(worldId_pre)?.zone ?? 'zone1';
+      const zonePools   = Config.GRADE2.ZONE_DROP_POOLS[zoneId]
+                       ?? Config.GRADE2.ZONE_DROP_POOLS['zone1'];
+      basicPool = zonePools.basic;
+      rarePool  = zonePools.rare;
+    } else {
+      basicPool = BASIC_MATERIALS;
+      rarePool  = RARE_MATERIALS;
+    }
 
     // ワールドごとのドロップ率乗数を取得（難しい単元は低め → 3〜4回プレイ誘導）
     const worldId         = GameStore.getState('currentSession.worldId');
@@ -803,6 +772,19 @@ class ResultScreen {
     const grade2Moments = ['zone2_start', 'zone3_start', 'zone4_start', 'zone5_start', 'grade2_finale_unlock'];
     if (grade2Moments.includes(actMoment)) {
       GameStore.setState(`app.${actMoment}Shown`, true);
+
+      // 船アップグレード演出をブックシェルフへ遅延（第2段階）
+      // 標準カットインはこのまま表示し、船の演出はブックシェルフ表示後に発火させる
+      if (actMoment === 'zone2_start' && !GameStore.getState('ship.largeCrafted')) {
+        const currentSize = GameStore.getState('ship.size');
+        if (currentSize === 'small') {
+          GameStore.setState('app.pendingShipUpgrade', 'medium');
+        }
+      }
+      if (actMoment === 'zone3_start' && !GameStore.getState('app.largeBlueprintObtained')) {
+        GameStore.setState('app.pendingShipUpgrade', 'large_blueprint');
+      }
+
       // Grade 2 ゾーン転換は専用の演出メソッドに委譲
       return this._showZoneCutin(actMoment, cutin);
     }
