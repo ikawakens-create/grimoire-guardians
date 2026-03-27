@@ -5757,6 +5757,12 @@
 /* ── フッター ──────────────────────────────── */
 .ship-build-footer { padding: 8px 12px; }
 
+/* ── 船ビルド画面ルート（position: relative が必要 — オンボーディング overlay の基準点） */
+.ship-build-screen {
+  position: relative;
+  overflow: hidden;
+}
+
 /* ── オンボーディングオーバーレイ ───────────── */
 .ship-onboarding-overlay {
   position: absolute;

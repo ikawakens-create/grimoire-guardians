@@ -90,7 +90,7 @@ export class ShipBuildScreen {
     this._rendererEl = null;
     this._render();
 
-    // GameStore の変化を監視（素材増加・スロット更新など）
+    // GameStore の変化を監視（素材増加・スロット更新・設計図取得など）
     this._unsubscribe = GameStore.subscribe((path) => {
       if (path.startsWith('ship.') || path.startsWith('inventory.')) {
         const ship = GameStore.getState('ship');
@@ -100,6 +100,10 @@ export class ShipBuildScreen {
         }
         // パネル部分のみ再描画
         this._updatePanels(ship);
+      }
+      // 設計図取得時はフル再描画（ロードマップUIの表示/非表示が変わるため）
+      if (path === 'app.largeBlueprintObtained') {
+        this._render();
       }
     });
 
@@ -131,7 +135,7 @@ export class ShipBuildScreen {
       <div class="ship-build-inner">
 
         ${this._renderHeader(ship)}
-        ${ship.largeBlueprintObtained ? this._renderBlueprintProgress(ship) : ''}
+        ${GameStore.getState('app.largeBlueprintObtained') ? this._renderBlueprintProgress(ship) : ''}
 
         <div class="ship-build-preview-wrap">
           <div id="ship-renderer-mount"></div>

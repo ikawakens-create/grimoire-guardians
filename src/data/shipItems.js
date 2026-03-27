@@ -129,7 +129,7 @@ export const SHIP_PARTS = [
     thumbCrop:  { objectPosition: 'center top', scale: 1.1 },
   },
   {
-    id:         'hata_jolly',
+    id:         'hata_skull',     // ← Config.GRADE2.THEME_SETS pirate/ghost が参照するID
     slotId:     'hata',
     name:       'どくろのはた',
     emoji:      '🚩',
@@ -137,8 +137,20 @@ export const SHIP_PARTS = [
     minSize:    'medium',
     craftCost:  { pearl: 2, seaglass: 2 },
     themeSetId: 'pirate',
-    pngPath:    'assets/ships/hata/hata_jolly.png',
+    pngPath:    'assets/ships/hata/hata_skull.png',
     thumbCrop:  { objectPosition: 'center top', scale: 1.2 },
+  },
+  {
+    id:         'senshu_cannon',
+    slotId:     'senshu',
+    name:       'たいほうのへさきかざり',
+    emoji:      '💣',
+    rarity:     RARITY.RARE,
+    minSize:    'large',
+    craftCost:  { anchor: 3, deepstone: 1 },
+    themeSetId: 'pirate',
+    pngPath:    'assets/ships/senshu/senshu_cannon.png',
+    thumbCrop:  { objectPosition: 'center 40%', scale: 1.2 },
   },
 
   // ── にんぎょセット（mermaid）────────────────
@@ -253,6 +265,43 @@ export const SHIP_PARTS = [
     themeSetId: 'coral',
     pngPath:    'assets/ships/senshu/senshu_crab.png',
     thumbCrop:  { objectPosition: 'center 40%', scale: 1.2 },
+  },
+  {
+    id:         'hata_coral',     // ← Config.GRADE2.THEME_SETS coral が参照するID
+    slotId:     'hata',
+    name:       'さんごのはた',
+    emoji:      '🪸',
+    rarity:     RARITY.COMMON,
+    minSize:    'medium',
+    craftCost:  { coral: 2, seaglass: 1 },
+    themeSetId: 'coral',
+    pngPath:    'assets/ships/hata/hata_coral.png',
+    thumbCrop:  { objectPosition: 'center top', scale: 1.2 },
+  },
+
+  {
+    id:         'senbi_rainbow',  // ← Config.GRADE2.THEME_SETS mermaid が参照するID
+    slotId:     'senbi',
+    name:       'にじのともかざり',
+    emoji:      '🌈',
+    rarity:     RARITY.RARE,
+    minSize:    'large',
+    craftCost:  { pearl: 3, seaglass: 2 },
+    themeSetId: 'mermaid',
+    pngPath:    'assets/ships/senbi/senbi_rainbow.png',
+    thumbCrop:  { objectPosition: 'center', scale: 1.0 },
+  },
+  {
+    id:         'hata_star',      // ← Config.GRADE2.THEME_SETS mermaid/space が参照するID
+    slotId:     'hata',
+    name:       'ほしのはた',
+    emoji:      '⭐',
+    rarity:     RARITY.RARE,
+    minSize:    'medium',
+    craftCost:  { pearl: 2, deepstone: 1 },
+    themeSetId: 'mermaid',
+    pngPath:    'assets/ships/hata/hata_star.png',
+    thumbCrop:  { objectPosition: 'center top', scale: 1.2 },
   },
 
   // ── 単品パーツ（テーマセット非所属）─────────
