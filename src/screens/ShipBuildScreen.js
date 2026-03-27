@@ -232,14 +232,30 @@ export class ShipBuildScreen {
   _renderSmallPreview(ship) {
     const skinId = ship.katachi ?? 'skin_default';
     const skin   = SMALL_SKINS.find(s => s.id === skinId) ?? SMALL_SKINS[0];
-    const filterStyle = skin.filter ? `filter:${skin.filter}` : '';
+    const filterStyle = skin.filter ?? '';
 
     const el = document.createElement('div');
     el.className = 'ship-small-preview';
     el.innerHTML = `
-      <div class="ship-small-emoji" style="${filterStyle}">${skin.emoji}</div>
+      <img class="ship-small-img"
+           src="assets/ships/katachi/small_base.png"
+           alt="${skin.name}">
       <div class="ship-small-name">${skin.name}</div>
     `;
+
+    // CSS filter を img に適用（PNG が color emoji より確実に hue-rotate が効く）
+    const img = el.querySelector('img');
+    if (filterStyle) img.style.filter = filterStyle;
+
+    // small_base.png 未生成時は絵文字にフォールバック
+    img.addEventListener('error', () => {
+      const fallback = document.createElement('div');
+      fallback.className = 'ship-small-emoji';
+      if (filterStyle) fallback.style.filter = filterStyle;
+      fallback.textContent = skin.emoji;
+      img.replaceWith(fallback);
+    });
+
     return el;
   }
 
