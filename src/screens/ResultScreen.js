@@ -25,6 +25,7 @@ import WORLDS, { getWorldById } from '../data/worlds.js';
 import { FUKUROU_CLEAR_COMMENTS, ACT_CUTINS, NPC_FIRST_MEET, STORY_IMAGES, PLAYER_VOICE, NG_PLUS_CUTIN } from '../data/storyData.js';
 import { getMonsterByWorldId } from '../data/memory-monsters.js';
 import { HouseManager } from '../core/HouseManager.js';
+import ShipRenderer from '../components/ShipRenderer.js';
 import { TownManager } from '../core/TownManager.js';
 import { SkinManager } from '../core/SkinManager.js';
 
@@ -826,7 +827,7 @@ class ResultScreen {
    * @returns {Promise<void>}
    * @private
    */
-  _showZoneCutin(actMoment, cutin) {
+  async _showZoneCutin(actMoment, cutin) {
     // XSS エスケープ用ヘルパー（ResultScreen には _esc がないため定義）
     const esc = (s) => String(s)
       .replace(/&/g, '&amp;')
@@ -852,6 +853,17 @@ class ResultScreen {
       zone5: { from: '🚢', to: '🛳️', newSize: 'large' },
     };
     const upgrade = UPGRADES[actMoment] || null;
+
+    // Phase D: upgrade 時に ShipRenderer.renderMini() でキャンバスを事前生成
+    // overlay.innerHTML に canvas を埋め込めないため、先に生成しておき後で appendChild する
+    let beforeCanvas = null, afterCanvas = null;
+    if (upgrade) {
+      const shipState = GameStore.getState('ship');
+      beforeCanvas = await ShipRenderer.renderMini(shipState, 160, 106).catch(() => null);
+      afterCanvas  = await ShipRenderer.renderMini(
+        { ...shipState, size: upgrade.newSize }, 160, 106
+      ).catch(() => null);
+    }
 
     // npcText: {shipName} 置換（エスケープ後）
     const rawNpc = (cutin.npcText || '').replace('{shipName}', esc(shipName));
@@ -879,9 +891,9 @@ class ResultScreen {
       midHtml = `
         <div class="zone-cutin-ship-wrap">
           <div class="zone-cutin-ship-row">
-            <span class="zone-cutin-ship-from" style="animation-delay:${T.ship}s">${upgrade.from}</span>
+            <div class="zone-cutin-ship-before-wrap" style="animation-delay:${T.ship}s"></div>
             <span class="zone-cutin-ship-arrow" style="animation-delay:${T.arrow}s">→</span>
-            <span class="zone-cutin-ship-to"   style="animation-delay:${T.shipTo}s">${upgrade.to}</span>
+            <div class="zone-cutin-ship-after-wrap"  style="animation-delay:${T.shipTo}s"></div>
           </div>
           <div class="zone-cutin-ship-name" style="animation-delay:${T.name}s">${esc(shipName)}</div>
         </div>`;
@@ -907,6 +919,14 @@ class ResultScreen {
         <div class="zone-cutin-title" style="animation-delay:${T.title}s">${esc(cutin.title || '')}</div>
         <button class="zone-cutin-action-btn" style="animation-delay:${T.btn}s">${btnLabel}</button>
       `;
+
+      // Phase D: canvas をプレースホルダーに挿入
+      if (upgrade && beforeCanvas && afterCanvas) {
+        beforeCanvas.className = 'zone-cutin-ship-before';
+        afterCanvas.className  = 'zone-cutin-ship-after';
+        overlay.querySelector('.zone-cutin-ship-before-wrap')?.appendChild(beforeCanvas);
+        overlay.querySelector('.zone-cutin-ship-after-wrap')?.appendChild(afterCanvas);
+      }
 
       // 船サイズ更新（アニメ後に反映）
       if (upgrade) {

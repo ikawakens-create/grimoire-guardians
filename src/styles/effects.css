@@ -1887,18 +1887,24 @@
   align-items: center;
   gap: 14px;
 }
-.zone-cutin-ship-from {
-  font-size: 44px;
+/* Phase D: emoji span → ShipRenderer canvas ラッパーに差し替え */
+.zone-cutin-ship-before-wrap {
   animation: zcutin-pop 0.5s ease both;
+}
+.zone-cutin-ship-after-wrap {
+  animation: zcutin-upgrade 0.7s ease both;
+}
+.zone-cutin-ship-before,
+.zone-cutin-ship-after {
+  display: block;
+  border-radius: 8px;
+  width: 160px;
+  height: 106px;
 }
 .zone-cutin-ship-arrow {
   font-size: 20px;
   color: #FFD700;
   animation: zcutin-rise 0.3s ease both;
-}
-.zone-cutin-ship-to {
-  font-size: 64px;
-  animation: zcutin-upgrade 0.7s ease both;
 }
 .zone-cutin-ship-name {
   font-size: 13px;
