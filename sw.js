@@ -9,7 +9,7 @@
  * @date 2026-03-04
  */
 
-const SW_VERSION   = '2.3.1';
+const SW_VERSION   = '2.3.2';
 const CACHE_NAME   = `grimoire-${SW_VERSION}`;
 
 /** キャッシュ対象ファイル（静的アセット） */
@@ -55,6 +55,7 @@ const ASSETS = [
   './src/screens/GuildScreen.js',
   './src/screens/FarmScreen.js',
   './src/data/shipItems.js',
+  './src/components/ShipRenderer.js',
   // Phase 1-F スキンシステム
   './src/core/SkinManager.js',
   './src/data/skinItems.js',

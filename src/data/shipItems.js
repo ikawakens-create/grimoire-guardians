@@ -6,8 +6,17 @@
  *   SHIP_PARTS 配列末尾に新しいオブジェクトを追加するだけでOK。
  *   テーマセットに含める場合は Config.GRADE2.THEME_SETS の parts[] にIDを追記する。
  *
- * @version 1.0
- * @date 2026-03-21
+ * Phase B: スロット名を新規名に統一
+ *   旧 → 新
+ *   hull       → katachi（船体形状）
+ *   sail       → suishin（推進・帆）
+ *   figurehead → senshu（船首かざり）
+ *   deck       → senbi（船尾かざり）
+ *   flag       → hata（旗）
+ *   glow       → oura（オーラエフェクト）
+ *
+ * @version 2.0
+ * @date 2026-03-28
  */
 
 // ─────────────────────────────────────────────
@@ -27,6 +36,9 @@ export const RARITY_LABEL = {
   [RARITY.EPIC]:   'でんせつ',
 };
 
+/** スロットの描画順（z-index 下→上） */
+export const SLOT_ORDER = ['katachi', 'suishin', 'senshu', 'senbi', 'hata', 'oura'];
+
 // ─────────────────────────────────────────────
 // 小型船スキン（small 時のみ使用）
 // ─────────────────────────────────────────────
@@ -37,14 +49,30 @@ export const RARITY_LABEL = {
  */
 export const SMALL_SKINS = [
   {
-    id:    'skin_default',
-    name:  'ふつうのふね',
-    emoji: '⛵',
+    id:     'skin_default',
+    name:   'ふつうのふね',
+    emoji:  '⛵',
+    filter: null,
   },
   {
-    id:    'skin_star',
-    name:  'ほしのふね',
-    emoji: '🌟',
+    id:     'skin_red',
+    name:   'あかいふね',
+    emoji:  '⛵',
+    filter: 'hue-rotate(340deg) saturate(1.5)',
+    craftCost: { pearl: 1 },
+  },
+  {
+    id:     'skin_blue',
+    name:   'あおいふね',
+    emoji:  '⛵',
+    filter: 'hue-rotate(200deg) saturate(1.3)',
+    craftCost: { pearl: 1 },
+  },
+  {
+    id:     'skin_star',
+    name:   'ほしのふね',
+    emoji:  '🌟',
+    filter: 'hue-rotate(40deg) brightness(1.2)',
     craftCost: { pearl: 1 },
   },
 ];
@@ -57,162 +85,188 @@ export const SMALL_SKINS = [
  * 船パーツ定義
  *
  * @typedef {Object} ShipPart
- * @property {string}   id         - ユニークID（GameStore の ship[partType] に保存される値）
- * @property {string}   partType   - スロット種別: 'hull'|'sail'|'figurehead'|'flag'|'deck'|'glow'
+ * @property {string}   id         - ユニークID（GameStore の ship[slotId] に保存される値）
+ * @property {string}   slotId     - スロット種別: 'katachi'|'suishin'|'senshu'|'senbi'|'hata'|'oura'
  * @property {string}   name       - 表示名（ひらがな）
  * @property {string}   emoji      - アイコン絵文字
  * @property {string}   rarity     - RARITY 定数
  * @property {'medium'|'large'} minSize - 装備できる最小船サイズ
  * @property {Object}   craftCost  - クラフトに必要な素材 { materialId: count }
  * @property {string|null} themeSetId - 所属テーマセットID（Config.GRADE2.THEME_SETS の id）
- * @property {string}   hintWorld  - 「このクイズで素材が手に入る」のヒント文言（任意）
+ * @property {string}   pngPath    - レイヤー PNG のパス
+ * @property {Object}   thumbCrop  - サムネイル表示設定 { objectPosition, scale }
  */
 
 /**
  * 後からパーツを追加する場合はこの配列の末尾に追記するだけ。
- * partType / minSize / themeSetId を正しく設定すれば UI に自動反映される。
+ * slotId / minSize / themeSetId を正しく設定すれば UI に自動反映される。
  */
 export const SHIP_PARTS = [
 
   // ── かいぞくセット（pirate）────────────────
   {
-    id:         'hull_pirate',
-    partType:   'hull',
-    name:       'かいぞくのふね',
+    id:         'katachi_pirate',
+    slotId:     'katachi',
+    name:       'かいぞくのふねがら',
     emoji:      '🏴‍☠️',
     rarity:     RARITY.RARE,
     minSize:    'medium',
     craftCost:  { pearl: 3, coral: 2 },
     themeSetId: 'pirate',
+    pngPath:    'assets/ships/katachi/katachi_pirate.png',
+    thumbCrop:  { objectPosition: 'center', scale: 1.0 },
   },
   {
-    id:         'sail_skull',
-    partType:   'sail',
+    id:         'suishin_skull',
+    slotId:     'suishin',
     name:       'どくろのほ',
     emoji:      '💀',
     rarity:     RARITY.RARE,
     minSize:    'medium',
     craftCost:  { coral: 3, seaglass: 2 },
     themeSetId: 'pirate',
+    pngPath:    'assets/ships/suishin/suishin_skull.png',
+    thumbCrop:  { objectPosition: 'center top', scale: 1.1 },
   },
   {
-    id:         'flag_jolly',
-    partType:   'flag',
+    id:         'hata_jolly',
+    slotId:     'hata',
     name:       'どくろのはた',
     emoji:      '🚩',
     rarity:     RARITY.RARE,
     minSize:    'medium',
     craftCost:  { pearl: 2, seaglass: 2 },
     themeSetId: 'pirate',
+    pngPath:    'assets/ships/hata/hata_jolly.png',
+    thumbCrop:  { objectPosition: 'center top', scale: 1.2 },
   },
 
   // ── にんぎょセット（mermaid）────────────────
   {
-    id:         'hull_pearl',
-    partType:   'hull',
-    name:       'しんじゅのふね',
+    id:         'katachi_pearl',
+    slotId:     'katachi',
+    name:       'しんじゅのふねがら',
     emoji:      '🤍',
     rarity:     RARITY.RARE,
     minSize:    'medium',
     craftCost:  { pearl: 4, seaglass: 1 },
     themeSetId: 'mermaid',
+    pngPath:    'assets/ships/katachi/katachi_pearl.png',
+    thumbCrop:  { objectPosition: 'center', scale: 1.0 },
   },
   {
-    id:         'sail_wave',
-    partType:   'sail',
+    id:         'suishin_wave',
+    slotId:     'suishin',
     name:       'なみのほ',
     emoji:      '🌊',
     rarity:     RARITY.RARE,
     minSize:    'medium',
     craftCost:  { coral: 3, pearl: 2 },
     themeSetId: 'mermaid',
+    pngPath:    'assets/ships/suishin/suishin_wave.png',
+    thumbCrop:  { objectPosition: 'center top', scale: 1.1 },
   },
   {
-    id:         'figurehead_mermaid',
-    partType:   'figurehead',
+    id:         'senshu_mermaid',
+    slotId:     'senshu',
     name:       'にんぎょのへさきかざり',
     emoji:      '🧜',
     rarity:     RARITY.EPIC,
     minSize:    'large',
     craftCost:  { pearl: 4, deepstone: 2 },
     themeSetId: 'mermaid',
+    pngPath:    'assets/ships/senshu/senshu_mermaid.png',
+    thumbCrop:  { objectPosition: 'center 40%', scale: 1.2 },
   },
 
   // ── あらしセット（storm）────────────────────
   {
-    id:         'hull_thunder',
-    partType:   'hull',
-    name:       'かみなりのふね',
+    id:         'katachi_thunder',
+    slotId:     'katachi',
+    name:       'かみなりのふねがら',
     emoji:      '⛈️',
     rarity:     RARITY.RARE,
     minSize:    'medium',
     craftCost:  { anchor: 2, seaglass: 2 },
     themeSetId: 'storm',
+    pngPath:    'assets/ships/katachi/katachi_thunder.png',
+    thumbCrop:  { objectPosition: 'center', scale: 1.0 },
   },
   {
-    id:         'sail_dark',
-    partType:   'sail',
+    id:         'suishin_dark',
+    slotId:     'suishin',
     name:       'くらやみのほ',
     emoji:      '🌑',
     rarity:     RARITY.RARE,
     minSize:    'medium',
     craftCost:  { deepstone: 2, seaglass: 1 },
     themeSetId: 'storm',
+    pngPath:    'assets/ships/suishin/suishin_dark.png',
+    thumbCrop:  { objectPosition: 'center top', scale: 1.1 },
   },
   {
-    id:         'flag_storm',
-    partType:   'flag',
+    id:         'hata_storm',
+    slotId:     'hata',
     name:       'あらしのはた',
     emoji:      '⚡',
     rarity:     RARITY.RARE,
     minSize:    'medium',
     craftCost:  { anchor: 2, deepstone: 1 },
     themeSetId: 'storm',
+    pngPath:    'assets/ships/hata/hata_storm.png',
+    thumbCrop:  { objectPosition: 'center top', scale: 1.2 },
   },
 
   // ── さんごセット（coral）────────────────────
   {
-    id:         'hull_coral',
-    partType:   'hull',
-    name:       'さんごのふね',
+    id:         'katachi_coral',
+    slotId:     'katachi',
+    name:       'さんごのふねがら',
     emoji:      '🪸',
     rarity:     RARITY.COMMON,
     minSize:    'medium',
     craftCost:  { coral: 4, pearl: 1 },
     themeSetId: 'coral',
+    pngPath:    'assets/ships/katachi/katachi_coral.png',
+    thumbCrop:  { objectPosition: 'center', scale: 1.0 },
   },
   {
-    id:         'sail_fan',
-    partType:   'sail',
+    id:         'suishin_fan',
+    slotId:     'suishin',
     name:       'おうぎのほ',
     emoji:      '🪭',
     rarity:     RARITY.COMMON,
     minSize:    'medium',
     craftCost:  { coral: 3, seaglass: 1 },
     themeSetId: 'coral',
+    pngPath:    'assets/ships/suishin/suishin_fan.png',
+    thumbCrop:  { objectPosition: 'center top', scale: 1.1 },
   },
   {
-    id:         'figurehead_crab',
-    partType:   'figurehead',
+    id:         'senshu_crab',
+    slotId:     'senshu',
     name:       'かにのへさきかざり',
     emoji:      '🦀',
     rarity:     RARITY.RARE,
     minSize:    'large',
     craftCost:  { coral: 4, anchor: 2 },
     themeSetId: 'coral',
+    pngPath:    'assets/ships/senshu/senshu_crab.png',
+    thumbCrop:  { objectPosition: 'center 40%', scale: 1.2 },
   },
 
   // ── 単品パーツ（テーマセット非所属）─────────
-  // ここに単品パーツを追加していける
   {
-    id:         'deck_anchor',
-    partType:   'deck',
+    id:         'senbi_anchor',
+    slotId:     'senbi',
     name:       'いかりのかざり',
     emoji:      '⚓',
     rarity:     RARITY.COMMON,
     minSize:    'large',
     craftCost:  { anchor: 2, seaglass: 1 },
     themeSetId: null,
+    pngPath:    'assets/ships/senbi/senbi_anchor.png',
+    thumbCrop:  { objectPosition: 'center', scale: 1.0 },
   },
 ];
 
@@ -231,11 +285,11 @@ export function getPartById(id) {
 
 /**
  * スロット種別でパーツ一覧を取得
- * @param {string} partType - 'hull' | 'sail' | 'figurehead' | 'flag' | 'deck' | 'glow'
+ * @param {string} slotId - 'katachi'|'suishin'|'senshu'|'senbi'|'hata'|'oura'
  * @returns {ShipPart[]}
  */
-export function getPartsByType(partType) {
-  return SHIP_PARTS.filter(p => p.partType === partType);
+export function getPartsBySlot(slotId) {
+  return SHIP_PARTS.filter(p => p.slotId === slotId);
 }
 
 /**

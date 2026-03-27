@@ -264,13 +264,13 @@ export class GameStore {
       nameSetByUser: false,
       /** 見た目サイズ上書き null | 'small'（null = 実際の size に追従） */
       displaySize: null,
-      /** 各パーツの装備中ID（null = デフォルト） */
-      hull:       null,
-      sail:       null,
-      figurehead: null,
-      flag:       null,
-      deck:       null,
-      glow:       null,
+      /** 各スロットの装備中パーツID（null = 未装備）Phase B 新スロット名 */
+      katachi: null,   // 船体形状
+      suishin: null,   // 推進・帆
+      senshu:  null,   // 船首かざり
+      senbi:   null,   // 船尾かざり
+      hata:    null,   // 旗
+      oura:    null,   // オーラエフェクト ('fire'|'bubble'|'star'|'fog'|null)
       /** クラフト済みパーツIDの配列 */
       crafted: [],
       /** テーマセット完成済みID配列（演出重複防止） */
@@ -601,12 +601,12 @@ export class GameStore {
         name: 'グリモア号',
         nameSetByUser: false,
         displaySize: null,
-        hull:       null,
-        sail:       null,
-        figurehead: null,
-        flag:       null,
-        deck:       null,
-        glow:       null,
+        katachi: null,
+        suishin: null,
+        senshu:  null,
+        senbi:   null,
+        hata:    null,
+        oura:    null,
         crafted: [],
         completedThemeSets: [],
         largeCrafted: false,
