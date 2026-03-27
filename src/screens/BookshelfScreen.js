@@ -832,6 +832,11 @@ class BookshelfScreen {
       });
     });
 
+    // 設計図取得フラグをここで確定（消費後に立てる）
+    if (type === 'large_blueprint') {
+      GameStore.setState('app.largeBlueprintObtained', true);
+    }
+
     overlay.classList.add('ship-upgrade-cutin-out');
     await new Promise(r => {
       const tid = setTimeout(r, 300);

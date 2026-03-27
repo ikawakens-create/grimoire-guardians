@@ -775,9 +775,8 @@ class ResultScreen {
 
       // 船アップグレード演出をブックシェルフへ遅延（第2段階）
       // 標準カットインはこのまま表示し、船の演出はブックシェルフ表示後に発火させる
-      if (actMoment === 'zone2_start' && !GameStore.getState('ship.largeCrafted')) {
-        const currentSize = GameStore.getState('ship.size');
-        if (currentSize === 'small') {
+      if (actMoment === 'zone2_start') {
+        if (GameStore.getState('ship.size') === 'small') {
           GameStore.setState('app.pendingShipUpgrade', 'medium');
         }
       }
@@ -830,6 +829,15 @@ class ResultScreen {
       .replace(/"/g, '&quot;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
+
+    // NPC ID → 絵文字マップ（cutin.npc で切り替え）
+    const NPC_EMOJI = {
+      fukurou:  '🦉',
+      tako_zo:  '🐙',
+      tanuki:   '🦝',
+      meister:  '🔨',
+    };
+    const npcEmoji = NPC_EMOJI[cutin.npc] ?? '🦉';
 
     const shipName = GameStore.getState('ship.name') || 'グリモア号';
     const isFinale = actMoment === 'grade2_finale_unlock';
@@ -889,7 +897,7 @@ class ResultScreen {
         <div class="zone-cutin-label" style="animation-delay:${T.label}s">${esc(cutin.actLabel || '')}</div>
         ${midHtml}
         <div class="zone-cutin-bubble" style="animation-delay:${T.bubble}s">
-          <div class="zone-cutin-npc-emoji">🦉</div>
+          <div class="zone-cutin-npc-emoji">${npcEmoji}</div>
           <div class="zone-cutin-npc-text">${npcHtml}</div>
         </div>
         <div class="zone-cutin-title" style="animation-delay:${T.title}s">${esc(cutin.title || '')}</div>
