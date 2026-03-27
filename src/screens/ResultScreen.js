@@ -291,10 +291,14 @@ class ResultScreen {
          </div>`
       : '';
 
-    // ドロップ領域
+    // ドロップ領域（Grade 2 は船サイズバッジを表示）
+    const SHIP_BADGE = { small: '⛵', medium: '🚢', large: '🛳️' };
+    const shipBadge  = GameStore.getState('app.currentGrade') === 2
+      ? `<span class="result-ship-badge">${SHIP_BADGE[GameStore.getState('ship.size') ?? 'small']}</span>`
+      : '';
     const dropsHTML = this._drops.length > 0
       ? `<div class="result-drops">
-           <div class="result-drops-title">✨ ざいりょうドロップ</div>
+           <div class="result-drops-title">${shipBadge}✨ ざいりょうドロップ</div>
            <div class="result-drops-list" id="result-drops-list"></div>
          </div>`
       : `<div class="result-no-drops">
