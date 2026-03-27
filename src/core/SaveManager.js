@@ -116,6 +116,7 @@ class SaveManagerClass {
     }
 
     if (saveData) {
+      this._migrateShipState(saveData);
       this._applyToStore(saveData);
       Logger.info('[SaveManager] セーブデータ反映完了');
     } else {
@@ -209,6 +210,38 @@ class SaveManagerClass {
   // ─────────────────────────────────────────
   // プライベート: GameStore 連携
   // ─────────────────────────────────────────
+
+  /**
+   * 船 state のマイグレーション
+   * Phase A: 新フィールドのデフォルト値を補完する
+   * Phase B: スロットキー名変換（hull→katachi 等）をここに追記する
+   *
+   * localStorage フラグで二重実行を防ぐ。
+   * @param {Object} saveData - ロード直後の生データ（破壊的変更OK）
+   */
+  _migrateShipState(saveData) {
+    const MIGRATED_KEY = 'gg_ship_migrated_v1';
+    if (localStorage.getItem(MIGRATED_KEY)) return;
+
+    const ship = saveData.ship;
+    if (!ship) return;
+
+    // Phase A: 新フィールドが存在しない旧セーブに初期値を補完
+    if (ship.shipBuildGuideShown === undefined) {
+      ship.shipBuildGuideShown = false;
+    }
+
+    // Phase B でここに追記:
+    // const keyMap = { hull:'katachi', sail:'suishin',
+    //                  figurehead:'senshu', deck:'senbi',
+    //                  flag:'hata', glow:'oura' };
+    // Object.entries(keyMap).forEach(([oldKey, newKey]) => {
+    //   if (oldKey in ship) { ship[newKey] = ship[oldKey]; delete ship[oldKey]; }
+    // });
+
+    localStorage.setItem(MIGRATED_KEY, '1');
+    Logger.info('[SaveManager] ship state migration v1 完了');
+  }
 
   /**
    * セーブデータを GameStore に反映する

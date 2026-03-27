@@ -430,9 +430,9 @@ export const Config = {
 
     // NPCレジストリ（画像・色は統一サイズ 120×120px）
     NPCS: [
-      { id: 'owl_librarian',   name: 'フクロウ先生', building: 'library',   image: 'assets/npcs/owl_librarian.png',   emoji: '🦉', color: '#7b5ea7' },
-      { id: 'tanuki_merchant', name: 'タヌキ商人',   building: 'shop',      image: 'assets/npcs/tanuki_merchant.png', emoji: '🦝', color: '#b87333' },
-      { id: 'guild_master',    name: 'ギルドマスター', building: 'guild',   image: 'assets/npcs/guild_master.png',    emoji: '⚔️', color: '#c0392b' },
+      { id: 'owl_librarian',   name: 'フクロウ先生', building: 'library',   image: 'assets/npcs/fukurou.png',    emoji: '🦉', color: '#7b5ea7' },
+      { id: 'tanuki_merchant', name: 'タヌキ商人',   building: 'shop',      image: 'assets/npcs/tanuki.png',     emoji: '🦝', color: '#b87333' },
+      { id: 'guild_master',    name: 'ギルドマスター', building: 'guild',   image: 'assets/npcs/guildmaster.png', emoji: '⚔️', color: '#c0392b' },
     ],
   },
 
@@ -478,15 +478,27 @@ export const Config = {
     // 大型船艦クラフトコスト（Zone 3後に設計図GET・Zone 4中に素材収集）
     LARGE_SHIP_CRAFT_COST: { pearl: 5, coral: 5, anchor: 3, deepstone: 2 },
 
-    // 船パーツ定義（ShipBuildScreen の6部位）
+    // 船スロット定義（v8.0 新スロット名）
+    // Phase B で ShipBuildScreen / shipItems.js がこの ID を参照する
     SHIP_PARTS: [
-      { id: 'hull',       name: 'ふねのほんたい', emoji: '🛥️' },
-      { id: 'sail',       name: 'ほ',            emoji: '🎌' },
-      { id: 'figurehead', name: 'へさきかざり',   emoji: '🐬' },
-      { id: 'flag',       name: 'はた',           emoji: '🚩' },
-      { id: 'deck',       name: 'うえのかざり',   emoji: '⚓' },
-      { id: 'glow',       name: 'そこびかり',     emoji: '✨' },
+      { id: 'katachi', name: 'かたち',           emoji: '🛥️', unlocksAt: 'small'  },
+      { id: 'suishin', name: 'すいしん',         emoji: '🎌', unlocksAt: 'medium' },
+      { id: 'senshu',  name: 'せんしゅ（まえ）', emoji: '🐉', unlocksAt: 'large'  },
+      { id: 'senbi',   name: 'せんび（うしろ）', emoji: '🔥', unlocksAt: 'large'  },
+      { id: 'hata',    name: 'はた',             emoji: '🚩', unlocksAt: 'medium' },
+      { id: 'oura',    name: 'オーラ',           emoji: '✨', unlocksAt: 'large'  },
     ],
+
+    // ゾーン別素材ドロッププール（ResultScreen._calcDrops() が参照）
+    // basic: 90% の確率で選ばれるプール
+    // rare:  10% の確率で選ばれるプール
+    ZONE_DROP_POOLS: {
+      zone1: { basic: ['pearl', 'coral'],                   rare: ['seaglass']          },
+      zone2: { basic: ['pearl', 'coral', 'seaglass'],       rare: ['anchor']             },
+      zone3: { basic: ['seaglass', 'anchor'],               rare: ['deepstone']          },
+      zone4: { basic: ['anchor', 'deepstone'],              rare: ['pearl']              },
+      zone5: { basic: ['anchor', 'deepstone'],              rare: ['pearl', 'seaglass']  },
+    },
 
     // フラッシュモード設定（九九専用：m2_10a〜m2_10i）
     FLASH_MODE: {
@@ -499,35 +511,51 @@ export const Config = {
     // 船の名前 最大文字数
     SHIP_NAME_MAX_LENGTH: 12,
 
-    // テーマセット定義（3パーツ揃うと演出発火）
+    // テーマセット定義（v8.0 6種・新パーツID対応）
+    // parts[] に含まれる全パーツを装備すると演出発火
+    // oura: テーマ完成時に提案するオーラ値（null = 提案なし）
     THEME_SETS: [
       {
-        id:     'pirate',
-        name:   'かいぞくセット',
-        emoji:  '🏴‍☠️',
-        parts:  ['hull_pirate', 'sail_skull', 'flag_jolly'],
-        effect: 'theme-pirate',
+        id:    'pirate',
+        name:  'かいぞくセット',
+        emoji: '🏴‍☠️',
+        parts: ['katachi_pirate', 'suishin_skull', 'senshu_cannon', 'hata_skull'],
+        oura:  null,
       },
       {
-        id:     'mermaid',
-        name:   'にんぎょセット',
-        emoji:  '🧜',
-        parts:  ['hull_pearl', 'sail_wave', 'figurehead_mermaid'],
-        effect: 'theme-mermaid',
+        id:    'coral',
+        name:  'さんごセット',
+        emoji: '🪸',
+        parts: ['katachi_coral', 'suishin_fan', 'hata_coral'],
+        oura:  'bubble',
       },
       {
-        id:     'storm',
-        name:   'あらしセット',
-        emoji:  '⛈️',
-        parts:  ['hull_thunder', 'sail_dark', 'flag_storm'],
-        effect: 'theme-storm',
+        id:    'mermaid',
+        name:  'にんぎょセット',
+        emoji: '🧜',
+        parts: ['katachi_pearl', 'suishin_wave', 'senshu_mermaid', 'senbi_rainbow', 'hata_star'],
+        oura:  'bubble',
       },
       {
-        id:     'coral',
-        name:   'さんごセット',
-        emoji:  '🪸',
-        parts:  ['hull_coral', 'sail_fan', 'figurehead_crab'],
-        effect: 'theme-coral',
+        id:    'ghost',
+        name:  'ゆうれいセット',
+        emoji: '👻',
+        parts: ['katachi_ghost', 'suishin_dark', 'senshu_ghost', 'senbi_broom', 'hata_skull'],
+        oura:  'fog',
+      },
+      {
+        id:    'dragon',
+        name:  'りゅうセット',
+        emoji: '🐉',
+        parts: ['katachi_dragon', 'suishin_magic', 'senshu_dragon', 'senbi_dragon', 'hata_dragon'],
+        oura:  'fire',
+      },
+      {
+        id:    'space',
+        name:  'うちゅうセット',
+        emoji: '🚀',
+        parts: ['katachi_space', 'suishin_rocket', 'senshu_crystal', 'senbi_rocket', 'hata_star'],
+        oura:  'star',
       },
     ],
 
@@ -571,5 +599,6 @@ Object.freeze(Config.GRADE2);
 Object.freeze(Config.GRADE2.FLASH_MODE);
 Object.freeze(Config.GRADE2.LARGE_SHIP_CRAFT_COST);
 Object.freeze(Config.GRADE2.THEME_SETS);
+Object.freeze(Config.GRADE2.ZONE_DROP_POOLS);
 
 export default Config;

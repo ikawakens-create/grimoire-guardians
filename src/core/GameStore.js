@@ -44,6 +44,11 @@ export class GameStore {
       zone4_startShown:          false,
       zone5_startShown:          false,
       grade2_finale_unlockShown: false,
+      /** 船アップグレード演出（ブックシェルフ表示時に発火）
+       *  null | 'medium' | 'large_blueprint' */
+      pendingShipUpgrade:        null,
+      /** 大型船艦の設計図を入手済みか */
+      largeBlueprintObtained:    false,
       /** 最終決戦をクリア済みか */
       finalBattleCleared: false,
       /** NG+ モードが解放済みか（全33ワールドクリア + カットイン表示後にtrue） */
@@ -274,6 +279,8 @@ export class GameStore {
       largeCrafted: false,
       /** フラッシュモード解放済みワールドID配列 */
       flashUnlockedWorlds: [],
+      /** 初回 ShipBuildScreen オンボーディング完了済みか */
+      shipBuildGuideShown: false,
     },
 
     // 街のシステム（Phase 1-E）
@@ -313,6 +320,8 @@ export class GameStore {
         date: null,               // 最後に生成した日付 'YYYY-MM-DD'
         missions: [],             // [{ questId, done }]
       },
+      // 未読クエストバッジ（船アップグレード時に SQ-1〜3 が追加される）
+      newQuestBadge: false,
     },
   };
 
@@ -446,6 +455,8 @@ export class GameStore {
         zone4_startShown:          false,
         zone5_startShown:          false,
         grade2_finale_unlockShown: false,
+        pendingShipUpgrade:        null,
+        largeBlueprintObtained:    false,
         finalBattleCleared: false,
         ngPlusUnlocked: false,
         sealStrength: 0,
@@ -600,6 +611,7 @@ export class GameStore {
         completedThemeSets: [],
         largeCrafted: false,
         flashUnlockedWorlds: [],
+        shipBuildGuideShown: false,
       },
       town: {
         buildings: {
@@ -619,6 +631,7 @@ export class GameStore {
         completedQuests: [],
         questItems:     {},
         daily: { date: null, missions: [] },
+        newQuestBadge:  false,
       },
     };
 

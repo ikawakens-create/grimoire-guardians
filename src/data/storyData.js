@@ -24,9 +24,11 @@ export const STORY_IMAGES = {
     slide06: 'assets/story/prologue/slide_06.png',
   },
   actEvents: {
-    act2Town:   'assets/story/act_events/act2_town.png',
-    act3Fog:    'assets/story/act_events/act3_fog.png',
-    act4Light:  'assets/story/act_events/act4_light.png',
+    act1Craftsman: 'assets/story/act_events/act1_craftsman.png',
+    act2Town:      'assets/story/act_events/act2_town.png',
+    act3Fog:       'assets/story/act_events/act3_fog.png',
+    act4Light:     'assets/story/act_events/act4_light.png',
+    act5Maze:      'assets/story/act_events/act5_maze.png',
   },
   boss: {
     normal:    'assets/story/boss/yami_normal.png',
@@ -41,6 +43,8 @@ export const STORY_IMAGES = {
     fukurou:     'assets/npcs/fukurou.png',
     tanuki:      'assets/npcs/tanuki.png',
     guildmaster: 'assets/npcs/guildmaster.png',
+    meister:     'assets/npcs/meister.png',
+    tailor:      'assets/npcs/tailor.png',
     // Grade 2 NPCs
     takozou:     'assets/npcs/takozou.png',
     rina:        'assets/npcs/rina.png',
@@ -177,6 +181,16 @@ export const PROLOGUE_SLIDES = [
     subText: 'ぜんぶ とりもどすまで\nもとの せかいには かえれない！',
   },
   {
+    id: 'slide_04b',
+    image:         'assets/story/prologue/slide_05.png',
+    bgFallback:    'linear-gradient(135deg, #2d4a1e, #5d8a4e)',
+    emojiFallback: '🐢',
+    showCharacter: false,
+    npc: 'meister',
+    npcText: '……やっと きたか、守護者よ。\nグリモアを とりもどすには 素材が いる。\nワシの 合成屋を つかえ。',
+    text: null,
+  },
+  {
     id: 'slide_05',
     image:       null,
     bgFallback:  'linear-gradient(135deg, #6B48FF, #2D1B69)',
@@ -206,6 +220,19 @@ export const PROLOGUE_SLIDES = [
 // ─────────────────────────────────────────
 
 export const ACT_CUTINS = {
+  /** Act1終了 = world_5（5ワールドクリア）後 — 合成屋・商店開放 */
+  act1: {
+    triggerAfterWorld: 'world_5',
+    image:      STORY_IMAGES.actEvents.act1Craftsman,
+    bgFallback: 'linear-gradient(135deg, #2d4a1e, #5d8a4e)',
+    icon:       '🐢',
+    actLabel:   'Act 1',
+    characterEmotion: 'happy',
+    showCharacter: true,
+    npc: 'meister',
+    npcText: 'ガルド「……あいてるぞ。はいってこい」\nピコ「やった〜！！はやく！！はやく！！」',
+    title: 'ごうせいやが かいてんした！',
+  },
   /** Act2開始 = world_6b（8ワールドクリア）後 */
   act2: {
     triggerAfterWorld: 'world_6b',
@@ -248,6 +275,20 @@ export const ACT_CUTINS = {
     title: 'きぼうの ひかりが もどってきた！',
     removeFogEffect: true,
   },
+  /** Act5突入 = world_11d（くりさがり完全突破）後 */
+  act5: {
+    triggerAfterWorld: 'world_11d',
+    image:      STORY_IMAGES.actEvents.act5Maze,
+    bgFallback: 'linear-gradient(135deg, #0d0d1a, #1a0533)',
+    icon:       '🌑',
+    actLabel:   'Act 5',
+    characterEmotion: 'normal',
+    showCharacter: true,
+    npc: 'fukurou',
+    npcText: '迷宮を 抜けた……！\nやみのまじんの 本体への 最後の 道が\n目の前に ひらいておる……！！',
+    title: 'くらやみの むこうへ……！',
+    addFogEffect: true,
+  },
   /** finale解放 = world_16b（全34ワールドクリア）後 */
   finale: {
     triggerAfterWorld: 'world_16b',
@@ -269,17 +310,17 @@ export const ACT_CUTINS = {
     icon:       '🪸',
     actLabel:   'Zone 2 さんごしょう',
     title:      'さんごしょうに とうたつ！',
-    npcText:    '{shipName}よ、\nちゅうがたのふねに なったぞ！\nさんごしょうへ こぎだせ！',
-    npc:        'fukurou',
+    npcText:    'やったぞ {shipName}！\nちゅうがたふねに なった！\nさんごしょうへ こぎだせ！',
+    npc:        'tako_zo',
   },
   /** Zone 3 突入 = がいようゾーン開始 */
   zone3: {
     bgFallback: 'linear-gradient(135deg, #1565C0, #0D47A1)',
     icon:       '🌊',
     actLabel:   'Zone 3 がいよう',
-    title:      'おおうみへ こぎだせ！',
-    npcText:    'ちゅうがたのふねで がいようを めざすんじゃ！\nおおきな うみが まっているぞ！',
-    npc:        'fukurou',
+    title:      'だいがたかんせんの せっけいず！',
+    npcText:    'これを 見ろ……！\nだいがたかんせんの せっけいずだ！\nギルドで クラフトすると 伝説の ふねに なれるぞ！',
+    npc:        'tako_zo',
   },
   /** Zone 4 突入 = しんかいゾーン開始 */
   zone4: {
@@ -315,6 +356,16 @@ export const ACT_CUTINS = {
 // ─────────────────────────────────────────
 
 export const NPC_FIRST_MEET = {
+  /** world_2クリア後（2ワールドクリア）：ガルド・ピコ登場 */
+  craftsman: {
+    triggerAfterWorld: 'world_2',
+    npc: 'meister',
+    characterEmotion: 'normal',
+    title: '🐢 ごうせいやが まちに あった！',
+    npcText: '……お、はじめて きたか。\nワシが ガルド。\nとなりの ピコと ふたりで\nここを やっとる。',
+    actionLabel: 'ごうせいやへ いく',
+    actionScreen: 'craftsman',
+  },
   /** world_5クリア後（5ワールドクリア）：タヌキ商人登場 */
   tanuki: {
     triggerAfterWorld: 'world_5',
@@ -529,6 +580,16 @@ export const GRAND_FINALE = {
       npc:  'guildmaster',
       text: 'いっしょに たたかえて……\nこうえいだった！！',
       delay: 3000,
+    },
+    {
+      npc:  'meister',
+      text: '……さすがじゃ。\nこれが……さいこうけっさくか。',
+      delay: 4500,
+    },
+    {
+      npc:  'tailor',
+      text: 'やったーーー！！！\nいっしょに できて よかった〜〜！！',
+      delay: 6000,
     },
   ],
   certificateTitle: 'グリモア・ガーディアン',
@@ -794,6 +855,38 @@ export const NG_PLUS = {
 };
 
 /**
+ * NG+ ガルドの秘密エピソード
+ * 全33ワールドクリア後、NG+ 解放と同タイミングで表示する一枚語り。
+ * 合成屋を訪れると解放される隠しエピソード。
+ */
+export const NG_PLUS_GARD_EPISODE = {
+  unlockCondition: '全33ワールドクリア後',
+  slides: [
+    {
+      npc:  'meister',
+      text: '……昔の ワシは、急いで 作ることに こだわっておった。\n早く 早く……早ければ 偉いと 思っとった。',
+    },
+    {
+      npc:  'meister',
+      text: 'ある日、弟子に 作らせたものが 壊れた。\n大切な ものを 守れなかった。\nその日以来……ワシは 「丁寧に」を 選んだ。',
+    },
+    {
+      npc:  'meister',
+      text: 'お前が 問題を 一つ一つ 丁寧に 解くのを\nみていた。……昔の 弟子を 思い出したよ。',
+    },
+    {
+      npc:  'tailor',
+      text: 'ガルドじいさんが そんな 話を するなんて……\nめずらしい！ でも、よかった。\nわたし、ずっと きいてみたかったんだ。',
+    },
+    {
+      npc:  'meister',
+      text: '……うるさい。\nただ……ありがとう、守護者よ。',
+    },
+  ],
+  reward: { type: 'material', id: 'magic_orb', amount: 1 },
+};
+
+/**
  * NG+ 解放カットイン定義（全33ワールドクリア後に1回のみ表示）
  * ResultScreen._showNgPlusCutin() で使用
  */
@@ -878,4 +971,5 @@ export default {
   DAILY_MISSIONS,
   NG_PLUS,
   NG_PLUS_CUTIN,
+  NG_PLUS_GARD_EPISODE,
 };
