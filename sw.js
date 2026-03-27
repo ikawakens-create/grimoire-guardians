@@ -9,7 +9,7 @@
  * @date 2026-03-04
  */
 
-const SW_VERSION   = '2.3.3';
+const SW_VERSION   = '2.3.4';
 const CACHE_NAME   = `grimoire-${SW_VERSION}`;
 
 /** キャッシュ対象ファイル（静的アセット） */
@@ -56,6 +56,24 @@ const ASSETS = [
   './src/screens/FarmScreen.js',
   './src/data/shipItems.js',
   './src/components/ShipRenderer.js',
+  // 船パーツ PNG（Phase B 実装分）
+  'assets/ships/katachi/katachi_pirate.png',
+  'assets/ships/katachi/katachi_pearl.png',
+  'assets/ships/katachi/katachi_thunder.png',
+  'assets/ships/katachi/katachi_coral.png',
+  'assets/ships/suishin/suishin_skull.png',
+  'assets/ships/suishin/suishin_wave.png',
+  'assets/ships/suishin/suishin_dark.png',
+  'assets/ships/suishin/suishin_fan.png',
+  'assets/ships/senshu/senshu_mermaid.png',
+  'assets/ships/senshu/senshu_crab.png',
+  'assets/ships/senshu/senshu_cannon.png',
+  'assets/ships/senbi/senbi_anchor.png',
+  'assets/ships/senbi/senbi_rainbow.png',
+  'assets/ships/hata/hata_skull.png',
+  'assets/ships/hata/hata_storm.png',
+  'assets/ships/hata/hata_coral.png',
+  'assets/ships/hata/hata_star.png',
   // Phase 1-F スキンシステム
   './src/core/SkinManager.js',
   './src/data/skinItems.js',

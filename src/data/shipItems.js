@@ -36,8 +36,11 @@ export const RARITY_LABEL = {
   [RARITY.EPIC]:   'でんせつ',
 };
 
-/** スロットの描画順（z-index 下→上） */
-export const SLOT_ORDER = ['katachi', 'suishin', 'senshu', 'senbi', 'hata', 'oura'];
+/** スロットの描画順（z-index 下→上）
+ * 計画書アーキテクチャ準拠:
+ *   1:katachi → 2:senbi → 3:senshu → 4:suishin → 5:hata → 6:oura
+ */
+export const SLOT_ORDER = ['katachi', 'senbi', 'senshu', 'suishin', 'hata', 'oura'];
 
 // ─────────────────────────────────────────────
 // 小型船スキン（small 時のみ使用）
@@ -59,14 +62,12 @@ export const SMALL_SKINS = [
     name:   'あかいふね',
     emoji:  '⛵',
     filter: 'hue-rotate(340deg) saturate(1.5)',
-    craftCost: { pearl: 1 },
   },
   {
     id:     'skin_blue',
     name:   'あおいふね',
     emoji:  '⛵',
     filter: 'hue-rotate(200deg) saturate(1.3)',
-    craftCost: { pearl: 1 },
   },
   {
     id:     'skin_star',
