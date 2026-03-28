@@ -96,10 +96,11 @@ SHARED STYLE ANCHOR — Ship Part PNG (apply to ALL parts):
 - Outline: 4–5px clean black outlines (must survive 4× downscale to 120×80px thumbnail)
 - Cel-shading: 1 hard shadow band only (terminator at 65% from top-left light source).
   1 top-left specular highlight strip. NO gradient fills. NO multi-band shading.
-- Canvas: 480×320px, PNG-24, fully transparent background.
+- Canvas: 480×320px, pure white background (#FFFFFF) — for alpha masking after generation.
   NO shadows cast on background. NO ground plane. NO environment.
-- Alpha edges: Hard alpha on all structural silhouette edges.
-  Soft alpha ONLY on intentional FX (fire wisps, smoke trails, ghost tails).
+- Background note: White background will be removed via rembg after upload to GitHub.
+  Areas described as "Transparent" in each prompt = regions that should contain
+  ONLY white background (draw nothing there — leave pure white).
 - GLOBAL PHYSICS: Wind direction = RIGHT (→). All sails, flags, smoke, flames,
   and exhaust must flow/billow toward the RIGHT side of canvas. No exceptions.
 - Mast x-position: When present, center mast at exactly x=40% (≈192px from left).
@@ -1615,7 +1616,12 @@ Background: pure white.
 ## 生成後の配置手順
 
 ```bash
-# 1. 透過処理（NPC のみ。船パーツは生成時から透過で作るのでスキップ可）
+# 1. 透過処理（船パーツ・NPC ともに白背景で生成 → GitHub upload 後に実行）
+python3 scripts/remove_bg.py assets/ships/katachi/katachi_pirate.png
+# または全船パーツ一括:
+python3 scripts/remove_bg.py --only ships
+
+# NPC も同様:
 python3 scripts/remove_bg.py assets/npcs/g2/captain_takuzo.png
 
 # 2. ファイル配置
