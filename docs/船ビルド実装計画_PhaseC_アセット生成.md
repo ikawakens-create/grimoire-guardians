@@ -176,8 +176,11 @@ suishin_skull, senshu_cannon, hata_skull must match this wood and iron palette.
 Type: Ship part layer — suishin (sail), pirate theme
 Layer order: ON TOP of katachi_pirate. hata_skull sits ON TOP.
 Thumbnail: 120×80px — large billowing sail with Jolly Roger must read clearly
-DRAW ONLY: One sail, its mast, and basic rigging. DO NOT DRAW: hull body,
-figureheads, stern decorations, other sails, water, sky, background, sea creatures.
+DRAW ONLY: Exactly ONE sail, ONE mast, and minimal rigging. Nothing else.
+DO NOT DRAW: hull body, figureheads, stern decorations, ANY other sails,
+ANY other masts, ANY background sails or rigging behind the main sail,
+water, sky, background, sea creatures. ONE SAIL ONLY — if you draw more than
+one sail or more than one mast, the image is WRONG.
 
 [CANVAS MAP]
 Mast: vertical pole at x=40% (≈192px), from y=95% down to y=10%
@@ -206,9 +209,11 @@ Mast: #3d2010 wood, vertical grain, 1 highlight strip on left face.
 
 [DETAIL ELEMENTS]
 - Jolly Roger centered on sail at ≈(x=38%, y=45%). Occupies 45% of sail width.
-  Skull: round chibi form, large circular eye sockets, wide flat grin.
+  Skull: SOLID WHITE FILL (#f5f5f5) — NOT outline-only. High contrast on cream background.
+  Round chibi skull: large circular eye sockets (filled dark), wide flat grin.
   NOT terrifying — almost cute. Think "friendly Halloween".
-  Crossbones: two femur bones in bold X, thick rounded ends.
+  Crossbones: two femur bones in bold X, SOLID WHITE FILL, thick rounded ends.
+  The entire Jolly Roger must be clearly visible at 120×80px thumbnail.
 - 3 rope ratlines on left side of mast (horizontal rungs, y=30–90%).
 - Tattered sail bottom edge: 2–3 small triangular rips, lower-right.
 
@@ -227,6 +232,9 @@ Match katachi_pirate: mast wood #3d2010, iron hardware #4a4a4a.
 Type: Ship part layer — senshu (bow ornament), pirate theme
 Layer order: ON TOP of katachi_pirate, at bow (left side)
 Thumbnail: 120×80px — chunky cannon silhouette pointing left must be identifiable
+CRITICAL: FLAT 2D SIDE VIEW ONLY. No 3D perspective. No isometric view.
+This is a flat cel-shaded 2D game asset — draw as if looking at the cannon
+directly from the SIDE (90° profile view). NOT from above-front. NOT from 3/4 angle.
 DRAW ONLY: The cannon and its mounting carriage. DO NOT DRAW: hull body,
 sails, mast, flags, cannonballs in flight, smoke effects.
 NOTE: 2 stacked cannonballs on the bracket (static prop) ARE included.
@@ -239,9 +247,12 @@ Two stacked cannonballs: x=40–55%, y=68–80%
 Transparent: y=0–28%, x=59–100%
 
 [SILHOUETTE]
-Barrel: thick cylinder tapering slightly at muzzle. Angled 15° above horizontal.
+FLAT 2D SIDE VIEW: the cannon is drawn as a pure side profile — like a technical
+drawing or classic video game sprite. Width is clearly visible, depth is NOT.
+Barrel: thick flat rectangle tapering slightly. Angled 15° above horizontal.
 Muzzle (left): slightly flared opening, faces left edge.
 Breech (right): round and heavy. Touch-hole visible on top surface.
+The carriage below is also a flat 2D side view — two wheels visible as flat circles.
 
 [PALETTE — PIRATE THEME CONTRACT]
 #2a2a2a = cannon barrel (dark iron)
@@ -280,6 +291,9 @@ Match katachi_pirate: wood #3d2010, iron #4a4a4a, rust #7a3c1a.
 Type: Ship part layer — hata (flag), pirate + ghost theme (SHARED)
 Layer order: ON TOP of suishin layer
 Thumbnail: 120×80px — black flag with Jolly Roger on dark mast = instantly readable
+CRITICAL — OUTPUT EXACTLY ONE FLAG: Generate a single image with one flag and
+one mast. DO NOT generate multiple versions, reference panels, design previews,
+or two flags side by side. ONE image, ONE flag, ONE mast. Nothing else.
 DRAW ONLY: One flag and upper mast section only. DO NOT DRAW: hull, sails,
 any ship body, ocean, sky, background, clouds.
 
@@ -315,7 +329,9 @@ Flag: flat #0d0d0d. Very subtle fabric weave texture (1px grid, barely visible).
 - Thin white halyard rope tying flag hoist edge to mast.
 
 [MAST ALIGNMENT CRITICAL]
-Mast at x=40% (192px). MUST match suishin_skull mast position exactly.
+Mast at EXACTLY x=40% from the left edge (= 192px from left on a 480px canvas).
+This is slightly LEFT OF CENTER — do NOT place at center (x=50%). EXACTLY x=40%.
+MUST match suishin_skull mast position exactly.
 The two masts are the SAME mast — perfect composite alignment required.
 
 [THEME CONTRACT]
