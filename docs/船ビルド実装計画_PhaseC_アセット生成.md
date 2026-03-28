@@ -415,11 +415,14 @@ Sail: x=18–65%, y=22–82%
 Transparent: all areas outside sail and mast
 
 [SILHOUETTE]
-KEY DIFFERENCE: sail edge is NOT rectangular — it undulates.
-Top edge: gentle upward arc (billowing). Left edge: sinusoidal S-curve.
+CRITICAL: The sail silhouette is NOT rectangular. A rectangular sail = WRONG.
+Left edge: sinusoidal S-curve — bulges LEFT at y=30%, then bulges RIGHT at y=65%.
+  The S-curve deviation must be at least 12% canvas width (≈58px). Subtle S = WRONG.
+Top edge: gentle upward arc (billowing).
 Right edge: broad rightward billow (convex, maximum at x=60%).
 Bottom edge: sinusoidal curve, 1 full wave cycle.
 Impression: the sail sways like it is gently moving underwater.
+If your sail left edge is straight or only slightly curved, redraw it as a strong S.
 
 [PALETTE — PEARL THEME CONTRACT]
 #c8e4e0 = sail light area (pale aqua, top-left lit)
@@ -454,8 +457,12 @@ Mast wood #3d2010 consistent across all themes.
 ```
 [GAME ASSET BRIEF]
 Type: Ship part layer — senshu (figurehead), pearl/mermaid theme
+CRITICAL: This is a CARVED STATUE bolted to the bow of a ship — NOT a living character.
+  The figure is made of CARVED PALE CRYSTAL MATERIAL (like white marble or ivory).
+  It does NOT have skin, hair color, or clothing. It is a sculpture. Treat it as such.
+  Wrong output: anime girl with skin tones and clothing. Correct output: pale carved statue.
 Layer order: ON TOP of katachi_pearl, at bow (left side)
-Thumbnail: 120×80px — mermaid with outstretched arms facing left = guardian of the bow
+Thumbnail: 120×80px — carved mermaid statue with outstretched arms facing left = guardian of the bow
 DRAW ONLY: The mermaid figurehead and its mounting bracket. DO NOT DRAW: hull body,
 sails, mast, flags, ocean, waves, other mermaids, background.
 
@@ -480,11 +487,13 @@ Tail: extends backward-right toward mounting bracket.
 #3a8f8a = tail shadow and deep scale areas
 
 [SURFACE]
-Carved material: pale pearl-white crystal. NOT wood, NOT stone.
+Carved material: pale pearl-white crystal. NOT wood, NOT stone. NOT anime skin tone.
 Surface: #e8eef5 flat base with 1 highlight strip on upper-left surfaces.
-This is a sculpture — clean, smooth, no skin texture.
+This is a SCULPTURE — clean, smooth, no skin texture. The entire body is the SAME
+pale material as the hull. Think: figureheads on real 18th century sailing ships.
 Tail: overlapping round scales in #a8d8d0 with #c8e8e0 highlights on upper scales.
 DO NOT generate iridescent/rainbow coloring — flat cel-shaded only.
+DO NOT give the figure warm peach skin, hair with color, or fabric clothing — it is carved stone.
 
 [DETAIL ELEMENTS]
 - Hair: long (#f0e8d8), flowing to the RIGHT in 3–4 distinct strands.
@@ -554,6 +563,8 @@ Match katachi_pearl: teal #3a8f8a, aqua #a8d8d0.
 
 ```
 [GAME ASSET BRIEF]
+CRITICAL — OUTPUT EXACTLY ONE SINGLE IMAGE: One flag, one mast. DO NOT generate
+multiple versions, multiple flags, or a comparison sheet. ONE image only.
 Type: Ship part layer — hata (flag), pearl/mermaid + space theme (SHARED)
 Layer order: ON TOP of suishin layer
 Thumbnail: 120×80px — large gold star on midnight blue = clear and bold
@@ -561,7 +572,9 @@ DRAW ONLY: Flag and upper mast section. DO NOT DRAW: hull, sails, ship body,
 ocean, sky, clouds, background.
 
 [CANVAS MAP]
-Flag mast: x=40% (192px) — match suishin_wave mast position EXACTLY
+Flag mast: x=40% (192px) — this is SLIGHTLY LEFT OF CENTER (center = x=50% = 240px).
+  Do NOT place the mast at canvas center. EXACTLY x=40% = 192px from the left edge.
+  This MUST match suishin_wave mast position exactly for layer compositing.
 Mast visible: y=5–55%
 Flag: x=40–82%, y=7–40%
 Transparent: all outside flag and mast
@@ -583,7 +596,9 @@ Flag: flat #0f1a3d. Barely-visible fine weave texture. NO iridescent shimmer.
 1 shadow band (#1a2a50) across lower-right quarter.
 
 [DETAIL ELEMENTS]
-- Central star: 5-pointed, centered on flag. Occupies 38% of flag height.
+- Central star: EXACTLY 5-POINTED (pentagon-based). NOT 6-pointed, NOT 4-pointed,
+  NOT 8-pointed. Count the points: there must be exactly 5.
+  Centered on flag. Occupies 38% of flag height.
   Fill: #f5e060. Center highlight: #fff8d0 (small bright area at center).
   8 sparkle rays from each point: thin straight lines, #f5e060.
 - 9 scatter stars: 3 medium (#f5e060) + 6 small (#c0d8f0), distributed across flag.
