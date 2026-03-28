@@ -43,6 +43,16 @@ export const SoundType = {
   WORLD_CLEAR:        'world_clear',
   PHASE_CLEAR:        'phase_clear',
 
+  // 船ビルド（Phase F — モック。Web Audio 実装は Phase 1 Audio 待ち）
+  SHIP: {
+    EQUIP_PART:     'ship_equip_part',     // パーツ装備
+    CRAFT_PART:     'ship_craft_part',     // パーツクラフト
+    THEME_COMPLETE: 'ship_theme_complete', // テーマセット完成
+    SIZE_UP:        'ship_size_up',        // サイズアップ
+    LARGE_COMPLETE: 'ship_large_complete', // 大型艦完成
+    WAVE_AMBIENT:   'ship_wave_ambient',   // 波音ループ（将来）
+  },
+
   // BGM（合成音では未対応、将来ファイルで実装）
   BGM_TITLE:          'bgm_title',
   BGM_BOOKSHELF:      'bgm_bookshelf',
