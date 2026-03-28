@@ -5781,6 +5781,64 @@
 .cost-item    { font-size: 0.6rem; padding: 1px 3px; border-radius: 4px; background: rgba(0,0,0,0.4); }
 .cost-ok      { color: var(--color-success, #27AE60); }
 .cost-ng      { color: var(--color-danger, #E74C3C); }
+
+/* ── Phase E: ギルド 大型艦クラフトセクション */
+.guild-largeship-section {
+  margin: 16px;
+  padding: 20px;
+  background: linear-gradient(135deg, #0D47A1 0%, #1565C0 100%);
+  border-radius: 16px;
+  color: white;
+}
+.craft-cost-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0;
+  font-size: 0.9rem;
+}
+.guild-largeship-btn { margin-top: 14px; width: 100%; }
+
+/* ── Phase E: 大型艦完成フルスクリーン演出 */
+.largeship-complete-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.4s ease;
+}
+.largeship-complete-box {
+  text-align: center;
+  max-width: 400px;
+  background: linear-gradient(135deg, #1565C0, #0D47A1);
+  border: 3px solid gold;
+  border-radius: 24px;
+  padding: 40px;
+  animation: slideUp 0.5s ease;
+  color: white;
+}
+.largeship-complete-emoji {
+  font-size: 80px;
+  animation: shipBounce 0.8s ease infinite alternate;
+}
+.largeship-complete-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin: 16px 0 10px;
+}
+.largeship-complete-body {
+  font-size: 0.9rem;
+  line-height: 1.8;
+  margin-bottom: 24px;
+  opacity: 0.9;
+}
+@keyframes shipBounce {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-12px); }
+}
 .part-status  { font-size: 0.62rem; margin-top: 2px; }
 .part-status-equipped { color: var(--color-success, #27AE60); }
 .part-status-locked   { color: rgba(255,255,255,0.4); }
