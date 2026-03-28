@@ -648,7 +648,7 @@ export class GuildScreen {
     `;
 
     section.querySelector('.guild-largeship-btn')?.addEventListener('click', () => {
-      this._craftLargeShip(cost, mats);
+      this._craftLargeShip(cost);
     });
 
     return section;
@@ -656,11 +656,17 @@ export class GuildScreen {
 
   /**
    * 大型艦をクラフトする（素材消費 → フラグ更新 → 演出）
-   * @param {Object} cost  - Config.GRADE2.LARGE_SHIP_CRAFT_COST
-   * @param {Object} mats  - 現在の inventory.materials スナップショット
+   * @param {Object} cost - Config.GRADE2.LARGE_SHIP_CRAFT_COST
    */
-  async _craftLargeShip(cost, mats) {
-    // 素材を消費
+  async _craftLargeShip(cost) {
+    // 二重実行防止（ボタン連打ガード）
+    if (GameStore.getState('ship.largeCrafted')) return;
+
+    // クリック時点の最新素材で再検証してから消費
+    const mats     = GameStore.getState('inventory.materials') ?? {};
+    const canCraft = Object.entries(cost).every(([id, n]) => (mats[id] ?? 0) >= n);
+    if (!canCraft) return;
+
     const newMats = { ...mats };
     Object.entries(cost).forEach(([id, n]) => { newMats[id] = (newMats[id] ?? 0) - n; });
     GameStore.setState('inventory.materials', newMats);
