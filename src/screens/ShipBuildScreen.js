@@ -600,6 +600,7 @@ export class ShipBuildScreen {
     const skinDef = SMALL_SKINS.find(s => s.id === partId);
     if (skinDef) {
       GameStore.setState('ship.katachi', partId);
+      SoundManager.playSFX(SoundType.SHIP.EQUIP_PART);
       this._showEquipEffect();
       return;
     }
@@ -608,6 +609,7 @@ export class ShipBuildScreen {
     if (!part) return;
 
     GameStore.setState(`ship.${part.slotId}`, partId);
+    SoundManager.playSFX(SoundType.SHIP.EQUIP_PART);
     this._showEquipEffect();
     this._checkThemeSetCompletion();
     Logger.info(`[ShipBuildScreen] equipped: ${partId} → ${part.slotId}`);
@@ -667,6 +669,8 @@ export class ShipBuildScreen {
     if (!crafted.includes(part.id)) crafted.push(part.id);
     GameStore.setState('ship.crafted', crafted);
 
+    SoundManager.playSFX(SoundType.SHIP.CRAFT_PART);
+
     // クラフト直後に自動装備
     this._equipPart(part.id);
 
@@ -716,7 +720,7 @@ export class ShipBuildScreen {
     GameStore.setState('ship.size', 'large');
     GameStore.setState('ship.largeCrafted', true);
 
-    SoundManager.playSFX(SoundType.ITEM_GET);
+    SoundManager.playSFX(SoundType.SHIP.LARGE_COMPLETE);
     Logger.info('[ShipBuildScreen] 大型艦 crafted');
     this._render();
   }
@@ -861,7 +865,7 @@ export class ShipBuildScreen {
       </div>
     `;
     (this._el ?? document.body).appendChild(banner);
-    SoundManager.playSFX(SoundType.ITEM_GET);
+    SoundManager.playSFX(SoundType.SHIP.THEME_COMPLETE);
 
     // バナー消去後、oura 提案モーダルを表示（set.oura が設定されている場合のみ）
     setTimeout(() => {
