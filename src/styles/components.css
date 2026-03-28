@@ -680,6 +680,7 @@
   color: rgba(255, 255, 255, 0.85);
   margin-bottom: var(--spacing-sm);
 }
+.result-ship-badge { margin-right: 4px; font-size: 1.1em; }
 
 .result-drops-list {
   display: flex;
@@ -5699,6 +5700,39 @@
   animation: themeGlow 1s ease-in-out infinite;
 }
 
+/* ── スロットタブ横スクロール ──────────────── */
+.slot-tab-bar {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 6px 12px;
+  scrollbar-width: none;
+}
+.slot-tab-bar::-webkit-scrollbar { display: none; }
+
+.slot-tab {
+  flex: 0 0 auto;
+  background: rgba(0,0,0,0.3);
+  color: rgba(255,255,255,0.7);
+  border: 2px solid transparent;
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.15s, background 0.15s;
+}
+.slot-tab-active {
+  border-color: var(--color-primary, #4A90D9);
+  background: rgba(74,144,217,0.25);
+  color: #fff;
+}
+.slot-tab-filled::after {
+  content: ' ✓';
+  font-size: 0.65rem;
+  color: var(--color-success, #27AE60);
+}
+
 /* ── スロットパネル ────────────────────────── */
 .slot-panel {
   padding: 8px 12px;
@@ -5747,6 +5781,64 @@
 .cost-item    { font-size: 0.6rem; padding: 1px 3px; border-radius: 4px; background: rgba(0,0,0,0.4); }
 .cost-ok      { color: var(--color-success, #27AE60); }
 .cost-ng      { color: var(--color-danger, #E74C3C); }
+
+/* ── Phase E: ギルド 大型艦クラフトセクション */
+.guild-largeship-section {
+  margin: 16px;
+  padding: 20px;
+  background: linear-gradient(135deg, #0D47A1 0%, #1565C0 100%);
+  border-radius: 16px;
+  color: white;
+}
+.craft-cost-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0;
+  font-size: 0.9rem;
+}
+.guild-largeship-btn { margin-top: 14px; width: 100%; }
+
+/* ── Phase E: 大型艦完成フルスクリーン演出 */
+.largeship-complete-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.4s ease;
+}
+.largeship-complete-box {
+  text-align: center;
+  max-width: 400px;
+  background: linear-gradient(135deg, #1565C0, #0D47A1);
+  border: 3px solid gold;
+  border-radius: 24px;
+  padding: 40px;
+  animation: slideUp 0.5s ease;
+  color: white;
+}
+.largeship-complete-emoji {
+  font-size: 80px;
+  animation: shipBounce 0.8s ease infinite alternate;
+}
+.largeship-complete-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin: 16px 0 10px;
+}
+.largeship-complete-body {
+  font-size: 0.9rem;
+  line-height: 1.8;
+  margin-bottom: 24px;
+  opacity: 0.9;
+}
+@keyframes shipBounce {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-12px); }
+}
 .part-status  { font-size: 0.62rem; margin-top: 2px; }
 .part-status-equipped { color: var(--color-success, #27AE60); }
 .part-status-locked   { color: rgba(255,255,255,0.4); }
@@ -5756,6 +5848,40 @@
 
 /* ── フッター ──────────────────────────────── */
 .ship-build-footer { padding: 8px 12px; }
+
+/* ── 小型船プレビュー（PNG なし・絵文字 + CSS filter） */
+.ship-small-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  height: 106px;
+  margin: 0 auto;
+  background: linear-gradient(180deg, #56CCF2 0%, #1565C0 100%);
+  border-radius: 12px;
+}
+.ship-small-img   { width: 120px; height: 80px; object-fit: contain; }
+.ship-small-emoji { font-size: 3rem; line-height: 1; }
+.ship-small-name  { font-size: 0.65rem; color: rgba(255,255,255,0.9); margin-top: 4px; }
+
+/* ── クイズ画面 — Grade 2 船ミニプレビュー */
+.quiz-ship-mini {
+  position: absolute;
+  right: 12px;
+  bottom: 8px;
+  width: 120px;
+  height: 80px;
+  border-radius: 8px;
+  opacity: 0.85;
+  pointer-events: none;  /* タップ判定を妨げない */
+}
+
+/* ── 船ビルド画面ルート（position: relative が必要 — オンボーディング overlay の基準点） */
+.ship-build-screen {
+  position: relative;
+  overflow: hidden;
+}
 
 /* ── オンボーディングオーバーレイ ───────────── */
 .ship-onboarding-overlay {
@@ -5815,8 +5941,13 @@
   text-align: center;
   max-width: 360px;
 }
-.ship-upgrade-cutin-ship  { font-size: 64px; margin-bottom: 16px; }
+.ship-upgrade-cutin-ship  { display: flex; align-items: center; gap: 10px; justify-content: center; margin-bottom: 16px; }
 .ship-upgrade-cutin-title { font-size: 22px; font-weight: bold; margin-bottom: 12px; }
 .ship-upgrade-cutin-body  { font-size: 14px; line-height: 1.8; margin-bottom: 16px; }
 .ship-upgrade-cutin-npc   { font-size: 13px; color: var(--color-text-secondary, rgba(255,255,255,0.6)); margin-bottom: 20px; }
 .ship-upgrade-cutin-out   { animation: fadeOut 0.3s ease forwards; }
+/* Phase D: upgrade 演出 canvas スタイル */
+.upgrade-ship-before,
+.upgrade-ship-after,
+.upgrade-ship-single { display: block; border-radius: 8px; }
+.upgrade-ship-arrow  { font-size: 24px; color: #FFD700; align-self: center; }

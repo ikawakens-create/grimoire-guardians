@@ -267,6 +267,7 @@
 }
 
 .quiz-header {
+  position: relative;    /* quiz-ship-mini の position:absolute 基準点 */
   padding: var(--spacing-md) var(--spacing-lg);
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);

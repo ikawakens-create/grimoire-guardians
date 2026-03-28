@@ -36,8 +36,11 @@ export const RARITY_LABEL = {
   [RARITY.EPIC]:   'でんせつ',
 };
 
-/** スロットの描画順（z-index 下→上） */
-export const SLOT_ORDER = ['katachi', 'suishin', 'senshu', 'senbi', 'hata', 'oura'];
+/** スロットの描画順（z-index 下→上）
+ * 計画書アーキテクチャ準拠:
+ *   1:katachi → 2:senbi → 3:senshu → 4:suishin → 5:hata → 6:oura
+ */
+export const SLOT_ORDER = ['katachi', 'senbi', 'senshu', 'suishin', 'hata', 'oura'];
 
 // ─────────────────────────────────────────────
 // 小型船スキン（small 時のみ使用）
@@ -59,14 +62,12 @@ export const SMALL_SKINS = [
     name:   'あかいふね',
     emoji:  '⛵',
     filter: 'hue-rotate(340deg) saturate(1.5)',
-    craftCost: { pearl: 1 },
   },
   {
     id:     'skin_blue',
     name:   'あおいふね',
     emoji:  '⛵',
     filter: 'hue-rotate(200deg) saturate(1.3)',
-    craftCost: { pearl: 1 },
   },
   {
     id:     'skin_star',
@@ -129,7 +130,7 @@ export const SHIP_PARTS = [
     thumbCrop:  { objectPosition: 'center top', scale: 1.1 },
   },
   {
-    id:         'hata_jolly',
+    id:         'hata_skull',     // ← Config.GRADE2.THEME_SETS pirate/ghost が参照するID
     slotId:     'hata',
     name:       'どくろのはた',
     emoji:      '🚩',
@@ -137,8 +138,20 @@ export const SHIP_PARTS = [
     minSize:    'medium',
     craftCost:  { pearl: 2, seaglass: 2 },
     themeSetId: 'pirate',
-    pngPath:    'assets/ships/hata/hata_jolly.png',
+    pngPath:    'assets/ships/hata/hata_skull.png',
     thumbCrop:  { objectPosition: 'center top', scale: 1.2 },
+  },
+  {
+    id:         'senshu_cannon',
+    slotId:     'senshu',
+    name:       'たいほうのへさきかざり',
+    emoji:      '💣',
+    rarity:     RARITY.RARE,
+    minSize:    'large',
+    craftCost:  { anchor: 3, deepstone: 1 },
+    themeSetId: 'pirate',
+    pngPath:    'assets/ships/senshu/senshu_cannon.png',
+    thumbCrop:  { objectPosition: 'center 40%', scale: 1.2 },
   },
 
   // ── にんぎょセット（mermaid）────────────────
@@ -253,6 +266,194 @@ export const SHIP_PARTS = [
     themeSetId: 'coral',
     pngPath:    'assets/ships/senshu/senshu_crab.png',
     thumbCrop:  { objectPosition: 'center 40%', scale: 1.2 },
+  },
+  {
+    id:         'hata_coral',     // ← Config.GRADE2.THEME_SETS coral が参照するID
+    slotId:     'hata',
+    name:       'さんごのはた',
+    emoji:      '🪸',
+    rarity:     RARITY.COMMON,
+    minSize:    'medium',
+    craftCost:  { coral: 2, seaglass: 1 },
+    themeSetId: 'coral',
+    pngPath:    'assets/ships/hata/hata_coral.png',
+    thumbCrop:  { objectPosition: 'center top', scale: 1.2 },
+  },
+
+  {
+    id:         'senbi_rainbow',  // ← Config.GRADE2.THEME_SETS mermaid が参照するID
+    slotId:     'senbi',
+    name:       'にじのともかざり',
+    emoji:      '🌈',
+    rarity:     RARITY.RARE,
+    minSize:    'large',
+    craftCost:  { pearl: 3, seaglass: 2 },
+    themeSetId: 'mermaid',
+    pngPath:    'assets/ships/senbi/senbi_rainbow.png',
+    thumbCrop:  { objectPosition: 'center', scale: 1.0 },
+  },
+  {
+    id:         'hata_star',      // ← Config.GRADE2.THEME_SETS mermaid/space が参照するID
+    slotId:     'hata',
+    name:       'ほしのはた',
+    emoji:      '⭐',
+    rarity:     RARITY.RARE,
+    minSize:    'medium',
+    craftCost:  { pearl: 2, deepstone: 1 },
+    themeSetId: 'mermaid',
+    pngPath:    'assets/ships/hata/hata_star.png',
+    thumbCrop:  { objectPosition: 'center top', scale: 1.2 },
+  },
+
+  // ── ゆうれいセット（ghost）──────────────────
+  // suishin は storm セットの suishin_dark を共用（Config.GRADE2.THEME_SETS 参照）
+  {
+    id:         'katachi_ghost',
+    slotId:     'katachi',
+    name:       'ゆうれいのふねがら',
+    emoji:      '👻',
+    rarity:     RARITY.RARE,
+    minSize:    'medium',
+    craftCost:  { deepstone: 3, seaglass: 2 },
+    themeSetId: 'ghost',
+    pngPath:    'assets/ships/katachi/katachi_ghost.png',
+    thumbCrop:  { objectPosition: 'center', scale: 1.0 },
+  },
+  {
+    id:         'senshu_ghost',
+    slotId:     'senshu',
+    name:       'ゆうれいのへさきかざり',
+    emoji:      '💀',
+    rarity:     RARITY.EPIC,
+    minSize:    'large',
+    craftCost:  { deepstone: 3, seaglass: 2 },
+    themeSetId: 'ghost',
+    pngPath:    'assets/ships/senshu/senshu_ghost.png',
+    thumbCrop:  { objectPosition: 'center 40%', scale: 1.2 },
+  },
+  {
+    id:         'senbi_broom',
+    slotId:     'senbi',
+    name:       'ほうきのともかざり',
+    emoji:      '🧹',
+    rarity:     RARITY.RARE,
+    minSize:    'large',
+    craftCost:  { deepstone: 2, seaglass: 1 },
+    themeSetId: 'ghost',
+    pngPath:    'assets/ships/senbi/senbi_broom.png',
+    thumbCrop:  { objectPosition: 'center', scale: 1.0 },
+  },
+
+  // ── りゅうセット（dragon）────────────────────
+  {
+    id:         'katachi_dragon',
+    slotId:     'katachi',
+    name:       'りゅうのふねがら',
+    emoji:      '🐉',
+    rarity:     RARITY.EPIC,
+    minSize:    'medium',
+    craftCost:  { deepstone: 4, anchor: 3 },
+    themeSetId: 'dragon',
+    pngPath:    'assets/ships/katachi/katachi_dragon.png',
+    thumbCrop:  { objectPosition: 'center', scale: 1.0 },
+  },
+  {
+    id:         'suishin_magic',
+    slotId:     'suishin',
+    name:       'ほのおのすいしん',
+    emoji:      '🔥',
+    rarity:     RARITY.EPIC,
+    minSize:    'medium',
+    craftCost:  { deepstone: 3, anchor: 2 },
+    themeSetId: 'dragon',
+    pngPath:    'assets/ships/suishin/suishin_magic.png',
+    thumbCrop:  { objectPosition: 'center top', scale: 1.1 },
+  },
+  {
+    id:         'senshu_dragon',
+    slotId:     'senshu',
+    name:       'りゅうのへさきかざり',
+    emoji:      '🐲',
+    rarity:     RARITY.EPIC,
+    minSize:    'large',
+    craftCost:  { deepstone: 4, anchor: 3 },
+    themeSetId: 'dragon',
+    pngPath:    'assets/ships/senshu/senshu_dragon.png',
+    thumbCrop:  { objectPosition: 'center 40%', scale: 1.2 },
+  },
+  {
+    id:         'senbi_dragon',
+    slotId:     'senbi',
+    name:       'りゅうのともかざり',
+    emoji:      '🔥',
+    rarity:     RARITY.EPIC,
+    minSize:    'large',
+    craftCost:  { deepstone: 3, anchor: 2 },
+    themeSetId: 'dragon',
+    pngPath:    'assets/ships/senbi/senbi_dragon.png',
+    thumbCrop:  { objectPosition: 'center', scale: 1.0 },
+  },
+  {
+    id:         'hata_dragon',
+    slotId:     'hata',
+    name:       'りゅうのはた',
+    emoji:      '🐉',
+    rarity:     RARITY.EPIC,
+    minSize:    'medium',
+    craftCost:  { deepstone: 2, anchor: 2 },
+    themeSetId: 'dragon',
+    pngPath:    'assets/ships/hata/hata_dragon.png',
+    thumbCrop:  { objectPosition: 'center top', scale: 1.2 },
+  },
+
+  // ── うちゅうセット（space）───────────────────
+  {
+    id:         'katachi_space',
+    slotId:     'katachi',
+    name:       'うちゅうのふねがら',
+    emoji:      '🚀',
+    rarity:     RARITY.EPIC,
+    minSize:    'medium',
+    craftCost:  { deepstone: 4, pearl: 2 },
+    themeSetId: 'space',
+    pngPath:    'assets/ships/katachi/katachi_space.png',
+    thumbCrop:  { objectPosition: 'center', scale: 1.0 },
+  },
+  {
+    id:         'suishin_rocket',
+    slotId:     'suishin',
+    name:       'ロケットすいしん',
+    emoji:      '🚀',
+    rarity:     RARITY.EPIC,
+    minSize:    'medium',
+    craftCost:  { deepstone: 3, pearl: 2 },
+    themeSetId: 'space',
+    pngPath:    'assets/ships/suishin/suishin_rocket.png',
+    thumbCrop:  { objectPosition: 'center top', scale: 1.1 },
+  },
+  {
+    id:         'senshu_crystal',
+    slotId:     'senshu',
+    name:       'すいしょうのへさきかざり',
+    emoji:      '💎',
+    rarity:     RARITY.EPIC,
+    minSize:    'large',
+    craftCost:  { deepstone: 4, pearl: 3 },
+    themeSetId: 'space',
+    pngPath:    'assets/ships/senshu/senshu_crystal.png',
+    thumbCrop:  { objectPosition: 'center 40%', scale: 1.2 },
+  },
+  {
+    id:         'senbi_rocket',
+    slotId:     'senbi',
+    name:       'ロケットのともかざり',
+    emoji:      '🔮',
+    rarity:     RARITY.EPIC,
+    minSize:    'large',
+    craftCost:  { deepstone: 3, pearl: 2 },
+    themeSetId: 'space',
+    pngPath:    'assets/ships/senbi/senbi_rocket.png',
+    thumbCrop:  { objectPosition: 'center', scale: 1.0 },
   },
 
   // ── 単品パーツ（テーマセット非所属）─────────

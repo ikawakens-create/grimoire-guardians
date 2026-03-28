@@ -29,6 +29,7 @@ import ClockFace from '../components/ClockFace.js';
 import ShapeFace from '../components/ShapeFace.js';
 import HitsuzanRenderer from '../components/HitsuzanRenderer.js';
 import { BOSS_TAUNT_LINES } from '../data/storyData.js';
+import ShipRenderer from '../components/ShipRenderer.js';
 
 /** フィードバック待機時間（ms） */
 const FEEDBACK_DELAY = {
@@ -147,6 +148,20 @@ export class QuizScreen {
     // DOM 骨格を構築（まずローディング状態で表示）
     this._buildUI(worldData.title);
     this._container.appendChild(this._el);
+
+    // Grade 2 時: ヘッダーに船ミニプレビューを非同期で追加
+    // クイズ起動をブロックしないよう .then() で遅延処理
+    if (GameStore.getState('app.currentGrade') === 2) {
+      const headerEl = this._el.querySelector('.quiz-header');
+      if (headerEl) {
+        ShipRenderer.renderMini(GameStore.getState('ship'), 120, 80)
+          .then(miniCanvas => {
+            miniCanvas.className = 'quiz-ship-mini';
+            headerEl.appendChild(miniCanvas);
+          })
+          .catch(() => {}); // 失敗してもクイズは続ける
+      }
+    }
 
     // BGM 開始
     SoundManager.playBGM(SoundType.BGM_QUIZ);

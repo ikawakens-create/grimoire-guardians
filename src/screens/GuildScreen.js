@@ -17,6 +17,7 @@ import { SoundManager, SoundType } from '../core/SoundManager.js';
 import HapticFeedback         from '../utils/HapticFeedback.js';
 import { ALL_QUESTS, getDailyPool, getQuestById } from '../data/questData.js';
 import { getWorldById }       from '../data/worlds.js';
+import { getMaterialEmoji, getMaterialName } from '../utils/materialUtils.js';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 定数
@@ -185,6 +186,13 @@ export class GuildScreen {
     this._buildDailySection();
     this._buildActiveSection();
     this._buildAvailableSection();
+
+    // 大型艦クラフトセクション（設計図取得済み & 未クラフトの場合のみ）
+    if (GameStore.getState('app.largeBlueprintObtained') && !GameStore.getState('ship.largeCrafted')) {
+      const board = this._el?.querySelector('.guild-board');
+      if (board) board.appendChild(this._buildLargeShipCraftSection());
+    }
+
     this._bindEvents();
   }
 
@@ -603,6 +611,103 @@ export class GuildScreen {
     p.className = 'guild-empty-msg';
     p.textContent = text;
     return p;
+  }
+
+  // ── 大型艦クラフト（Phase E） ─────────────────────────────────────────────
+
+  /**
+   * 大型艦クラフトセクションを構築して返す
+   * 条件: app.largeBlueprintObtained === true && ship.largeCrafted === false
+   * @returns {HTMLElement}
+   */
+  _buildLargeShipCraftSection() {
+    const cost    = Config.GRADE2.LARGE_SHIP_CRAFT_COST;
+    const mats    = GameStore.getState('inventory.materials') ?? {};
+    const canCraft = Object.entries(cost).every(([id, n]) => (mats[id] ?? 0) >= n);
+
+    const section = document.createElement('section');
+    section.className = 'guild-section guild-largeship-section';
+
+    const costRows = Object.entries(cost).map(([id, n]) => {
+      const have = mats[id] ?? 0;
+      const ok   = have >= n;
+      return `
+        <div class="craft-cost-row">
+          ${getMaterialEmoji(id)} ${getMaterialName(id)} × ${n}
+          <span class="${ok ? 'cost-ok' : 'cost-ng'}">（もち: ${have}）</span>
+        </div>`;
+    }).join('');
+
+    section.innerHTML = `
+      <h2 class="guild-section-title">🚢 → 🛳️ だいがたかんせんクラフト</h2>
+      ${costRows}
+      <button type="button" class="button button-large guild-largeship-btn"
+              ${canCraft ? '' : 'disabled'}>
+        ${canCraft ? '⚒️ クラフトする！' : '素材が たりない…'}
+      </button>
+    `;
+
+    section.querySelector('.guild-largeship-btn')?.addEventListener('click', () => {
+      this._craftLargeShip(cost);
+    });
+
+    return section;
+  }
+
+  /**
+   * 大型艦をクラフトする（素材消費 → フラグ更新 → 演出）
+   * @param {Object} cost - Config.GRADE2.LARGE_SHIP_CRAFT_COST
+   */
+  async _craftLargeShip(cost) {
+    // 二重実行防止（ボタン連打ガード）
+    if (GameStore.getState('ship.largeCrafted')) return;
+
+    // クリック時点の最新素材で再検証してから消費
+    const mats     = GameStore.getState('inventory.materials') ?? {};
+    const canCraft = Object.entries(cost).every(([id, n]) => (mats[id] ?? 0) >= n);
+    if (!canCraft) return;
+
+    const newMats = { ...mats };
+    Object.entries(cost).forEach(([id, n]) => { newMats[id] = (newMats[id] ?? 0) - n; });
+    GameStore.setState('inventory.materials', newMats);
+
+    // フラグ更新
+    GameStore.setState('ship.largeCrafted', true);
+    GameStore.setState('ship.size', 'large');
+
+    // フルスクリーン完成演出
+    await this._showLargeShipCompleteAnim();
+
+    // 大型艦完成クエスト相当のバッジ通知
+    GameStore.setState('guild.newQuestBadge', true);
+  }
+
+  /**
+   * 大型艦完成アニメーションを表示し、ボタンが押されるまで待つ
+   * @returns {Promise<void>}
+   */
+  _showLargeShipCompleteAnim() {
+    const overlay = document.createElement('div');
+    overlay.className = 'largeship-complete-overlay';
+    overlay.innerHTML = `
+      <div class="largeship-complete-box">
+        <div class="largeship-complete-emoji">🛳️</div>
+        <div class="largeship-complete-title">だいがたかんせん かんせい！！</div>
+        <div class="largeship-complete-body">
+          タコぞう「やったー！！！これが……伝説のふねだ！！」
+        </div>
+        <button type="button" class="button button-large largeship-complete-ok">ふねを みる！</button>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    return new Promise(resolve => {
+      overlay.querySelector('.largeship-complete-ok').addEventListener('click', () => {
+        overlay.remove();
+        GameStore.setState('app.currentScreen', 'ship_build');
+        resolve();
+      });
+    });
   }
 
   // ── イベント ──────────────────────────────────────────────────────────────

@@ -9,7 +9,7 @@
  * @date 2026-03-04
  */
 
-const SW_VERSION   = '2.3.2';
+const SW_VERSION   = '2.3.5';
 const CACHE_NAME   = `grimoire-${SW_VERSION}`;
 
 /** キャッシュ対象ファイル（静的アセット） */
@@ -56,6 +56,44 @@ const ASSETS = [
   './src/screens/FarmScreen.js',
   './src/data/shipItems.js',
   './src/components/ShipRenderer.js',
+  // 船パーツ PNG（Phase B 実装分）
+  'assets/ships/katachi/katachi_pirate.png',
+  'assets/ships/katachi/katachi_pearl.png',
+  'assets/ships/katachi/katachi_thunder.png',
+  'assets/ships/katachi/katachi_coral.png',
+  'assets/ships/suishin/suishin_skull.png',
+  'assets/ships/suishin/suishin_wave.png',
+  'assets/ships/suishin/suishin_dark.png',
+  'assets/ships/suishin/suishin_fan.png',
+  'assets/ships/senshu/senshu_mermaid.png',
+  'assets/ships/senshu/senshu_crab.png',
+  'assets/ships/senshu/senshu_cannon.png',
+  'assets/ships/senbi/senbi_anchor.png',
+  'assets/ships/senbi/senbi_rainbow.png',
+  'assets/ships/hata/hata_skull.png',
+  'assets/ships/hata/hata_storm.png',
+  'assets/ships/hata/hata_coral.png',
+  'assets/ships/hata/hata_star.png',
+  // 船パーツ PNG（Phase C 実装分）
+  'assets/ships/katachi/small_base.png',
+  'assets/ships/katachi/katachi_ghost.png',
+  'assets/ships/katachi/katachi_dragon.png',
+  'assets/ships/katachi/katachi_space.png',
+  'assets/ships/suishin/suishin_magic.png',
+  'assets/ships/suishin/suishin_rocket.png',
+  'assets/ships/senshu/senshu_ghost.png',
+  'assets/ships/senshu/senshu_dragon.png',
+  'assets/ships/senshu/senshu_crystal.png',
+  'assets/ships/senbi/senbi_broom.png',
+  'assets/ships/senbi/senbi_dragon.png',
+  'assets/ships/senbi/senbi_rocket.png',
+  'assets/ships/hata/hata_dragon.png',
+  // Grade 2 NPC（Phase C）
+  'assets/npcs/g2/captain_takuzo.png',
+  'assets/npcs/g2/mermaid_lina.png',
+  'assets/npcs/g2/coral_daiku.png',
+  'assets/npcs/g2/lighthouse_ojii.png',
+  'assets/npcs/g2/sea_sage.png',
   // Phase 1-F スキンシステム
   './src/core/SkinManager.js',
   './src/data/skinItems.js',

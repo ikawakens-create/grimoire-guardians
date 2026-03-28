@@ -262,7 +262,7 @@ class SaveManagerClass {
         sail_wave:    'suishin_wave',
         sail_dark:    'suishin_dark',
         sail_fan:     'suishin_fan',
-        flag_jolly:   'hata_jolly',
+        flag_jolly:   'hata_skull',   // hata_skull に統一（Config.THEME_SETS pirate 対応）
         flag_storm:   'hata_storm',
         figurehead_mermaid: 'senshu_mermaid',
         figurehead_crab:    'senshu_crab',

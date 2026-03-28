@@ -90,7 +90,7 @@ export class ShipBuildScreen {
     this._rendererEl = null;
     this._render();
 
-    // GameStore の変化を監視（素材増加・スロット更新など）
+    // GameStore の変化を監視（素材増加・スロット更新・設計図取得など）
     this._unsubscribe = GameStore.subscribe((path) => {
       if (path.startsWith('ship.') || path.startsWith('inventory.')) {
         const ship = GameStore.getState('ship');
@@ -100,6 +100,10 @@ export class ShipBuildScreen {
         }
         // パネル部分のみ再描画
         this._updatePanels(ship);
+      }
+      // 設計図取得時はフル再描画（ロードマップUIの表示/非表示が変わるため）
+      if (path === 'app.largeBlueprintObtained') {
+        this._render();
       }
     });
 
@@ -131,13 +135,15 @@ export class ShipBuildScreen {
       <div class="ship-build-inner">
 
         ${this._renderHeader(ship)}
-        ${ship.largeBlueprintObtained ? this._renderBlueprintProgress(ship) : ''}
+        ${GameStore.getState('app.largeBlueprintObtained') ? this._renderBlueprintProgress(ship) : ''}
 
         <div class="ship-build-preview-wrap">
           <div id="ship-renderer-mount"></div>
           <div class="ship-hotspots" id="ship-hotspots"></div>
           <div class="ship-size-label">${this._sizeLabelText(ship.size)}</div>
         </div>
+
+        ${ship.size !== 'small' ? `<div class="slot-tab-bar" id="slot-tab-bar">${this._renderSlotTabs(ship, slots)}</div>` : ''}
 
         ${this._renderThemeSets(ship)}
 
@@ -153,12 +159,18 @@ export class ShipBuildScreen {
       </div>
     `;
 
-    // ShipRenderer をマウント
+    // ShipRenderer をマウント（small は PNG なし → 絵文字プレビューを使う）
     const mountEl = this._el.querySelector('#ship-renderer-mount');
     if (mountEl) {
-      this._renderer   = new ShipRenderer(ship, dispSize);
-      this._rendererEl = this._renderer.render();
-      mountEl.appendChild(this._rendererEl);
+      if (ship.size === 'small') {
+        this._renderer   = null;
+        this._rendererEl = null;
+        mountEl.appendChild(this._renderSmallPreview(ship));
+      } else {
+        this._renderer   = new ShipRenderer(ship, dispSize);
+        this._rendererEl = this._renderer.render();
+        mountEl.appendChild(this._rendererEl);
+      }
     }
 
     // ホットスポットを生成
@@ -179,6 +191,22 @@ export class ShipBuildScreen {
     const dispSize = ship.displaySize ?? ship.size;
     const slots    = SLOTS_BY_SIZE[ship.size] ?? [];
 
+    // 小型船プレビューの差分更新
+    if (ship.size === 'small') {
+      const mountEl = this._el.querySelector('#ship-renderer-mount');
+      if (mountEl) {
+        mountEl.innerHTML = '';
+        mountEl.appendChild(this._renderSmallPreview(ship));
+      }
+    }
+
+    // スロットタブ更新
+    const tabBarEl = this._el.querySelector('#slot-tab-bar');
+    if (tabBarEl) {
+      tabBarEl.innerHTML = this._renderSlotTabs(ship, slots);
+      this._bindSlotTabs();
+    }
+
     const panelEl = this._el.querySelector('#ship-slot-panel');
     if (panelEl) {
       panelEl.innerHTML = this._renderSlotPanel(ship, dispSize, slots);
@@ -192,6 +220,44 @@ export class ShipBuildScreen {
   // ─────────────────────────────────────────────
   // 各セクション描画
   // ─────────────────────────────────────────────
+
+  // ─── 小型船プレビュー（絵文字 + CSS filter）──
+
+  /**
+   * 小型船用プレビュー要素を生成する
+   * ShipRenderer は PNG を前提とするため small では使用しない
+   * @param {Object} ship
+   * @returns {HTMLElement}
+   */
+  _renderSmallPreview(ship) {
+    const skinId = ship.katachi ?? 'skin_default';
+    const skin   = SMALL_SKINS.find(s => s.id === skinId) ?? SMALL_SKINS[0];
+    const filterStyle = skin.filter ?? '';
+
+    const el = document.createElement('div');
+    el.className = 'ship-small-preview';
+    el.innerHTML = `
+      <img class="ship-small-img"
+           src="assets/ships/katachi/small_base.png"
+           alt="${skin.name}">
+      <div class="ship-small-name">${skin.name}</div>
+    `;
+
+    // CSS filter を img に適用（PNG が color emoji より確実に hue-rotate が効く）
+    const img = el.querySelector('img');
+    if (filterStyle) img.style.filter = filterStyle;
+
+    // small_base.png 未生成時は絵文字にフォールバック
+    img.addEventListener('error', () => {
+      const fallback = document.createElement('div');
+      fallback.className = 'ship-small-emoji';
+      if (filterStyle) fallback.style.filter = filterStyle;
+      fallback.textContent = skin.emoji;
+      img.replaceWith(fallback);
+    });
+
+    return el;
+  }
 
   // ─── ヘッダー ──────────────────────────────
 
@@ -277,6 +343,28 @@ export class ShipBuildScreen {
         this._updatePanels(GameStore.getState('ship'));
       });
     });
+  }
+
+  // ─── スロットタブ（横スクロール）──────────────
+
+  /**
+   * スロット選択タブ一覧 HTML を生成する
+   * ホットスポットタップと同じ動作をする補助 UI
+   */
+  _renderSlotTabs(ship, slots) {
+    return slots.map(slotId => {
+      const label    = SLOT_LABEL[slotId] ?? slotId;
+      const isActive = this._activeSlot === slotId;
+      const partId   = ship[slotId];
+      const hasItem  = !!partId;
+      return `
+        <button type="button"
+          class="slot-tab${isActive ? ' slot-tab-active' : ''}${hasItem ? ' slot-tab-filled' : ''}"
+          data-slot="${slotId}">
+          ${label}
+        </button>
+      `;
+    }).join('');
   }
 
   // ─── テーマセット進捗 ──────────────────────
@@ -459,7 +547,24 @@ export class ShipBuildScreen {
       this._showLargeCraftConfirm();
     });
 
+    // スロットタブ
+    this._bindSlotTabs();
+
     this._bindPanelEvents(ship);
+  }
+
+  _bindSlotTabs() {
+    this._el?.querySelectorAll('.slot-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        SoundManager.playSFX(SoundType.BUTTON_CLICK);
+        this._activeSlot = btn.dataset.slot;
+        const ship = GameStore.getState('ship');
+        if (!ship.shipBuildGuideShown) {
+          GameStore.setState('ship.shipBuildGuideShown', true);
+        }
+        this._updatePanels(ship);
+      });
+    });
   }
 
   _bindPanelEvents(ship) {
@@ -495,6 +600,7 @@ export class ShipBuildScreen {
     const skinDef = SMALL_SKINS.find(s => s.id === partId);
     if (skinDef) {
       GameStore.setState('ship.katachi', partId);
+      SoundManager.playSFX(SoundType.SHIP.EQUIP_PART);
       this._showEquipEffect();
       return;
     }
@@ -503,6 +609,7 @@ export class ShipBuildScreen {
     if (!part) return;
 
     GameStore.setState(`ship.${part.slotId}`, partId);
+    SoundManager.playSFX(SoundType.SHIP.EQUIP_PART);
     this._showEquipEffect();
     this._checkThemeSetCompletion();
     Logger.info(`[ShipBuildScreen] equipped: ${partId} → ${part.slotId}`);
@@ -562,6 +669,8 @@ export class ShipBuildScreen {
     if (!crafted.includes(part.id)) crafted.push(part.id);
     GameStore.setState('ship.crafted', crafted);
 
+    SoundManager.playSFX(SoundType.SHIP.CRAFT_PART);
+
     // クラフト直後に自動装備
     this._equipPart(part.id);
 
@@ -611,7 +720,7 @@ export class ShipBuildScreen {
     GameStore.setState('ship.size', 'large');
     GameStore.setState('ship.largeCrafted', true);
 
-    SoundManager.playSFX(SoundType.ITEM_GET);
+    SoundManager.playSFX(SoundType.SHIP.LARGE_COMPLETE);
     Logger.info('[ShipBuildScreen] 大型艦 crafted');
     this._render();
   }
@@ -756,8 +865,48 @@ export class ShipBuildScreen {
       </div>
     `;
     (this._el ?? document.body).appendChild(banner);
-    SoundManager.playSFX(SoundType.ITEM_GET);
-    setTimeout(() => banner.remove(), 2500);
+    SoundManager.playSFX(SoundType.SHIP.THEME_COMPLETE);
+
+    // バナー消去後、oura 提案モーダルを表示（set.oura が設定されている場合のみ）
+    setTimeout(() => {
+      banner.remove();
+      if (set.oura) {
+        this._showOuraProposal(set);
+      }
+    }, 2500);
+  }
+
+  /**
+   * テーマ達成時のオーラ提案モーダル
+   * @param {Object} set - Config.GRADE2.THEME_SETS のエントリ
+   */
+  _showOuraProposal(set) {
+    const ship    = GameStore.getState('ship');
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay ship-oura-proposal';
+    overlay.innerHTML = `
+      <div class="modal-content">
+        <div class="modal-title">${set.emoji} ${set.name} かんせい！</div>
+        <div class="modal-body">
+          おすすめのオーラ「<strong>${set.oura}</strong>」をつける？
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="button button-success oura-yes-btn">つける！</button>
+          <button type="button" class="button button-secondary oura-no-btn">あとで</button>
+        </div>
+      </div>
+    `;
+
+    overlay.querySelector('.oura-yes-btn').addEventListener('click', () => {
+      GameStore.setState('ship.oura', set.oura);
+      overlay.remove();
+      Logger.info(`[ShipBuildScreen] oura 提案承諾: ${set.oura}`);
+    });
+    overlay.querySelector('.oura-no-btn').addEventListener('click', () => {
+      overlay.remove();
+    });
+
+    (this._el ?? document.body).appendChild(overlay);
   }
 
   // ─────────────────────────────────────────────

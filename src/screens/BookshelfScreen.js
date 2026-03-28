@@ -21,6 +21,7 @@ import WORLDS from '../data/worlds.js';
 import { SEAL_GAUGE_TEXT, FINAL_BATTLE, NG_PLUS } from '../data/storyData.js';
 import InventoryScreen from './InventoryScreen.js';
 import MemoryIsleScreen from './MemoryIsleScreen.js';
+import ShipRenderer from '../components/ShipRenderer.js';
 
 /**
  * BookshelfScreen クラス
@@ -794,8 +795,7 @@ class BookshelfScreen {
   }
 
   /**
-   * 船アップグレード演出を表示する（Phase A: 絵文字のみ版）
-   * Phase B で ShipRenderer.renderMini() を使った本格版に差し替え予定
+   * 船アップグレード演出を表示する（Phase D: ShipRenderer canvas 版）
    * @param {'medium'|'large_blueprint'} type
    * @returns {Promise<void>}
    * @private
@@ -804,17 +804,26 @@ class BookshelfScreen {
     if (!this.element) return;
 
     const isMedium = type === 'medium';
-    const emoji    = isMedium ? '⛴️' : '🚢';
     const title    = isMedium ? 'ふねが おおきくなった！' : 'だいがたかんせんの せっけいずを てにいれた！';
     const body     = isMedium
       ? 'ちゅうがたふね に なったぞ！\nパーツスロットが ふえたよ！'
       : 'ギルドで クラフトすると\nおおきな ふねに なれるぞ！';
 
+    // ShipRenderer.renderMini() で before/after を生成
+    // 呼び出し時点で ship.size はすでに新サイズに更新済みのため
+    // medium 時: before=small（旧サイズ） / after=medium（現在）
+    const ship       = GameStore.getState('ship');
+    const beforeSize = isMedium ? 'small' : ship.size;
+    const currentCanvas = await ShipRenderer.renderMini({ ...ship, size: beforeSize }, 120, 80).catch(() => null);
+    const afterCanvas   = isMedium
+      ? await ShipRenderer.renderMini(ship, 120, 80).catch(() => null)
+      : null;
+
     const overlay = document.createElement('div');
     overlay.className = 'ship-upgrade-cutin';
     overlay.innerHTML = `
       <div class="ship-upgrade-cutin-box">
-        <div class="ship-upgrade-cutin-ship">${emoji}</div>
+        <div class="ship-upgrade-cutin-ship" id="upgrade-ship-slot"></div>
         <div class="ship-upgrade-cutin-title">${title}</div>
         <div class="ship-upgrade-cutin-body">${body.replace(/\n/g, '<br>')}</div>
         <div class="ship-upgrade-cutin-npc">タコぞう「すごいぞ！」</div>
@@ -822,6 +831,24 @@ class BookshelfScreen {
       </div>
     `;
     this.element.appendChild(overlay);
+
+    // canvas を ship slot に挿入
+    const shipSlot = overlay.querySelector('#upgrade-ship-slot');
+    if (shipSlot) {
+      if (isMedium && currentCanvas && afterCanvas) {
+        currentCanvas.className = 'upgrade-ship-before';
+        afterCanvas.className   = 'upgrade-ship-after';
+        const arrow = document.createElement('span');
+        arrow.className   = 'upgrade-ship-arrow';
+        arrow.textContent = '→';
+        shipSlot.appendChild(currentCanvas);
+        shipSlot.appendChild(arrow);
+        shipSlot.appendChild(afterCanvas);
+      } else if (currentCanvas) {
+        currentCanvas.className = 'upgrade-ship-single';
+        shipSlot.appendChild(currentCanvas);
+      }
+    }
 
     // ボタンタップ or オーバーレイ外タップで閉じる
     await new Promise(resolve => {
