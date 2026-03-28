@@ -809,11 +809,14 @@ class BookshelfScreen {
       ? 'ちゅうがたふね に なったぞ！\nパーツスロットが ふえたよ！'
       : 'ギルドで クラフトすると\nおおきな ふねに なれるぞ！';
 
-    // ShipRenderer.renderMini() で現在の船と（medium 時は）新サイズの船を生成
-    const ship = GameStore.getState('ship');
-    const currentCanvas = await ShipRenderer.renderMini(ship, 120, 80).catch(() => null);
+    // ShipRenderer.renderMini() で before/after を生成
+    // 呼び出し時点で ship.size はすでに新サイズに更新済みのため
+    // medium 時: before=small（旧サイズ） / after=medium（現在）
+    const ship       = GameStore.getState('ship');
+    const beforeSize = isMedium ? 'small' : ship.size;
+    const currentCanvas = await ShipRenderer.renderMini({ ...ship, size: beforeSize }, 120, 80).catch(() => null);
     const afterCanvas   = isMedium
-      ? await ShipRenderer.renderMini({ ...ship, size: 'medium' }, 120, 80).catch(() => null)
+      ? await ShipRenderer.renderMini(ship, 120, 80).catch(() => null)
       : null;
 
     const overlay = document.createElement('div');
