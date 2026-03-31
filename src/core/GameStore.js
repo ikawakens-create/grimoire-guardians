@@ -8,6 +8,12 @@
 
 import { Config } from './Config.js';
 import Logger from './Logger.js';
+import {
+  createHouseState,
+  createShipState,
+  createTownState,
+  createGuildState,
+} from './initialState.js';
 
 /**
  * GameStore クラス
@@ -157,172 +163,17 @@ export class GameStore {
       collected: [],
     },
 
-    // 家ビルドシステム（Phase 1-D / v3.1）
-    house: {
-      // セクション（レイヤー）解放状態
-      // v3.1 解放タイミング: garden=7, floor2=11, exterior=13, floor3=19, tower=33
-      sections: {
-        floor1:    true,   // 最初から解放
-        garden:    false,
-        floor2:    false,
-        exterior:  false,  // 装飾レイヤー（オーバーレイ）
-        floor3:    false,
-        tower:     false,
-      },
+    // 家ビルドシステム（Phase 1-D / v3.1）— 詳細は initialState.js を参照
+    house: createHouseState(),
 
-      // ─── v3.1 スタイルシステム ───────────────────────────
-      // 解放済みスタイルID配列（クリア数に応じて増える）
-      unlockedStyles: ['style_wood'],
+    // 船システム（Grade 2 深海グリモア / Phase 2）— 詳細は initialState.js を参照
+    ship: createShipState(),
 
-      // レイヤーごとの選択中スタイル
-      layerStyles: {
-        garden:     'style_wood',
-        floor1:     'style_wood',
-        floor2:     'style_wood',
-        floor3:     'style_wood',
-        tower:      'style_wood',
-        decoration: null,          // 装飾レイヤー（解放後に選択可）
-      },
+    // 街のシステム（Phase 1-E）— 詳細は initialState.js を参照
+    town: createTownState(),
 
-      // ─── 写真機能 ─────────────────────────────────────────
-      photo: {
-        unlockedFrames:  ['frame_simple'],  // 解放済みフレームID
-        unlockedStamps:  [],                // ドロップで増えるスタンプ（絵文字配列）
-        currentFrame:    'frame_simple',
-        currentPose:     'normal',
-        stampPlacements: [],  // [{ emoji, x, y }] 最後の写真のスタンプ配置
-      },
-
-      // 後方互換（既存アイテムクラフト・配置システム用）
-      // 外観プリセットスタイルID
-      exteriorStyle: 'default',
-
-      // 外観装飾スロット（exterior解放後）
-      exteriorDeco: {
-        banner:    null,
-        signboard: null,
-        chimney:   null,
-        roofDeco:  null,
-      },
-
-      // 庭
-      garden: {
-        path: 'path_grass',
-        decorations: [null, null, null, null, null, null, null, null],
-        monsters:    [null, null, null],
-      },
-
-      // 1階
-      floor1: {
-        wallpaper: null,
-        floor:     null,
-        furniture: [null, null, null, null, null, null, null, null],
-      },
-
-      // 2階（floor2解放後のみ使用）
-      floor2: {
-        wallpaper: null,
-        floor:     null,
-        furniture: [null, null, null, null, null, null, null, null],
-      },
-
-      // 3階（floor3解放後のみ使用）
-      floor3: {
-        wallpaper: null,
-        floor:     null,
-        furniture: [null, null, null, null, null, null],
-      },
-
-      // 屋上の塔（tower解放後のみ使用）
-      tower: {
-        decorations: [null, null, null, null],
-      },
-
-      // クラフト済みアイテムIDの配列（実績・コレクション率計算用）
-      crafted: [],
-
-      // マイルストーン達成済みID一覧（重複発火防止）
-      triggeredMilestones: [],
-
-      // ボーナススロット（マイルストーンで拡張）
-      bonusSlots: {
-        garden_extra: 0,
-        floor1_extra:  0,
-      },
-
-      // 最終更新日時
-      lastUpdated: null,
-    },
-
-    // 船システム（Grade 2 深海グリモア / Phase 2）
-    ship: {
-      /** 現在の船サイズ 'small' | 'medium' | 'large' */
-      size: 'small',
-      /** 船の名前（最大12文字） */
-      name: 'グリモア号',
-      /** 名前を手動変更済みか（false = まだデフォルト） */
-      nameSetByUser: false,
-      /** 見た目サイズ上書き null | 'small'（null = 実際の size に追従） */
-      displaySize: null,
-      /** 各スロットの装備中パーツID（null = 未装備）Phase B 新スロット名 */
-      katachi: null,   // 船体形状
-      suishin: null,   // 推進・帆
-      senshu:  null,   // 船首かざり
-      senbi:   null,   // 船尾かざり
-      hata:    null,   // 旗
-      oura:    null,   // オーラエフェクト ('fire'|'bubble'|'star'|'fog'|null)
-      /** クラフト済みパーツIDの配列 */
-      crafted: [],
-      /** テーマセット完成済みID配列（演出重複防止） */
-      completedThemeSets: [],
-      /** 大型船艦クラフト完了済みか */
-      largeCrafted: false,
-      /** フラッシュモード解放済みワールドID配列 */
-      flashUnlockedWorlds: [],
-      /** 初回 ShipBuildScreen オンボーディング完了済みか */
-      shipBuildGuideShown: false,
-    },
-
-    // 街のシステム（Phase 1-E）
-    town: {
-      // 施設レベル（0=ロック中 / 1以上=解放済み）
-      buildings: {
-        craftsman:   { level: 1 },
-        library:     { level: 1 },
-        guild:       { level: 1 },  // 最初から解放
-        house:       { level: 1 },
-        house_build: { level: 0 },  // Q1-3 クエストで解放
-        shop:        { level: 0 },  // Q1-2 クエストで解放
-        farm:        { level: 0 },
-      },
-      // 商店状態
-      shop: {
-        dailyFreeClaimedDate: null,  // 'YYYY-MM-DD'
-      },
-      // 農場状態
-      farm: {
-        // 各プロット: null | { seed, plantedQuizTotal, readyQuizTotal }
-        plots: [],
-        quizTotal: 0,  // 累計クイズ完了数（収穫判定用）
-      },
-    },
-
-    // ギルドシステム（Phase E）
-    guild: {
-      // 受注中クエスト: [{ questId, acceptedAt, progress: { worldId: count } }]
-      activeQuests: [],
-      // 完了済みクエスト ID の配列
-      completedQuests: [],
-      // クエストアイテム所持: { quest_item_id: count }
-      questItems: {},
-      // デイリーミッション状態
-      daily: {
-        date: null,               // 最後に生成した日付 'YYYY-MM-DD'
-        missions: [],             // [{ questId, done }]
-      },
-      // 未読クエストバッジ（船アップグレード時に SQ-1〜3 が追加される）
-      newQuestBadge: false,
-    },
+    // ギルドシステム（Phase E）— 詳細は initialState.js を参照
+    guild: createGuildState(),
   };
 
   // 状態変更の監視者
@@ -536,103 +387,10 @@ export class GameStore {
         clearCounts: {},
         collected: [],
       },
-      house: {
-        sections: {
-          floor1:   true,
-          garden:   false,
-          floor2:   false,
-          exterior: false,
-          floor3:   false,
-          tower:    false,
-        },
-        unlockedStyles: ['style_wood'],
-        layerStyles: {
-          garden:     'style_wood',
-          floor1:     'style_wood',
-          floor2:     'style_wood',
-          floor3:     'style_wood',
-          tower:      'style_wood',
-          decoration: null,
-        },
-        photo: {
-          unlockedFrames:  ['frame_simple'],
-          unlockedStamps:  [],
-          currentFrame:    'frame_simple',
-          currentPose:     'normal',
-          stampPlacements: [],
-        },
-        exteriorStyle: 'default',
-        exteriorDeco: {
-          banner:    null,
-          signboard: null,
-          chimney:   null,
-          roofDeco:  null,
-        },
-        garden: {
-          path: 'path_grass',
-          decorations: [null, null, null, null, null, null, null, null],
-          monsters:    [null, null, null],
-        },
-        floor1: {
-          wallpaper: null,
-          floor:     null,
-          furniture: [null, null, null, null, null, null, null, null],
-        },
-        floor2: {
-          wallpaper: null,
-          floor:     null,
-          furniture: [null, null, null, null, null, null, null, null],
-        },
-        floor3: {
-          wallpaper: null,
-          floor:     null,
-          furniture: [null, null, null, null, null, null],
-        },
-        tower: {
-          decorations: [null, null, null, null],
-        },
-        crafted: [],
-        triggeredMilestones: [],
-        bonusSlots: { garden_extra: 0, floor1_extra: 0 },
-        lastUpdated: null,
-      },
-      ship: {
-        size: 'small',
-        name: 'グリモア号',
-        nameSetByUser: false,
-        displaySize: null,
-        katachi: null,
-        suishin: null,
-        senshu:  null,
-        senbi:   null,
-        hata:    null,
-        oura:    null,
-        crafted: [],
-        completedThemeSets: [],
-        largeCrafted: false,
-        flashUnlockedWorlds: [],
-        shipBuildGuideShown: false,
-      },
-      town: {
-        buildings: {
-          craftsman:   { level: 1 },
-          library:     { level: 1 },
-          guild:       { level: 1 },
-          house:       { level: 1 },
-          house_build: { level: 0 },
-          shop:        { level: 0 },
-          farm:        { level: 0 },
-        },
-        shop: { dailyFreeClaimedDate: null },
-        farm: { plots: [], quizTotal: 0 },
-      },
-      guild: {
-        activeQuests:   [],
-        completedQuests: [],
-        questItems:     {},
-        daily: { date: null, missions: [] },
-        newQuestBadge:  false,
-      },
+      house:  createHouseState(),
+      ship:   createShipState(),
+      town:   createTownState(),
+      guild:  createGuildState(),
     };
 
     this.notifyObservers('*', this.state, null);

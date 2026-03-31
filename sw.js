@@ -21,6 +21,7 @@ const ASSETS = [
   './src/core/Config.js',
   './src/core/Logger.js',
   './src/core/GameStore.js',
+  './src/core/initialState.js',
   './src/core/SoundManager.js',
   './src/core/SaveManager.js',
   './src/core/EventManager.js',
