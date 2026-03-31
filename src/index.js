@@ -118,23 +118,10 @@ function hideLoadingScreen() {
 /** 現在アクティブな画面インスタンスを保持 */
 let _activeScreen = null;
 
-/** 家ビルド画面インスタンス（show/hide方式のためモジュール外で保持） */
-let _houseScreen = null;
-let _houseBuildScreen = null;
-let _photoScreen = null;
-let _craftsmanScreen = null;
-/** 船カスタマイズ画面インスタンス */
-let _shipBuildScreen = null;
-/** 街のシステム画面インスタンス */
-let _townScreen = null;
-let _libraryScreen = null;
-let _shopScreen = null;
-let _guildScreen = null;
-let _farmScreen = null;
-/** インベントリモーダルインスタンス */
+/** Show/Hide パターンの画面インスタンスを一元管理（名前 → インスタンス） */
+const _persistentScreens = new Map();
+/** インベントリはモーダル（open/close）のため個別管理 */
 let _inventoryScreen = null;
-/** 保護者ダッシュボードインスタンス */
-let _parentDashboardScreen = null;
 
 /**
  * ミュートボタンを初期化する（クリックハンドラ登録・初期状態反映）
@@ -190,17 +177,7 @@ function showGameScreen() {
 
     // 全サブ画面を隠すヘルパー
     const hideAll = () => {
-      _houseScreen?.hide?.();
-      _houseBuildScreen?.hide?.();
-      _photoScreen?.hide?.();
-      _craftsmanScreen?.hide?.();
-      _townScreen?.hide?.();
-      _libraryScreen?.hide?.();
-      _shopScreen?.hide?.();
-      _guildScreen?.hide?.();
-      _farmScreen?.hide?.();
-      _shipBuildScreen?.hide?.();
-      _parentDashboardScreen?.hide?.();
+      for (const screen of _persistentScreens.values()) screen?.hide?.();
       _inventoryScreen?.close?.();
       _inventoryScreen = null;
     };
@@ -615,106 +592,40 @@ function showResult(gameScreen, quizResult, worldData) {
 }
 
 /**
- * HouseScreen を描画する
- * @param {HTMLElement} gameScreen
+ * Show/Hide パターンの画面を表示する汎用ヘルパー
+ * インスタンスが未生成なら生成して _persistentScreens に保存し、show() を呼ぶ
+ * @param {string}      name        - 画面識別キー
+ * @param {Function}    ScreenClass - 画面クラス
+ * @param {HTMLElement} container   - ゲーム画面コンテナ
  */
-function showHouse(gameScreen) {
-  if (_activeScreen) {
-    _activeScreen.destroy?.();
-    _activeScreen = null;
-  }
-  if (!_houseScreen) {
-    _houseScreen = new HouseScreen();
-  }
-  _houseScreen.show(gameScreen);
-}
-
-/**
- * PhotoScreen（マイハウス写真館）を描画する
- * @param {HTMLElement} gameScreen
- */
-function showPhoto(gameScreen) {
+function _showPersistent(name, ScreenClass, container) {
   if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
-  if (!_photoScreen) _photoScreen = new PhotoScreen();
-  _photoScreen.show(gameScreen);
+  if (!_persistentScreens.has(name)) _persistentScreens.set(name, new ScreenClass());
+  _persistentScreens.get(name).show(container);
 }
 
-/**
- * HouseBuildScreen を描画する
- * @param {HTMLElement} gameScreen
- */
-function showHouseBuild(gameScreen) {
-  if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
-  if (!_houseBuildScreen) {
-    _houseBuildScreen = new HouseBuildScreen();
-  }
-  _houseBuildScreen.show(gameScreen);
-}
-
-/**
- * CraftsmanScreen（合成屋）を描画する
- * @param {HTMLElement} gameScreen
- */
-function showCraftsman(gameScreen) {
-  if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
-  if (!_craftsmanScreen) _craftsmanScreen = new CraftsmanScreen();
-  _craftsmanScreen.show(gameScreen);
-}
-
+/** HouseScreen（マイハウス）を描画する */
+function showHouse(gameScreen)        { _showPersistent('house',            HouseScreen,           gameScreen); }
+/** PhotoScreen（写真館）を描画する */
+function showPhoto(gameScreen)        { _showPersistent('photo',            PhotoScreen,           gameScreen); }
+/** HouseBuildScreen（家エディター）を描画する */
+function showHouseBuild(gameScreen)   { _showPersistent('house_build',      HouseBuildScreen,      gameScreen); }
+/** CraftsmanScreen（合成屋）を描画する */
+function showCraftsman(gameScreen)    { _showPersistent('craftsman',        CraftsmanScreen,       gameScreen); }
 /** TownScreen（街ハブ）を描画する */
-function showTown(gameScreen) {
-  if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
-  if (!_townScreen) _townScreen = new TownScreen();
-  _townScreen.show(gameScreen);
-}
-
+function showTown(gameScreen)         { _showPersistent('town',             TownScreen,            gameScreen); }
 /** GrimoireLibraryScreen（魔導書庫）を描画する */
-function showLibrary(gameScreen) {
-  if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
-  if (!_libraryScreen) _libraryScreen = new GrimoireLibraryScreen();
-  _libraryScreen.show(gameScreen);
-}
-
+function showLibrary(gameScreen)      { _showPersistent('library',          GrimoireLibraryScreen, gameScreen); }
 /** ShopScreen（商店）を描画する */
-function showShop(gameScreen) {
-  if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
-  if (!_shopScreen) _shopScreen = new ShopScreen();
-  _shopScreen.show(gameScreen);
-}
-
+function showShop(gameScreen)         { _showPersistent('shop',             ShopScreen,            gameScreen); }
 /** GuildScreen（ギルド）を描画する */
-function showGuild(gameScreen) {
-  if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
-  if (!_guildScreen) _guildScreen = new GuildScreen();
-  _guildScreen.show(gameScreen);
-}
-
+function showGuild(gameScreen)        { _showPersistent('guild',            GuildScreen,           gameScreen); }
 /** FarmScreen（魔法農場）を描画する */
-function showFarm(gameScreen) {
-  if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
-  if (!_farmScreen) _farmScreen = new FarmScreen();
-  _farmScreen.show(gameScreen);
-}
-
-/**
- * 船カスタマイズ画面を表示する
- * @param {HTMLElement} gameScreen
- */
-function showShipBuild(gameScreen) {
-  if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
-  if (!_shipBuildScreen) _shipBuildScreen = new ShipBuildScreen();
-  _shipBuildScreen.show(gameScreen);
-}
-
-/**
- * ParentDashboardScreen（保護者ダッシュボード）を描画する
- * @param {HTMLElement} gameScreen
- */
-function showParentDashboard(gameScreen) {
-  if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
-  if (!_parentDashboardScreen) _parentDashboardScreen = new ParentDashboardScreen();
-  _parentDashboardScreen.show(gameScreen);
-}
+function showFarm(gameScreen)         { _showPersistent('farm',             FarmScreen,            gameScreen); }
+/** ShipBuildScreen（船カスタマイズ）を描画する */
+function showShipBuild(gameScreen)    { _showPersistent('ship_build',       ShipBuildScreen,       gameScreen); }
+/** ParentDashboardScreen（保護者ダッシュボード）を描画する */
+function showParentDashboard(gameScreen) { _showPersistent('parent_dashboard', ParentDashboardScreen, gameScreen); }
 
 /**
  * スキン解放通知をトーストで表示する
