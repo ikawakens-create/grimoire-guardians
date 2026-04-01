@@ -15,6 +15,7 @@ import { GameStore } from '../core/GameStore.js';
 import { Config } from '../core/Config.js';
 import Logger from '../core/Logger.js';
 import { TownManager } from '../core/TownManager.js';
+import { SoundManager, SoundType } from '../core/SoundManager.js';
 
 const MATERIAL_EMOJI = {
   wood: '🌲', stone: '⛰️', brick: '🧱', gem: '💎',
@@ -49,6 +50,7 @@ export class FarmScreen {
   show(container) {
     this._container = container;
     this._render();
+    SoundManager.playBGM(SoundType.BGM_FARM);
     Logger.info('[FarmScreen] 表示');
   }
 

@@ -2,13 +2,11 @@
  * SoundManager.js - Grimoire Guardians
  * サウンド管理システム
  *
- * 現在の実装：Web Audio API による合成音（音声ファイル不要）
- * 差し替え方針：将来ファイルベースに移行する場合は _SYNTH_CONFIGS / _BGM_CONFIGS を削除し
- *               playSFX / playBGM の実装部分（"── 合成音再生 ──"以降）を
- *               Audio/HTMLAudioElement ベースに置き換えるだけでよい。
+ * BGM：HTMLAudioElement（MP3ファイル）+ audio.loop = true
+ * SFX：Web Audio API Oscillator（合成音）
  *
- * iOS 制約：最初のユーザー操作（タップ）後に AudioContext を resume する。
- *           _unlock() がその役割を担う。
+ * iOS 制約：最初のユーザー操作（タップ）前は audio.play() が失敗する。
+ *           _unlock() がユーザー操作後に AudioContext resume + BGM リトライを行う。
  *
  * @version 2.1
  * @date 2026-03-06
@@ -53,11 +51,16 @@ export const SoundType = {
     WAVE_AMBIENT:   'ship_wave_ambient',   // 波音ループ（将来）
   },
 
-  // BGM（合成音では未対応、将来ファイルで実装）
+  // BGM
   BGM_TITLE:          'bgm_title',
   BGM_BOOKSHELF:      'bgm_bookshelf',
+  BGM_TOWN:           'bgm_town',
   BGM_QUIZ:           'bgm_quiz',
   BGM_BOSS:           'bgm_boss',
+  BGM_RESULT:         'bgm_result',
+  BGM_HOUSE:          'bgm_house',
+  BGM_HARBOR:         'bgm_harbor',
+  BGM_FARM:           'bgm_farm',
 };
 
 // ─────────────────────────────────────────────────
@@ -132,63 +135,18 @@ const _SYNTH_CONFIGS = {
 };
 
 // ─────────────────────────────────────────────────
-// BGM 合成音の設定テーブル
+// BGM ファイルパスマップ
 // ─────────────────────────────────────────────────
-// notes: SFX と同じ形式の配列。loopDuration: ループ間隔（秒）
-// 将来ファイルに差し替える場合はこのテーブルごと削除してよい。
-// ─────────────────────────────────────────────────
-const _BGM_CONFIGS = {
-  // タイトル画面: ゆっくり・夢幻的なCペンタトニック（sine）
-  [SoundType.BGM_TITLE]: {
-    notes: [
-      { freq: 261.63, type: 'sine', duration: 0.8, gain: 0.18, delay: 0.0 }, // ド C4
-      { freq: 329.63, type: 'sine', duration: 0.8, gain: 0.18, delay: 0.8 }, // ミ E4
-      { freq: 392.00, type: 'sine', duration: 0.8, gain: 0.18, delay: 1.6 }, // ソ G4
-      { freq: 440.00, type: 'sine', duration: 0.8, gain: 0.18, delay: 2.4 }, // ラ A4
-      { freq: 392.00, type: 'sine', duration: 0.8, gain: 0.18, delay: 3.2 }, // ソ G4
-      { freq: 329.63, type: 'sine', duration: 0.8, gain: 0.18, delay: 4.0 }, // ミ E4
-      { freq: 261.63, type: 'sine', duration: 1.2, gain: 0.18, delay: 4.8 }, // ド C4（長め）
-    ],
-    loopDuration: 6.2,
-  },
-  // 本棚画面: ほんわか・好奇心（triangle）
-  [SoundType.BGM_BOOKSHELF]: {
-    notes: [
-      { freq: 523.25, type: 'triangle', duration: 0.5, gain: 0.15, delay: 0.0 }, // ド C5
-      { freq: 587.33, type: 'triangle', duration: 0.5, gain: 0.15, delay: 0.5 }, // レ D5
-      { freq: 659.25, type: 'triangle', duration: 0.5, gain: 0.15, delay: 1.0 }, // ミ E5
-      { freq: 783.99, type: 'triangle', duration: 0.5, gain: 0.15, delay: 1.5 }, // ソ G5
-      { freq: 659.25, type: 'triangle', duration: 0.5, gain: 0.15, delay: 2.0 }, // ミ E5
-      { freq: 587.33, type: 'triangle', duration: 0.5, gain: 0.15, delay: 2.5 }, // レ D5
-      { freq: 523.25, type: 'triangle', duration: 1.0, gain: 0.15, delay: 3.0 }, // ド C5（長め）
-    ],
-    loopDuration: 4.2,
-  },
-  // クイズ画面: 軽快・集中（triangle）
-  [SoundType.BGM_QUIZ]: {
-    notes: [
-      { freq: 659.25, type: 'triangle', duration: 0.22, gain: 0.13, delay: 0.0  }, // ミ E5
-      { freq: 783.99, type: 'triangle', duration: 0.22, gain: 0.13, delay: 0.3  }, // ソ G5
-      { freq: 880.00, type: 'triangle', duration: 0.22, gain: 0.13, delay: 0.6  }, // ラ A5
-      { freq: 783.99, type: 'triangle', duration: 0.22, gain: 0.13, delay: 0.9  }, // ソ G5
-      { freq: 659.25, type: 'triangle', duration: 0.22, gain: 0.13, delay: 1.2  }, // ミ E5
-      { freq: 523.25, type: 'triangle', duration: 0.45, gain: 0.15, delay: 1.5  }, // ド C5（長め）
-    ],
-    loopDuration: 2.1,
-  },
-  // ボス画面: 緊張感・Aマイナー（sawtooth）
-  [SoundType.BGM_BOSS]: {
-    notes: [
-      { freq: 220.00, type: 'sawtooth', duration: 0.35, gain: 0.12, delay: 0.0  }, // ラ A3
-      { freq: 261.63, type: 'sawtooth', duration: 0.35, gain: 0.12, delay: 0.45 }, // ド C4
-      { freq: 329.63, type: 'sawtooth', duration: 0.35, gain: 0.12, delay: 0.9  }, // ミ E4
-      { freq: 392.00, type: 'sawtooth', duration: 0.45, gain: 0.14, delay: 1.35 }, // ソ G4
-      { freq: 329.63, type: 'sawtooth', duration: 0.35, gain: 0.12, delay: 1.85 }, // ミ E4
-      { freq: 261.63, type: 'sawtooth', duration: 0.35, gain: 0.12, delay: 2.3  }, // ド C4
-      { freq: 220.00, type: 'sawtooth', duration: 0.8,  gain: 0.14, delay: 2.75 }, // ラ A3（長め）
-    ],
-    loopDuration: 3.7,
-  },
+const _BGM_FILES = {
+  [SoundType.BGM_TITLE]:     'assets/sounds/bgm/bgm_title.mp3',
+  [SoundType.BGM_BOOKSHELF]: 'assets/sounds/bgm/bgm_bookshelf.mp3',
+  [SoundType.BGM_TOWN]:      'assets/sounds/bgm/bgm_town.mp3',
+  [SoundType.BGM_QUIZ]:      'assets/sounds/bgm/bgm_quiz.mp3',
+  [SoundType.BGM_BOSS]:      'assets/sounds/bgm/bgm_boss.mp3',
+  [SoundType.BGM_RESULT]:    'assets/sounds/bgm/bgm_result.mp3',
+  [SoundType.BGM_HOUSE]:     'assets/sounds/bgm/bgm_house.mp3',
+  [SoundType.BGM_HARBOR]:    'assets/sounds/bgm/bgm_harbor.mp3',
+  [SoundType.BGM_FARM]:      'assets/sounds/bgm/bgm_farm.mp3',
 };
 
 // ─────────────────────────────────────────────────
@@ -205,8 +163,8 @@ export class SoundManager {
   static _audioContext  = null;
   /** @type {boolean} iOS 対策: ユーザー操作後に true になる */
   static _unlocked      = false;
-  /** @type {number|null} BGM ループ用タイマー ID */
-  static _bgmLoopTimer  = null;
+  /** @type {Map<string, HTMLAudioElement>} BGM インスタンスキャッシュ */
+  static _bgmCache  = new Map();
 
   static sounds    = new Map();
   static currentBGM = null;
@@ -249,6 +207,14 @@ export class SoundManager {
       }
       this._unlocked = true;
       Logger.info('[Sound] AudioContext unlocked');
+
+      // ユーザー操作前に playBGM が呼ばれて失敗していた場合にリトライ
+      if (this.currentBGM) {
+        const audio = this._bgmCache.get(this.currentBGM);
+        if (audio && audio.paused) {
+          audio.play().catch(err => Logger.debug('[Sound] BGM retry failed:', err.message));
+        }
+      }
     } catch (err) {
       Logger.warn('[Sound] AudioContext not available:', err.message);
     }
@@ -317,50 +283,46 @@ export class SoundManager {
   }
 
   /**
-   * BGM を再生する（合成音ループ）
-   * 将来ファイルベースに移行する場合はこのメソッドを置き換える。
+   * BGM を再生する（MP3ファイル・ループあり）
    * @param {string} bgmType - SoundType.BGM_* 定数
    */
   static playBGM(bgmType) {
     if (!Config.UI.ENABLE_SOUND || this.isMuted) return;
     if (this.currentBGM === bgmType) return;
     this.stopBGM();
+
+    const path = _BGM_FILES[bgmType];
+    if (!path) {
+      Logger.debug('[Sound] No BGM file for:', bgmType);
+      return;
+    }
+
+    // キャッシュ済みインスタンスを再利用、なければ新規作成
+    if (!this._bgmCache.has(bgmType)) {
+      const audio = new Audio(path);
+      audio.loop = true;
+      this._bgmCache.set(bgmType, audio);
+    }
+
+    const audio = this._bgmCache.get(bgmType);
+    audio.volume = this.bgmVolume * this.masterVolume;
+    audio.currentTime = 0;
+    audio.play().catch(err => Logger.debug('[Sound] BGM play failed:', err.message));
+
     this.currentBGM = bgmType;
     Logger.debug('[Sound] BGM start:', bgmType);
-    this._scheduleBGMLoop(bgmType);
-  }
-
-  /**
-   * BGM をループ再生し続けるスケジューラー
-   * @private
-   * @param {string} bgmType
-   */
-  static _scheduleBGMLoop(bgmType) {
-    const config = _BGM_CONFIGS[bgmType];
-    if (!config) {
-      Logger.debug('[Sound] No BGM config for:', bgmType);
-      return;
-    }
-    // AudioContext が未ロックの場合は短いポーリングで待つ
-    if (!this._audioContext || !this._unlocked) {
-      this._bgmLoopTimer = setTimeout(() => {
-        if (this.currentBGM === bgmType) this._scheduleBGMLoop(bgmType);
-      }, 500);
-      return;
-    }
-    this._playTone(config.notes, 'bgm');
-    this._bgmLoopTimer = setTimeout(() => {
-      if (this.currentBGM === bgmType) this._scheduleBGMLoop(bgmType);
-    }, config.loopDuration * 1000);
   }
 
   /** BGM を停止する */
   static stopBGM() {
-    if (this._bgmLoopTimer !== null) {
-      clearTimeout(this._bgmLoopTimer);
-      this._bgmLoopTimer = null;
+    if (this.currentBGM) {
+      const audio = this._bgmCache.get(this.currentBGM);
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+      this.currentBGM = null;
     }
-    this.currentBGM = null;
   }
 
   /** 全サウンドを停止する */
@@ -382,6 +344,7 @@ export class SoundManager {
   /** @param {number} volume 0.0〜1.0 */
   static setMasterVolume(volume) {
     this.masterVolume = Math.max(0, Math.min(1, volume));
+    this._applyBGMVolume();
     GameStore.setState('sound.masterVolume', this.masterVolume);
   }
 
@@ -394,7 +357,16 @@ export class SoundManager {
   /** @param {number} volume 0.0〜1.0 */
   static setBGMVolume(volume) {
     this.bgmVolume = Math.max(0, Math.min(1, volume));
+    this._applyBGMVolume();
     GameStore.setState('sound.bgmVolume', this.bgmVolume);
+  }
+
+  /** 再生中の BGM に現在の音量を反映する @private */
+  static _applyBGMVolume() {
+    if (this.currentBGM) {
+      const audio = this._bgmCache.get(this.currentBGM);
+      if (audio) audio.volume = this.bgmVolume * this.masterVolume;
+    }
   }
 
   /** 設定をエクスポートする */

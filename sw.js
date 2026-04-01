@@ -9,7 +9,7 @@
  * @date 2026-03-04
  */
 
-const SW_VERSION   = '2.3.5';
+const SW_VERSION   = '2.3.6';
 const CACHE_NAME   = `grimoire-${SW_VERSION}`;
 
 /** キャッシュ対象ファイル（静的アセット） */
@@ -258,6 +258,16 @@ const ASSETS = [
   './assets/story/act_events/act5_maze.png',
   './assets/story/finale/light_burst.png',
   './assets/story/finale/certificate_bg.png',
+  // BGM
+  './assets/sounds/bgm/bgm_title.mp3',
+  './assets/sounds/bgm/bgm_bookshelf.mp3',
+  './assets/sounds/bgm/bgm_town.mp3',
+  './assets/sounds/bgm/bgm_quiz.mp3',
+  './assets/sounds/bgm/bgm_boss.mp3',
+  './assets/sounds/bgm/bgm_result.mp3',
+  './assets/sounds/bgm/bgm_house.mp3',
+  './assets/sounds/bgm/bgm_harbor.mp3',
+  './assets/sounds/bgm/bgm_farm.mp3',
 ];
 
 // ─── インストール ──────────────────────────────────────────

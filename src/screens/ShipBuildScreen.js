@@ -71,6 +71,7 @@ export class ShipBuildScreen {
    */
   show(container) {
     this._container = container;
+    SoundManager.playBGM(SoundType.BGM_HARBOR);
 
     if (this._unsubscribe) {
       this._unsubscribe();
