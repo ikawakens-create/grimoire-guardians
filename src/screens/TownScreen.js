@@ -20,6 +20,7 @@ import { GameStore } from '../core/GameStore.js';
 import Logger from '../core/Logger.js';
 import { TownManager } from '../core/TownManager.js';
 import MemoryIsleScreen from './MemoryIsleScreen.js';
+import { SoundManager, SoundType } from '../core/SoundManager.js';
 
 // 素材絵文字
 const MATERIAL_EMOJI = {
@@ -122,6 +123,7 @@ export class TownScreen {
     this._container = container;
     TownManager.checkAndUnlockBuildings();
     this._render();
+    SoundManager.playBGM(SoundType.BGM_TOWN);
     Logger.info('[TownScreen] v2.0 表示');
   }
 

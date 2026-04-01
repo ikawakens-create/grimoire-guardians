@@ -21,6 +21,7 @@ import { GameStore } from '../core/GameStore.js';
 import { Config } from '../core/Config.js';
 import Logger from '../core/Logger.js';
 import { HouseManager } from '../core/HouseManager.js';
+import { SoundManager, SoundType } from '../core/SoundManager.js';
 import {
   GARDEN_ITEMS,
   RARITY,
@@ -86,6 +87,7 @@ export class HouseBuildScreen {
 
   show(container) {
     this._container = container;
+    SoundManager.playBGM(SoundType.BGM_HOUSE);
 
     // 前画面から引き継いだターゲットレイヤーがあれば適用
     const targetLayer = GameStore.getState('app.styleTargetLayer');

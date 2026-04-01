@@ -20,6 +20,7 @@ import Logger from '../core/Logger.js';
 import { HouseManager } from '../core/HouseManager.js';
 import { getItemById } from '../data/houseItems.js';
 import { getStyleById } from '../data/styleItems.js';
+import { SoundManager, SoundType } from '../core/SoundManager.js';
 
 // ビューモード
 const VIEW = {
@@ -60,6 +61,7 @@ export class HouseScreen {
   show(container) {
     this._container = container;
     this._view = VIEW.OVERVIEW;
+    SoundManager.playBGM(SoundType.BGM_HOUSE);
 
     // セクション解放チェック
     const { newSections, newMilestones } = HouseManager.checkProgressUnlocks();

@@ -105,7 +105,7 @@ class ResultScreen {
    */
   render() {
     Logger.info('[ResultScreen] Rendering...');
-    SoundManager.playBGM(SoundType.BGM_BOOKSHELF);
+    SoundManager.playBGM(SoundType.BGM_RESULT);
 
     const stars   = this._calcStars(this._result.percentage);
     const cleared = this._result.percentage >= Config.GAME.CLEAR_THRESHOLD;

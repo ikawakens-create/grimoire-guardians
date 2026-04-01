@@ -237,7 +237,7 @@ class FinalBattleScreen {
     this._currentIdx   = 0;
     this._correctCount = 0;
     this._bossHp       = 100;
-    SoundManager.playBGM(SoundType.BGM_QUIZ);
+    SoundManager.playBGM(SoundType.BGM_BOSS);
     this._renderBattleUI();
     this._showQuestion();
   }
