@@ -62,7 +62,10 @@ Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon,
 ```
 realistic, 3D render, photorealistic, dark background, colored background, gradient background,
 shadow under feet, thin outline, muted colors, dull palette, scary face, adult content,
-overly detailed weapon, blurry, low quality, watermark, text, multiple characters
+overly detailed weapon, blurry, low quality, watermark, text, multiple characters,
+surrounding aura, floating particles around body, energy aura, fire aura,
+sparkles floating around character, petals floating around, bubbles floating around,
+stars floating around character, speed lines around body, smoke or steam effects
 ```
 
 ---
@@ -318,11 +321,15 @@ Front-facing full-body standing pose, pure white background (#FFFFFF), no shadow
 Vertical 2:3 composition, generate at 480×720px.
 Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-Character: A graceful young ballerina child in an absolutely ENORMOUS fluffy pastel pink tutu skirt — maximum volume, maximum puffiness, like a pink cloud.
-White ballet shoes en pointe (standing on tiptoes). Holding a gorgeous bouquet of roses in both hands.
-Classic one-leg ballerina en pointe pose, perfectly balanced.
+Character: A graceful young ballerina child in an absolutely ENORMOUS fluffy pastel pink tutu skirt — maximum volume, maximum puffiness, at least 5 layers of ruffles like a pink cloud explosion.
+White ballet shoes tied with satin ribbons, standing en pointe (on tiptoes).
+Holding a gorgeous, oversized bouquet of pink and white roses in both hands — so big it's almost as wide as the tutu.
 Expression: "YAAAAY!!!" triumphant glow-up smile radiating pure joy and achievement.
-Rose petals and glittering stars swirling softly all around. The ultimate cute and elegant combo.
+The ultimate cute and elegant combo — the tutu is so big it takes up half the frame width.
+```
+**Negative prompt (add to base):**
+```
+floating petals, rose petals in air, floating stars, sparkles in air
 ```
 
 ---
@@ -396,12 +403,16 @@ Front-facing full-body standing pose, pure white background (#FFFFFF), no shadow
 Vertical 2:3 composition, generate at 480×720px.
 Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-Character: An adorable young child completely hidden under a soft, rounded white sheet ghost costume draped over the whole body.
+Character: An adorable young child completely hidden under a soft, rounded PALE GREY sheet ghost costume draped over the whole body.
 Two perfectly round eyeholes cut into the sheet, with wide, cheerful, sparkling happy eyes peering out.
-Two small feet with shoes sticking out from the bottom of the sheet — the ultimate adorable detail.
+Two small feet wearing colorful sneakers sticking out from the bottom — the cutest detail in the whole design.
 The sheet has a soft, puffy, rounded ghost silhouette — gentle, friendly, zero scary.
 Expression: pure "BOO!!" joyful energy — a ghost that is 100% cute and 0% frightening.
-NOTE: The white sheet must have visible grey shading/outline so it reads against the white background.
+NOTE: Use pale grey (#DDDDDD) for the sheet — strong visible grey shading and thick outline so the full silhouette reads clearly against white.
+```
+**Negative prompt (add to base):**
+```
+pure white sheet, white costume blending with background
 ```
 
 ---
@@ -416,12 +427,16 @@ Front-facing full-body standing pose, pure white background (#FFFFFF), no shadow
 Vertical 2:3 composition, generate at 480×720px.
 Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-Character: A gleeful young mad-scientist child wearing a homemade robot armor built from cardboard and scrap — silver-painted with visible dents and tape marks.
-Steam/smoke puffing energetically from the top of the boxy helmet head.
-Chest panel covered in a glorious array of colorful buttons and switches: red, yellow, blue, green — totally random.
-Two wobbly antennae on top of the head, one slightly bent.
-Expression: the ultimate "MWAHAHAHA!! IT IS COMPLETE!!!" evil-genius triumph grin — arms spread wide.
+Character: A gleeful young mad-scientist child wearing a homemade robot armor built from cardboard and scrap — silver-painted with visible dents, tape marks, and stickers everywhere.
+Chest panel covered in a glorious array of colorful GLOWING buttons and switches: red, yellow, blue, green — all lit up and blinking.
+Two wobbly antennae on top of the head — one slightly bent, one with a bright blinking red light at the tip.
+Arms spread wide in a triumphant pose.
+Expression: the ultimate "MWAHAHAHA!! IT IS COMPLETE!!!" evil-genius triumph grin.
 Handmade charm + cute chaos + peak comedy scientist energy. Absolutely delightful.
+```
+**Negative prompt (add to base):**
+```
+steam, smoke, vapor, exhaust from robot
 ```
 
 ---
@@ -478,10 +493,14 @@ Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon,
 ---
 Character: A dreamy young astronaut child in a puffy, rounded white spacesuit — perfectly soft and round like a marshmallow.
 Perfectly circular helmet with a light blue visor, revealing a huge beaming smile inside.
-NOTE: White spacesuit needs visible grey cel-shading and thick outline to separate from white background.
-Tiny planets, stars, and a little rocket icon floating gently all around the body.
+Spacesuit decorated with colorful mission patches and a shiny gold badge on the chest.
 Floating just slightly off the ground, feet dangling — zero gravity vibes.
 Expression: "WE ARE GOING TO SPAAAACE!!!" — pure wonder, pure dreams, pure excitement.
+NOTE: White spacesuit needs visible grey cel-shading and thick black outline to read clearly against white background.
+```
+**Negative prompt (add to base):**
+```
+floating planets, floating stars around body, space objects around character
 ```
 
 ---
@@ -496,11 +515,15 @@ Front-facing full-body standing pose, pure white background (#FFFFFF), no shadow
 Vertical 2:3 composition, generate at 480×720px.
 Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-Character: A wildly colorful young rainbow witch child. Dress, cape, AND pointed hat all display a full 7-color rainbow gradient: red → orange → yellow → green → blue → indigo → violet.
-Holding a rainbow staff that shoots a tiny perfect rainbow arc from its sparkling tip.
-Rainbow sparkles, glitter, and stars EXPLODING in all directions around the body.
+Character: A wildly colorful young rainbow witch child. Dress, cape, AND pointed hat all display a full 7-color rainbow gradient flowing top to bottom: red → orange → yellow → green → blue → indigo → violet — each color band bold and distinct.
+Rainbow-striped stockings on both legs continuing the gradient all the way to the shoes.
+Holding a rainbow staff with a small perfect rainbow arc shooting from its sparkling tip — contained to the staff only.
 Expression: proud, self-satisfied "Isn't this BEAUTIFUL?! Look at me!!" dazzling show-off smile.
-Maximally loud, maximally colorful, maximally eye-catching. A visual fireworks display. The most colorful thing in any room.
+Maximally loud, maximally colorful. The most colorful costume in any room.
+```
+**Negative prompt (add to base):**
+```
+sparkles around body, glitter in air, magic particles floating, stars around character
 ```
 
 ---
@@ -515,12 +538,15 @@ Front-facing full-body standing pose, pure white background (#FFFFFF), no shadow
 Vertical 2:3 composition, generate at 480×720px.
 Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-Character: An overwhelmingly majestic chibi young eternal king. Full royal outfit made entirely of shimmering gold — top to bottom, pure gold.
-Jewels encrusting every inch of the outfit: purple amethyst, ruby red, sapphire blue, emerald green — all blazing with light.
-Comically enormous crown on head — absurdly huge, impossibly gorgeous, dripping with more jewels.
-Blinding gold aura radiating from the body like a second sun.
+Character: An overwhelmingly majestic chibi young eternal king. Full royal outfit made entirely of shimmering gold fabric — top to bottom, pure gold.
+Jewels encrusting every square centimeter of the outfit: purple amethyst, ruby red, sapphire blue, emerald green — all embedded directly into the costume, blazing with color.
+Comically, absurdly ENORMOUS crown on head — wider than the shoulders, taller than the head itself, impossibly gorgeous and dripping with more jewels than seems physically possible.
 Expression: supreme, unassailable "Hmph. THIS... is my power." legendary swagger face — one eyebrow raised, completely unbothered.
-Over-the-top luxury. This character IS wealth.
+Over-the-top luxury. This character IS wealth. The comedy is how serious they look wearing all of this.
+```
+**Negative prompt (add to base):**
+```
+gold aura, radiant glow around body, light rays from character, halo effect
 ```
 
 ---
@@ -535,12 +561,17 @@ Front-facing full-body standing pose, pure white background (#FFFFFF), no shadow
 Vertical 2:3 composition, generate at 480×720px.
 Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-Character: A chibi young demon king radiating dark power. Sweeping black cloak, impressive pointed demon horns (properly big and menacing), small but dramatic demon wings on the back.
-Eyes glowing a vivid, brilliant crimson red — the most striking feature.
-Dense swirling dark purple shadow aura churning and flowing from the body like living darkness.
-Expression: "MWAHAHAHA!!" — but because it's a 2-head chibi with a huge round head, somehow simultaneously adorable.
+Character: A chibi young demon king radiating dark power through design alone — no aura needed.
+Sweeping jet-black cloak lined with deep purple, printed with crescent moons and jagged stars.
+Two impressively LARGE curved demon horns on the head — bigger than the fists. Small but dramatic bat wings folded behind the back.
+Sharp claw-like black gauntlets on both hands. Eyes glowing a vivid, brilliant crimson red — the most striking feature.
+Expression: "MWAHAHAHA!!" — but because it's a 2-head chibi with a huge round head, simultaneously adorable.
 This is the perfect balance: dangerously cool on the outside, secretly cute on the inside.
 Kids must look at this and immediately think "I NEED this skin."
+```
+**Negative prompt (add to base):**
+```
+dark aura, shadow aura, purple mist around body, energy aura, dark smoke
 ```
 
 ---
@@ -555,12 +586,16 @@ Front-facing full-body standing pose, pure white background (#FFFFFF), no shadow
 Vertical 2:3 composition, generate at 480×720px.
 Japanese kids game art style inspired by Yo-kai Watch, Pokémon Mystery Dungeon, and Splatoon.
 ---
-Character: The true form of the Grimoire Guardian — the ultimate symbol of this entire game.
-Deep navy outer robe blazing with glowing golden magic circle inscriptions and ancient rune patterns across every surface.
-Glowing pages from an ancient grimoire BURST outward from the body in all directions like wings made of light and knowledge.
-The entire body radiates blinding white radiant aura — at maximum, overflowing power.
+Character: The true form of the Grimoire Guardian — the ultimate symbol of this game.
+Deep navy outer robe completely covered in glowing golden magic circle inscriptions and ancient rune patterns etched into every surface of the fabric — the robe itself IS the magic.
+Left hand holding a large open ancient grimoire — brilliant golden light radiating from the pages of the book only, contained within the book's glow.
+Right hand raised with two fingers pointing upward — a confident guardian's pose.
 Expression: proud, brilliant, unbreakable "I will protect EVERYTHING!!" smile — the most beautiful, most powerful smile in the entire game.
-This is the FINAL skin. It must be the most iconic, most awe-inspiring, most legendary design possible. Make it perfect. Make it unforgettable.
+This is the FINAL skin. Most iconic, most awe-inspiring, most legendary design possible. Make it perfect. Make it unforgettable.
+```
+**Negative prompt (add to base):**
+```
+pages flying around, white aura, magical aura, glowing pages in air, book pages floating
 ```
 
 ---
