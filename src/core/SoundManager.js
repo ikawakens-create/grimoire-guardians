@@ -2,13 +2,11 @@
  * SoundManager.js - Grimoire Guardians
  * サウンド管理システム
  *
- * 現在の実装：Web Audio API による合成音（音声ファイル不要）
- * 差し替え方針：将来ファイルベースに移行する場合は _SYNTH_CONFIGS / _BGM_CONFIGS を削除し
- *               playSFX / playBGM の実装部分（"── 合成音再生 ──"以降）を
- *               Audio/HTMLAudioElement ベースに置き換えるだけでよい。
+ * BGM：HTMLAudioElement（MP3ファイル）+ audio.loop = true
+ * SFX：Web Audio API Oscillator（合成音）
  *
- * iOS 制約：最初のユーザー操作（タップ）後に AudioContext を resume する。
- *           _unlock() がその役割を担う。
+ * iOS 制約：最初のユーザー操作（タップ）前は audio.play() が失敗する。
+ *           _unlock() がユーザー操作後に AudioContext resume + BGM リトライを行う。
  *
  * @version 2.1
  * @date 2026-03-06
@@ -209,6 +207,14 @@ export class SoundManager {
       }
       this._unlocked = true;
       Logger.info('[Sound] AudioContext unlocked');
+
+      // ユーザー操作前に playBGM が呼ばれて失敗していた場合にリトライ
+      if (this.currentBGM) {
+        const audio = this._bgmCache.get(this.currentBGM);
+        if (audio && audio.paused) {
+          audio.play().catch(err => Logger.debug('[Sound] BGM retry failed:', err.message));
+        }
+      }
     } catch (err) {
       Logger.warn('[Sound] AudioContext not available:', err.message);
     }
