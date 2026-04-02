@@ -41,6 +41,7 @@ import MultiTableScreen from './screens/MultiTableScreen.js';
 import MemorizeScreen from './screens/MemorizeScreen.js';
 import SequentialPracticeScreen from './screens/SequentialPracticeScreen.js';
 import { ParentDashboardScreen } from './screens/ParentDashboardScreen.js';
+import { WORLDS } from './data/worlds.js';
 
 /**
  * アプリケーション初期化
@@ -718,6 +719,214 @@ function displayDebugInfo() {
 
   Logger.info('💡 Debug helpers available via window.GG');
   Logger.info('   Example: GG.getState("player.streak")');
+
+  // デバッグオーバーレイ（Antigavity テスト用）
+  _initDebugOverlay();
+}
+
+/**
+ * デバッグオーバーレイを初期化する（ENABLE_CHEATS が true のときのみ）
+ * Antigavity 自動テストプレイ用
+ */
+function _initDebugOverlay() {
+  if (!Config.DEBUG.ENABLE_CHEATS) return;
+
+  // ── ヘルパー ─────────────────────────────────────────────────────
+  const _gs  = () => document.getElementById('game-screen');
+  const _btn = (label, onClick) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'dbg-btn';
+    b.textContent = label;
+    b.addEventListener('click', onClick);
+    return b;
+  };
+  const _row = (...children) => {
+    const r = document.createElement('div');
+    r.className = 'dbg-row';
+    children.forEach(c => r.appendChild(c));
+    return r;
+  };
+  const _sectionHdr = (text) => {
+    const d = document.createElement('div');
+    d.className = 'dbg-section-hdr';
+    d.textContent = text;
+    return d;
+  };
+
+  // ── 名前とcreatedAtが未設定なら補完するヘルパー ────────────────────
+  const _ensurePlayer = () => {
+    if (!GameStore.getState('player.name'))      GameStore.setState('player.name', 'テスト');
+    if (!GameStore.getState('player.createdAt')) GameStore.setState('player.createdAt', Date.now());
+  };
+
+  // ── DOM 構築 ──────────────────────────────────────────────────────
+  const overlay = document.createElement('div');
+  overlay.id = 'debug-overlay';
+  overlay.className = 'debug-overlay';
+
+  // ヘッダー（タップで折りたたみ）
+  const hdr = document.createElement('div');
+  hdr.className = 'dbg-header';
+  hdr.innerHTML = '🔧 DEBUG <span id="dbg-toggle">▲</span>';
+  overlay.appendChild(hdr);
+
+  const body = document.createElement('div');
+  body.id = 'dbg-body';
+  overlay.appendChild(body);
+
+  hdr.addEventListener('click', () => {
+    const collapsed = body.style.display === 'none';
+    body.style.display = collapsed ? '' : 'none';
+    document.getElementById('dbg-toggle').textContent = collapsed ? '▲' : '▼';
+  });
+
+  // 現在画面名（リアルタイム更新）
+  const screenLabel = document.createElement('div');
+  screenLabel.className = 'dbg-screen-label';
+  const _updateLabel = (s) => { screenLabel.textContent = `📺 ${s || '---'}`; };
+  _updateLabel(GameStore.getState('app.currentScreen'));
+  GameStore.subscribe((path, newValue) => {
+    if (path === 'app.currentScreen') _updateLabel(newValue);
+  });
+  body.appendChild(screenLabel);
+
+  // ── 【進行】セクション ────────────────────────────────────────────
+  body.appendChild(_sectionHdr('【進行】'));
+
+  // 全解放：全ワールド・ライセンス・素材を一括解放して本棚へ
+  body.appendChild(_btn('🔓 全解放', () => {
+    GameStore.unlockAllWorlds();
+    _ensurePlayer();
+    showBookshelf(_gs());
+  }));
+
+  // 制限解除：ライセンスのみ通してストーリー順に進められるモード
+  body.appendChild(_btn('🔑 制限解除', () => {
+    GameStore.setState('license.core.licensed', true);
+    _ensurePlayer();
+    showBookshelf(_gs());
+  }));
+
+  // 名前スキップ：ウェルカム画面をバイパスして本棚へ
+  body.appendChild(_btn('👤 名前スキップ', () => {
+    _ensurePlayer();
+    showBookshelf(_gs());
+  }));
+
+  // リセット：全データをリセットしてウェルカム画面へ
+  body.appendChild(_btn('🔄 リセット', () => {
+    // npc_met_* と phase_complete_shown を localStorage からクリア
+    Object.keys(localStorage)
+      .filter(k => k.startsWith('npc_met_') || k === 'phase_complete_shown')
+      .forEach(k => localStorage.removeItem(k));
+    GameStore.reset();
+    if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
+    showWelcome(_gs());
+  }));
+
+  // ── 【ツール】セクション ──────────────────────────────────────────
+  body.appendChild(_sectionHdr('【ツール】'));
+
+  // アニメーションOFF：body クラス切り替えで CSS アニメを 0ms に
+  let _animOff = false;
+  const btnAnim = _btn('⏩ アニメOFF', () => {
+    _animOff = !_animOff;
+    document.body.classList.toggle('debug-skip-animations', _animOff);
+    btnAnim.textContent  = _animOff ? '⏩ アニメOFF ✓' : '⏩ アニメOFF';
+    btnAnim.classList.toggle('dbg-btn-active', _animOff);
+  });
+  body.appendChild(btnAnim);
+
+  // サウンドOFF：SoundManager.setMuted() でトグル
+  const btnSound = _btn('🔇 サウンドOFF', () => {
+    const muted = !SoundManager.isMuted;
+    SoundManager.setMuted(muted);
+    btnSound.textContent = muted ? '🔇 サウンドOFF ✓' : '🔇 サウンドOFF';
+    btnSound.classList.toggle('dbg-btn-active', muted);
+  });
+  body.appendChild(btnSound);
+
+  // セーブ出力：コンソール出力 + クリップボードコピー
+  body.appendChild(_btn('💾 セーブ出力', () => {
+    const json = GameStore.toJSON();
+    console.log('[DEBUG] Save Data:\n', json);
+    navigator.clipboard?.writeText(json).catch(() => {});
+  }));
+
+  // ── 【直接操作】セクション ────────────────────────────────────────
+  body.appendChild(_sectionHdr('【直接操作】'));
+
+  // ワールドジャンプ：セレクトで選んだワールドの unit_intro へ直接ジャンプ
+  const worldSelect = document.createElement('select');
+  worldSelect.className = 'dbg-select';
+  WORLDS.forEach(w => {
+    const opt = document.createElement('option');
+    opt.value = w.id;
+    opt.textContent = `${w.id}`;
+    worldSelect.appendChild(opt);
+  });
+  body.appendChild(_row(
+    worldSelect,
+    _btn('🎯GO', () => {
+      const world = WORLDS.find(w => w.id === worldSelect.value);
+      if (!world) return;
+      _ensurePlayer();
+      showUnitIntro(_gs(), world);
+    })
+  ));
+
+  // イベント強制発動：クイズ外からイベント演出を直接起動
+  const eventSelect = document.createElement('select');
+  eventSelect.className = 'dbg-select';
+  [['monster', 'モンスター'], ['treasure', '宝箱'], ['omikuji', 'おみくじ'], ['three_paths', '3つの道']]
+    .forEach(([val, label]) => {
+      const opt = document.createElement('option');
+      opt.value = val;
+      opt.textContent = label;
+      eventSelect.appendChild(opt);
+    });
+  body.appendChild(_row(
+    eventSelect,
+    _btn('⚡GO', async () => {
+      const layer = EventManager.getLayer();
+      if (!layer) { Logger.warn('[DEBUG] イベントレイヤーが見つかりません'); return; }
+      const type = eventSelect.value;
+      if (type === 'monster') {
+        const { default: M } = await import('./events/MonsterBattleEvent.js');
+        await M.play(layer);
+      } else if (type === 'treasure') {
+        const { default: T } = await import('./events/TreasureEvent.js');
+        await T.play(layer);
+      } else if (type === 'omikuji') {
+        const { default: O } = await import('./events/OmikujiEvent.js');
+        await O.play(layer);
+      } else if (type === 'three_paths') {
+        const { default: P } = await import('./events/ThreePathsEvent.js');
+        await P.play(layer);
+      }
+    })
+  ));
+
+  // ストリーク数セット：任意の連続正解数を直接セット
+  const streakInput = document.createElement('input');
+  streakInput.type        = 'number';
+  streakInput.className   = 'dbg-input';
+  streakInput.min         = '0';
+  streakInput.max         = '999';
+  streakInput.placeholder = 'streak';
+  streakInput.value       = String(GameStore.getState('player.streak') || 0);
+  body.appendChild(_row(
+    streakInput,
+    _btn('🔥SET', () => {
+      const val = parseInt(streakInput.value, 10);
+      if (!isNaN(val) && val >= 0) GameStore.setState('player.streak', val);
+    })
+  ));
+
+  // ── DOM に追加 ────────────────────────────────────────────────────
+  document.body.appendChild(overlay);
+  Logger.info('[DEBUG] デバッグオーバーレイを初期化しました');
 }
 
 /**
