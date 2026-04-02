@@ -500,7 +500,10 @@ class BookshelfScreen {
     const highestClearedOrder = gradeWorlds.reduce(
       (max, w) => (worldProgress[w.id]?.cleared ? Math.max(max, w.order) : max), 0
     );
-    const maxVisibleOrder = highestClearedOrder + ahead;
+    // 未クリア時は当該グレードの最小 order を基点にする（Grade 2 は order が 35〜 から始まるため）
+    const minOrder = gradeWorlds.reduce((min, w) => Math.min(min, w.order), Infinity);
+    const baseOrder = highestClearedOrder > 0 ? highestClearedOrder : minOrder - 1;
+    const maxVisibleOrder = baseOrder + ahead;
     const visibleWorlds   = gradeWorlds.filter(w => w.order <= maxVisibleOrder);
     const hiddenCount     = gradeWorlds.length - visibleWorlds.length;
     // ────────────────────────────────────────────────────────────────────────
