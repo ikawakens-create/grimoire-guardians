@@ -797,6 +797,13 @@ function _initDebugOverlay() {
   // 全解放：全ワールド・ライセンス・素材を一括解放して本棚へ
   body.appendChild(_btn('🔓 全解放', () => {
     GameStore.unlockAllWorlds();
+    // 全ワールドをクリア済みにして段階表示制限を解除
+    const wp = {};
+    WORLDS.forEach(w => {
+      const existing = GameStore.getState(`progress.worlds.${w.id}`) || {};
+      wp[w.id] = { ...existing, cleared: true, stars: existing.stars ?? 3 };
+    });
+    GameStore.setState('progress.worlds', wp);
     _ensurePlayer();
     showBookshelf(_gs());
   }));
