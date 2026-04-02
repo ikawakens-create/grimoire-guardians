@@ -9,7 +9,7 @@
  * @date 2026-03-04
  */
 
-const SW_VERSION   = '2.3.6';
+const SW_VERSION   = '2.3.7';
 const CACHE_NAME   = `grimoire-${SW_VERSION}`;
 
 /** キャッシュ対象ファイル（静的アセット） */
@@ -258,6 +258,32 @@ const ASSETS = [
   './assets/story/act_events/act5_maze.png',
   './assets/story/finale/light_burst.png',
   './assets/story/finale/certificate_bg.png',
+  // スキン画像
+  './assets/skins/default.png',
+  './assets/skins/knight_silver.png',
+  './assets/skins/mage_fire.png',
+  './assets/skins/mage_ice.png',
+  './assets/skins/ninja_dark.png',
+  './assets/skins/knight_dragon.png',
+  './assets/skins/swordsman_thunder.png',
+  './assets/skins/dancer_sakura.png',
+  './assets/skins/rabbit_traveler.png',
+  './assets/skins/fairy_princess.png',
+  './assets/skins/princess_magic.png',
+  './assets/skins/mermaid.png',
+  './assets/skins/ballerina.png',
+  './assets/skins/bear_kigurumi.png',
+  './assets/skins/ragged_adventurer.png',
+  './assets/skins/dinosaur_cos.png',
+  './assets/skins/ghost_pajama.png',
+  './assets/skins/robot_hakase.png',
+  './assets/skins/tomato_costume.png',
+  './assets/skins/pirate_captain.png',
+  './assets/skins/astronaut.png',
+  './assets/skins/rainbow_witch.png',
+  './assets/skins/royal_eternal.png',
+  './assets/skins/demon_king.png',
+  './assets/skins/grimoire_guardian.png',
   // BGM
   './assets/sounds/bgm/bgm_title.mp3',
   './assets/sounds/bgm/bgm_bookshelf.mp3',
