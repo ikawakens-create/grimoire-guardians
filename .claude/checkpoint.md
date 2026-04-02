@@ -19,10 +19,11 @@
 - フィーチャーブランチ `claude/morning-session-april-3-vWHrU` にプッシュ済み（PR 未作成）
 
 ## 次にやること（優先順）
-1. **Antigavity にテストプレイしてもらう** — デバッグオーバーレイの動作確認
-2. **スキン表示の動作確認** — `SkinManager.js` + `CharacterAvatar.js` で画像が正しく表示されるか
-3. **SFX 本実装** — `assets/sounds/sfx/` を作成、Oscillator モックを実音ファイル再生に置き換え（技術的負債：中）
-4. **Grade 3 実装準備** — `dimensionConfig.js` の次元定義確認から（大型タスク・内部評価ループ必要）
+1. **UnitIntroScreen 改修 Ph1** — ロードマップ `.claude/tasks/unit-intro-roadmap.md` に従い実装開始
+   - ボタン中央統一 + 90%再表示ロジック + ConceptVisualizerスケルトン（2ファイル）
+2. **Antigavity にテストプレイしてもらう** — デバッグオーバーレイの動作確認
+3. **スキン表示の動作確認** — `SkinManager.js` + `CharacterAvatar.js` で画像が正しく表示されるか
+4. **SFX 本実装** — `assets/sounds/sfx/` を作成、Oscillator モックを実音ファイル再生に置き換え（技術的負債：中）
 
 ## 未解決のバグ・問題
 - なし
