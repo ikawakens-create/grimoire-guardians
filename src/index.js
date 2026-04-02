@@ -797,6 +797,13 @@ function _initDebugOverlay() {
   // 全解放：全ワールド・ライセンス・素材を一括解放して本棚へ
   body.appendChild(_btn('🔓 全解放', () => {
     GameStore.unlockAllWorlds();
+    // 全ワールドをクリア済みにして段階表示制限を解除
+    const wp = {};
+    WORLDS.forEach(w => {
+      const existing = GameStore.getState(`progress.worlds.${w.id}`) || {};
+      wp[w.id] = { ...existing, cleared: true, stars: existing.stars ?? 3 };
+    });
+    GameStore.setState('progress.worlds', wp);
     _ensurePlayer();
     showBookshelf(_gs());
   }));
@@ -822,6 +829,8 @@ function _initDebugOverlay() {
       .forEach(k => localStorage.removeItem(k));
     GameStore.reset();
     if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
+    // 永続スクリーン（街・家など）も非表示にする
+    for (const s of _persistentScreens.values()) s?.hide?.();
     showWelcome(_gs());
   }));
 
@@ -872,6 +881,8 @@ function _initDebugOverlay() {
       const world = WORLDS.find(w => w.id === worldSelect.value);
       if (!world) return;
       _ensurePlayer();
+      // unit_intro は subscriber で hideAll() が呼ばれないため明示的に隠す
+      for (const s of _persistentScreens.values()) s?.hide?.();
       showUnitIntro(_gs(), world);
     })
   ));
