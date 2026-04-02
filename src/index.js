@@ -829,6 +829,8 @@ function _initDebugOverlay() {
       .forEach(k => localStorage.removeItem(k));
     GameStore.reset();
     if (_activeScreen) { _activeScreen.destroy?.(); _activeScreen = null; }
+    // 永続スクリーン（街・家など）も非表示にする
+    for (const s of _persistentScreens.values()) s?.hide?.();
     showWelcome(_gs());
   }));
 
@@ -879,6 +881,8 @@ function _initDebugOverlay() {
       const world = WORLDS.find(w => w.id === worldSelect.value);
       if (!world) return;
       _ensurePlayer();
+      // unit_intro は subscriber で hideAll() が呼ばれないため明示的に隠す
+      for (const s of _persistentScreens.values()) s?.hide?.();
       showUnitIntro(_gs(), world);
     })
   ));
