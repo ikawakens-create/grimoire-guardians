@@ -143,26 +143,13 @@ export const CONCEPT_GUIDES = {
 
 ---
 
-### Ph2 — ストーリー連動ヒント（未着手）
+### Ph2 — ~~ストーリー連動ヒント~~（廃止）
 
-**変更ファイル（2本）**：
-- `src/data/storyData.js`（`storyConnector`フィールドを追加）
-- `src/screens/UnitIntroScreen.js`（storyConnector表示を追加）
-
-**storyConnectorデータ構造**：
-```js
-storyConnector: {
-  situation: 'グリモアを まもる ためには たし算が ひつよう！',
-  facility: 'guild',   // 'guild'|'house'|'shop'|'farm'|null
-  facilityHint: 'ギルドの クエストで つかう けいさんだよ',
-}
-```
-
-**Done条件**：
-- [ ] storyConnectorありのユニットで施設ヒントが表示される
-- [ ] storyConnectorなしのユニットでもレイアウト崩れなし
-- [ ] 全テキストが対象学年の漢字制限以内
-- [ ] Phase間検証チェックリストを通過
+> **廃止理由**（2026-04-03）：クイズ前に施設ヒントを表示するアプローチは
+> 「子供からすると必要ない」という判断により削除。
+> 代わりに、クイズクリア・クエストクリア・施設解放など
+> **アクション後にストーリーで意味づけする仕組み**を
+> Ph7のスコープ拡張として実現する方針に変更。
 
 ---
 
@@ -305,7 +292,7 @@ export const WORLD_CLEAR_SCENES = {
 | Phase | ステータス |
 |-------|----------|
 | Ph1 | ✅ 完了（2026-04-03） |
-| Ph2 | ⬜ 未着手 |
+| Ph2 | ~~⬜ 未着手~~ → ❌ 廃止 |
 | Ph3 | ⬜ 未着手 |
 | Ph4A | ⬜ 未着手 |
 | Ph4B | ⬜ 未着手 |
