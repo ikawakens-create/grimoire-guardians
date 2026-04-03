@@ -91,6 +91,80 @@ export const CONCEPT_GUIDES = {
     },
   },
 
+  'M1-06': {
+    grade: 1,
+    difficulty: 'normal',       // ひきざん → 絵で「取る」イメージを視覚化
+    type: 'subtraction',
+    dialogue: [
+      { speaker: 'owl',    text: 'りんごが 5こ。2こ たべたら のこりは いくつ？' },
+      { speaker: 'player', text: 'たべちゃうの！？ かぞえてみる！' },
+    ],
+    steps: [
+      {
+        content: [
+          { emoji: '🍎', count: 5, style: 'normal' },
+        ],
+        label: 'はじめに 5こ あるよ',
+      },
+      {
+        content: [
+          { emoji: '🍎', count: 3, style: 'normal' },
+          { emoji: '🍎', count: 2, style: 'accent' },
+        ],
+        label: '2こ たべた → のこりは 3こ！',
+      },
+    ],
+    microChallenge: {
+      question: '7 - 3 = ？',
+      choices: ['3', '4', '5'],
+      correct: 1,
+    },
+  },
+
+  'M1-11a': {
+    grade: 1,
+    difficulty: 'detailed',     // くりさがり橋渡し → さくらんぼ逆を4ステップで丁寧に
+    type: 'kurisagari',
+    dialogue: [
+      { speaker: 'owl',    text: 'たしざんの さくらんぼ、ひきざんにも つかえるんだ！' },
+      { speaker: 'player', text: 'え！ どういうこと？！' },
+    ],
+    steps: [
+      {
+        content: [
+          { emoji: '💎', count: 11, style: 'normal' },
+        ],
+        label: '11こ あるよ',
+      },
+      {
+        content: [
+          { emoji: '💎', count: 10, style: 'ten' },
+          { emoji: '💎', count: 1,  style: 'highlight' },
+        ],
+        label: '11を "10と 1"に わけよう！',
+      },
+      {
+        content: [
+          { emoji: '💎', count: 7,  style: 'ten' },
+          { emoji: '💎', count: 3,  style: 'accent' },
+        ],
+        label: '10から 3を とると… 7のこる！',
+      },
+      {
+        content: [
+          { emoji: '💎', count: 7, style: 'highlight' },
+          { emoji: '💎', count: 1, style: 'normal' },
+        ],
+        label: '7と 1を あわせて → 8！ これが くりさがり！',
+      },
+    ],
+    microChallenge: {
+      question: '11 - 3 = ？',
+      choices: ['7', '8', '9'],
+      correct: 1,
+    },
+  },
+
   // ─────────────────────────────────────────
   // 難易度ガイド（データ作成時の参考）
   //
