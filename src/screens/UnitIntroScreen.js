@@ -20,6 +20,7 @@ import { GameStore } from '../core/GameStore.js';
 import { Config } from '../core/Config.js';
 import { SoundManager, SoundType } from '../core/SoundManager.js';
 import { CharacterAvatar } from '../components/CharacterAvatar.js';
+import { ConceptVisualizer } from '../components/ConceptVisualizer.js';
 import { UNIT_INTROS, STORY_IMAGES } from '../data/storyData.js';
 import { getWorldById } from '../data/worlds.js';
 
@@ -85,11 +86,37 @@ class UnitIntroScreen {
   // ─────────────────────────────────────────
 
   /**
-   * 初回表示。Ph3 で ConceptVisualizer を使った演出に置き換える。
-   * 現時点はリピート表示と同じ中身を仮置き。
+   * 初回表示。ConceptVisualizer で対話 → マイクロ体験 → クイズへ直行。
    */
   _renderFirst(world, intro) {
-    this._renderRepeat(world, intro);
+    Logger.info('[UnitIntroScreen] First render (CV):', world?.id);
+    const unitId = world?.unitId;
+
+    const el = document.createElement('div');
+    el.className = 'unit-intro-screen';
+    el.innerHTML = `
+      <button class="button button-small unit-intro-cv-back" type="button">もどる</button>
+      <div id="cv-slot" class="unit-intro-cv-slot"></div>
+    `;
+    this._el = el;
+    this._container.appendChild(el);
+
+    const cv = new ConceptVisualizer(() => {
+      cv.destroy();
+      this.destroy();
+      if (typeof this._onStart === 'function') this._onStart();
+    });
+
+    cv.render(el.querySelector('#cv-slot'), unitId);
+
+    el.querySelector('.unit-intro-cv-back').addEventListener('click', () => {
+      SoundManager.playSFX(SoundType.BUTTON_CLICK);
+      cv.destroy();
+      this.destroy();
+      if (typeof this._onBack === 'function') this._onBack();
+    });
+
+    requestAnimationFrame(() => el.classList.add('unit-intro-visible'));
   }
 
   // ─────────────────────────────────────────

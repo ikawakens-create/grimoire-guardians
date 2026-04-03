@@ -104,6 +104,7 @@ const ASSETS = [
   './src/components/ProgressBar.js',
   './src/components/ClockFace.js',
   './src/components/ConceptVisualizer.js',
+  './src/data/conceptGuides.js',
   './src/components/ShapeFace.js',
   './src/components/HitsuzanRenderer.js',
   './src/events/OmikujiEvent.js',
