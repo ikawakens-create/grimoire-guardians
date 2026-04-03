@@ -165,6 +165,79 @@ export const CONCEPT_GUIDES = {
     },
   },
 
+  'M1-11b': {
+    grade: 1,
+    difficulty: 'detailed',     // くりさがり11・12 → 12のさくらんぼ逆を4ステップで定着
+    type: 'kurisagari',
+    dialogue: [
+      { speaker: 'owl',    text: 'さくらんぼざんで 12のせかいも いけるよ！' },
+      { speaker: 'player', text: '12も できるの！？' },
+    ],
+    steps: [
+      {
+        content: [
+          { emoji: '💎', count: 12, style: 'normal' },
+        ],
+        label: '12こ あるよ',
+      },
+      {
+        content: [
+          { emoji: '💎', count: 10, style: 'ten' },
+          { emoji: '💎', count: 2,  style: 'highlight' },
+        ],
+        label: '12を "10と 2"に わけよう！',
+      },
+      {
+        content: [
+          { emoji: '💎', count: 5, style: 'ten' },
+          { emoji: '💎', count: 5, style: 'accent' },
+        ],
+        label: '10から 5を とると… 5のこる！',
+      },
+      {
+        content: [
+          { emoji: '💎', count: 5, style: 'highlight' },
+          { emoji: '💎', count: 2, style: 'normal' },
+        ],
+        label: '5と 2を あわせて → 7！',
+      },
+    ],
+    microChallenge: {
+      question: '12 - 5 = ？',
+      choices: ['6', '7', '8'],
+      correct: 1,
+    },
+  },
+
+  'M1-08a': {
+    grade: 1,
+    difficulty: 'easy',         // なんじちょうど → 時計絵文字で「みじかいはり＝じ」を直感化
+    type: 'clock',
+    dialogue: [
+      { speaker: 'owl',    text: 'みじかいはりが さす かずが "じ"だよ！' },
+      { speaker: 'player', text: 'みじかいはりを みればいいんだね！' },
+    ],
+    steps: [
+      {
+        content: [
+          { emoji: '🕒', count: 1, style: 'normal' },
+        ],
+        label: 'みじかいはりが 3を さしてる → 3じ！',
+      },
+      {
+        content: [
+          { emoji: '🕔', count: 1, style: 'highlight' },
+        ],
+        label: 'みじかいはりが 4を さしてる → 4じ！',
+      },
+    ],
+    microChallenge: {
+      question: 'みじかいはりが 6を さしているよ。なんじ？',
+      choices: ['5じ', '6じ', '7じ'],
+      correct: 1,
+    },
+  },
+
   // ─────────────────────────────────────────
   // 難易度ガイド（データ作成時の参考）
   //
