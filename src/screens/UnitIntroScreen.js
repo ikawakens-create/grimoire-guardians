@@ -6,13 +6,13 @@
  *   - フクロウ先生のストーリーコメント表示
  *   - 単元ヒント・例題イラスト（画像 or CSSプレースホルダー）
  *   - 自キャラアバター（happy）でモチベーション
- *   - 初回：フルスクリーン表示
- *   - 2回目以降：ミニバナーのみ（スキップ不要）
+ *   - 初回（または90%未満クリア）：_renderFirst() → Ph3でConceptVisualizer演出に置き換え予定
+ *   - 2回目以降（90%以上クリア済み）：_renderRepeat()
  *
  * ライフサイクル: Create/Destroy パターン
  *
- * @version 1.0
- * @date 2026-03-16
+ * @version 1.1
+ * @date 2026-04-03
  */
 
 import Logger from '../core/Logger.js';
@@ -20,6 +20,7 @@ import { GameStore } from '../core/GameStore.js';
 import { Config } from '../core/Config.js';
 import { SoundManager, SoundType } from '../core/SoundManager.js';
 import { CharacterAvatar } from '../components/CharacterAvatar.js';
+import { ConceptVisualizer } from '../components/ConceptVisualizer.js';
 import { UNIT_INTROS, STORY_IMAGES } from '../data/storyData.js';
 import { getWorldById } from '../data/worlds.js';
 
@@ -46,22 +47,26 @@ class UnitIntroScreen {
 
   /**
    * 画面を描画する
-   * 初回ならフルスクリーン、2回目以降はミニバナーを表示する
+   * 初回（または90%未満クリア）ならフルスクリーン、2回目以降はリピート表示
    */
   render() {
     const world   = getWorldById(this._worldId);
     const unitId  = world?.unitId;
     const intro   = UNIT_INTROS[unitId];
 
-    // 初回判定（セッション内でこのユニットを初めて見るか）
-    const seenKey    = `intro_seen_${unitId}`;
+    // 90%未満クリアの場合は「初回扱い」にリセットして再度フル表示する
+    const seenKey       = `intro_seen_${unitId}`;
+    const worldProgress = GameStore.getState(`progress.worlds.${this._worldId}`);
+    const pct           = worldProgress?.percentage ?? 0;
+    if (pct < 90) sessionStorage.removeItem(seenKey);
+
     const hasBeenSeen = !!sessionStorage.getItem(seenKey);
 
     if (hasBeenSeen) {
-      this._renderMiniBanner(world, intro);
+      this._renderRepeat(world, intro);
     } else {
       sessionStorage.setItem(seenKey, '1');
-      this._renderFull(world, intro);
+      this._renderFirst(world, intro);
     }
   }
 
@@ -77,11 +82,49 @@ class UnitIntroScreen {
   }
 
   // ─────────────────────────────────────────
-  // プライベート: フルスクリーン表示（初回）
+  // プライベート: 初回表示（Ph3で ConceptVisualizer 本実装予定）
   // ─────────────────────────────────────────
 
-  _renderFull(world, intro) {
-    Logger.info('[UnitIntroScreen] Full render:', world?.id);
+  /**
+   * 初回表示。ConceptVisualizer で対話 → マイクロ体験 → クイズへ直行。
+   */
+  _renderFirst(world, intro) {
+    Logger.info('[UnitIntroScreen] First render (CV):', world?.id);
+    const unitId = world?.unitId;
+
+    const el = document.createElement('div');
+    el.className = 'unit-intro-screen';
+    el.innerHTML = `
+      <button class="button button-small unit-intro-cv-back" type="button">もどる</button>
+      <div id="cv-slot" class="unit-intro-cv-slot"></div>
+    `;
+    this._el = el;
+    this._container.appendChild(el);
+
+    const cv = new ConceptVisualizer(() => {
+      cv.destroy();
+      this.destroy();
+      if (typeof this._onStart === 'function') this._onStart();
+    });
+
+    cv.render(el.querySelector('#cv-slot'), unitId);
+
+    el.querySelector('.unit-intro-cv-back').addEventListener('click', () => {
+      SoundManager.playSFX(SoundType.BUTTON_CLICK);
+      cv.destroy();
+      this.destroy();
+      if (typeof this._onBack === 'function') this._onBack();
+    });
+
+    requestAnimationFrame(() => el.classList.add('unit-intro-visible'));
+  }
+
+  // ─────────────────────────────────────────
+  // プライベート: リピート表示（2回目以降 / 初回仮表示）
+  // ─────────────────────────────────────────
+
+  _renderRepeat(world, intro) {
+    Logger.info('[UnitIntroScreen] Repeat render:', world?.id);
     SoundManager.playBGM(SoundType.BGM_BOOKSHELF);
 
     const storyDesc  = world?.storyDesc  || 'グリモアを とりもどせ！';
@@ -119,12 +162,12 @@ class UnitIntroScreen {
 
         <!-- ボタン -->
         <div class="unit-intro-buttons">
-          <button class="button button-secondary unit-intro-btn-back" type="button">
-            もどる
-          </button>
-          ${flashBtn}
           <button class="button button-large unit-intro-btn-start" type="button">
             はじめる！ 🚀
+          </button>
+          ${flashBtn}
+          <button class="button button-secondary unit-intro-btn-back" type="button">
+            もどる
           </button>
         </div>
 
@@ -148,51 +191,6 @@ class UnitIntroScreen {
 
     // フェードイン
     requestAnimationFrame(() => el.classList.add('unit-intro-visible'));
-  }
-
-  // ─────────────────────────────────────────
-  // プライベート: ミニバナー（2回目以降）
-  // ─────────────────────────────────────────
-
-  _renderMiniBanner(world, intro) {
-    Logger.info('[UnitIntroScreen] Mini banner:', world?.id);
-    const worldTitle = world?.title || 'クイズ';
-    const storyDesc  = world?.storyDesc || '';
-    const flashBtn   = this._isFlashUnlocked() ? `
-        <button class="button button-warning unit-intro-mini-flash" type="button">
-          ⚡ フラッシュ
-        </button>` : '';
-
-    const el = document.createElement('div');
-    el.className = 'unit-intro-mini-banner';
-    el.innerHTML = `
-      <div class="unit-intro-mini-inner">
-        <span class="unit-intro-mini-title">📘 ${worldTitle}</span>
-        <span class="unit-intro-mini-desc">${storyDesc.split('\n')[0]}</span>
-        ${flashBtn}
-        <button class="button button-large unit-intro-mini-start" type="button">
-          はじめる！
-        </button>
-      </div>
-    `;
-
-    this._el = el;
-    this._container.appendChild(el);
-
-    el.querySelector('.unit-intro-mini-start').addEventListener('click', () => {
-      SoundManager.playSFX(SoundType.BUTTON_CLICK);
-      this.destroy();
-      if (typeof this._onStart === 'function') this._onStart();
-    });
-
-    el.querySelector('.unit-intro-mini-flash')?.addEventListener('click', () => {
-      SoundManager.playSFX(SoundType.BUTTON_CLICK);
-      this.destroy();
-      if (typeof this._onFlash === 'function') this._onFlash();
-    });
-
-    // 自動でフェードイン
-    requestAnimationFrame(() => el.classList.add('unit-intro-mini-visible'));
   }
 
   // ─────────────────────────────────────────
