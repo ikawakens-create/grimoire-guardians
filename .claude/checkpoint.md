@@ -1,85 +1,77 @@
 # セッション引き継ぎ
 
-**保存日時**: 2026-04-03
+**保存日時**: 2026-04-04
 
-## 今日やったこと（4/3セッション後半）
+## 今日やったこと（4/4セッション）
 
-### UnitIntroScreen 改修（Ph1〜Ph4A）
-- **Ph1** — 基盤整備
-  - `render()` に 90%未満クリア再表示ロジック追加
-  - `_renderFull()` → `_renderRepeat()` リネーム、`_renderMiniBanner()` 廃止
-  - `_renderFirst()` スタブ追加
-  - 「はじめる！」ボタンを縦方向中央配置に変更
-  - `ConceptVisualizer.js` スケルトン新規作成
-- **Ph2** — 廃止（施設ヒント表示は「子供に不要」と判断）
-  - 代替方針：クリア後・クエスト後にストーリーで意味づけ → Ph7スコープ拡張で対応
-- **Ph3** — キャラ対話＋マイクロ体験問題
-  - `_renderFirst()` 本実装（ConceptVisualizer起動 → 完了時クイズへ直行）
-  - `ConceptVisualizer.js` 本実装：対話タップ進行・マイクロ体験・フォールバック対話
-  - `conceptGuides.js` 新規作成（M1-01・M1-07テストデータ）
-- **Ph4A** — ステップアニメーション
-  - `conceptGuides.js` に `difficulty` フィールド追加（easy/normal/detailed）
-  - M1-07の内容を誤り修正（くりあがり→20までのかず）
-  - M1-01・M1-07に `steps[]` 追加
-  - `ConceptVisualizer.js` に `_showStep()` / `_renderStepContent()` 追加
-  - 絵文字スタイル4種（normal/highlight/ten/accent）
+### ConceptVisualizer ガイド充填（Ph4B〜Ph5）
 
-### 設計決定事項
-- `difficulty` フィールドは `conceptGuides.js` に集約（worlds.jsは触らない）
-  - 3年生・理科・社会を追加するときも conceptGuides.js に追記するだけ
-  - easy: steps 1〜2個 / normal: 2〜3個 / detailed: 4〜5個
+- **Ph4B** — ひきざん・くりさがり橋渡し
+  - `M1-06`（normal / 2steps）: 🍎で「取る」イメージ視覚化
+  - `M1-11a`（detailed / 4steps）: さくらんぼ逆の4ステップ分解
+  - `effects.css`: `cv-emoji-accent` を緑グロー → 消えかかり表現（opacity:0.3）に修正
+
+- **Ph4C** — くりさがり本編・なんじちょうど
+  - `M1-11b`（detailed / 4steps）: 12のさくらんぼ逆
+  - `M1-08a`（easy / 2steps）: 🕒🕔絵文字でみじかいはり概念
+
+- **Ph4D** — 筆算たしざん・かけ算の意味（Grade2）
+  - `M2-01`（normal / 3steps）: 🔵🟡ブロックでくらいの概念
+  - `M2-10a`（normal / 2steps）: 🍬ふくろ3グループでかけ算の意味
+
+- **Ph5** — Grade1 全34ユニット一括充填
+  - グループA（easy 8件）: M1-02, M1-03, M1-08b, M1-08c, M1-13, M1-13b, M1-14b, M1-16a
+  - グループB（normal 15件）: M1-04, M1-05, M1-05b, M1-06b, M1-10d, M1-11d, M1-12a〜c, M1-14a, M1-14c, M1-14d, M1-15a, M1-15b, M1-16b
+  - グループD（detailed 5件）: M1-09, M1-10a, M1-10b, M1-10c, M1-11c
+  - 全エントリ漢字チェック通過
+
+### 現在の conceptGuides.js 状態
+- **総エントリ数: 36件**（Grade1: 34件 / Grade2: 2件）
+- 変更ファイルは conceptGuides.js + effects.css のみ
+- ConceptVisualizer.js は変更ゼロを維持
 
 ## 未コミットの変更
 なし（クリーン）
 
 ## ブランチ状況
-- `claude/morning-session-april-3-vWHrU` にプッシュ済み（PR 未作成）
+- `claude/morning-session-exxhg` にプッシュ済み（PR 未作成）
 
 ## 次にやること（優先順）
-1. **UnitIntroScreen 改修 Ph4B** — ひきざん（M1-02）・くりさがり（M1-08x）のアニメ実装
-   - difficulty: 'normal' / 'detailed' を使い分ける
-   - ロードマップ `.claude/tasks/unit-intro-roadmap.md` 参照
-2. **Ph4C** — 時計・長さ（M1-08a〜c / M1-11）
-3. **Ph4D** — Grade2 掛け算・筆算（M1-01系 / M2-14）
-4. **Ph5** — Grade1 全33ユニット conceptGuides データ充填
-5. **Antigavity テストプレイ** — デバッグオーバーレイの動作確認
+1. **ロードマップ更新** — `unit-intro-roadmap.md` の Ph4B〜Ph5 を完了に更新
+2. **Ph6** — Grade2 全42ユニット conceptGuides データ充填
+   - 6-1: M2-02〜M2-09d（筆算・長さ・大きい数・時刻）
+   - 6-2: M2-10b〜10k（九九 3〜1のだん）
+   - 6-3: M2-11〜M2-14e（分数・図形・グラフ系）
+3. **Ph7** — クリア後ミニストーリー（ClearStoryBanner）
 
 ## 未解決のバグ・問題
 - なし
 
 ## 重要なメモ
 
-### conceptGuides.js の difficulty 基準
+### ロードマップのユニットID誤りパターン（繰り返し発見）
+今セッションで3回確認。実装前に必ず worlds.js・問題ファイルで正しいIDを確認すること：
+- M1-02 ≠ ひきざん（実際は「10までのかず」）
+- M1-08x ≠ くりさがり（実際は「時計」系）
+- M2-01 ≠ かけ算（実際は「2けたのたしざん筆算」）
+- M2-14 ≠ 筆算（実際は「分数」）
+
+### conceptGuides.js の difficulty 基準（確定）
 | difficulty | steps数 | 対象概念 |
 |-----------|--------|---------|
-| easy | 0〜2 | かず・なかまづくり・じゅんばん |
-| normal | 2〜3 | たしざん・ひきざん・時計・長さ |
-| detailed | 4〜5 | くりあがり・くりさがり・掛け算・ひっさん・分数 |
+| easy | 0〜2 | かず・じゅんばん・形・時計ちょうど |
+| normal | 2〜3 | たしざん・ひきざん・大きいかず・時刻・文章題 |
+| detailed | 4〜5 | くりあがり全般・くりさがり全般・さくらんぼ算 |
 
-### ConceptVisualizer フロー
-```
-_renderFirst() → ConceptVisualizer
-  dialogue（タップで進む）
-  → steps（タップで進む、なければスキップ）
-  → microChallenge（なければスキップ）
-  → onComplete → _onStart()（クイズへ直行）
-```
+### cv-emoji スタイル対応表（確定）
+| style | 見た目 | 使いどころ |
+|-------|------|----------|
+| normal | 通常 | デフォルト表示 |
+| highlight | 光る | 注目させたい要素 |
+| ten | 青系グロー | 10のまとまり・くらいのかたまり |
+| accent | 薄く・グレー | 取り除かれる・消えかかり要素 |
 
-### steps の content 構造
-```js
-steps: [
-  {
-    content: [
-      { emoji: '🍎', count: 3, style: 'normal' },
-      { emoji: '🍊', count: 2, style: 'highlight' },
-    ],
-    label: 'ぜんぶで いくつ？',
-  },
-]
-// style: 'normal' | 'highlight' | 'ten' | 'accent'
-```
-
-### Ph7スコープ拡張メモ（Ph2廃止の代替）
-- クイズクリア → ストーリー演出 → 施設解放
-- ギルドクエストクリア → ストーリー → 報酬
-- ResultScreen後だけでなく複数トリガーに対応予定
+### Ph6 設計の注意点
+- Grade2 漢字制限：grade:2 → 1年生配当漢字まで使用可（基本ひらがな推奨）
+- 九九ユニット（M2-10a〜j）はかけ算の意味を各段で強調するセリフに変化をつける
+- 派生ユニット（-1/-2/big/3dig系）はフォールバックで十分
