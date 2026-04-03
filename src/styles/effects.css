@@ -2728,3 +2728,58 @@
   display: flex;
   justify-content: center;
 }
+
+/* ─── アニメーションステップ ─── */
+.cv-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  cursor: pointer;
+}
+.cv-step-label {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  white-space: pre-line;
+}
+
+/* 絵文字エリア */
+.cv-emoji-area {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  animation: fadeInScale 0.3s ease both;
+}
+.cv-emoji-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+  max-width: 240px;
+}
+.cv-emoji {
+  font-size: 28px;
+  line-height: 1;
+  display: inline-block;
+  transition: transform 0.15s ease;
+}
+
+/* style バリエーション */
+.cv-emoji-normal    { opacity: 1; }
+.cv-emoji-highlight {
+  filter: drop-shadow(0 0 4px rgba(255,193,7,0.8));
+  transform: scale(1.1);
+}
+.cv-emoji-ten {
+  filter: drop-shadow(0 0 6px rgba(63,81,181,0.7));
+  transform: scale(1.05);
+}
+.cv-emoji-accent {
+  filter: drop-shadow(0 0 4px rgba(76,175,80,0.8));
+}

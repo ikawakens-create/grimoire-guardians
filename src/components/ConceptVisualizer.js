@@ -73,8 +73,11 @@ class ConceptVisualizer {
 
   _showDialogue(dialogue, index) {
     if (index >= dialogue.length) {
-      // 対話終了 → マイクロ体験 or はじめる！
-      if (this._guide?.microChallenge) {
+      // 対話終了 → steps → マイクロ体験 or はじめる！
+      const steps = this._guide?.steps;
+      if (steps?.length) {
+        this._showStep(steps, 0);
+      } else if (this._guide?.microChallenge) {
         this._showChallenge();
       } else {
         this._showStartButton();
@@ -100,6 +103,55 @@ class ConceptVisualizer {
     this._el.querySelector('.cv-tap-zone').addEventListener('click', () => {
       this._showDialogue(dialogue, index + 1);
     }, { once: true });
+  }
+
+  // ─────────────────────────────────────────
+  // アニメーションステップ
+  // ─────────────────────────────────────────
+
+  _showStep(steps, index) {
+    if (index >= steps.length) {
+      // steps終了 → マイクロ体験 or はじめる！
+      if (this._guide?.microChallenge) {
+        this._showChallenge();
+      } else {
+        this._showStartButton();
+      }
+      return;
+    }
+
+    const step = steps[index];
+    const isLast = index === steps.length - 1;
+
+    this._el.innerHTML = `
+      <div class="cv-step cv-tap-zone">
+        ${this._renderStepContent(step.content)}
+        ${step.label ? `<p class="cv-step-label">${step.label}</p>` : ''}
+        <p class="cv-tap-hint">${isLast ? 'タップして もんだいへ ▶' : 'タップして つぎへ ▶'}</p>
+      </div>
+    `;
+
+    this._el.querySelector('.cv-tap-zone').addEventListener('click', () => {
+      this._showStep(steps, index + 1);
+    }, { once: true });
+  }
+
+  /**
+   * content 配列を絵文字グリッドHTMLに変換する
+   * @param {Array<{emoji:string, count:number, style:string}>} content
+   * @returns {string} HTML文字列
+   */
+  _renderStepContent(content) {
+    if (!content?.length) return '';
+    return `<div class="cv-emoji-area">${
+      content.map(group =>
+        `<div class="cv-emoji-group">${
+          Array.from({ length: group.count }, () =>
+            `<span class="cv-emoji cv-emoji-${group.style}">${group.emoji}</span>`
+          ).join('')
+        }</div>`
+      ).join('')
+    }</div>`;
   }
 
   // ─────────────────────────────────────────
