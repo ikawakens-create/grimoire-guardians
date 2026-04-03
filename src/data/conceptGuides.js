@@ -239,6 +239,79 @@ export const CONCEPT_GUIDES = {
   },
 
   // ─────────────────────────────────────────
+  // Grade 2
+  // ─────────────────────────────────────────
+
+  'M2-01': {
+    grade: 2,
+    difficulty: 'normal',       // 2けた筆算 → 🔵🟡ブロックでくらいの概念を視覚化
+    type: 'vertical_addition',
+    dialogue: [
+      { speaker: 'owl',    text: 'くらいを そろえると たしざんが かんたんになるよ！' },
+      { speaker: 'player', text: 'くらいって なに？' },
+    ],
+    steps: [
+      {
+        content: [
+          { emoji: '🔵', count: 2, style: 'ten' },
+          { emoji: '🟡', count: 3, style: 'normal' },
+        ],
+        label: '23は 10が 2つ と 1が 3つ',
+      },
+      {
+        content: [
+          { emoji: '🔵', count: 1, style: 'ten' },
+          { emoji: '🟡', count: 4, style: 'highlight' },
+        ],
+        label: '14は 10が 1つ と 1が 4つ',
+      },
+      {
+        content: [
+          { emoji: '🔵', count: 3, style: 'ten' },
+          { emoji: '🟡', count: 7, style: 'highlight' },
+        ],
+        label: 'くらいごとに たすと → 37！',
+      },
+    ],
+    microChallenge: {
+      question: '23 + 14 = ？',
+      choices: ['36', '37', '38'],
+      correct: 1,
+    },
+  },
+
+  'M2-10a': {
+    grade: 2,
+    difficulty: 'normal',       // 九九2のだん → かけ算＝おなじ数のまとまりを体験
+    type: 'multiplication',
+    dialogue: [
+      { speaker: 'owl',    text: '2×3は "2こが 3つぶん" ということだよ！' },
+      { speaker: 'player', text: 'ぜんぶ かぞえなくても わかるの！？' },
+    ],
+    steps: [
+      {
+        content: [
+          { emoji: '🍬', count: 2, style: 'normal' },
+        ],
+        label: '2こ はいった ふくろが 1つ → 2こ',
+      },
+      {
+        content: [
+          { emoji: '🍬', count: 2, style: 'normal' },
+          { emoji: '🍬', count: 2, style: 'highlight' },
+          { emoji: '🍬', count: 2, style: 'ten' },
+        ],
+        label: 'ふくろが 3つ → 2×3＝6こ！',
+      },
+    ],
+    microChallenge: {
+      question: '2 × 4 は いくつ？',
+      choices: ['6', '7', '8'],
+      correct: 2,
+    },
+  },
+
+  // ─────────────────────────────────────────
   // 難易度ガイド（データ作成時の参考）
   //
   // easy:
