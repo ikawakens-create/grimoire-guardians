@@ -2781,5 +2781,6 @@
   transform: scale(1.05);
 }
 .cv-emoji-accent {
-  filter: drop-shadow(0 0 4px rgba(76,175,80,0.8));
+  opacity: 0.3;
+  filter: grayscale(0.6);
 }
