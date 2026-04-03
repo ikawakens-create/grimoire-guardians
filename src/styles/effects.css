@@ -1429,12 +1429,13 @@
 
 .unit-intro-buttons {
   display: flex;
-  gap: 12px;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
   width: 100%;
-  justify-content: center;
 }
-.unit-intro-btn-back { min-width: 80px; }
-.unit-intro-btn-start { min-width: 140px; }
+.unit-intro-btn-start { min-width: 200px; }
+.unit-intro-btn-back  { min-width: 80px; font-size: 13px; }
 
 /* ミニバナー */
 .unit-intro-mini-banner {

@@ -103,6 +103,7 @@ const ASSETS = [
   './src/components/BookCard.js',
   './src/components/ProgressBar.js',
   './src/components/ClockFace.js',
+  './src/components/ConceptVisualizer.js',
   './src/components/ShapeFace.js',
   './src/components/HitsuzanRenderer.js',
   './src/events/OmikujiEvent.js',
