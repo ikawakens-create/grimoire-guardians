@@ -9,7 +9,7 @@
  * @date 2026-03-04
  */
 
-const SW_VERSION   = '2.3.7';
+const SW_VERSION   = '2.3.8';
 const CACHE_NAME   = `grimoire-${SW_VERSION}`;
 
 /** キャッシュ対象ファイル（静的アセット） */
@@ -37,6 +37,9 @@ const ASSETS = [
   './src/screens/FinalBattleScreen.js',
   // ストーリーシステム
   './src/data/storyData.js',
+  // Ph7: クリア後ミニストーリー
+  './src/data/worldClearScenes.js',
+  './src/components/ClearStoryBanner.js',
   './src/data/dimensionConfig.js',
   './src/screens/InventoryScreen.js',
   './src/screens/MemoryIsleScreen.js',
