@@ -21,6 +21,8 @@ import { SoundManager, SoundType } from '../core/SoundManager.js';
 import HapticFeedback from '../utils/HapticFeedback.js';
 import { MATERIAL_NAMES, MATERIAL_EMOJIS } from '../utils/materialUtils.js';
 import { CharacterAvatar } from '../components/CharacterAvatar.js';
+import { ClearStoryBanner } from '../components/ClearStoryBanner.js';
+import { WORLD_CLEAR_SCENES, buildFallbackScene } from '../data/worldClearScenes.js';
 import WORLDS, { getWorldById } from '../data/worlds.js';
 import { FUKUROU_CLEAR_COMMENTS, ACT_CUTINS, NPC_FIRST_MEET, STORY_IMAGES, PLAYER_VOICE, NG_PLUS_CUTIN } from '../data/storyData.js';
 import { getMonsterByWorldId } from '../data/memory-monsters.js';
@@ -112,6 +114,10 @@ class ResultScreen {
 
     this._drops = this._calcDrops(cleared);
 
+    // 初クリア判定（_buildHTML と _persistResult より前に確認する）
+    this._isFirstClear = cleared &&
+      !GameStore.getState(`progress.worlds.${this._result.worldId}.cleared`);
+
     // DOM 構築
     const el = document.createElement('div');
     el.className = 'result-screen';
@@ -125,11 +131,6 @@ class ResultScreen {
     if (avatarSlot && this._avatar) {
       avatarSlot.appendChild(this._avatar.render());
     }
-
-    // 初クリア判定（_persistResult が cleared フラグを書き込む前に確認）
-    const _worldIdForCheck = this._result.worldId;
-    this._isFirstClear = cleared &&
-      !GameStore.getState(`progress.worlds.${_worldIdForCheck}.cleared`);
 
     // 進捗・インベントリを更新してセーブ
     this._persistResult(cleared);
@@ -280,7 +281,9 @@ class ResultScreen {
 
     // フクロウ先生のクリアコメント
     const worldId   = GameStore.getState('currentSession.worldId');
+    // 初クリア時はバナー（ClearStoryBanner）がフクロウを担うため、ここでは非表示
     const fukuComment = cleared && worldId && FUKUROU_CLEAR_COMMENTS[worldId]
+      && !this._isFirstClear
       ? FUKUROU_CLEAR_COMMENTS[worldId]
       : null;
     const fukuHTML = fukuComment
@@ -538,6 +541,33 @@ class ResultScreen {
     if (cleared) {
       this._checkPhaseComplete();
     }
+
+    // ⑧ クリア後ミニストーリーバナー（初クリア時のみ）
+    if (cleared && this._isFirstClear) {
+      await this._showClearStory();
+    }
+  }
+
+  /**
+   * クリア後ミニストーリーバナーを表示する（初クリア時のみ）
+   * データは ResultScreen 側で解決して ClearStoryBanner に渡す（GameStore 二重アクセス防止）
+   * @returns {Promise<void>}
+   * @private
+   */
+  _showClearStory() {
+    const worldId    = this._result.worldId;
+    const worldDef   = getWorldById(worldId);
+    const scene      = WORLD_CLEAR_SCENES[worldId] ?? buildFallbackScene(worldDef);
+    const playerName = GameStore.getState('player.name') || 'ぼうけんしゃ';
+
+    return new Promise((resolve) => {
+      const banner = new ClearStoryBanner();
+      banner.show(scene, playerName, {
+        onRetry: () => { resolve(); if (typeof this._onRetry === 'function') this._onRetry(); },
+        onBack:  () => { resolve(); if (typeof this._onBack  === 'function') this._onBack(); },
+        onNext:  () => { resolve(); GameStore.setState('app.currentScreen', 'bookshelf'); },
+      });
+    });
   }
 
   /**

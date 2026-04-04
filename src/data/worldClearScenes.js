@@ -1,0 +1,470 @@
+/**
+ * worldClearScenes.js — Grimoire Guardians
+ * クリア後ミニストーリーデータ（Ph7）
+ *
+ * 各ワールドの初クリア時に表示する JRPG ダイアログボックス演出のデータ。
+ * ClearStoryBanner.js が消費する。
+ *
+ * フィールド定義:
+ *   @property {string} emoji        — このワールドのシンボル絵文字（Panel 1: グリモア演出）
+ *   @property {string} nextEmoji    — 次ワールドの予告絵文字（Panel 3）
+ *   @property {string|null} image   — 将来のゾーン背景画像パス（現在は null）
+ *   @property {string} owlLine      — フクロウのセリフ。{name} プレースホルダー使用可（owlLine のみ）
+ *   @property {string} grimoireLine — グリモア主役セリフ。プレースホルダー禁止
+ *   @property {string} storyLine    — 世界への影響テキスト（1行）
+ *   @property {string} nextWorldHint — 次ワールドの予告テキスト
+ *
+ * 漢字制限:
+ *   Grade 1 ワールド → 全てひらがな
+ *   Grade 2 ワールド → 全てひらがな（1年生配当漢字は使用可だが統一でひらがな）
+ *
+ * @version 1.0
+ * @date 2026-04-04
+ */
+
+// ─────────────────────────────────────────
+// Grade 1 ワールド（world_1 〜 world_16b）
+// 全テキスト: ひらがなのみ
+// ─────────────────────────────────────────
+export const WORLD_CLEAR_SCENES = {
+
+  // ── Act 1: はじまりの まち（world_1 〜 world_6b）────────────────
+
+  'world_1': {
+    emoji:        '🔢',
+    nextEmoji:    '🔟',
+    image:        null,
+    owlLine:      '{name}！ さいしょの グリモアを とりもどしたぞ！',
+    grimoireLine: 'なかまづくりの グリモアが もどってきた！',
+    storyLine:    'まちの ひとびとが かずを かぞえられるように なった…',
+    nextWorldHint:'つぎは 10までの かずの グリモアが まっているよ',
+  },
+
+  'world_2': {
+    emoji:        '🔟',
+    nextEmoji:    '📍',
+    image:        null,
+    owlLine:      '{name}！ よくやったぞ！',
+    grimoireLine: '10までの かずの グリモアが もどってきた！',
+    storyLine:    'こどもたちが たのしそうに かずを かぞえている…',
+    nextWorldHint:'つぎは なんばんめの グリモアが まっているよ',
+  },
+
+  'world_3': {
+    emoji:        '📍',
+    nextEmoji:    '🤝',
+    image:        null,
+    owlLine:      '{name}！ すごいぞ！',
+    grimoireLine: 'なんばんめの グリモアが もどってきた！',
+    storyLine:    'みちで まいごに なる ことが なくなった…',
+    nextWorldHint:'つぎは いくつと いくつの グリモアが まっているよ',
+  },
+
+  'world_4': {
+    emoji:        '🤝',
+    nextEmoji:    '➕',
+    image:        null,
+    owlLine:      '{name}！ よくやった！',
+    grimoireLine: 'いくつと いくつの グリモアが もどってきた！',
+    storyLine:    'まちが すこし あかるくなった…',
+    nextWorldHint:'つぎは たしざんの グリモアが まっているよ',
+  },
+
+  'world_5': {
+    emoji:        '➕',
+    nextEmoji:    '✨',
+    image:        null,
+    owlLine:      '{name}！ たしざんを みにつけたぞ！',
+    grimoireLine: 'たしざんの グリモアが もどってきた！',
+    storyLine:    'まちに あわせる まほうが もどってきた…',
+    nextWorldHint:'つぎは たしざん おうような グリモアが まっているよ',
+  },
+
+  'world_5b': {
+    emoji:        '✨',
+    nextEmoji:    '➖',
+    image:        null,
+    owlLine:      '{name}！ おうようまで できたぞ！',
+    grimoireLine: 'たしざん おうような グリモアが もどってきた！',
+    storyLine:    'ほんだなに ひかりが もどってきた…',
+    nextWorldHint:'つぎは ひきざんの グリモアが まっているよ',
+  },
+
+  'world_6': {
+    emoji:        '➖',
+    nextEmoji:    '🌟',
+    image:        null,
+    owlLine:      '{name}！ ひきざんを みにつけたぞ！',
+    grimoireLine: 'ひきざんの グリモアが もどってきた！',
+    storyLine:    'のこりを もとめる まほうが よみがえった…',
+    nextWorldHint:'つぎは ひきざん おうような グリモアが まっているよ',
+  },
+
+  'world_6b': {
+    emoji:        '🌟',
+    nextEmoji:    '🔢',
+    image:        null,
+    owlLine:      '{name}！ たしざんも ひきざんも できるぞ！',
+    grimoireLine: 'ひきざん おうような グリモアが もどってきた！',
+    storyLine:    'まちに あたらしい なかまが やってきた…',
+    nextWorldHint:'つぎは 20までの かずの グリモアが まっているよ',
+  },
+
+  // ── Act 2: とけいと おおきい かず（world_7 〜 world_9）────────────
+
+  'world_7': {
+    emoji:        '🔢',
+    nextEmoji:    '🕐',
+    image:        null,
+    owlLine:      '{name}！ おおきい かずも わかるぞ！',
+    grimoireLine: '20までの かずの グリモアが もどってきた！',
+    storyLine:    'きりが すこし うすくなってきた…',
+    nextWorldHint:'つぎは とけいの グリモアが まっているよ',
+  },
+
+  'world_8a': {
+    emoji:        '🕐',
+    nextEmoji:    '🕧',
+    image:        null,
+    owlLine:      '{name}！ とけいが よめるように なったぞ！',
+    grimoireLine: 'なんじの グリモアが もどってきた！',
+    storyLine:    'まちの とけいが また うごきはじめた…',
+    nextWorldHint:'つぎは なんじはんの グリモアが まっているよ',
+  },
+
+  'world_8b': {
+    emoji:        '🕧',
+    nextEmoji:    '⏰',
+    image:        null,
+    owlLine:      '{name}！ はんの じかんも わかるぞ！',
+    grimoireLine: 'なんじはんの グリモアが もどってきた！',
+    storyLine:    'とけいの まほうが ふかまってきた…',
+    nextWorldHint:'つぎは 5ふんたんいの グリモアが まっているよ',
+  },
+
+  'world_8c': {
+    emoji:        '⏰',
+    nextEmoji:    '🍒',
+    image:        null,
+    owlLine:      '{name}！ 5ふんたんいも よめるぞ！',
+    grimoireLine: '5ふんたんいの グリモアが もどってきた！',
+    storyLine:    'まちの みんなが じかんを わすれなくなった…',
+    nextWorldHint:'つぎは さくらんぼざんの グリモアが まっているよ',
+  },
+
+  'world_9': {
+    emoji:        '🍒',
+    nextEmoji:    '🔥',
+    image:        null,
+    owlLine:      '{name}！ さくらんぼざんの ひみつを みつけたぞ！',
+    grimoireLine: 'さくらんぼざんの グリモアが もどってきた！',
+    storyLine:    'かずを わける まほうが うまれた…',
+    nextWorldHint:'つぎは くりあがりの グリモアが まっているよ',
+  },
+
+  // ── Act 3: くりあがりと くりさがり（world_10a 〜 world_11d）──────
+
+  'world_10a': {
+    emoji:        '🔥',
+    nextEmoji:    '💪',
+    image:        null,
+    owlLine:      '{name}！ くりあがりを のりこえたぞ！',
+    grimoireLine: 'くりあがり 9の グリモアが もどってきた！',
+    storyLine:    'むずかしい たしざんの とびらが ひらいた…',
+    nextWorldHint:'つぎは 8の くりあがりの グリモアが まっているよ',
+  },
+
+  'world_10b': {
+    emoji:        '💪',
+    nextEmoji:    '⚡',
+    image:        null,
+    owlLine:      '{name}！ また ひとつ のりこえたぞ！',
+    grimoireLine: 'くりあがり 8の グリモアが もどってきた！',
+    storyLine:    'まほうが どんどん つよくなっている…',
+    nextWorldHint:'つぎは 7と 6の くりあがりの グリモアだ',
+  },
+
+  'world_10c': {
+    emoji:        '⚡',
+    nextEmoji:    '🌈',
+    image:        null,
+    owlLine:      '{name}！ 7と 6まで やりとげたぞ！',
+    grimoireLine: 'くりあがり 7・6の グリモアが もどってきた！',
+    storyLine:    'ふういんが どんどん かいふくしていく…',
+    nextWorldHint:'つぎは くりあがり おうような グリモアだ',
+  },
+
+  'world_10d': {
+    emoji:        '🌈',
+    nextEmoji:    '💧',
+    image:        null,
+    owlLine:      '{name}！ くりあがりを かんぜんに みにつけたぞ！',
+    grimoireLine: 'くりあがり おうようの グリモアが もどってきた！',
+    storyLine:    'たしざんの まほうが かんぜんに そなわった…',
+    nextWorldHint:'つぎは くりさがりの ひみつの グリモアだ',
+  },
+
+  'world_11a': {
+    emoji:        '💧',
+    nextEmoji:    '💫',
+    image:        null,
+    owlLine:      '{name}！ くりさがりの ひみつを みつけたぞ！',
+    grimoireLine: '10からひくの グリモアが もどってきた！',
+    storyLine:    'ひきざんの おくぎが めざめた…',
+    nextWorldHint:'つぎは くりさがり 11・12の グリモアだ',
+  },
+
+  'world_11b': {
+    emoji:        '💫',
+    nextEmoji:    '🌙',
+    image:        null,
+    owlLine:      '{name}！ むずかしい くりさがりも できるぞ！',
+    grimoireLine: 'くりさがり 11・12の グリモアが もどってきた！',
+    storyLine:    'きりの なかから ひかりが みえる…',
+    nextWorldHint:'つぎは 13から 18の くりさがりの グリモアだ',
+  },
+
+  'world_11c': {
+    emoji:        '🌙',
+    nextEmoji:    '🎆',
+    image:        null,
+    owlLine:      '{name}！ 13から 18まで やりとげたぞ！',
+    grimoireLine: 'くりさがり 13〜18の グリモアが もどってきた！',
+    storyLine:    'ふういんが なかばを こえた……なにかが ゆれている…',
+    nextWorldHint:'つぎは くりさがり おうような グリモアだ',
+  },
+
+  'world_11d': {
+    emoji:        '🎆',
+    nextEmoji:    '🎯',
+    image:        null,
+    owlLine:      '{name}！ くりさがりも かんせいだぞ！',
+    grimoireLine: 'くりさがり おうようの グリモアが もどってきた！',
+    storyLine:    'やみの きりを はねのけた……まちが みえてきた…',
+    nextWorldHint:'つぎは 3つの かずの たしざんの グリモアだ',
+  },
+
+  // ── Act 4: やみへの はんげき（world_12a 〜 world_13b）────────────
+
+  'world_12a': {
+    emoji:        '🎯',
+    nextEmoji:    '🎪',
+    image:        null,
+    owlLine:      '{name}！ 3つの かずも とけたぞ！',
+    grimoireLine: '3つの たしざんの グリモアが もどってきた！',
+    storyLine:    'まちの みんなが ちからを あわせている…',
+    nextWorldHint:'つぎは 3つの ひきざんの グリモアだ',
+  },
+
+  'world_12b': {
+    emoji:        '🎪',
+    nextEmoji:    '🎲',
+    image:        null,
+    owlLine:      '{name}！ やみに まけるな！',
+    grimoireLine: '3つの ひきざんの グリモアが もどってきた！',
+    storyLine:    'やみの こうげきを うけながらも まけていない…',
+    nextWorldHint:'つぎは たしざん・ひきざん まじりの グリモアだ',
+  },
+
+  'world_12c': {
+    emoji:        '🎲',
+    nextEmoji:    '🔺',
+    image:        null,
+    owlLine:      '{name}！ たしざんも ひきざんも つかいこなすぞ！',
+    grimoireLine: 'たし・ひきまじりの グリモアが もどってきた！',
+    storyLine:    'りょうほうの まほうで やみに たちむかっている…',
+    nextWorldHint:'つぎは かたちの グリモアだ',
+  },
+
+  'world_13': {
+    emoji:        '🔺',
+    nextEmoji:    '🔷',
+    image:        null,
+    owlLine:      '{name}！ かたちの ひみつを みつけたぞ！',
+    grimoireLine: 'かたちあそびの グリモアが もどってきた！',
+    storyLine:    'まわりの ものを みる まほうが めざめた…',
+    nextWorldHint:'つぎは かたちづくりの グリモアだ',
+  },
+
+  'world_13b': {
+    emoji:        '🔷',
+    nextEmoji:    '📝',
+    image:        null,
+    owlLine:      '{name}！ かたちを つかいこなせるぞ！',
+    grimoireLine: 'かたちづくりの グリモアが もどってきた！',
+    storyLine:    'まちの かたちが もとに もどってきた…',
+    nextWorldHint:'つぎは おおきい かずの グリモアだ',
+  },
+
+  // ── ラストスパート（world_14a 〜 world_16b）──────────────────────
+
+  'world_14a': {
+    emoji:        '📝',
+    nextEmoji:    '📊',
+    image:        null,
+    owlLine:      '{name}！ おおきい かずを よみかきできるぞ！',
+    grimoireLine: 'かずの よみかきの グリモアが もどってきた！',
+    storyLine:    'やみよ……もうすぐ きみの まけだ…',
+    nextWorldHint:'つぎは かずの じゅんばんの グリモアだ',
+  },
+
+  'world_14b': {
+    emoji:        '📊',
+    nextEmoji:    '⏱️',
+    image:        null,
+    owlLine:      '{name}！ かずの じゅんばんも わかるぞ！',
+    grimoireLine: 'かずの じゅんばんの グリモアが もどってきた！',
+    storyLine:    'きりが はれていく……もうすぐ だぞ！',
+    nextWorldHint:'つぎは とけい（なんじなんぷん）の グリモアだ',
+  },
+
+  'world_15a': {
+    emoji:        '⏱️',
+    nextEmoji:    '🕰️',
+    image:        null,
+    owlLine:      '{name}！ なんじなんぷんも よめるぞ！',
+    grimoireLine: 'なんじなんぷん（まえはん）の グリモアが もどってきた！',
+    storyLine:    'あと すこし！ まちに ひかりが もどってきた…',
+    nextWorldHint:'つぎは とけいの グリモア こうはんだ',
+  },
+
+  'world_15b': {
+    emoji:        '🕰️',
+    nextEmoji:    '📖',
+    image:        null,
+    owlLine:      '{name}！ とけいを かんぺきに よめるぞ！',
+    grimoireLine: 'なんじなんぷん（こうはん）の グリモアが もどってきた！',
+    storyLine:    'きぼうの ひかりが みえてきた！！',
+    nextWorldHint:'つぎは たしざん もんだいの グリモアだ',
+  },
+
+  'world_16a': {
+    emoji:        '📖',
+    nextEmoji:    '🏆',
+    image:        null,
+    owlLine:      '{name}！ さいごの もんだいを といてきたぞ！',
+    grimoireLine: 'たしざん もんだいの グリモアが もどってきた！',
+    storyLine:    'さいごの ふういんが ゆらいでいる…！！',
+    nextWorldHint:'つぎは さいごの グリモアだ……！',
+  },
+
+  'world_16b': {
+    emoji:        '🏆',
+    nextEmoji:    '🌈',
+    image:        null,
+    owlLine:      '{name}！ ついに やりとげたぞ！ グレード 1 かんりょうだ！',
+    grimoireLine: 'ひきざん もんだいの グリモアが もどってきた！',
+    storyLine:    'すべての ふういんが とけた……まちに ひかりが あふれている！',
+    nextWorldHint:'すべての グリモアが もとに もどった！ つぎの ぼうけんへ！',
+  },
+
+  // ─────────────────────────────────────────
+  // Grade 2 キーワールド（m2_01 〜 m2_15d）
+  // 全テキスト: ひらがなのみ
+  // ─────────────────────────────────────────
+
+  'm2_01': {
+    emoji:        '💎',
+    nextEmoji:    '✏️',
+    image:        null,
+    owlLine:      '{name}！ おおきい かずを みにつけたぞ！',
+    grimoireLine: 'おおきい かずの グリモアが もどってきた！',
+    storyLine:    'しんかいの なかで なにかが ひかった…',
+    nextWorldHint:'つぎは ひっさんの グリモアが まっているよ',
+  },
+
+  'm2_05': {
+    emoji:        '📏',
+    nextEmoji:    '⏱️',
+    image:        null,
+    owlLine:      '{name}！ ながさの ひみつを みつけたぞ！',
+    grimoireLine: 'ながさの グリモアが もどってきた！',
+    storyLine:    'しんかいに ながれが うまれた…',
+    nextWorldHint:'つぎは じこくと じかんの グリモアだ',
+  },
+
+  'm2_07': {
+    emoji:        '⏱️',
+    nextEmoji:    '✖️',
+    image:        null,
+    owlLine:      '{name}！ じかんの ながれが わかるぞ！',
+    grimoireLine: 'じこくと じかんの グリモアが もどってきた！',
+    storyLine:    'しんかいに じかんが もどってきた…',
+    nextWorldHint:'つぎは かけざんの グリモアが まっているよ',
+  },
+
+  'm2_09a': {
+    emoji:        '✖️',
+    nextEmoji:    '🐟',
+    image:        null,
+    owlLine:      '{name}！ かけざんの はじまりだぞ！',
+    grimoireLine: 'かけざんの グリモアが もどってきた！',
+    storyLine:    'しんかいに まったく あたらしい まほうが めざめた…',
+    nextWorldHint:'つぎは くくの グリモアが まっているよ',
+  },
+
+  'm2_10a': {
+    emoji:        '🐟',
+    nextEmoji:    '🌊',
+    image:        null,
+    owlLine:      '{name}！ 2のだんを おぼえたぞ！',
+    grimoireLine: '2のだんの グリモアが もどってきた！',
+    storyLine:    'くくの まほうが しんかいに ひびいた…',
+    nextWorldHint:'つぎは 3のだんの グリモアだ',
+  },
+
+  'm2_10k': {
+    emoji:        '🌟',
+    nextEmoji:    '📐',
+    image:        null,
+    owlLine:      '{name}！ くく ぜんだんを みにつけたぞ！！',
+    grimoireLine: 'くく ぜんだんの グリモアが もどってきた！',
+    storyLine:    'しんかい ぜんたいに まほうの ひかりが あふれた…！',
+    nextWorldHint:'つぎは かたちの グリモアが まっているよ',
+  },
+
+  'm2_14a': {
+    emoji:        '🍕',
+    nextEmoji:    '📐',
+    image:        null,
+    owlLine:      '{name}！ ぶんすうの ひみつを みつけたぞ！',
+    grimoireLine: 'ぶんすうの グリモアが もどってきた！',
+    storyLine:    'しんかいに ぶんかつの まほうが めざめた…',
+    nextWorldHint:'つぎは さんかくけいと しかくけいの グリモアだ',
+  },
+
+  'm2_15d': {
+    emoji:        '🏆',
+    nextEmoji:    '🌈',
+    image:        null,
+    owlLine:      '{name}！ グレード 2 ぜんぶ クリアだぞ！！！',
+    grimoireLine: 'しんかいの グリモアが すべて もどってきた！',
+    storyLine:    'やみが とけ…しんかいに あかるい ひかりが さしこんだ……！',
+    nextWorldHint:'すべての ぼうけんを やりとげた！ つぎの せかいへ！',
+  },
+};
+
+// ─────────────────────────────────────────
+// フォールバックシーン生成（データ未定義ワールド用）
+// ─────────────────────────────────────────
+
+/**
+ * WORLD_CLEAR_SCENES にデータがないワールド用の汎用シーンを生成する。
+ * worldDef.title を使って「○○の グリモアが もどってきた！」と表示する。
+ *
+ * @param {Object|null} worldDef - getWorldById() の返り値
+ * @returns {Object} シーンオブジェクト
+ */
+export function buildFallbackScene(worldDef) {
+  // タイトルをひらがな的に使えるよう、漢字混入リスクを避けて汎用文言にフォールバック
+  const titleHint = worldDef?.title ?? 'グリモア';
+  return {
+    emoji:        '📖',
+    nextEmoji:    '✨',
+    image:        null,
+    owlLine:      '{name}！ グリモアを とりもどしたぞ！',
+    grimoireLine: `${titleHint}の グリモアが もどってきた！`,
+    storyLine:    'まちが すこし あかるくなった…',
+    nextWorldHint:'つぎの グリモアを さがしにいこう！',
+  };
+}
