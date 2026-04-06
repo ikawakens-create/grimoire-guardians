@@ -718,14 +718,78 @@ export const WORLD_CLEAR_SCENES = {
     nextWorldHint:'つぎは かたちの グリモアが まっているよ',
   },
 
+  // ── Zone4: しんかい図形（m2_11 〜 m2_12b）──────────────────────
+
+  'm2_11': {
+    emoji:        '🔺',
+    nextEmoji:    '🔷',
+    image:        null,
+    owlLine:      '{name}！ かたちの ひみつを みつけたぞ！',
+    grimoireLine: 'さんかくけい・しかくけいの グリモアが もどってきた！',
+    storyLine:    'うみそこに かがやく かたちが あらわれた……さんかくと しかく…',
+    nextWorldHint:'つぎは ちょうほうけいと せいほうけいの グリモアだ',
+  },
+
+  'm2_12': {
+    emoji:        '🔷',
+    nextEmoji:    '📐',
+    image:        null,
+    owlLine:      '{name}！ ちょうほうけいも せいほうけいも わかるぞ！',
+    grimoireLine: 'ちょうほうけい・せいほうけいの グリモアが もどってきた！',
+    storyLine:    'しんかいの かべに うつくしい もよう が きざまれていく…',
+    nextWorldHint:'つぎは ずけい そうまとめ……すべての かたちを てにいれろ',
+  },
+
+  'm2_12b': {
+    emoji:        '📐',
+    nextEmoji:    '💎',
+    image:        null,
+    owlLine:      '{name}！ ……すべての かたちを みやぶった。ほんものだ',
+    grimoireLine: 'ずっと まっていたぞ……！ しんかいの ずけい グリモアが すべて もどった！',
+    storyLine:    'うみそこに ふしぎな きかがくもようが ひろがった……せかいの かたちが みえる…',
+    nextWorldHint:'さらに ふかく……3けたの けいさんが まっているぞ',
+  },
+
+  // ── Zone5: しんかい3桁（m2_13a 〜 m2_13c）────────────────────
+
+  'm2_13a': {
+    emoji:        '💎',
+    nextEmoji:    '🔑',
+    image:        null,
+    owlLine:      '{name}！ 3けたの たしざんも できるぞ！',
+    grimoireLine: '3けた たしざんの グリモアが もどってきた！',
+    storyLine:    'あたりが しんと しずまった……ここが しんかいの さいしんぶだ',
+    nextWorldHint:'つぎは 3けたの ひきざん……もう すこしで さいしんぶに たどりつく',
+  },
+
+  'm2_13b': {
+    emoji:        '🔑',
+    nextEmoji:    '⚔️',
+    image:        null,
+    owlLine:      '{name}！ 3けたの ひきざんも とけたぞ！',
+    grimoireLine: '3けた ひきざんの グリモアが もどってきた！',
+    storyLine:    'しんかいの あつい とびらが すこし ひらいた……おくから ひかりが もれる…',
+    nextWorldHint:'3けた ひっさん まとめ……このとびらを こじあけろ！',
+  },
+
+  'm2_13c': {
+    emoji:        '⚔️',
+    nextEmoji:    '🍕',
+    image:        null,
+    owlLine:      '{name}！ ……3けたの けいさん、かんぜんせいはだ。すごい',
+    grimoireLine: 'ずっと まっていたぞ……！ しんかい さいしんぶの グリモアが もどった！',
+    storyLine:    'とびらが ひらいた……そのむこうに まったく あたらしい まほうが あった',
+    nextWorldHint:'ぶんすうの まほうが よんでいる……あたらしい せかいへ！',
+  },
+
   'm2_14a': {
     emoji:        '🍕',
-    nextEmoji:    '📐',
+    nextEmoji:    '🎯',
     image:        null,
     owlLine:      '{name}！ ぶんすうの ひみつを みつけたぞ！',
     grimoireLine: 'ぶんすうの グリモアが もどってきた！',
     storyLine:    'しんかいに ぶんかつの まほうが めざめた…',
-    nextWorldHint:'つぎは さんかくけいと しかくけいの グリモアだ',
+    nextWorldHint:'つぎは ぶんすうの たしざんの グリモアだ',
   },
 
   'm2_15d': {
