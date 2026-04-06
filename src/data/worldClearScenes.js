@@ -609,13 +609,103 @@ export const WORLD_CLEAR_SCENES = {
   },
 
   'm2_10a': {
-    emoji:        '🐟',
-    nextEmoji:    '🌊',
+    emoji:        '✖️',
+    nextEmoji:    '⚡',
     image:        null,
     owlLine:      '{name}！ 2のだんを おぼえたぞ！',
     grimoireLine: '2のだんの グリモアが もどってきた！',
-    storyLine:    'くくの まほうが しんかいに ひびいた…',
-    nextWorldHint:'つぎは 3のだんの グリモアだ',
+    storyLine:    'がいように でた！ おおきな なみが まえを ふさいでいる…',
+    nextWorldHint:'つぎは 3のだんの グリモアだ……どんどん いくぞ！',
+  },
+
+  'm2_10b': {
+    emoji:        '⚡',
+    nextEmoji:    '🌊',
+    image:        null,
+    owlLine:      '{name}！ 2のつぎも きたぞ！ すごいな！',
+    grimoireLine: '3のだんの グリモアが もどってきた！',
+    storyLine:    'なみが ひとつ くずれた……まだまだ さきが あるぞ…',
+    nextWorldHint:'4のだんが まっているぞ……まだ とまるな！',
+  },
+
+  'm2_10c': {
+    emoji:        '🌊',
+    nextEmoji:    '⚡',
+    image:        null,
+    owlLine:      '{name}！ どんどん つよくなってるな！',
+    grimoireLine: '4のだんの グリモアが もどってきた！',
+    storyLine:    'かぜが かわってきた……むかいかぜが すこし よわまってきた',
+    nextWorldHint:'5のだんは とくべつだぞ……おりかえしの なみだ！',
+  },
+
+  'm2_10d': {
+    emoji:        '⚡',
+    nextEmoji:    '🌪️',
+    image:        null,
+    owlLine:      '{name}！ 5のだんは とくべつだぞ……やったな！',
+    grimoireLine: '5のだんの グリモアが もどってきた！',
+    storyLine:    'なみのてっぺんに のぼった……さきには もっと おおきな あらしが みえる…',
+    nextWorldHint:'6のだん……あらしの かくしんに ふみこむぞ',
+  },
+
+  'm2_10e': {
+    emoji:        '🌪️',
+    nextEmoji:    '🐋',
+    image:        null,
+    owlLine:      '{name}！ むずかしく なってきたな……でも やったぞ！',
+    grimoireLine: '6のだんの グリモアが もどってきた！',
+    storyLine:    'あらしの なかで ふねが ゆれる……でも まだ すすめる…！',
+    nextWorldHint:'7のだんが まっている……ここが いちばん の やまだ',
+  },
+
+  'm2_10f': {
+    emoji:        '🐋',
+    nextEmoji:    '🦈',
+    image:        null,
+    owlLine:      '{name}！ 7は こんなんだ……でも きみなら できる！',
+    grimoireLine: '7のだんの グリモアが もどってきた！',
+    storyLine:    'おおくじらが そばを とおった……ちからを もらった きがする…',
+    nextWorldHint:'あと すこしだ！ 8のだんを のりこえろ……！',
+  },
+
+  'm2_10g': {
+    emoji:        '🦈',
+    nextEmoji:    '🌊',
+    image:        null,
+    owlLine:      '{name}！ あと すこしだ……！ がんばれ！',
+    grimoireLine: '8のだんの グリモアが もどってきた！',
+    storyLine:    'あらしが よわまってきた……さきに あおぞらが みえてきたぞ…！',
+    nextWorldHint:'9のだんを のりこえれば……ほんものの まほうつかいだ！',
+  },
+
+  'm2_10h': {
+    emoji:        '🌊',
+    nextEmoji:    '⚡',
+    image:        null,
+    owlLine:      '{name}！ 9のだんまで！ ほんものの まほうつかいだ！',
+    grimoireLine: '9のだんの グリモアが もどってきた！',
+    storyLine:    'あらしが はれた……がいように まぶしい ひかりが さしこんだ！！',
+    nextWorldHint:'さいごに 1のだん……これは きっと おどろくぞ！',
+  },
+
+  'm2_10i': {
+    emoji:        '⚡',
+    nextEmoji:    '🐋',
+    image:        null,
+    owlLine:      '{name}！ 1のだんが いちばん かんたんとは……！ いいぞ！',
+    grimoireLine: '1のだん・0のかけざんの グリモアが もどってきた！',
+    storyLine:    'なみが しずまり……うみが わらって いるように みえた',
+    nextWorldHint:'くくの もんだい……しあげの グリモアが よんでいる',
+  },
+
+  'm2_10j': {
+    emoji:        '🐋',
+    nextEmoji:    '🌟',
+    image:        null,
+    owlLine:      '{name}！ くくの もんだいも かんぺきだぞ！',
+    grimoireLine: 'つぎの グリモアが さけんでいる……！ はやくきてくれ！',
+    storyLine:    'がいように おだやかな かぜが ふいた……しあげの とびらが ちかい',
+    nextWorldHint:'くく そうまとめ……さいごの かべを のりこえろ！',
   },
 
   'm2_10k': {
