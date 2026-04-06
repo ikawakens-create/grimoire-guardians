@@ -513,38 +513,42 @@ class ResultScreen {
       await this._animateDrops();
     }
 
-    // ③ ボタンをフェードイン（画面が破棄済みなら中断）
-    if (!this._el) return;
-    const btns = this._el.querySelector('.result-buttons');
-    if (btns) {
-      btns.classList.add('result-buttons-visible');
-    }
-
-    // ④ モンスターGET演出
+    // 幕間演出１：モンスターGET演出
     if (this._newlyCollectedMonster) {
       await this._animateMonsterGet(this._newlyCollectedMonster);
     }
+    if (!this._el) return;
 
-    // ⑤ NPC初登場バナー
+    // 幕間演出２：NPC初登場バナー
     if (this._pendingNpcMeet) {
       await this._showNpcFirstMeet(this._pendingNpcMeet);
       this._pendingNpcMeet = null;
     }
+    if (!this._el) return;
 
-    // ⑥ Act転換カットイン
+    // 幕間演出３：Act転換カットイン
     if (this._pendingActMoment) {
       await this._showActCutin(this._pendingActMoment);
       this._pendingActMoment = null;
     }
+    if (!this._el) return;
 
-    // ⑦ 全ワールドクリア判定（phase_complete）
+    // 幕間演出４：全ワールドクリア判定（phase_complete）
     if (cleared) {
       this._checkPhaseComplete();
     }
+    if (!this._el) return;
 
-    // ⑧ クリア後ミニストーリーバナー（初クリア時のみ）
+    // クリア後ミニストーリーバナー（初クリア時のみ）
     if (cleared && this._isFirstClear) {
       await this._showClearStory();
+    }
+    if (!this._el) return;
+
+    // 最後にボタンをフェードイン
+    const btns = this._el.querySelector('.result-buttons');
+    if (btns) {
+      btns.classList.add('result-buttons-visible');
     }
   }
 

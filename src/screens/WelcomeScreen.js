@@ -214,7 +214,7 @@ class WelcomeScreen {
     const confirmName = () => {
       this._playerName = input.value.trim() || 'プレイヤー';
       SoundManager.playSFX(SoundType.BUTTON_CLICK);
-      this._showSlide(5); // → slide_06（決意）
+      this._showSlide(6); // → slide_06（決意）
     };
 
     btn.addEventListener('click', confirmName);
@@ -357,9 +357,9 @@ class WelcomeScreen {
     btn.textContent = 'とばす';
     btn.addEventListener('click', () => {
       // スキップ時は名前入力スライドに飛ぶ
-      if (this._currentSlide < 4) {
+      if (this._currentSlide < 5) {
         SoundManager.playSFX(SoundType.BUTTON_CLICK);
-        this._showSlide(4); // slide_05（名前入力）
+        this._showSlide(5); // slide_05（名前入力）
       }
     });
     return btn;
