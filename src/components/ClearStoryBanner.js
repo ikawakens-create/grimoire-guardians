@@ -42,6 +42,8 @@ export class ClearStoryBanner {
     this._steps = [];
     /** @type {number|null} タイプライター interval ID */
     this._typeTimer = null;
+    /** @type {number|null} 遅延用 timeout ID */
+    this._waitTimer = null;
     /** @type {boolean} タイプライター表示中フラグ */
     this._isTyping = false;
     /** @type {string} 現在のフルテキスト（スキップ用） */
@@ -105,7 +107,7 @@ export class ClearStoryBanner {
 
     // ステップ配列を構築
     const name = playerName || 'ぼうけんしゃ';
-    const owlText      = (scene.owlLine      || '').replace('{name}', name);
+    const owlText      = (scene.owlLine      || '').replace(/\{name\}/g, name);
     const grimoireText = scene.grimoireLine  || '';
     const storyText    = scene.storyLine     || '';
     const hintText     = scene.nextWorldHint || '';
@@ -157,6 +159,7 @@ export class ClearStoryBanner {
    */
   destroy() {
     this._clearTypeTimer();
+    this._clearWaitTimer();
     if (this._el) {
       this._el.remove();
       this._el = null;
@@ -178,9 +181,7 @@ export class ClearStoryBanner {
     owlEl.classList.add('csb-owl--enter');
     SoundManager.playSFX(SoundType.CORRECT);
 
-    setTimeout(() => {
-      this._typewrite(this._texts.owlText, () => this._showIndicator());
-    }, 400);
+    this._typewrite(this._texts.owlText, 400, () => this._showIndicator());
   }
 
   /** step 1: グリモア登場 + grimoireLine */
@@ -191,15 +192,13 @@ export class ClearStoryBanner {
     grimoireEl.classList.add('csb-grimoire--enter');
     SoundManager.playSFX(SoundType.WORLD_CLEAR);
 
-    setTimeout(() => {
-      this._typewrite(this._texts.grimoireText, () => this._showIndicator());
-    }, 500);
+    this._typewrite(this._texts.grimoireText, 500, () => this._showIndicator());
   }
 
   /** step 2: storyLine */
   _stepStory() {
     this._hideIndicator();
-    this._typewrite(this._texts.storyText, () => this._showIndicator());
+    this._typewrite(this._texts.storyText, 0, () => this._showIndicator());
   }
 
   /** step 3: nextWorldHint + ボタン表示（タップ無効化） */
@@ -236,8 +235,8 @@ export class ClearStoryBanner {
     // ボタン要素へのタップは処理しない（ボタン自身のイベントに任せる）
     if (e.target.closest('button')) return;
 
-    if (this._isTyping) {
-      // 1タップ目: タイプライターをスキップして全文表示
+    if (this._isTyping || this._waitTimer !== null) {
+      // 1タップ目: タイプライター（および待機時間）をスキップして全文表示
       this._skipTypewriter();
     } else {
       // 2タップ目: 次ステップへ
@@ -260,35 +259,49 @@ export class ClearStoryBanner {
   /**
    * ダイアログボックスにテキストをタイプライター表示する
    * @param {string}   text       - 表示テキスト
+   * @param {number}   delay      - 開始までの遅延時間（ms）
    * @param {Function} onComplete - 完了コールバック
    */
-  _typewrite(text, onComplete) {
+  _typewrite(text, delay, onComplete) {
     this._clearTypeTimer();
+    this._clearWaitTimer();
     this._isTyping = true;
     this._fullText = text;
 
     const el = this._dialogueTextEl;
     el.textContent = '';
-    let i = 0;
 
-    this._typeTimer = setInterval(() => {
-      if (!this._el) {
-        this._clearTypeTimer();
-        return;
-      }
-      if (i < text.length) {
-        el.textContent += text[i++];
-      } else {
-        this._clearTypeTimer();
-        this._isTyping = false;
-        if (typeof onComplete === 'function') onComplete();
-      }
-    }, 40);
+    const startTyping = () => {
+      let i = 0;
+      this._typeTimer = setInterval(() => {
+        if (!this._el) {
+          this._clearTypeTimer();
+          return;
+        }
+        if (i < text.length) {
+          el.textContent += text[i++];
+        } else {
+          this._clearTypeTimer();
+          this._isTyping = false;
+          if (typeof onComplete === 'function') onComplete();
+        }
+      }, 40);
+    };
+
+    if (delay > 0) {
+      this._waitTimer = setTimeout(() => {
+        this._waitTimer = null;
+        startTyping();
+      }, delay);
+    } else {
+      startTyping();
+    }
   }
 
   /** タイプライターをスキップして全文即時表示 */
   _skipTypewriter() {
     this._clearTypeTimer();
+    this._clearWaitTimer();
     this._isTyping = false;
     if (this._dialogueTextEl) {
       this._dialogueTextEl.textContent = this._fullText;
@@ -300,6 +313,13 @@ export class ClearStoryBanner {
     if (this._typeTimer !== null) {
       clearInterval(this._typeTimer);
       this._typeTimer = null;
+    }
+  }
+
+  _clearWaitTimer() {
+    if (this._waitTimer !== null) {
+      clearTimeout(this._waitTimer);
+      this._waitTimer = null;
     }
   }
 

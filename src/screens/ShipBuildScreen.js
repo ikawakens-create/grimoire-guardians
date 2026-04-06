@@ -828,13 +828,22 @@ export class ShipBuildScreen {
       lenSpan.textContent = input.value.length;
     });
 
-    overlay.querySelector('.name-confirm-btn').addEventListener('click', () => {
+    const confirmShipName = () => {
       const newName = input.value.trim() || 'グリモア号';
       GameStore.setState('ship.name', newName);
       GameStore.setState('ship.nameSetByUser', true);
       overlay.remove();
       Logger.info(`[ShipBuildScreen] ship renamed: ${newName}`);
+    };
+
+    overlay.querySelector('.name-confirm-btn').addEventListener('click', confirmShipName);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        confirmShipName();
+      }
     });
+
     overlay.querySelector('.name-cancel-btn').addEventListener('click', () => {
       overlay.remove();
     });
@@ -990,12 +999,20 @@ export function showShipNameDialog(container) {
     lenSpan.textContent = input.value.length;
   });
 
-  overlay.querySelector('.ship-intro-confirm-btn').addEventListener('click', () => {
+  const confirmIntroName = () => {
     const newName = input.value.trim() || 'グリモア号';
     GameStore.setState('ship.name', newName);
     GameStore.setState('ship.nameSetByUser', true);
     overlay.remove();
     Logger.info(`[ShipNameDialog] named: ${newName}`);
+  };
+
+  overlay.querySelector('.ship-intro-confirm-btn').addEventListener('click', confirmIntroName);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      confirmIntroName();
+    }
   });
 
   container.appendChild(overlay);
