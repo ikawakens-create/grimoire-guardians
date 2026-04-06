@@ -520,12 +520,72 @@ export const WORLD_CLEAR_SCENES = {
 
   'm2_05': {
     emoji:        '📏',
-    nextEmoji:    '⏱️',
+    nextEmoji:    '💎',
     image:        null,
     owlLine:      '{name}！ ながさの ひみつを みつけたぞ！',
     grimoireLine: 'ながさの グリモアが もどってきた！',
-    storyLine:    'しんかいに ながれが うまれた…',
+    storyLine:    'さんごしょうに しおの ながれが うまれた…',
+    nextWorldHint:'つぎは おおきい かずの グリモアが まっているぞ',
+  },
+
+  'm2_06a': {
+    emoji:        '💎',
+    nextEmoji:    '🦀',
+    image:        null,
+    owlLine:      '{name}！ おおきい かずも よめるぞ！',
+    grimoireLine: 'おおきい かず①の グリモアが もどってきた！',
+    storyLine:    'さんごしょうの おくで ほうせきが きらめいた…',
+    nextWorldHint:'つぎは もっと おおきい かずの グリモアだ',
+  },
+
+  'm2_06b': {
+    emoji:        '🦀',
+    nextEmoji:    '💧',
+    image:        null,
+    owlLine:      '{name}！ まんのくらいまで バッチリだぞ！',
+    grimoireLine: 'おおきい かず②の グリモアが もどってきた！',
+    storyLine:    'さんごのすきまから あおい ひかりが もれてきた…',
+    nextWorldHint:'つぎは みずの かさを はかる グリモアだ',
+  },
+
+  'm2_08': {
+    emoji:        '⚖️',
+    nextEmoji:    '⏱️',
+    image:        null,
+    owlLine:      '{name}！ おもさの グリモアも てにはいったぞ！',
+    grimoireLine: 'おもさの グリモアが もどってきた！',
+    storyLine:    'さんごしょうの いわが すこし うごいた……なにかが めざめる…',
     nextWorldHint:'つぎは じこくと じかんの グリモアだ',
+  },
+
+  'm2_09b': {
+    emoji:        '⏰',
+    nextEmoji:    '🐙',
+    image:        null,
+    owlLine:      '{name}！ なんじかんごも わかるぞ！',
+    grimoireLine: 'じかんの ながれの グリモアが もどってきた！',
+    storyLine:    'さんごしょうに しずかな じかんが もどってきた…',
+    nextWorldHint:'つぎは じかんの もんだいを ときあかす グリモアだ',
+  },
+
+  'm2_09c': {
+    emoji:        '🐙',
+    nextEmoji:    '🐠',
+    image:        null,
+    owlLine:      '{name}！ むずかしい ぶんしょうだいも とけたぞ！',
+    grimoireLine: 'つぎの グリモアが さけんでいる……！ はやく きてくれ！',
+    storyLine:    'さんごしょうの ぬしが すがたを あらわした……けっせんが ちかい…',
+    nextWorldHint:'つぎは さんごしょう さいごの グリモアだ……おわりが みえてきたぞ',
+  },
+
+  'm2_09d': {
+    emoji:        '🐠',
+    nextEmoji:    '✖️',
+    image:        null,
+    owlLine:      '{name}！ ……さんごしょうを せいはしたぞ。すごい',
+    grimoireLine: 'ずっと まっていたぞ……！ さんごしょうの グリモアが すべて もどった！',
+    storyLine:    'さんごしょう ぜんたいが にじいろに かがやいた……なかがたの ふねが やってきた！',
+    nextWorldHint:'がいようへ とびだせ……くくの まほうが めざめる ときだ！',
   },
 
   'm2_07': {
