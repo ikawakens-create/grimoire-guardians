@@ -792,6 +792,78 @@ export const WORLD_CLEAR_SCENES = {
     nextWorldHint:'つぎは ぶんすうの たしざんの グリモアだ',
   },
 
+  'm2_14b': {
+    emoji:        '🎯',
+    nextEmoji:    '💫',
+    image:        null,
+    owlLine:      '{name}！ ぶんすうの たしざんも できるぞ！',
+    grimoireLine: 'ぶんすう たしざんの グリモアが もどってきた！',
+    storyLine:    'しんかいで ふたつの ひかりが ひとつに あわさった……あたらしい まほうが うまれた',
+    nextWorldHint:'つぎは ぶんすうの ひきざん……わけるまほうを みにつけろ',
+  },
+
+  'm2_14c': {
+    emoji:        '💫',
+    nextEmoji:    '🔮',
+    image:        null,
+    owlLine:      '{name}！ ひくことも できるぞ！ すごいな！',
+    grimoireLine: 'ぶんすう ひきざんの グリモアが もどってきた！',
+    storyLine:    'ひかりが わかれて ちいさく かがやいた……ぶんすうの まほうが ふかまる…',
+    nextWorldHint:'おうようもんだいが まっているぞ……ぶんすうを つかいこなせ',
+  },
+
+  'm2_14d': {
+    emoji:        '🔮',
+    nextEmoji:    '🌸',
+    image:        null,
+    owlLine:      '{name}！ おうようもんだいも へっちゃらだぞ！',
+    grimoireLine: 'ぶんすう おうようの グリモアが もどってきた！',
+    storyLine:    'しんかいに まほうじんが ひかりはじめた……ぶんすうが いきている',
+    nextWorldHint:'ぶんすう そうまとめ……これが さいごの とびらだ',
+  },
+
+  'm2_14e': {
+    emoji:        '🌸',
+    nextEmoji:    '⚔️',
+    image:        null,
+    owlLine:      '{name}！ ……ぶんすう、かんぜんせいは。ほんものだ',
+    grimoireLine: 'ずっと まっていたぞ……！ ぶんすうの グリモアが すべて もどった！',
+    storyLine:    'しんかいに さくらのような ひかりが まいちった……あたらしい まほうが かいほうされた',
+    nextWorldHint:'さあ……そうふくしゅうが はじまるぞ。さいごの ときが ちかい',
+  },
+
+  // ── Zone7: そうふくしゅう〜さいしゅうけっせん（m2_15a 〜 m2_15d）──
+
+  'm2_15a': {
+    emoji:        '⚔️',
+    nextEmoji:    '🌟',
+    image:        null,
+    owlLine:      '{name}！ よく ここまで きたな……いよいよだぞ',
+    grimoireLine: 'そうふくしゅう①の グリモアが もどってきた！',
+    storyLine:    'これまでの まほうが ひとつひとつ よみがえる……うみの そこから きはくが ちかづいてくる…',
+    nextWorldHint:'もう すこしで さいごだ……たたかいの まえに おさらいを しておけ',
+  },
+
+  'm2_15b': {
+    emoji:        '🌟',
+    nextEmoji:    '💥',
+    image:        null,
+    owlLine:      '{name}！ すべてを おぼえているな……たのもしいぞ',
+    grimoireLine: 'そうふくしゅう②の グリモアが もどってきた！',
+    storyLine:    'うみが しずかに ふるえている……グランド・レヴィアサンが めをさます…',
+    nextWorldHint:'さいごの おさらい……これが おわれば けっせんだ',
+  },
+
+  'm2_15c': {
+    emoji:        '💥',
+    nextEmoji:    '🏆',
+    image:        null,
+    owlLine:      '{name}！ さいごの たたかいが はじまるぞ……いくか',
+    grimoireLine: 'そうふくしゅう③の グリモアが もどってきた！',
+    storyLine:    'しんかい ぜんたいが ふるえた……グランド・レヴィアサンが あらわれた…！',
+    nextWorldHint:'グランド・レヴィアサン……さあ、けっせんだ！！',
+  },
+
   'm2_15d': {
     emoji:        '🏆',
     nextEmoji:    '🌈',
