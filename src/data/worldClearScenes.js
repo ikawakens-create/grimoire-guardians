@@ -409,13 +409,113 @@ export const WORLD_CLEAR_SCENES = {
   // ─────────────────────────────────────────
 
   'm2_01': {
-    emoji:        '💎',
-    nextEmoji:    '✏️',
+    emoji:        '⚓',
+    nextEmoji:    '🚢',
     image:        null,
-    owlLine:      '{name}！ おおきい かずを みにつけたぞ！',
-    grimoireLine: 'おおきい かずの グリモアが もどってきた！',
-    storyLine:    'しんかいの なかで なにかが ひかった…',
-    nextWorldHint:'つぎは ひっさんの グリモアが まっているよ',
+    owlLine:      '{name}！ 2けたの たしざんを みにつけたぞ！',
+    grimoireLine: '2けた たしざんの グリモアが もどってきた！',
+    storyLine:    'みなとに あさやけが さしこんできた…',
+    nextWorldHint:'つぎは もっと むずかしい たしざんの グリモアが まっているぞ',
+  },
+
+  'm2_01_a': {
+    emoji:        '🚢',
+    nextEmoji:    '🌊',
+    image:        null,
+    owlLine:      '{name}！ もっと きびしい しれんを のりこえたぞ！',
+    grimoireLine: 'つよさを みせてくれた……！ グリモアが こたえた',
+    storyLine:    'みなとの かぜが つよくなった……もっと おおきな うみが よんでいる',
+    nextWorldHint:'くりあがりの なみが まっているぞ……いくか',
+  },
+
+  'm2_02': {
+    emoji:        '🌊',
+    nextEmoji:    '💨',
+    image:        null,
+    owlLine:      '{name}！ くりあがりの かべを やぶったぞ！',
+    grimoireLine: 'くりあがり たしざんの グリモアが もどってきた！',
+    storyLine:    'みなとの とうだいに あかるい ひかりが ともった…',
+    nextWorldHint:'つぎは さらに きびしい くりあがりが まっているぞ',
+  },
+
+  'm2_02_a': {
+    emoji:        '💨',
+    nextEmoji:    '🗺️',
+    image:        null,
+    owlLine:      '{name}！ むずかしかったな……でも やったぞ！',
+    grimoireLine: 'ここまで やれるとは……！ グリモアが ふるえた',
+    storyLine:    'うみかぜが はげしく ふいた……まるで せかいが こたえているようだ',
+    nextWorldHint:'つぎは 2けた どうしの おおきな たしざんだ',
+  },
+
+  'm2_02b': {
+    emoji:        '🗺️',
+    nextEmoji:    '⚓',
+    image:        null,
+    owlLine:      '{name}！ 2けた どうしの たしざんも できるぞ！',
+    grimoireLine: '2けた＋2けたの グリモアが もどってきた！',
+    storyLine:    'みなとに あたらしい ふねが にゅうこうした…',
+    nextWorldHint:'こんどは ひきざんの グリモアが まっているぞ',
+  },
+
+  'm2_03': {
+    emoji:        '🚢',
+    nextEmoji:    '🌊',
+    image:        null,
+    owlLine:      '{name}！ 2けたの ひきざんを みにつけたぞ！',
+    grimoireLine: '2けた ひきざんの グリモアが もどってきた！',
+    storyLine:    'みなとの くものすきまから そらが みえてきた…',
+    nextWorldHint:'つぎは もっと むずかしい ひきざんが まっているぞ',
+  },
+
+  'm2_03_a': {
+    emoji:        '🌊',
+    nextEmoji:    '💨',
+    image:        null,
+    owlLine:      '{name}！ きびしい しれんも のりこえたぞ！',
+    grimoireLine: 'なんどでも たちむかう……！ グリモアが よろこんだ',
+    storyLine:    'みなとの なみが おだやかに なってきた……ふねが すすみやすくなった',
+    nextWorldHint:'くりさがりの ふかぶかしい グリモアが よんでいる',
+  },
+
+  'm2_03b': {
+    emoji:        '💨',
+    nextEmoji:    '🧭',
+    image:        null,
+    owlLine:      '{name}！ くりさがりの ひみつも わかったぞ！',
+    grimoireLine: 'くりさがり ひきざんの グリモアが もどってきた！',
+    storyLine:    'みなとの かすみが はれて とおくの うみが みえた…',
+    nextWorldHint:'つぎは さらに きびしい くりさがりが まっているぞ',
+  },
+
+  'm2_03b_a': {
+    emoji:        '🧭',
+    nextEmoji:    '🗺️',
+    image:        null,
+    owlLine:      '{name}！ さいごの かべを のりこえたぞ……！',
+    grimoireLine: 'ここまで きたか……！ グリモアが なきそうな かおをした',
+    storyLine:    'みなとの ふるい とうだいが また ともった……むかしの まほうが もどってきた',
+    nextWorldHint:'たしざん・ひきざん おうよう……しあげの グリモアだ',
+  },
+
+  'm2_04': {
+    emoji:        '🗺️',
+    nextEmoji:    '🚢',
+    image:        null,
+    owlLine:      '{name}！ おうようもんだいも へっちゃらだぞ！',
+    grimoireLine: 'けいさん おうようの グリモアが もどってきた！',
+    storyLine:    'みなとに あつまった ひとびとが よろこんでいる…',
+    nextWorldHint:'つぎは みなとの さいごの グリモアだ……いよいよだぞ',
+  },
+
+  'm2_04b': {
+    emoji:        '🚢',
+    nextEmoji:    '🐠',
+    image:        null,
+    owlLine:      '{name}！ ……よく ここまで きた。ほんものだ',
+    grimoireLine: 'ずっと まっていたぞ……！ みなとの グリモアが すべて もどった！',
+    storyLine:    'みなとから だいかんせいの てきせんが しゅっぱんした……つぎの うみへ！',
+    nextWorldHint:'さんごしょうが よんでいる……あたらしい ぼうけんの はじまりだ！',
   },
 
   'm2_05': {
