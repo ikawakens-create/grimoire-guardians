@@ -557,11 +557,22 @@ export class CraftsmanScreen {
     header.textContent = '✨ ゲット！';
     modal.appendChild(header);
 
-    // CharacterAvatar xl（スキンを即装備してから表示）
+    // CharacterAvatar xl を生成し、新しく解放されたスキンの画像を上書き表示する
+    // （craft() は unlock のみで equip しないため、現在のスキンではなく新スキンを見せる）
     const avatarWrap = document.createElement('div');
     avatarWrap.className = 'skin-unlock-avatar';
     const avatar = new CharacterAvatar('xl');
     avatarWrap.appendChild(avatar.render());
+
+    // 解放されたスキンの画像・絵文字に上書き
+    const avatarImg = avatarWrap.querySelector('.char-avatar-img');
+    if (avatarImg) {
+      avatarImg.src = skin.image;
+      avatarImg.alt = skin.name;
+    }
+    const avatarEmoji = avatarWrap.querySelector('.char-avatar-emoji');
+    if (avatarEmoji) avatarEmoji.textContent = skin.emoji || '🧙';
+
     modal.appendChild(avatarWrap);
 
     // スキン名・レアリティ
