@@ -19,6 +19,8 @@
 import Logger from '../core/Logger.js';
 import { GameStore } from '../core/GameStore.js';
 import { Config } from '../core/Config.js';
+import { CharacterAvatar } from '../components/CharacterAvatar.js';
+import { SkinManager } from '../core/SkinManager.js';
 import { SoundManager, SoundType } from '../core/SoundManager.js';
 import ProgressBar from '../components/ProgressBar.js';
 import HapticFeedback from '../utils/HapticFeedback.js';
@@ -125,6 +127,11 @@ export class QuizScreen {
     this._bossTauntTimer = null;
     /** @type {boolean} セリフ表示中フラグ（二重表示防止） */
     this._isBossTauntActive = false;
+
+    /** @type {HTMLElement|null} マスコット枠に注入した CharacterAvatar の DOM */
+    this._avatarEl = null;
+    /** @type {number|null} victory pose の自動消去タイマー */
+    this._victoryTimer = null;
   }
 
   // ============================================================
@@ -175,6 +182,8 @@ export class QuizScreen {
 
       // 最初の問題を表示
       this._hideLoadingOverlay();
+      // キャラの初回登場演出（slide-in-up で仲間が来た感を演出）
+      this._showMascotEntrance();
       this._showQuestion(0);
 
     } catch (err) {
@@ -206,18 +215,21 @@ export class QuizScreen {
       this._buffUnsubscribe = null;
     }
 
-    // タイマーを全て解除（フィードバック待機 / ローディング / マスコット / ストリーク / ボス）
+    // タイマーを全て解除（フィードバック待機 / ローディング / マスコット / ストリーク / ボス / victory）
     if (this._feedbackTimer)    clearTimeout(this._feedbackTimer);
     if (this._loadingTimer)     clearTimeout(this._loadingTimer);
     if (this._mascotTimer)      clearTimeout(this._mascotTimer);
     if (this._streakBadgeTimer) clearTimeout(this._streakBadgeTimer);
     if (this._bossTauntTimer)   clearTimeout(this._bossTauntTimer);
+    if (this._victoryTimer)     clearTimeout(this._victoryTimer);
     this._feedbackTimer    = null;
     this._loadingTimer     = null;
     this._mascotTimer      = null;
     this._streakBadgeTimer = null;
     this._bossTauntTimer   = null;
+    this._victoryTimer     = null;
     this._isBossTauntActive = false;
+    this._avatarEl         = null;
 
     if (this._el && this._el.parentNode) {
       this._el.parentNode.removeChild(this._el);
@@ -315,10 +327,10 @@ export class QuizScreen {
         "></div>
       </div>
 
-      <!-- マスコット（右下固定） -->
+      <!-- マスコット（右下固定）: CharacterAvatar を JS で注入 -->
       <div class="quiz-mascot hidden" aria-live="polite" aria-atomic="true">
         <div class="mascot-bubble"></div>
-        <div class="mascot-icon">🧙</div>
+        <div class="mascot-icon"></div>
       </div>
 
       <!-- 連続正解ストリーク表示 -->
@@ -327,6 +339,16 @@ export class QuizScreen {
       <!-- バフアイコン（おみくじ倍率・おまもり）右上固定 -->
       <div class="quiz-buff-indicator hidden" aria-live="polite" aria-atomic="true"></div>
     `;
+
+    // CharacterAvatar をマスコットアイコン枠に注入
+    if (Config.FEATURES.ENABLE_SKINS) {
+      const mascotIcon = el.querySelector('.mascot-icon');
+      const avatarInst = new CharacterAvatar('md');
+      this._avatarEl   = avatarInst.render();
+      this._avatarEl.style.animation = 'float 3s ease-in-out infinite';
+      this._avatarEl.style.willChange = 'transform';
+      mascotIcon.appendChild(this._avatarEl);
+    }
 
     // position: relative が必要（絶対配置の子要素のため）
     el.style.position = 'relative';
@@ -763,6 +785,8 @@ export class QuizScreen {
       const feedbackEl = this._el?.querySelector('.quiz-feedback');
       if (feedbackEl) feedbackEl.classList.add('hidden');
 
+      if (isFinalCorrect) this._triggerVictoryIfNeeded(this._correctStreak);
+
       const answeredNum = this._currentIndex + 1;
       try {
         await EventManager.checkAndTrigger(answeredNum, this._worldData);
@@ -834,6 +858,9 @@ export class QuizScreen {
     // イベント前にフィードバックオーバーレイを非表示（背景が残らないように）
     const feedbackEl = this._el?.querySelector('.quiz-feedback');
     if (feedbackEl) feedbackEl.classList.add('hidden');
+
+    // ⭕オーバーレイ消去後に victory pose（重複しない）
+    if (isCorrect) this._triggerVictoryIfNeeded(this._correctStreak);
 
     // イベントチェック（triggerAt が一致すれば演出完了まで待機）
     const answeredNum = this._currentIndex + 1;  // 1始まり
@@ -1021,19 +1048,27 @@ export class QuizScreen {
     const bubble = this._el.querySelector('.mascot-bubble');
     if (!mascot || !bubble) return;
 
+    // スキン固有リアクション取得（fallback: MASCOT_MESSAGES）
+    const reactions = Config.FEATURES.ENABLE_SKINS
+      ? SkinManager.getCurrentSkin()?.reactions
+      : null;
+
     // メッセージ選択
     let message;
     if (isCorrect && this._correctStreak >= 10) {
-      message = MASCOT_MESSAGES.streak10;
+      message = reactions?.combo5 ?? MASCOT_MESSAGES.streak10;
     } else if (isCorrect && this._correctStreak >= 7) {
-      message = MASCOT_MESSAGES.streak7;
+      message = reactions?.combo5 ?? MASCOT_MESSAGES.streak7;
     } else if (isCorrect && this._correctStreak >= 5) {
-      message = MASCOT_MESSAGES.streak5;
+      message = reactions?.combo5 ?? MASCOT_MESSAGES.streak5;
     } else if (isCorrect && this._correctStreak >= 3) {
-      message = MASCOT_MESSAGES.streak3;
+      message = reactions?.combo3 ?? MASCOT_MESSAGES.streak3;
+    } else if (isCorrect) {
+      message = reactions?.correct
+        ?? MASCOT_MESSAGES.correct[Math.floor(Math.random() * MASCOT_MESSAGES.correct.length)];
     } else {
-      const pool = isCorrect ? MASCOT_MESSAGES.correct : MASCOT_MESSAGES.wrong;
-      message = pool[Math.floor(Math.random() * pool.length)];
+      message = reactions?.wrong
+        ?? MASCOT_MESSAGES.wrong[Math.floor(Math.random() * MASCOT_MESSAGES.wrong.length)];
     }
 
     bubble.textContent = message;
@@ -1098,6 +1133,98 @@ export class QuizScreen {
       this._el.classList.add('quiz-streak-glow');
       setTimeout(() => this._el?.classList.remove('quiz-streak-glow'), 1000);
     }
+
+    // 3連続以上: アバターを glow-pulse でハイライト
+    if (count >= 3 && this._avatarEl) {
+      this._avatarEl.style.animation = 'float 3s ease-in-out infinite, glow-pulse 0.6s ease 3';
+      setTimeout(() => {
+        if (this._avatarEl) {
+          this._avatarEl.style.animation = 'float 3s ease-in-out infinite';
+        }
+      }, 1800);
+    }
+  }
+
+  /**
+   * フィードバック後に victory pose が必要か判定して実行する
+   * （_showFeedback の await 後に呼ぶこと）
+   * @private
+   * @param {number} count - 連続正解数
+   */
+  _triggerVictoryIfNeeded(count) {
+    if (count >= 5) {
+      this._showVictoryPose();
+    }
+  }
+
+  /**
+   * キャラクターを画面中央に大きく登場させる victory 演出
+   * @private
+   */
+  _showVictoryPose() {
+    if (!this._el) return;
+
+    const reactions = Config.FEATURES.ENABLE_SKINS
+      ? SkinManager.getCurrentSkin()?.reactions
+      : null;
+    const line = reactions?.combo5 ?? 'すごい！5れんぞく！';
+
+    // 右下マスコットを一時的に非表示（重複防止）
+    const mascot = this._el.querySelector('.quiz-mascot');
+    if (mascot) mascot.classList.add('hidden');
+
+    // victory overlay を生成
+    const overlay = document.createElement('div');
+    overlay.className = 'quiz-victory-overlay';
+    overlay.style.cssText = `
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 6; pointer-events: none;
+    `;
+
+    const avatarInst = new CharacterAvatar('xl');
+    const avatarEl   = avatarInst.render();
+    avatarEl.style.animation = 'bounce 0.5s ease, sparkle 1.2s ease 0.3s';
+    avatarEl.style.willChange = 'transform';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'mascot-bubble';
+    bubble.textContent = line;
+    bubble.style.cssText = `
+      animation: voice-bubble-in 0.3s ease 0.2s both;
+      font-size: 1.1rem; margin-top: 0.5rem;
+    `;
+
+    overlay.appendChild(avatarEl);
+    overlay.appendChild(bubble);
+    this._el.appendChild(overlay);
+
+    // 1.8秒後にフェードアウト → 削除 → マスコット復元
+    this._victoryTimer = setTimeout(() => {
+      overlay.style.transition = 'opacity 0.3s';
+      overlay.style.opacity = '0';
+      setTimeout(() => {
+        overlay.remove();
+        if (mascot && this._el) mascot.classList.remove('hidden');
+        this._victoryTimer = null;
+      }, 300);
+    }, 1800);
+  }
+
+  /**
+   * キャラクターの初回登場演出（画面ロード完了時）
+   * @private
+   */
+  _showMascotEntrance() {
+    if (!this._el || !this._avatarEl) return;
+    const mascot = this._el.querySelector('.quiz-mascot');
+    if (!mascot) return;
+    mascot.classList.remove('hidden');
+    this._avatarEl.style.animation = 'slide-in-up 0.4s ease both, float 3s ease-in-out 0.4s infinite';
+    setTimeout(() => {
+      mascot.classList.add('hidden');
+    }, 600);
   }
 
   /**
