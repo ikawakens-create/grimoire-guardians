@@ -139,11 +139,9 @@ export class WardrobeScreen {
     imgWrap.className = 'wardrobe-char-wrap';
 
     const img = document.createElement('img');
-    img.className = 'wardrobe-char-img';
+    img.className = 'wardrobe-preview-img';
     img.src = skin.image;
     img.alt = skin.name;
-    img.style.animation = 'float 3s ease-in-out infinite';
-    img.style.willChange = 'transform';
     img.addEventListener('error', () => {
       imgWrap.innerHTML = `<span class="wardrobe-char-emoji">${skin.emoji}</span>`;
     });
@@ -163,7 +161,7 @@ export class WardrobeScreen {
 
     // reactions.correct セリフ吹き出し
     const bubbleEl = document.createElement('div');
-    bubbleEl.className = 'wardrobe-preview-bubble';
+    bubbleEl.className = 'wardrobe-reaction-bubble';
     bubbleEl.textContent = skin.reactions?.correct ?? skin.emoji;
     panel.appendChild(bubbleEl);
 
@@ -184,7 +182,7 @@ export class WardrobeScreen {
     CATEGORIES.forEach(cat => {
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'wardrobe-cat-btn' + (this._category === cat.id ? ' active' : '');
+      btn.className = 'wardrobe-tab' + (this._category === cat.id ? ' active' : '');
       btn.textContent = cat.label;
       btn.dataset.cat = cat.id;
       btn.addEventListener('click', () => {
@@ -227,9 +225,10 @@ export class WardrobeScreen {
 
     const card = document.createElement('div');
     card.className = 'wardrobe-skin-card'
-      + (previewing ? ' previewing' : '')
-      + (equipped   ? ' equipped'   : '')
-      + (unlocked   ? ' unlocked'   : ' locked');
+      + (previewing  ? ' previewing' : '')
+      + (equipped    ? ' equipped'   : '')
+      + (unlocked    ? ' unlocked'   : ' locked')
+      + (!unlocked && isSuperRare ? ' super-rare' : '');
     card.setAttribute('role', 'button');
     card.setAttribute('tabindex', '0');
     card.dataset.skinId = skin.id;
@@ -239,13 +238,7 @@ export class WardrobeScreen {
     imgEl.alt = skin.name;
     imgEl.className = 'wardrobe-card-img';
 
-    if (!unlocked) {
-      // シルエット: SUPER_RAREは金色、それ以外は黒
-      imgEl.style.filter = isSuperRare
-        ? 'brightness(0) sepia(1) saturate(3) hue-rotate(5deg)'
-        : 'brightness(0)';
-      imgEl.style.opacity = '0.85';
-    }
+    // シルエット色はCSSで制御（.locked img → 黒、.locked.super-rare img → 金色）
 
     imgEl.addEventListener('error', () => {
       imgEl.style.display = 'none';
@@ -261,12 +254,12 @@ export class WardrobeScreen {
     // 装備中バッジ
     if (equipped) {
       const badge = document.createElement('span');
-      badge.className = 'wardrobe-card-badge badge-equipped';
+      badge.className = 'card-badge';
       badge.textContent = 'そうびちゅう';
       card.appendChild(badge);
     } else if (previewing) {
       const badge = document.createElement('span');
-      badge.className = 'wardrobe-card-badge badge-preview';
+      badge.className = 'card-badge';
       badge.textContent = '▶ みてる';
       card.appendChild(badge);
     }
@@ -290,16 +283,16 @@ export class WardrobeScreen {
     btn.className = 'wardrobe-action-btn';
 
     if (equipped) {
-      btn.textContent = '✓ いまのスキン';
-      btn.classList.add('btn-equipped');
+      btn.textContent = '✓ そうびちゅう';
+      btn.classList.add('equipped');
       btn.disabled = true;
     } else if (unlocked) {
       btn.textContent = '👗 きがえる！';
-      btn.classList.add('btn-equip');
+      btn.classList.add('equip');
       btn.addEventListener('click', () => this._equipSkin(skinId));
     } else {
       btn.textContent = this._renderObtainHint(skin);
-      btn.classList.add('btn-locked');
+      btn.classList.add('locked');
       btn.disabled = true;
     }
 
@@ -385,7 +378,7 @@ export class WardrobeScreen {
       ?? `${skin.reactions?.correct ?? '✨'}`;
 
     const flash = document.createElement('div');
-    flash.className = 'wardrobe-equip-flash';
+    flash.className = 'wardrobe-equip-effect';
     flash.textContent = greet;
     this._el.appendChild(flash);
     setTimeout(() => flash.remove(), 1500);
@@ -410,7 +403,7 @@ export class WardrobeScreen {
   _refreshGridPanel(panel) {
     if (!panel) return;
     // カテゴリタブを更新
-    panel.querySelectorAll('.wardrobe-cat-btn').forEach(btn => {
+    panel.querySelectorAll('.wardrobe-tab').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.cat === this._category);
     });
     // グリッドだけ差し替え
