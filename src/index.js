@@ -41,6 +41,7 @@ import MultiTableScreen from './screens/MultiTableScreen.js';
 import MemorizeScreen from './screens/MemorizeScreen.js';
 import SequentialPracticeScreen from './screens/SequentialPracticeScreen.js';
 import { ParentDashboardScreen } from './screens/ParentDashboardScreen.js';
+import WardrobeScreen from './screens/WardrobeScreen.js';
 import { WORLDS } from './data/worlds.js';
 
 /**
@@ -226,6 +227,9 @@ function showGameScreen() {
     } else if (screen === 'parent_dashboard') {
       hideAll();
       showParentDashboard(gameScreen);
+    } else if (screen === 'wardrobe') {
+      hideAll();
+      showWardrobe(gameScreen);
     } else if (screen === 'bookshelf') {
       hideAll();
       // まち等のサブ画面から戻ってきた場合はブックシェルフを再描画
@@ -289,6 +293,28 @@ function showBookshelf(gameScreen, newlyClearedWorldId = null) {
 
   if (Config.IS_DEBUG) {
     window.GG._screen = bookshelf;
+  }
+}
+
+/**
+ * WardrobeScreen を描画する（きがえや）
+ * @param {HTMLElement} gameScreen
+ */
+function showWardrobe(gameScreen) {
+  if (_activeScreen) {
+    _activeScreen.destroy();
+    _activeScreen = null;
+  }
+
+  const wardrobe = new WardrobeScreen(gameScreen, () => {
+    showBookshelf(gameScreen);
+  });
+
+  wardrobe.render();
+  _activeScreen = wardrobe;
+
+  if (Config.IS_DEBUG) {
+    window.GG._screen = wardrobe;
   }
 }
 
