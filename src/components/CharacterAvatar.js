@@ -119,7 +119,7 @@ export class CharacterAvatar {
    */
   startTalking(text, duration = 1500) {
     if (!this._element) return;
-    this.stopTalking();
+    this._clearBubble();  // タイマーとバブルだけ消す（クラス操作なし）
 
     // ゴニョゴニョSE（スキンの voiceFreq を使用）
     const skin = SkinManager.getCurrentSkin();
@@ -144,16 +144,23 @@ export class CharacterAvatar {
    * destroy() 時にも呼ぶこと。
    */
   stopTalking() {
-    clearTimeout(this._talkTimer);
-    this._talkTimer = null;
-
-    this._bubbleEl?.remove();
-    this._bubbleEl = null;
-
+    this._clearBubble();
     if (this._element) {
       this._element.classList.remove('char-avatar-talking');
       this._element.classList.add('char-avatar-idle');
     }
+  }
+
+  /**
+   * タイマーとバブル要素だけをクリアする（クラス操作なし）。
+   * startTalking の多重呼び出し防止に使う。
+   * @private
+   */
+  _clearBubble() {
+    clearTimeout(this._talkTimer);
+    this._talkTimer = null;
+    this._bubbleEl?.remove();
+    this._bubbleEl = null;
   }
 
   /**
@@ -170,8 +177,12 @@ export class CharacterAvatar {
 
     // bounce アニメ終了後に idle に戻す
     const onEnd = () => {
+      // bounce 終了後は victory を除去。talking 中なら talking のまま維持、
+      // そうでなければ idle に戻す（talking と idle の共存を防ぐ）
       this._element.classList.remove('char-avatar-victory');
-      this._element.classList.add('char-avatar-idle');
+      if (!this._element.classList.contains('char-avatar-talking')) {
+        this._element.classList.add('char-avatar-idle');
+      }
       this._element.removeEventListener('animationend', onEnd);
     };
     this._element.addEventListener('animationend', onEnd);

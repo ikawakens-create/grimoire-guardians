@@ -272,7 +272,7 @@ class UnitIntroScreen {
       SoundManager.playSFX(SoundType.BUTTON_CLICK);
       // キャラが「いくぞ！」と叫んでから 600ms 後にクイズ遷移
       if (this._avatar) {
-        const skin = SkinManager.getCurrentSkin?.() ?? null;
+        const skin = SkinManager.getCurrentSkin();
         const line = skin?.reactions?.correct ?? 'いくぞ！';
         this._avatar.victoryPose(line);
         setTimeout(() => {
