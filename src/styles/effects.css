@@ -1413,6 +1413,8 @@
 .unit-intro-ph-label { font-size: 13px; color: #555; }
 
 .unit-intro-avatar-slot { position: absolute; bottom: 16px; right: 16px; }
+/* 初回 CV 画面の右下キャラスロット */
+.unit-intro-cv-avatar  { position: absolute; bottom: 16px; right: 16px; z-index: 10; }
 
 .unit-intro-hint-bubble {
   display: flex;

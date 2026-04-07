@@ -180,7 +180,7 @@ export const Config = {
     // かけら N 枚で解放
     FRAGMENTS_NEEDED: 3,
     // テイラー解放に必要な合成屋レベル
-    TAILOR_UNLOCK_LEVEL: 2,
+    TAILOR_UNLOCK_LEVEL: 1,
   },
 
   // 家ビルドシステム設定

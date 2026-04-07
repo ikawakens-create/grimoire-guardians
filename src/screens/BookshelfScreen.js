@@ -22,6 +22,8 @@ import { SEAL_GAUGE_TEXT, FINAL_BATTLE, NG_PLUS } from '../data/storyData.js';
 import InventoryScreen from './InventoryScreen.js';
 import MemoryIsleScreen from './MemoryIsleScreen.js';
 import ShipRenderer from '../components/ShipRenderer.js';
+import SkinManager from '../core/SkinManager.js';
+import { SKINS } from '../data/skinItems.js';
 
 /**
  * BookshelfScreen クラス
@@ -226,13 +228,56 @@ class BookshelfScreen {
     playerInfo.className = 'bookshelf-player';
     playerInfo.textContent = `${playerName} さん`;
 
-    // キャラクターアバター（小）
-    const avatar = new CharacterAvatar('sm').render();
+    // キャラクターアバター（中）＋挨拶エリア
+    const avatarWrap = document.createElement('div');
+    avatarWrap.className = 'bookshelf-avatar-wrap';
+
+    const avatar = new CharacterAvatar('md').render();
+    avatar.style.animation = 'float 3s ease-in-out infinite';
     avatar.style.cursor = 'pointer';
-    avatar.title = 'スキンをかえる';
+    avatar.title = 'きがえやへ';
     avatar.addEventListener('click', () => {
-      GameStore.setState('app.currentScreen', 'craftsman');
+      GameStore.setState('app.currentScreen', 'wardrobe');
     });
+
+    // greet セリフ吹き出し
+    const streak = GameStore.getState('player.streak') || 1;
+    const skin = SkinManager.getCurrentSkin();
+    const rawGreet = skin?.reactions?.greet;
+    const greetText = rawGreet
+      ? rawGreet.replace('{name}', playerName).replace('{n}', String(streak))
+      : `${playerName}！きょうも がんばろう！`;
+
+    const greetBubble = document.createElement('div');
+    greetBubble.className = 'bookshelf-greet-bubble';
+    greetBubble.textContent = greetText;
+
+    // 「きがえる」ボタン
+    const changeBtn = document.createElement('button');
+    changeBtn.type = 'button';
+    changeBtn.className = 'button button-small bookshelf-wardrobe-btn';
+    changeBtn.textContent = '👗 きがえる';
+    changeBtn.addEventListener('click', () => {
+      GameStore.setState('app.currentScreen', 'wardrobe');
+    });
+
+    // 次のストリークスキンまでの進捗
+    const nextStreakSkin = SKINS
+      .filter(s => s.obtain?.method === 'streak' && !SkinManager.isUnlocked(s.id))
+      .sort((a, b) => a.obtain.streakDays - b.obtain.streakDays)[0];
+    if (nextStreakSkin) {
+      const remaining = nextStreakSkin.obtain.streakDays - streak;
+      if (remaining > 0) {
+        const streakHint = document.createElement('div');
+        streakHint.className = 'bookshelf-streak-hint';
+        streakHint.textContent = `🐰 あと${remaining}にち！`;
+        avatarWrap.appendChild(streakHint);
+      }
+    }
+
+    avatarWrap.appendChild(avatar);
+    avatarWrap.appendChild(greetBubble);
+    avatarWrap.appendChild(changeBtn);
 
     // 右側バッジ群
     const rightGroup = document.createElement('div');
@@ -323,7 +368,6 @@ class BookshelfScreen {
     rightGroup.appendChild(inventoryBtn);
 
     // ストリークバッジ
-    const streak = GameStore.getState('player.streak') || 1;
     if (streak >= 1) {
       const streakBadge = document.createElement('div');
       streakBadge.className = 'streak-badge' + (streak >= 3 ? ' streak-badge-hot' : '');
@@ -361,7 +405,7 @@ class BookshelfScreen {
 
     header.appendChild(title);
     header.appendChild(playerInfo);
-    header.appendChild(avatar);
+    header.appendChild(avatarWrap);
     header.appendChild(rightGroup);
 
     return header;

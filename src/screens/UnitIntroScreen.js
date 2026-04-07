@@ -20,6 +20,7 @@ import { GameStore } from '../core/GameStore.js';
 import { Config } from '../core/Config.js';
 import { SoundManager, SoundType } from '../core/SoundManager.js';
 import { CharacterAvatar } from '../components/CharacterAvatar.js';
+import { SkinManager } from '../core/SkinManager.js';
 import { ConceptVisualizer } from '../components/ConceptVisualizer.js';
 import { UNIT_INTROS, STORY_IMAGES } from '../data/storyData.js';
 import { getWorldById } from '../data/worlds.js';
@@ -39,6 +40,8 @@ class UnitIntroScreen {
     this._onBack    = onBack;
     this._onFlash   = onFlash;
     this._el        = null;
+    /** @type {CharacterAvatar|null} greet/victoryPose に使うアバターインスタンス */
+    this._avatar    = null;
   }
 
   // ─────────────────────────────────────────
@@ -74,6 +77,8 @@ class UnitIntroScreen {
    * 画面を破棄する
    */
   destroy() {
+    this._avatar?.stopTalking();
+    this._avatar = null;
     if (this._el) {
       this._el.remove();
       this._el = null;
@@ -97,6 +102,7 @@ class UnitIntroScreen {
     el.innerHTML = `
       <button class="button button-small unit-intro-cv-back" type="button">もどる</button>
       <div id="cv-slot" class="unit-intro-cv-slot"></div>
+      <div id="cv-avatar-slot" class="unit-intro-cv-avatar"></div>
     `;
     this._el = el;
     this._container.appendChild(el);
@@ -108,6 +114,16 @@ class UnitIntroScreen {
     });
 
     cv.render(el.querySelector('#cv-slot'), unitId);
+
+    // 初回：右下にキャラを配置して挨拶させる
+    const cvAvatarSlot = el.querySelector('#cv-avatar-slot');
+    if (cvAvatarSlot) {
+      this._avatar = new CharacterAvatar('md', 'happy');
+      cvAvatarSlot.appendChild(this._avatar.render());
+      setTimeout(() => {
+        this._avatar?.startTalking('いっしょに がんばろう！', 2500);
+      }, 1000);
+    }
 
     el.querySelector('.unit-intro-cv-back').addEventListener('click', () => {
       SoundManager.playSFX(SoundType.BUTTON_CLICK);
@@ -180,16 +196,23 @@ class UnitIntroScreen {
     // イラスト挿入
     this._insertIllust(el.querySelector('#unit-intro-illust'), imgSrc, ph);
 
-    // キャラアバター挿入
+    // キャラアバター挿入（インスタンスを保持して greet/victoryPose に使う）
     const avatarSlot = el.querySelector('#unit-intro-avatar');
     if (avatarSlot) {
-      const avatar = new CharacterAvatar('md', 'happy');
-      avatarSlot.appendChild(avatar.render());
+      this._avatar = new CharacterAvatar('md', 'happy');
+      avatarSlot.appendChild(this._avatar.render());
     }
 
     this._bindEvents();
 
-    // フェードイン
+    // フェードイン後、フクロウのヒントに続いてキャラが反応する（掛け合い演出）
+    // フクロウ: 即時表示 → 0.8秒後: キャラが greet
+    const playerName = GameStore.getState('player.name') || 'プレイヤー';
+    const streak     = GameStore.getState('player.streak') || 1;
+    setTimeout(() => {
+      this._avatar?.greet(playerName, streak);
+    }, 800);
+
     requestAnimationFrame(() => el.classList.add('unit-intro-visible'));
   }
 
@@ -247,8 +270,19 @@ class UnitIntroScreen {
 
     btnStart?.addEventListener('click', () => {
       SoundManager.playSFX(SoundType.BUTTON_CLICK);
-      this.destroy();
-      if (typeof this._onStart === 'function') this._onStart();
+      // キャラが「いくぞ！」と叫んでから 600ms 後にクイズ遷移
+      if (this._avatar) {
+        const skin = SkinManager.getCurrentSkin();
+        const line = skin?.reactions?.correct ?? 'いくぞ！';
+        this._avatar.victoryPose(line);
+        setTimeout(() => {
+          this.destroy();
+          if (typeof this._onStart === 'function') this._onStart();
+        }, 600);
+      } else {
+        this.destroy();
+        if (typeof this._onStart === 'function') this._onStart();
+      }
     });
 
     btnBack?.addEventListener('click', () => {

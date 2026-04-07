@@ -26,10 +26,13 @@ import {
   COLLECTIBLE_SKINS,
   SKIN_CATEGORY,
   SKIN_OBTAIN,
+  SKIN_RARITY,
   FRAGMENTS_NEEDED,
   RARITY_LABEL as SKIN_RARITY_LABEL,
   getObtainHint,
 } from '../data/skinItems.js';
+import { CharacterAvatar } from '../components/CharacterAvatar.js';
+import { SoundManager, SoundType } from '../core/SoundManager.js';
 import {
   getItemById,
   RARITY,
@@ -352,6 +355,7 @@ export class CraftsmanScreen {
 
       let statusClass = 'skin-locked';
       let badge = '';
+      let hintText = '';
       if (equipped) {
         statusClass = 'skin-equipped';
         badge = '<span class="skin-badge badge-equipped">✓ そうびちゅう</span>';
@@ -366,16 +370,26 @@ export class CraftsmanScreen {
         badge = `<span class="skin-badge badge-frag">💎${frags}/${FRAGMENTS_NEEDED}</span>`;
       }
 
+      // 未解放カードに解放ヒントを表示
+      if (!unlocked) {
+        hintText = this._cardObtainHint(skin, frags);
+      }
+
+      // 未解放はシルエット（SUPER_RAREは金色）
+      const imgFilter = this._skinImgFilter(skin, unlocked);
+
       return `
         <div class="craft-item-card ${statusClass} ${this._selectedSkin === skin.id ? 'selected' : ''}"
              data-skin-id="${skin.id}" role="button" tabindex="0">
           <div class="craft-item-img">
             <img src="${skin.image}" alt="${skin.name}"
+                 style="${imgFilter}"
                  onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
             <span style="display:none;font-size:2.5rem">${skin.emoji}</span>
           </div>
-          <p class="craft-item-name">${skin.name}</p>
+          <p class="craft-item-name">${unlocked ? skin.name : '？？？'}</p>
           ${badge}
+          ${hintText ? `<p class="skin-card-hint">${hintText}</p>` : ''}
         </div>
       `;
     }).join('') || '<p class="craft-empty">スキンがありません</p>';
@@ -471,6 +485,143 @@ export class CraftsmanScreen {
         ${actionBtn}
       </div>
     `;
+  }
+
+  // ─────────────────────────────────────────────
+  // テイラー補助メソッド
+  // ─────────────────────────────────────────────
+
+  /**
+   * スキン画像に適用する filter スタイルを返す
+   * @param {object} skin
+   * @param {boolean} unlocked
+   * @returns {string} CSS style 文字列（例 "filter:brightness(0)"）
+   */
+  _skinImgFilter(skin, unlocked) {
+    if (unlocked) return '';
+    if (skin.rarity === SKIN_RARITY.SUPER_RARE) {
+      return 'filter:brightness(0) sepia(1) saturate(3) hue-rotate(5deg)';
+    }
+    return 'filter:brightness(0)';
+  }
+
+  /**
+   * スキンカード上に表示するコンパクトな解放ヒントを返す
+   * @param {object} skin
+   * @param {number} frags - 現在のかけら数
+   * @returns {string}
+   */
+  _cardObtainHint(skin, frags) {
+    const streak = GameStore.getState('player.streak') || 1;
+    switch (skin.obtain?.method) {
+      case SKIN_OBTAIN.CRAFT: {
+        const { missing } = SkinManager.canCraft(skin.id);
+        const MOJI = { wood:'🌲',stone:'⛰️',brick:'🧱',gem:'💎',star_fragment:'✨',
+                       cloth:'🧶',paint:'🎨',crown:'👑',cape:'🧣',magic_orb:'🔮' };
+        const parts = Object.entries(missing || {})
+          .slice(0, 2)
+          .map(([m, n]) => `${MOJI[m] ?? m}×${n}`)
+          .join(' ');
+        return parts ? `あと ${parts}` : '';
+      }
+      case SKIN_OBTAIN.STREAK: {
+        const left = Math.max(0, (skin.obtain.streakDays || 0) - streak);
+        return left > 0 ? `あと${left}にち` : 'もうすぐ！';
+      }
+      case SKIN_OBTAIN.FRAGMENT:
+        return `かけら ${frags}/${FRAGMENTS_NEEDED}`;
+      default:
+        return 'ひみつのにゅうしゅ';
+    }
+  }
+
+  /**
+   * スキン解放祝福モーダルを表示する。
+   * craft / streak / milestone など解放経路を問わず使用可能。
+   * @param {object}   skin      - 解放されたスキンオブジェクト
+   * @param {Function} onEquip   - 「きがえる！」ボタン押下時のコールバック
+   * @param {Function} onClose   - 「あとで」ボタン押下時のコールバック
+   */
+  _showUnlockModal(skin, onEquip, onClose) {
+    // オーバーレイ
+    const overlay = document.createElement('div');
+    overlay.className = 'skin-unlock-overlay';
+
+    // モーダル本体
+    const modal = document.createElement('div');
+    modal.className = 'skin-unlock-modal';
+
+    // ヘッダー
+    const header = document.createElement('p');
+    header.className = 'skin-unlock-header';
+    header.textContent = '✨ ゲット！';
+    modal.appendChild(header);
+
+    // CharacterAvatar xl を生成し、新しく解放されたスキンの画像を上書き表示する
+    // （craft() は unlock のみで equip しないため、現在のスキンではなく新スキンを見せる）
+    const avatarWrap = document.createElement('div');
+    avatarWrap.className = 'skin-unlock-avatar';
+    const avatar = new CharacterAvatar('xl');
+    avatarWrap.appendChild(avatar.render());
+
+    // 解放されたスキンの画像・絵文字に上書き
+    const avatarImg = avatarWrap.querySelector('.char-avatar-img');
+    if (avatarImg) {
+      avatarImg.src = skin.image;
+      avatarImg.alt = skin.name;
+    }
+    const avatarEmoji = avatarWrap.querySelector('.char-avatar-emoji');
+    if (avatarEmoji) avatarEmoji.textContent = skin.emoji || '🧙';
+
+    modal.appendChild(avatarWrap);
+
+    // スキン名・レアリティ
+    const nameEl = document.createElement('p');
+    nameEl.className = 'skin-unlock-name';
+    nameEl.textContent = skin.name;
+    modal.appendChild(nameEl);
+
+    const rarityEl = document.createElement('p');
+    rarityEl.className = 'skin-unlock-rarity';
+    rarityEl.textContent = SKIN_RARITY_LABEL[skin.rarity] ?? '';
+    modal.appendChild(rarityEl);
+
+    // ボタン行
+    const btnRow = document.createElement('div');
+    btnRow.className = 'skin-unlock-btn-row';
+
+    const equipBtn = document.createElement('button');
+    equipBtn.type = 'button';
+    equipBtn.className = 'button skin-unlock-equip-btn';
+    equipBtn.textContent = '👗 きがえる！';
+    equipBtn.addEventListener('click', () => {
+      avatar.stopTalking();
+      overlay.remove();
+      onEquip();
+    });
+
+    const laterBtn = document.createElement('button');
+    laterBtn.type = 'button';
+    laterBtn.className = 'button button-secondary skin-unlock-later-btn';
+    laterBtn.textContent = 'あとで';
+    laterBtn.addEventListener('click', () => {
+      avatar.stopTalking();
+      overlay.remove();
+      onClose();
+    });
+
+    btnRow.appendChild(equipBtn);
+    btnRow.appendChild(laterBtn);
+    modal.appendChild(btnRow);
+
+    overlay.appendChild(modal);
+    this._container.appendChild(overlay);
+
+    // 表示後に victoryPose + RARE_DROP SE
+    SoundManager.playSFX(SoundType.RARE_DROP);
+    setTimeout(() => {
+      avatar.victoryPose(skin.reactions?.correct ?? '✨');
+    }, 100);
   }
 
   _renderCategoryTabs() {
@@ -799,13 +950,33 @@ export class CraftsmanScreen {
       const id = this._container.querySelector('.tailor-craft-btn')?.dataset.skinId;
       if (!id) return;
       const result = SkinManager.craft(id);
-      this._craftMsg = result.success
-        ? `✨ ${COLLECTIBLE_SKINS.find(s => s.id === id)?.name}をゲット！`
-        : `❌ ${result.reason}`;
-      this._dialogue = result.success
-        ? this._getDialogue('craftSuccess')
-        : this._getDialogue('craftFail');
-      this._render();
+      if (result.success) {
+        this._dialogue = this._getDialogue('craftSuccess');
+        const skin = COLLECTIBLE_SKINS.find(s => s.id === id);
+        this._showUnlockModal(
+          skin,
+          // 「きがえる！」→ wardrobe に即移動
+          () => {
+            SkinManager.equip(id);
+            GameStore.setState('app.currentScreen', 'wardrobe');
+          },
+          // 「あとで」→ テイラータブを再描画 + sparkle
+          () => {
+            this._selectedSkin = id;
+            this._craftMsg = null;
+            this._render();
+            setTimeout(() => {
+              this._container
+                .querySelector(`.craft-item-card[data-skin-id="${id}"]`)
+                ?.classList.add('sparkle-effect');
+            }, 50);
+          }
+        );
+      } else {
+        this._craftMsg = `❌ ${result.reason}`;
+        this._dialogue = this._getDialogue('craftFail');
+        this._render();
+      }
     });
 
     // スキン装備ボタン
@@ -813,8 +984,7 @@ export class CraftsmanScreen {
       const id = this._container.querySelector('.tailor-equip-btn')?.dataset.skinId;
       if (!id) return;
       SkinManager.equip(id);
-      this._craftMsg = '👗 きがえたよ！';
-      this._render();
+      GameStore.setState('app.currentScreen', 'wardrobe');
     });
   }
 

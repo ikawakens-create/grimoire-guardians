@@ -51,6 +51,14 @@ export const SKINS = [
     emoji:       '🧙',
     description: 'グリモアガーディアンの基本スタイル。すべての冒険はここから始まる。',
     obtain:      { method: SKIN_OBTAIN.FREE },
+    reactions: {
+      correct: 'やったぞ！',
+      wrong:   'つぎは まけない！',
+      combo3:  '3かいも せいかい！',
+      combo5:  '5れんぞく！まほうが あふれる！',
+      greet:   '{name}！{n}にちめだぞ！きょうも いくか！',
+    },
+    voiceFreq: 300,
   },
 
   // ──────────────────────────────────
@@ -66,6 +74,14 @@ export const SKINS = [
     description:  '銀色にかがやく全身鎧！大きなたてとかがやく剣を持つ正統派ヒーロー。',
     obtain:      { method: SKIN_OBTAIN.CRAFT, tailorLevel: 1,
                    recipe: { stone: 5, cloth: 3 } },
+    reactions: {
+      correct: 'たてで まもった！',
+      wrong:   'もう いちど！',
+      combo3:  '3れんぞく！ほこらしい！',
+      combo5:  '5れんぞく！きしどうの ちかい！',
+      greet:   '{name}！{n}にちも まもるぞ！',
+    },
+    voiceFreq: 260,
   },
   {
     id:          'mage_fire',
@@ -77,6 +93,14 @@ export const SKINS = [
     description: '燃えさかる炎をまとった赤いローブ。杖からもほのおが吹き出てる！',
     obtain:      { method: SKIN_OBTAIN.CRAFT, tailorLevel: 1,
                    recipe: { wood: 5, paint: 3 } },
+    reactions: {
+      correct: 'もえるぜ！',
+      wrong:   'つぎは もやす！',
+      combo3:  'ファイヤー！3れんぞく！',
+      combo5:  '5かいも！もえすぎて きえそう！🔥',
+      greet:   '{name}！{n}にちめ！きょうも もやすか！',
+    },
+    voiceFreq: 280,
   },
   {
     id:          'mage_ice',
@@ -88,6 +112,14 @@ export const SKINS = [
     description: '氷の結晶がかがやく白銀のローブ。体のまわりに雪の結晶がただよってる。',
     obtain:      { method: SKIN_OBTAIN.CRAFT, tailorLevel: 2,
                    recipe: { gem: 3, cloth: 4 } },
+    reactions: {
+      correct: 'こおった！せいかい！',
+      wrong:   'とけるな…',
+      combo3:  'れんぞく！こちこち！',
+      combo5:  '5れんぞく…ぜんぶ こおらせた',
+      greet:   '{name}…{n}にちめ だね',
+    },
+    voiceFreq: 340,
   },
   {
     id:          'ninja_dark',
@@ -99,6 +131,14 @@ export const SKINS = [
     description: '全身まっ黒の忍装束。手裏剣を2こ持っていて、目だけが赤く光ってる。',
     obtain:      { method: SKIN_OBTAIN.CRAFT, tailorLevel: 2,
                    recipe: { cloth: 6, paint: 2 } },
+    reactions: {
+      correct: 'シュッ！',
+      wrong:   '…つぎがある',
+      combo3:  '3れんぞく！にんじゃ！',
+      combo5:  '5れんぞく…かげのように うごく',
+      greet:   '{name}、{n}にちめ…忍',
+    },
+    voiceFreq: 240,
   },
   {
     id:          'knight_dragon',
@@ -110,6 +150,14 @@ export const SKINS = [
     description: '背中にドラゴンの翼が生えた赤い鎧！ランスを持ち、炎をまとっている。',
     obtain:      { method: SKIN_OBTAIN.CRAFT, tailorLevel: 3,
                    recipe: { gem: 5, magic_orb: 1 } },
+    reactions: {
+      correct: 'ドラゴンの ちから！',
+      wrong:   'まだまだ！',
+      combo3:  '3れんぞく！炎を まとう！',
+      combo5:  '5れんぞく！りゅうが めざめた！🐉',
+      greet:   '{name}！{n}にちも つよくなれ！',
+    },
+    voiceFreq: 250,
   },
   {
     id:          'swordsman_thunder',
@@ -120,6 +168,14 @@ export const SKINS = [
     emoji:       '⚡',
     description: '紫の稲妻をまとった漆黒の剣士。全身に雷が走り、かっこよさMAX！',
     obtain:      { method: SKIN_OBTAIN.FRAGMENT, fragmentId: 'swordsman_thunder' },
+    reactions: {
+      correct: 'ビリビリ！せいかい！',
+      wrong:   'かみなり おとした！',
+      combo3:  '3れんぞく！いなずま！',
+      combo5:  '5れんぞく！でんげきが とまらない！⚡',
+      greet:   '{name}！{n}にちも かっとべ！',
+    },
+    voiceFreq: 290,
   },
 
   // ──────────────────────────────────
@@ -135,6 +191,14 @@ export const SKINS = [
     description: '桜色のおどり子のいしょう。はなリボンをつけて、おうぎを持つ和風スタイル。',
     obtain:      { method: SKIN_OBTAIN.CRAFT, tailorLevel: 1,
                    recipe: { cloth: 5, paint: 2 } },
+    reactions: {
+      correct: 'はなびら！せいかい！',
+      wrong:   'つぎは まいあがる！',
+      combo3:  '3れんぞく！おどる！🌸',
+      combo5:  '5れんぞく！さくらが さく！🌸🌸',
+      greet:   '{name}！{n}にちめ♪ いっしょに まいましょ！',
+    },
+    voiceFreq: 400,
   },
   {
     id:          'rabbit_traveler',
@@ -145,6 +209,14 @@ export const SKINS = [
     emoji:       '🐰',
     description: 'うさぎ耳のフードをかぶった旅人スタイル。かわいい短剣もばっちり決まってる。',
     obtain:      { method: SKIN_OBTAIN.STREAK, streakDays: 7 },
+    reactions: {
+      correct: 'ぴょん！せいかい！',
+      wrong:   'ぴょこぴょこ！つぎは まける か！',
+      combo3:  '3れんぞく！うさぴょん！',
+      combo5:  '5れんぞく！ぴょんぴょんとまらない！🐰',
+      greet:   '{name}！{n}にちめの ぼうけん！いくよ！',
+    },
+    voiceFreq: 420,
   },
   {
     id:          'fairy_princess',
@@ -156,6 +228,14 @@ export const SKINS = [
     description: 'はんとうめいの羽がきれいなようせい。花のかんむりをつけて、光るステッキ持ち。',
     obtain:      { method: SKIN_OBTAIN.CRAFT, tailorLevel: 2,
                    recipe: { cloth: 6, gem: 1, star_fragment: 1 } },
+    reactions: {
+      correct: 'きらきら！せいかい！',
+      wrong:   'つぎは まほうで！',
+      combo3:  '3れんぞく！ようせいまほう！',
+      combo5:  '5れんぞく！はねが ひかりだした！✨',
+      greet:   '{name}♪{n}にちめも いっしょ！',
+    },
+    voiceFreq: 450,
   },
   {
     id:          'princess_magic',
@@ -167,6 +247,14 @@ export const SKINS = [
     description: 'キラキラのドレスに大きなティアラ。星のステッキがキラリと光る！',
     obtain:      { method: SKIN_OBTAIN.CRAFT, tailorLevel: 2,
                    recipe: { cloth: 5, crown: 1 } },
+    reactions: {
+      correct: 'ティアラが かがやく！',
+      wrong:   'おうじょは まけない！',
+      combo3:  '3れんぞく！おしろが よろこぶ！',
+      combo5:  '5れんぞく！プリンセスの きせき！👸',
+      greet:   '{name}！{n}にちも てつだうよ！',
+    },
+    voiceFreq: 430,
   },
   {
     id:          'mermaid',
@@ -178,6 +266,14 @@ export const SKINS = [
     description: '人魚のいしょう（陸でもちゃんと歩けてる笑）。かいの杖のまわりに泡がただよう。',
     obtain:      { method: SKIN_OBTAIN.CRAFT, tailorLevel: 3,
                    recipe: { gem: 4, star_fragment: 3 } },
+    reactions: {
+      correct: 'ぷくぷく！せいかい！',
+      wrong:   'あわになれ！',
+      combo3:  '3れんぞく！なみのまほう！',
+      combo5:  '5れんぞく！うみが よろこんでる！🧜',
+      greet:   '{name}！{n}にちめも およごう！',
+    },
+    voiceFreq: 460,
   },
   {
     id:          'ballerina',
@@ -188,6 +284,14 @@ export const SKINS = [
     emoji:       '🩰',
     description: 'ふわふわのチュチュスカートにバレエシューズ。かわいい花束を持っている。',
     obtain:      { method: SKIN_OBTAIN.FRAGMENT, fragmentId: 'ballerina' },
+    reactions: {
+      correct: 'くるくる！せいかい！',
+      wrong:   'バレエ つづける！',
+      combo3:  '3れんぞく！ぐらん！ぐらん！',
+      combo5:  '5れんぞく！ぶたいに はなが とぶ！🩰',
+      greet:   '{name}♪{n}にちめ はじめよ！',
+    },
+    voiceFreq: 440,
   },
 
   // ──────────────────────────────────
@@ -203,6 +307,14 @@ export const SKINS = [
     description: 'ふわふわのくまコス。おなかがぷっくり、ちっちゃい手がかわいい着ぐるみ。',
     obtain:      { method: SKIN_OBTAIN.CRAFT, tailorLevel: 1,
                    recipe: { cloth: 6 } },
+    reactions: {
+      correct: 'ぐるぐるー！',
+      wrong:   'くまさんも がんばる！',
+      combo3:  '3かいも！ぐるぐる！',
+      combo5:  '5かいも！ぐるぐるぐるぐるー！🐻',
+      greet:   '{name}！{n}にちも いっしょだよ！',
+    },
+    voiceFreq: 380,
   },
   {
     id:          'ragged_adventurer',
@@ -214,6 +326,14 @@ export const SKINS = [
     description: 'ボロ布の服に傷だらけ。でっかい木の棒を持って、なぜか自信まんまんな顔！',
     obtain:      { method: SKIN_OBTAIN.CRAFT, tailorLevel: 1,
                    recipe: { wood: 5, cloth: 2 } },
+    reactions: {
+      correct: 'こんなの よゆう！',
+      wrong:   'ボロボロでも まけるか！',
+      combo3:  '3れんぞく！ボロでも つよい！',
+      combo5:  '5れんぞく！ボロが きんいろに みえてきた！',
+      greet:   '{name}！{n}にちめも つっぱしる！',
+    },
+    voiceFreq: 320,
   },
   {
     id:          'dinosaur_cos',
@@ -225,6 +345,14 @@ export const SKINS = [
     description: '本格的なT-REXの着ぐるみ。ちっちゃい手が少しだけ見えてるのがポイント😂',
     obtain:      { method: SKIN_OBTAIN.CRAFT, tailorLevel: 2,
                    recipe: { cloth: 8, paint: 2 } },
+    reactions: {
+      correct: 'がおー！せいかい！',
+      wrong:   'がおー…くやしい！',
+      combo3:  '3れんぞく！ティラノ あばれる！',
+      combo5:  '5れんぞく！ティラノ むてき！がおがお！🦖',
+      greet:   '{name}！{n}にちめだ！がおー！',
+    },
+    voiceFreq: 350,
   },
   {
     id:          'ghost_pajama',
@@ -235,6 +363,14 @@ export const SKINS = [
     emoji:       '👻',
     description: '白いシーツのおばけコス。目の穴からちゃんと足が出てるのが見える笑。',
     obtain:      { method: SKIN_OBTAIN.STREAK, streakDays: 14 },
+    reactions: {
+      correct: 'ひゅー！せいかい！',
+      wrong:   'ひゅーん…つぎがある',
+      combo3:  '3れんぞく！おばけパワー！',
+      combo5:  '5れんぞく！おばけが のりうつった！👻',
+      greet:   '{name}…{n}にちめも でるよ…',
+    },
+    voiceFreq: 360,
   },
   {
     id:          'robot_hakase',
@@ -245,6 +381,14 @@ export const SKINS = [
     emoji:       '🤖',
     description: '段ボールで作ったロボットのよろい！ボタンがいっぱいで、頭から煙が出てる。',
     obtain:      { method: SKIN_OBTAIN.FRAGMENT, fragmentId: 'robot_hakase' },
+    reactions: {
+      correct: 'けいさん かんりょう！',
+      wrong:   'エラー！さいけいさん！',
+      combo3:  '3れんぞく！ロボット むてき！',
+      combo5:  '5れんぞく！ロボット かいぞう！🤖',
+      greet:   '{name}！{n}にちめ ぶんせき かいし！',
+    },
+    voiceFreq: 300,
   },
   {
     id:          'tomato_costume',
@@ -255,6 +399,14 @@ export const SKINS = [
     emoji:       '🍅',
     description: 'まるまるトマトの着ぐるみ。手足だけ出ていて、とってもごきげんな顔してる。',
     obtain:      { method: SKIN_OBTAIN.STREAK, streakDays: 30 },
+    reactions: {
+      correct: 'まるまる！せいかい！',
+      wrong:   'トマトは まけない！',
+      combo3:  '3れんぞく！まるまるー！',
+      combo5:  '5れんぞく！ごきげん さいこう！🍅',
+      greet:   '{name}！{n}にちめ ごきげん！',
+    },
+    voiceFreq: 480,
   },
 
   // ──────────────────────────────────
@@ -269,6 +421,14 @@ export const SKINS = [
     emoji:       '🏴‍☠️',
     description: 'ド派手な海賊帽と金の装飾コート。宝の地図を片手にカトラス持ち！',
     obtain:      { method: SKIN_OBTAIN.STREAK, streakDays: 21 },
+    reactions: {
+      correct: 'うみを せいかい！',
+      wrong:   'かいぞく あきらめぬ！',
+      combo3:  '3れんぞく！たからみつけた！',
+      combo5:  '5れんぞく！ふねが すすむ！🏴‍☠️',
+      greet:   '{name}！{n}にちめも うみへ！',
+    },
+    voiceFreq: 270,
   },
   {
     id:          'astronaut',
@@ -279,6 +439,14 @@ export const SKINS = [
     emoji:       '🚀',
     description: '本格的な宇宙服とヘルメット。まわりに星がただよっていて、ちょっとぷかぷかしてる。',
     obtain:      { method: SKIN_OBTAIN.MILESTONE, milestoneId: 'worlds_16_clear' },
+    reactions: {
+      correct: 'こうか せいこう！',
+      wrong:   'つぎの きどうで！',
+      combo3:  '3れんぞく！ほしを こえた！',
+      combo5:  '5れんぞく！うちゅうに とどいた！🚀',
+      greet:   '{name}！{n}にちめ しゅっぱつ！',
+    },
+    voiceFreq: 310,
   },
   {
     id:          'rainbow_witch',
@@ -289,6 +457,14 @@ export const SKINS = [
     emoji:       '🌈',
     description: '7色グラデーションのドレスに虹の杖。どこを見てもきれいな色がかがやいてる。',
     obtain:      { method: SKIN_OBTAIN.MILESTONE, milestoneId: 'library_lv3' },
+    reactions: {
+      correct: 'にじいろ！せいかい！',
+      wrong:   'つぎは 7いろで！',
+      combo3:  '3れんぞく！にじの まほう！',
+      combo5:  '5れんぞく！そらに にじが かかった！🌈',
+      greet:   '{name}♪{n}にちめも にじいろ！',
+    },
+    voiceFreq: 420,
   },
   {
     id:          'royal_eternal',
@@ -299,6 +475,14 @@ export const SKINS = [
     emoji:       '👑',
     description: '全身宝石と金でできた王族のいしょう。あまりのきらびやかさに目がいたくなる…？',
     obtain:      { method: SKIN_OBTAIN.TREASURE },
+    reactions: {
+      correct: 'えいえんの せいかい！',
+      wrong:   'おうさまも まつ！',
+      combo3:  '3れんぞく！えいえんの つよさ！',
+      combo5:  '5れんぞく！おうこくが ひかる！👑',
+      greet:   '{name}！{n}にちめ よくきた！',
+    },
+    voiceFreq: 230,
   },
   {
     id:          'demon_king',
@@ -309,6 +493,14 @@ export const SKINS = [
     emoji:       '😈',
     description: '黒マントに悪魔の角、やみのオーラ。でも顔はちょっとかわいい…強さの証明スキン！',
     obtain:      { method: SKIN_OBTAIN.MILESTONE, milestoneId: 'all_worlds_clear' },
+    reactions: {
+      correct: 'やみが こたえた！',
+      wrong:   'ふふ…つぎは まける か？',
+      combo3:  '3れんぞく！やみのちから！',
+      combo5:  '5れんぞく…おまえは まおうを こえるか',
+      greet:   '{name}…{n}にちめも きたのか',
+    },
+    voiceFreq: 220,
   },
   {
     id:          'grimoire_guardian',
@@ -319,6 +511,14 @@ export const SKINS = [
     emoji:       '📖',
     description: 'グリモアガーディアンの真の姿。魔法書をまとった守護者——これがゲームの象徴だ。',
     obtain:      { method: SKIN_OBTAIN.MILESTONE, milestoneId: 'all_facilities_max' },
+    reactions: {
+      correct: 'グリモアが ひかる！',
+      wrong:   'まだ まけない…',
+      combo3:  '3れんぞく！グリモアの おまもり！',
+      combo5:  '5れんぞく！すべての グリモアが めざめる！📖',
+      greet:   '{name}！{n}にちめも まもる！',
+    },
+    voiceFreq: 260,
   },
 ];
 

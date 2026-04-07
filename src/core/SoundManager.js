@@ -51,6 +51,9 @@ export const SoundType = {
     WAVE_AMBIENT:   'ship_wave_ambient',   // 波音ループ（将来）
   },
 
+  // キャラクター会話（ゴニョゴニョSE）
+  TALK:               'talk',
+
   // BGM
   BGM_TITLE:          'bgm_title',
   BGM_BOOKSHELF:      'bgm_bookshelf',
@@ -280,6 +283,24 @@ export class SoundManager {
     const volumeScale = options.volume ?? 1.0;
     const scaled = notes.map(n => ({ ...n, gain: n.gain * volumeScale }));
     this._playTone(scaled);
+  }
+
+  /**
+   * キャラのゴニョゴニョSEを鳴らす（吹き出し表示と連動）
+   * 60ms のサイン波を 80ms 間隔で 4 バースト再生する。
+   * @param {number} [voiceFreq=380] - スキン固有の周波数（skinItems.js の voiceFreq）
+   */
+  static playTalk(voiceFreq = 380) {
+    if (!Config.UI.ENABLE_SOUND || this.isMuted) return;
+    const freq = (typeof voiceFreq === 'number' && voiceFreq > 0) ? voiceFreq : 380;
+    const notes = [0, 0.08, 0.16, 0.24].map(delay => ({
+      freq,
+      type:     'sine',
+      duration: 0.06,
+      gain:     0.12,
+      delay,
+    }));
+    this._playTone(notes);
   }
 
   /**

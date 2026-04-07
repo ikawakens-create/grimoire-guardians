@@ -9,7 +9,7 @@
  * @date 2026-03-04
  */
 
-const SW_VERSION   = '2.3.8';
+const SW_VERSION   = '2.3.9';
 const CACHE_NAME   = `grimoire-${SW_VERSION}`;
 
 /** キャッシュ対象ファイル（静的アセット） */
@@ -42,6 +42,7 @@ const ASSETS = [
   './src/components/ClearStoryBanner.js',
   './src/data/dimensionConfig.js',
   './src/screens/InventoryScreen.js',
+  './src/screens/WardrobeScreen.js',
   './src/screens/MemoryIsleScreen.js',
   './src/screens/HouseScreen.js',
   './src/screens/HouseBuildScreen.js',
