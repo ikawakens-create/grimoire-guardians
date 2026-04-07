@@ -881,20 +881,18 @@ export const WORLD_CLEAR_SCENES = {
 
 /**
  * WORLD_CLEAR_SCENES にデータがないワールド用の汎用シーンを生成する。
- * worldDef.title を使って「○○の グリモアが もどってきた！」と表示する。
+ * worldDef.title は漢字を含む可能性があるため使用せず、汎用文言で固定する。
  *
- * @param {Object|null} worldDef - getWorldById() の返り値
+ * @param {Object|null} worldDef - getWorldById() の返り値（現在未使用・将来の拡張用に残す）
  * @returns {Object} シーンオブジェクト
  */
 export function buildFallbackScene(worldDef) {
-  // タイトルをひらがな的に使えるよう、漢字混入リスクを避けて汎用文言にフォールバック
-  const titleHint = worldDef?.title ?? 'グリモア';
   return {
     emoji:        '📖',
     nextEmoji:    '✨',
     image:        null,
     owlLine:      '{name}！ グリモアを とりもどしたぞ！',
-    grimoireLine: `${titleHint}の グリモアが もどってきた！`,
+    grimoireLine: 'グリモアが まちに もどってきた！',
     storyLine:    'まちが すこし あかるくなった…',
     nextWorldHint:'つぎの グリモアを さがしにいこう！',
   };
