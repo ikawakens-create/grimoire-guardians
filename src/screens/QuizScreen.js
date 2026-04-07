@@ -672,7 +672,8 @@ export class QuizScreen {
 
     const hitsuzanDisplayEl = this._el.querySelector('.quiz-hitsuzan-display');
     const currentStep = this._hitsuzanStep;
-    const is3digit = question.operand1 >= 100 || question.operand2 >= 100;
+    const maxVal = Math.max(question.operand1, question.operand2, computed.result);
+    const is3digit = maxVal >= 100;
 
     // 現在のステップの正解桁
     const correctDigit =

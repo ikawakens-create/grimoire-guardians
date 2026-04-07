@@ -1,4 +1,4 @@
-/**
+﻿/**
  * worlds.js - Grimoire Guardians
  * ワールド定義データ（Phase 0.1 + Phase 0.2 + Phase 0.3）
  *
@@ -797,7 +797,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_14c_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #fdcb6e, #e17055)' },
-    order: 29,
+    order: 30,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'monster' }
@@ -821,7 +821,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_14c_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #fdcb6e, #e17055)' },
-    order: 30,
+    order: 31,
     freeToPlay: false,
     events: [{ triggerAt: 8, type: 'monster' }],
     storyDesc: 'ひっ算 チャレンジ！\nこんどは こたえを まるごと えらぼう！',
@@ -843,7 +843,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_14c_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #e17055, #d63031)' },
-    order: 31,
+    order: 32,
     freeToPlay: false,
     events: [{ triggerAt: 8, type: 'omikuji' }],
     storyDesc: '2桁＋2桁！\nひっ算で しっかり けいさんしよう！',
@@ -865,7 +865,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_14c_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #d63031, #c0392b)' },
-    order: 32,
+    order: 33,
     freeToPlay: false,
     events: [{ triggerAt: 8, type: 'omikuji' }],
     storyDesc: '3桁の ひっ算！\nひゃくのくらいまで こたえよう！',
@@ -887,7 +887,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_10a_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #a29bfe, #6c5ce7)' },
-    order: 32,
+    order: 34,
     freeToPlay: false,
     events: [{ triggerAt: 8, type: 'omikuji' }],
     storyDesc: 'くりあがりの グリモア！\nひっ算で いちのくらいから こたえよう！',
@@ -909,7 +909,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_10a_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #a29bfe, #6c5ce7)' },
-    order: 33,
+    order: 35,
     freeToPlay: false,
     events: [{ triggerAt: 10, type: 'monster' }],
     storyDesc: 'くりあがりチャレンジ！\nこんどは こたえを まるごと えらぼう！',
@@ -928,7 +928,7 @@ export const WORLDS = [
     totalQuestions: 15,
     assets: { icon: 'assets/icons/worlds/world_10b.png', iconLocked: 'assets/icons/worlds/world_10b_locked.png' },
     theme: { gradient: 'linear-gradient(135deg, #74b9ff, #0984e3)' },
-    order: 34,
+    order: 36,
     freeToPlay: false,
     events: [{ triggerAt: 8, type: 'omikuji' }],
     storyDesc: '8のせかいの くりあがり！\nひっ算で こたえよう！',
@@ -943,7 +943,7 @@ export const WORLDS = [
     totalQuestions: 15,
     assets: { icon: 'assets/icons/worlds/world_10b.png', iconLocked: 'assets/icons/worlds/world_10b_locked.png' },
     theme: { gradient: 'linear-gradient(135deg, #74b9ff, #0984e3)' },
-    order: 35,
+    order: 37,
     freeToPlay: false,
     events: [{ triggerAt: 10, type: 'monster' }],
     storyDesc: '8のせかい チャレンジ！\nこたえを まるごと えらぼう！',
@@ -961,7 +961,7 @@ export const WORLDS = [
     totalQuestions: 15,
     assets: { icon: 'assets/icons/worlds/world_10c.png', iconLocked: 'assets/icons/worlds/world_10c_locked.png' },
     theme: { gradient: 'linear-gradient(135deg, #55efc4, #00b894)' },
-    order: 36,
+    order: 38,
     freeToPlay: false,
     events: [{ triggerAt: 8, type: 'omikuji' }],
     storyDesc: '7と6のせかいの くりあがり！',
@@ -976,7 +976,7 @@ export const WORLDS = [
     totalQuestions: 15,
     assets: { icon: 'assets/icons/worlds/world_10c.png', iconLocked: 'assets/icons/worlds/world_10c_locked.png' },
     theme: { gradient: 'linear-gradient(135deg, #55efc4, #00b894)' },
-    order: 37,
+    order: 39,
     freeToPlay: false,
     events: [{ triggerAt: 10, type: 'monster' }],
     storyDesc: '7と6のせかい チャレンジ！\nこたえを まるごと えらぼう！',
@@ -997,7 +997,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_14d_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #fd79a8, #e84393)' },
-    order: 30,
+    order: 40,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'treasure' }
@@ -1018,7 +1018,7 @@ export const WORLDS = [
     totalQuestions: 15,
     assets: { icon: 'assets/icons/worlds/world_14d.png', iconLocked: 'assets/icons/worlds/world_14d_locked.png' },
     theme: { gradient: 'linear-gradient(135deg, #fd79a8, #e84393)' },
-    order: 38,
+    order: 41,
     freeToPlay: false,
     events: [{ triggerAt: 8, type: 'omikuji' }],
     storyDesc: 'ひっ算の ひきざん！\nいちのくらいから じゅんばんに こたえよう！',
@@ -1033,7 +1033,7 @@ export const WORLDS = [
     totalQuestions: 15,
     assets: { icon: 'assets/icons/worlds/world_14d.png', iconLocked: 'assets/icons/worlds/world_14d_locked.png' },
     theme: { gradient: 'linear-gradient(135deg, #fd79a8, #e84393)' },
-    order: 39,
+    order: 42,
     freeToPlay: false,
     events: [{ triggerAt: 10, type: 'monster' }],
     storyDesc: 'ひっ算 ひきざんチャレンジ！\nこたえを まるごと えらぼう！',
@@ -1048,7 +1048,7 @@ export const WORLDS = [
     totalQuestions: 15,
     assets: { icon: 'assets/icons/worlds/world_14d.png', iconLocked: 'assets/icons/worlds/world_14d_locked.png' },
     theme: { gradient: 'linear-gradient(135deg, #e84393, #d63031)' },
-    order: 40,
+    order: 43,
     freeToPlay: false,
     events: [{ triggerAt: 8, type: 'omikuji' }],
     storyDesc: '2桁－2桁！\nひっ算で しっかり けいさんしよう！',
@@ -1063,7 +1063,7 @@ export const WORLDS = [
     totalQuestions: 15,
     assets: { icon: 'assets/icons/worlds/world_14d.png', iconLocked: 'assets/icons/worlds/world_14d_locked.png' },
     theme: { gradient: 'linear-gradient(135deg, #d63031, #b71c1c)' },
-    order: 41,
+    order: 44,
     freeToPlay: false,
     events: [{ triggerAt: 8, type: 'omikuji' }],
     storyDesc: '3桁のひきざん！\nひっ算で いちのくらいから じゅんに こたえよう！',
@@ -1081,7 +1081,7 @@ export const WORLDS = [
     totalQuestions: 15,
     assets: { icon: 'assets/icons/worlds/world_11b.png', iconLocked: 'assets/icons/worlds/world_11b_locked.png' },
     theme: { gradient: 'linear-gradient(135deg, #fdcb6e, #e17055)' },
-    order: 41,
+    order: 45,
     freeToPlay: false,
     events: [{ triggerAt: 8, type: 'omikuji' }],
     storyDesc: 'くりさがりの グリモア！\nひっ算で いちのくらいから こたえよう！',
@@ -1096,7 +1096,7 @@ export const WORLDS = [
     totalQuestions: 15,
     assets: { icon: 'assets/icons/worlds/world_11b.png', iconLocked: 'assets/icons/worlds/world_11b_locked.png' },
     theme: { gradient: 'linear-gradient(135deg, #fdcb6e, #e17055)' },
-    order: 42,
+    order: 46,
     freeToPlay: false,
     events: [{ triggerAt: 10, type: 'monster' }],
     storyDesc: 'くりさがりチャレンジ！\nこたえを まるごと えらぼう！',
@@ -1114,7 +1114,7 @@ export const WORLDS = [
     totalQuestions: 15,
     assets: { icon: 'assets/icons/worlds/world_11c.png', iconLocked: 'assets/icons/worlds/world_11c_locked.png' },
     theme: { gradient: 'linear-gradient(135deg, #fab1a0, #e17055)' },
-    order: 43,
+    order: 47,
     freeToPlay: false,
     events: [{ triggerAt: 8, type: 'omikuji' }],
     storyDesc: '13〜18の くりさがり！\nひっ算で いちのくらいから こたえよう！',
@@ -1129,7 +1129,7 @@ export const WORLDS = [
     totalQuestions: 15,
     assets: { icon: 'assets/icons/worlds/world_11c.png', iconLocked: 'assets/icons/worlds/world_11c_locked.png' },
     theme: { gradient: 'linear-gradient(135deg, #fab1a0, #e17055)' },
-    order: 44,
+    order: 48,
     freeToPlay: false,
     events: [{ triggerAt: 10, type: 'monster' }],
     storyDesc: '13〜18チャレンジ！\nこたえを まるごと えらぼう！',
@@ -1150,7 +1150,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_15a_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #a29bfe, #6c5ce7)' },
-    order: 31,
+    order: 49,
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'omikuji' }
@@ -1174,7 +1174,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_15b_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #81ecec, #00cec9)' },
-    order: 32,
+    order: 50,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'three_paths' }
@@ -1198,7 +1198,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_16a_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #ffeaa7, #fdcb6e)' },
-    order: 33,
+    order: 51,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'monster' }
@@ -1222,7 +1222,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/world_16b_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #fab1a0, #e17055)' },
-    order: 34,
+    order: 52,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'treasure' },
@@ -1255,7 +1255,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_01_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #00C9FF, #92FE9D)' },
-    order: 35,
+    order: 53,
     freeToPlay: true,
     events: [],
     storyDesc: 'しんかいグリモアの とびらが ひらいた！\nたしざんの まほうを とりもどせ！',
@@ -1281,7 +1281,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_01_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #00C9FF, #92FE9D)' },
-    order: 36,
+    order: 54,
     freeToPlay: true,
     events: [],
     storyDesc: 'ひっさんの こたえを まるごと かこう！\nつぎの とびらが ひらく！',
@@ -1305,7 +1305,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_02_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #11998E, #38EF7D)' },
-    order: 36,
+    order: 55,
     freeToPlay: true,
     events: [
       { triggerAt: 8, type: 'omikuji' }
@@ -1333,7 +1333,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_02_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #11998E, #38EF7D)' },
-    order: 37,
+    order: 56,
     freeToPlay: true,
     events: [
       { triggerAt: 8, type: 'omikuji' }
@@ -1359,7 +1359,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_02b_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #56AB2F, #A8E063)' },
-    order: 37,
+    order: 57,
     freeToPlay: true,
     events: [
       { triggerAt: 8, type: 'treasure' }
@@ -1386,7 +1386,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_03_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #74b9ff, #0984e3)' },
-    order: 38,
+    order: 58,
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'three_paths' }
@@ -1414,7 +1414,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_03_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #74b9ff, #0984e3)' },
-    order: 39,
+    order: 59,
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'three_paths' }
@@ -1440,7 +1440,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_03b_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #4776E6, #8E54E9)' },
-    order: 39,
+    order: 60,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'monster' }
@@ -1468,7 +1468,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_03b_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #4776E6, #8E54E9)' },
-    order: 40,
+    order: 61,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'monster' }
@@ -1494,7 +1494,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_04_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #F09819, #EDDE5D)' },
-    order: 40,
+    order: 62,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'treasure' }
@@ -1521,7 +1521,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_04b_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #36D1DC, #5B86E5)' },
-    order: 41,
+    order: 63,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'omikuji' },
@@ -1549,7 +1549,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_05_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #FF6B6B, #FEC89A)' },
-    order: 42,
+    order: 64,
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'omikuji' }
@@ -1574,7 +1574,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_06a_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #FDA085, #F6D365)' },
-    order: 43,
+    order: 65,
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'three_paths' }
@@ -1599,7 +1599,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_06b_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #F093FB, #F5576C)' },
-    order: 44,
+    order: 66,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'monster' }
@@ -1624,7 +1624,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_07_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #0cebeb, #20e3b2)' },
-    order: 45,
+    order: 67,
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'treasure' }
@@ -1649,7 +1649,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_08_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #a1c4fd, #c2e9fb)' },
-    order: 46,
+    order: 68,
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'omikuji' }
@@ -1674,7 +1674,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_09a_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #FDC830, #F37335)' },
-    order: 47,
+    order: 69,
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'three_paths' }
@@ -1699,7 +1699,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_09b_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #FF512F, #F09819)' },
-    order: 48,
+    order: 70,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'monster' }
@@ -1724,7 +1724,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_09c_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #c0392b, #8e44ad)' },
-    order: 49,
+    order: 71,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'treasure' }
@@ -1749,7 +1749,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_09d_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #eb3349, #f45c43)' },
-    order: 50,
+    order: 72,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'omikuji' },
@@ -1778,7 +1778,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_10a_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #0077B6, #0096C7)' },
-    order: 51,
+    order: 73,
     freeToPlay: false,
     events: [
       { triggerAt: 6, type: 'omikuji' }
@@ -1804,7 +1804,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_10b_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #0096C7, #00B4D8)' },
-    order: 52,
+    order: 74,
     freeToPlay: false,
     events: [
       { triggerAt: 6, type: 'three_paths' }
@@ -1830,7 +1830,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_10c_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #00B4D8, #48CAE4)' },
-    order: 53,
+    order: 75,
     freeToPlay: false,
     events: [
       { triggerAt: 6, type: 'monster' }
@@ -1856,7 +1856,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_10d_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #48CAE4, #90E0EF)' },
-    order: 54,
+    order: 76,
     freeToPlay: false,
     events: [
       { triggerAt: 6, type: 'treasure' }
@@ -1882,7 +1882,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_10e_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #023E8A, #0077B6)' },
-    order: 55,
+    order: 77,
     freeToPlay: false,
     events: [
       { triggerAt: 6, type: 'omikuji' }
@@ -1908,7 +1908,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_10f_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #03045E, #023E8A)' },
-    order: 56,
+    order: 78,
     freeToPlay: false,
     events: [
       { triggerAt: 6, type: 'monster' }
@@ -1934,7 +1934,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_10g_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #240046, #03045E)' },
-    order: 57,
+    order: 79,
     freeToPlay: false,
     events: [
       { triggerAt: 6, type: 'three_paths' }
@@ -1960,7 +1960,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_10h_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #10002B, #240046)' },
-    order: 58,
+    order: 80,
     freeToPlay: false,
     events: [
       { triggerAt: 6, type: 'monster' }
@@ -1986,7 +1986,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_10i_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #C77DFF, #7B2FBE)' },
-    order: 59,
+    order: 81,
     freeToPlay: false,
     events: [
       { triggerAt: 6, type: 'treasure' }
@@ -2012,7 +2012,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_10j_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #7B2FBE, #5A189A)' },
-    order: 60,
+    order: 82,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'monster' }
@@ -2038,7 +2038,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_10k_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #3C096C, #10002B)' },
-    order: 61,
+    order: 83,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'omikuji' },
@@ -2066,7 +2066,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_11_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #0f0c29, #302b63)' },
-    order: 62,
+    order: 84,
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'three_paths' }
@@ -2091,7 +2091,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_12_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #24243e, #302b63)' },
-    order: 63,
+    order: 85,
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'monster' }
@@ -2116,7 +2116,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_12b_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #1a1a2e, #16213e)' },
-    order: 64,
+    order: 86,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'treasure' }
@@ -2142,7 +2142,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_13a_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #0f3460, #16213e)' },
-    order: 65,
+    order: 87,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'omikuji' }
@@ -2168,7 +2168,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_13b_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #000428, #004e92)' },
-    order: 66,
+    order: 88,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'monster' }
@@ -2194,7 +2194,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_13c_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #0a3d62, #1e3799)' },
-    order: 67,
+    order: 89,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'treasure' }
@@ -2220,7 +2220,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_14a_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #192a56, #273c75)' },
-    order: 68,
+    order: 90,
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'three_paths' }
@@ -2246,7 +2246,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_14b_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #0c2461, #1e3799)' },
-    order: 69,
+    order: 91,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'monster' }
@@ -2272,7 +2272,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_14c_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #1B1464, #2C3E50)' },
-    order: 70,
+    order: 92,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'omikuji' }
@@ -2298,7 +2298,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_14d_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #0f0c29, #1B1464)' },
-    order: 71,
+    order: 93,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'monster' }
@@ -2324,7 +2324,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_14e_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #1a0533, #0f0c29)' },
-    order: 72,
+    order: 94,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'treasure' },
@@ -2352,7 +2352,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_15a_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #005c97, #363795)' },
-    order: 73,
+    order: 95,
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'omikuji' }
@@ -2377,7 +2377,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_15b_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #1e3c72, #2a5298)' },
-    order: 74,
+    order: 96,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'three_paths' }
@@ -2402,7 +2402,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_15c_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #0a0a2a, #1e3c72)' },
-    order: 75,
+    order: 97,
     freeToPlay: false,
     events: [
       { triggerAt: 10, type: 'monster' }
@@ -2427,7 +2427,7 @@ export const WORLDS = [
       iconLocked: 'assets/icons/worlds/m2_15d_locked.png'
     },
     theme: { gradient: 'linear-gradient(135deg, #FDC830, #F37335)' },
-    order: 76,
+    order: 98,
     freeToPlay: false,
     events: [
       { triggerAt: 8, type: 'monster' },

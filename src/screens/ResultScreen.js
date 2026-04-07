@@ -441,8 +441,8 @@ class ResultScreen {
 
     // フラッシュモード解放チェック（九九ワールドの初クリア時）
     if (cleared && worldId && Config.FEATURES.ENABLE_FLASH_MODE) {
-      const flashIds = Config.GRADE2.FLASH_MODE.ENABLED_WORLD_IDS;
-      if (flashIds.includes(worldId)) {
+      const flashIds = Config.GRADE2?.FLASH_MODE?.ENABLED_WORLD_IDS;
+      if (flashIds && flashIds.includes(worldId)) {
         const unlocked = GameStore.getState('ship.flashUnlockedWorlds') ?? [];
         if (!unlocked.includes(worldId)) {
           GameStore.setState('ship.flashUnlockedWorlds', [...unlocked, worldId]);
