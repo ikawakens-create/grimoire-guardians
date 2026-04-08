@@ -168,6 +168,8 @@ export class CraftsmanScreen {
     this._skinCategory = 'cool'; // 現在のスキンカテゴリー
     this._selectedSkin = null;   // 選択中スキンID
     this._craftMsg = null;       // クラフト結果メッセージ
+    this._dialogueTimer = null;  // セリフローテーション用インターバル
+    this._craftTimers = [];      // クラフト儀式タイマー群
   }
 
   // ─────────────────────────────────────────────
@@ -183,13 +185,26 @@ export class CraftsmanScreen {
       this._category = 'garden';
     }
 
-    this._dialogue = this._getDialogue('idle');
+    this._dialogue = this._buildWelcomeDialogue();
     this._render();
+
+    // NPCエリアにスライドインアニメを付与
+    setTimeout(() => {
+      this._element?.querySelector('.craftsman-left')?.classList.add('slide-in-left');
+    }, 50);
+
+    // セリフローテーション開始
+    this._startDialogueRotation();
+
     Logger.info('[CraftsmanScreen] 表示: npc=' + this._npc);
   }
 
   hide() {
     if (this._unsubscribe) { this._unsubscribe(); this._unsubscribe = null; }
+    if (this._dialogueTimer) { clearInterval(this._dialogueTimer); this._dialogueTimer = null; }
+    this._craftTimers.forEach(t => clearTimeout(t));
+    this._craftTimers = [];
+    this._isCrafting = false;
     GameStore.setState('app.craftsmanMode', null);
     GameStore.setState('app.craftsmanTarget', null);
     if (this._element) { this._element.remove(); this._element = null; }
@@ -214,6 +229,7 @@ export class CraftsmanScreen {
             ? this._renderTailorTab()
             : this._renderTailorLocked())
         : `
+          ${this._renderHeroZone()}
           ${this._renderCategoryTabs()}
           <div class="craftsman-content">
             <div class="craft-item-list">${this._renderItemList(materials, house)}</div>
@@ -238,11 +254,12 @@ export class CraftsmanScreen {
             ${this._renderNpcSelector()}
             <!-- NPC アバター + ふきだし -->
             ${this._renderNpcPanel(npcData)}
-            <!-- 素材チップ -->
-            <div class="facility-mat-chips">
-              ${['wood','stone','brick','gem','star_fragment']
-                .map(id => `<span class="mat-chip">${MATERIAL_EMOJI[id]}${materials[id]||0}</span>`)
-                .join('')}
+            <!-- 素材カード -->
+            <div class="facility-mat-cards">
+              ${['wood','stone','brick','gem','star_fragment'].map(id => {
+                const amt = materials[id] || 0;
+                return `<div class="mat-card${amt === 0 ? ' mat-empty' : ''}"><span class="mat-card-emoji">${MATERIAL_EMOJI[id]}</span><span class="mat-card-count">${amt}</span></div>`;
+              }).join('')}
             </div>
           </aside>
 
@@ -260,7 +277,6 @@ export class CraftsmanScreen {
           </div>
         </div>
 
-        ${this._isCrafting ? this._renderCraftingAnimation() : ''}
       </div>
     `;
     this._element = _tmp.firstElementChild;
@@ -299,7 +315,7 @@ export class CraftsmanScreen {
       <div class="npc-panel">
         <div class="facility-npc-wrap">
           <div class="npc-avatar facility-npc-avatar">
-            <img src="${npcData.image}" alt="${npcData.name}"
+            <img src="${npcData.image}" alt="${npcData.name}" class="craft-npc-img"
                  onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
             <div class="npc-emoji-fallback" style="display:none">${npcData.emoji}</div>
           </div>
@@ -402,6 +418,7 @@ export class CraftsmanScreen {
     return `
       <div class="tailor-tab">
         ${msgHtml}
+        ${this._renderHeroZone()}
         <div class="tailor-stats">
           🎭 コレクション: ${stats.unlocked}/${stats.total} (${stats.completion}%)
         </div>
@@ -843,6 +860,271 @@ export class CraftsmanScreen {
   }
 
   // ─────────────────────────────────────────────
+  // ウェルカム演出・セリフローテーション
+  // ─────────────────────────────────────────────
+
+  _startDialogueRotation() {
+    if (this._dialogueTimer) { clearInterval(this._dialogueTimer); this._dialogueTimer = null; }
+    this._dialogueTimer = setInterval(() => {
+      if (this._isCrafting) return;
+      this._dialogue = this._getDialogue('idle');
+      const bubble = this._element?.querySelector('.npc-dialogue');
+      if (bubble) bubble.textContent = this._dialogue;
+    }, 3500);
+  }
+
+  _buildWelcomeDialogue() {
+    const name = GameStore.getState('player.name') || 'きみ';
+    if (this._npc === NPC.MEISTER) {
+      const craftables = this._findCraftableItems();
+      if (craftables.length > 0) {
+        return `${name}！いいとこに来た！${craftables[0].name}が作れるぞ！`;
+      }
+      const almost = this._findAlmostCraftableItem();
+      if (almost) {
+        const { missing } = HouseManager.checkCraftable(almost.id);
+        const parts = Object.entries(missing).slice(0, 2)
+          .map(([m, n]) => `${MATERIAL_EMOJI[m]}×${n}`).join(' ');
+        return `${name}！もう少しだ！あと${parts}で${almost.name}が作れる！`;
+      }
+    } else if (this._npc === NPC.TAILOR) {
+      const craftables = this._findCraftableSkins();
+      if (craftables.length > 0) {
+        return `${name}！いいとこに来た！${craftables[0].name}が作れるよ！！`;
+      }
+    }
+    return this._getDialogue('idle');
+  }
+
+  _findCraftableItems() {
+    const crafted = (GameStore.getState('house') || {}).crafted || [];
+    const result = [];
+    for (const cat of MEISTER_CATEGORIES) {
+      for (const item of cat.items()) {
+        if (crafted.includes(item.id)) continue;
+        if (!HouseManager.isSectionUnlocked(item.section)) continue;
+        const { craftable } = HouseManager.checkCraftable(item.id);
+        if (craftable) result.push(item);
+      }
+    }
+    return result;
+  }
+
+  _findAlmostCraftableItem() {
+    const crafted = (GameStore.getState('house') || {}).crafted || [];
+    const materials = GameStore.getState('inventory.materials') || {};
+    let best = null, bestRatio = 0;
+    for (const cat of MEISTER_CATEGORIES) {
+      for (const item of cat.items()) {
+        if (crafted.includes(item.id) || !item.recipe) continue;
+        if (!HouseManager.isSectionUnlocked(item.section)) continue;
+        const entries = Object.entries(item.recipe);
+        if (!entries.length) continue;
+        let total = 0, have = 0;
+        for (const [mat, req] of entries) {
+          total += req;
+          have += Math.min(materials[mat] || 0, req);
+        }
+        const ratio = total ? have / total : 0;
+        if (ratio > bestRatio && ratio < 1) { bestRatio = ratio; best = item; }
+      }
+    }
+    return best;
+  }
+
+  _findCraftableSkins() {
+    return COLLECTIBLE_SKINS.filter(skin => {
+      if (SkinManager.isUnlocked(skin.id)) return false;
+      if (skin.obtain?.method !== SKIN_OBTAIN.CRAFT) return false;
+      return SkinManager.canCraft(skin.id).craftable;
+    });
+  }
+
+  // ─────────────────────────────────────────────
+  // 「いまつくれる！」ヒーローゾーン
+  // ─────────────────────────────────────────────
+
+  _renderHeroZone() {
+    const isTailor  = this._npc === NPC.TAILOR;
+    const craftables = isTailor ? this._findCraftableSkins() : this._findCraftableItems();
+
+    if (craftables.length === 0) {
+      if (isTailor) return '';
+      const almost = this._findAlmostCraftableItem();
+      if (!almost) return '';
+      const { missing } = HouseManager.checkCraftable(almost.id);
+      const missingStr = Object.entries(missing)
+        .map(([m, n]) => `${MATERIAL_EMOJI[m]}×${n}`).join(' ');
+      return `
+        <div class="craftable-hero almost-zone">
+          <p class="hero-label">⏳ あとすこし！</p>
+          <div class="hero-almost-item">
+            <span class="hero-item-big-emoji">${almost.imageFallback}</span>
+            <div class="hero-almost-info">
+              <span class="hero-item-name">${almost.name}</span>
+              <span class="hero-item-missing">あと ${missingStr}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    const cards = craftables.slice(0, 3).map(item => {
+      const emoji    = isTailor ? item.emoji : item.imageFallback;
+      const dataAttr = isTailor
+        ? `data-skin-id="${item.id}"`
+        : `data-item-id="${item.id}"`;
+      const extraCls = isTailor ? '' : 'craft-item-card';
+      return `
+        <div class="hero-item-card ${extraCls} glow-pulse" ${dataAttr} role="button" tabindex="0">
+          <span class="hero-item-big-emoji">${emoji}</span>
+          <span class="hero-item-name">${item.name}</span>
+          <span class="hero-craft-badge">✨ つくれる！</span>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="craftable-hero">
+        <p class="hero-label">✨ いまつくれる！</p>
+        <div class="hero-cards">${cards}</div>
+      </div>
+    `;
+  }
+
+  // ─────────────────────────────────────────────
+  // クラフトの儀式 + リビール演出
+  // ─────────────────────────────────────────────
+
+  _startCraftRitual(type, itemId) {
+    if (this._isCrafting) return;
+    this._isCrafting = true;
+
+    // セリフローテーションを一時停止
+    if (this._dialogueTimer) { clearInterval(this._dialogueTimer); this._dialogueTimer = null; }
+
+    const updateBubble = (text) => {
+      this._dialogue = text;
+      const bubble = this._element?.querySelector('.npc-dialogue');
+      if (!bubble) return;
+      bubble.textContent = text;
+      bubble.classList.remove('bounce');
+      void bubble.offsetWidth;
+      bubble.classList.add('bounce');
+    };
+
+    updateBubble('よし！はじめるぞ！');
+    const t1 = setTimeout(() => updateBubble('いち！'), 600);
+    const t2 = setTimeout(() => updateBubble('に！'), 1200);
+    const t3 = setTimeout(() => {
+      updateBubble('さん！できた！！！');
+      SoundManager.playSFX(SoundType.CORRECT);
+      const avatar = this._element?.querySelector('.facility-npc-avatar');
+      if (avatar) {
+        avatar.classList.remove('bounce');
+        void avatar.offsetWidth;
+        avatar.classList.add('bounce');
+      }
+    }, 1800);
+
+    const t4 = setTimeout(() => {
+      this._isCrafting = false;
+      if (type === 'item') {
+        const result = HouseManager.craft(itemId);
+        if (result.success) {
+          const item = getItemById(itemId);
+          this._showCraftReveal('item', item, () => {
+            this._dialogue = this._getDialogue('craftSuccess');
+            this._showShipPartToast(itemId);
+            this._render();
+            this._startDialogueRotation();
+          });
+        } else {
+          this._dialogue = result.reason?.includes('済み')
+            ? this._getDialogue('alreadyCrafted')
+            : this._getDialogue('craftFail');
+          this._render();
+          this._startDialogueRotation();
+        }
+      } else if (type === 'skin') {
+        const result = SkinManager.craft(itemId);
+        if (result.success) {
+          const skin = COLLECTIBLE_SKINS.find(s => s.id === itemId);
+          this._showCraftReveal('skin', skin, () => {
+            this._showUnlockModal(
+              skin,
+              () => { SkinManager.equip(itemId); GameStore.setState('app.currentScreen', 'wardrobe'); },
+              () => {
+                this._selectedSkin = itemId;
+                this._craftMsg = null;
+                this._render();
+                this._startDialogueRotation();
+              }
+            );
+          });
+        } else {
+          this._craftMsg = `❌ ${result.reason}`;
+          this._dialogue = this._getDialogue('craftFail');
+          this._render();
+          this._startDialogueRotation();
+        }
+      }
+      Logger.info(`[CraftsmanScreen] クラフト儀式完了: type=${type} id=${itemId}`);
+    }, 2400);
+
+    this._craftTimers.push(t1, t2, t3, t4);
+  }
+
+  _showCraftReveal(type, item, onDone) {
+    const overlay = document.createElement('div');
+    overlay.className = `craft-reveal-overlay${type === 'skin' ? ' reveal-dark' : ''}`;
+
+    const inner = document.createElement('div');
+    inner.className = 'craft-reveal-inner';
+
+    if (type === 'skin' && item?.image) {
+      const img = document.createElement('img');
+      img.src = item.image;
+      img.alt = item.name || '';
+      img.className = 'craft-reveal-skin-img';
+      img.onerror = () => { img.style.display = 'none'; emojiEl.style.display = 'block'; };
+      inner.appendChild(img);
+    }
+
+    const emojiEl = document.createElement('span');
+    emojiEl.className = 'craft-reveal-emoji';
+    emojiEl.textContent = (type === 'skin' ? item?.emoji : item?.imageFallback) || '✨';
+    if (type === 'skin' && item?.image) emojiEl.style.display = 'none';
+    inner.appendChild(emojiEl);
+
+    const nameEl = document.createElement('p');
+    nameEl.className = 'craft-reveal-name';
+    nameEl.textContent = item?.name || '';
+    inner.appendChild(nameEl);
+
+    const sparks = document.createElement('div');
+    sparks.className = 'craft-reveal-sparks';
+    sparks.innerHTML = '<span>✨</span><span>⭐</span><span>💫</span><span>✨</span>';
+    inner.appendChild(sparks);
+
+    overlay.appendChild(inner);
+    this._container.appendChild(overlay);
+
+    // scale(0) → scale(1) アニメを次フレームで発火
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      inner.classList.add('reveal-show');
+    }));
+
+    const duration = type === 'skin' ? 1800 : 1200;
+    const t = setTimeout(() => {
+      overlay.style.transition = 'opacity 0.3s';
+      overlay.style.opacity = '0';
+      setTimeout(() => { overlay.remove(); onDone(); }, 300);
+    }, duration);
+    this._craftTimers.push(t);
+  }
+
+  // ─────────────────────────────────────────────
   // イベントバインド
   // ─────────────────────────────────────────────
 
@@ -949,34 +1231,7 @@ export class CraftsmanScreen {
     this._container.querySelector('.tailor-craft-btn')?.addEventListener('click', () => {
       const id = this._container.querySelector('.tailor-craft-btn')?.dataset.skinId;
       if (!id) return;
-      const result = SkinManager.craft(id);
-      if (result.success) {
-        this._dialogue = this._getDialogue('craftSuccess');
-        const skin = COLLECTIBLE_SKINS.find(s => s.id === id);
-        this._showUnlockModal(
-          skin,
-          // 「きがえる！」→ wardrobe に即移動
-          () => {
-            SkinManager.equip(id);
-            GameStore.setState('app.currentScreen', 'wardrobe');
-          },
-          // 「あとで」→ テイラータブを再描画 + sparkle
-          () => {
-            this._selectedSkin = id;
-            this._craftMsg = null;
-            this._render();
-            setTimeout(() => {
-              this._container
-                .querySelector(`.craft-item-card[data-skin-id="${id}"]`)
-                ?.classList.add('sparkle-effect');
-            }, 50);
-          }
-        );
-      } else {
-        this._craftMsg = `❌ ${result.reason}`;
-        this._dialogue = this._getDialogue('craftFail');
-        this._render();
-      }
+      this._startCraftRitual('skin', id);
     });
 
     // スキン装備ボタン
@@ -993,30 +1248,7 @@ export class CraftsmanScreen {
   // ─────────────────────────────────────────────
 
   _doCraft(itemId) {
-    if (this._isCrafting) return;
-    this._isCrafting = true;
-    this._render();
-
-    // クラフトアニメーション（Config.HOUSE.CRAFT_ANIM_DURATIONms）
-    const duration = Config.HOUSE?.CRAFT_ANIM_DURATION || 1200;
-
-    setTimeout(() => {
-      this._isCrafting = false;
-      const result = HouseManager.craft(itemId);
-
-      if (result.success) {
-        this._dialogue = this._getDialogue('craftSuccess');
-        // 船パーツが完成した時に「マイふねに装備できるよ！」トーストを表示
-        this._showShipPartToast(itemId);
-      } else if (result.reason?.includes('済み')) {
-        this._dialogue = this._getDialogue('alreadyCrafted');
-      } else {
-        this._dialogue = this._getDialogue('craftFail');
-      }
-
-      this._render();
-      Logger.info(`[CraftsmanScreen] クラフト: ${itemId} → ${result.success}`);
-    }, duration);
+    this._startCraftRitual('item', itemId);
   }
 
   // ─────────────────────────────────────────────

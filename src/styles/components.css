@@ -3394,6 +3394,89 @@
 .tailor-locked-body  { font-size: 0.85rem; color: rgba(255,255,255,0.6); margin: 0; line-height: 1.6; }
 .tailor-preview-items { font-size: 2rem; letter-spacing: 8px; }
 
+/* ── 素材カード（facility-mat-cards） ── */
+.facility-mat-cards {
+  display: flex; gap: 4px; flex-wrap: wrap;
+  padding: 8px 4px; margin-top: auto; justify-content: center;
+}
+.mat-card {
+  display: flex; flex-direction: column; align-items: center;
+  width: 52px; padding: 4px 2px;
+  background: rgba(255,255,255,0.85); border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+}
+.mat-card.mat-empty { opacity: 0.35; }
+.mat-card-emoji { font-size: 1.4rem; line-height: 1; }
+.mat-card-count { font-size: 0.85rem; font-weight: 800; color: #333; margin-top: 2px; }
+
+/* ── ヒーローゾーン（craftable-hero） ── */
+.craftable-hero {
+  margin: 6px 10px 0;
+  background: linear-gradient(135deg, rgba(255,220,60,0.18), rgba(255,180,0,0.10));
+  border: 2px solid rgba(255,200,0,0.5);
+  border-radius: 16px; padding: 8px 10px;
+}
+.craftable-hero.almost-zone {
+  background: linear-gradient(135deg, rgba(120,180,255,0.15), rgba(80,140,255,0.08));
+  border-color: rgba(100,160,255,0.4);
+}
+.hero-label {
+  font-size: 0.78rem; font-weight: 800; color: #b8820a;
+  margin: 0 0 6px; text-align: center; letter-spacing: 0.04em;
+}
+.almost-zone .hero-label { color: #4a7bc8; }
+.hero-cards { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.hero-item-card {
+  display: flex; flex-direction: column; align-items: center;
+  background: rgba(255,255,255,0.9); border-radius: 12px;
+  padding: 8px 10px; min-width: 70px; cursor: pointer;
+  border: 2px solid rgba(255,200,0,0.6);
+  box-shadow: 0 2px 8px rgba(255,180,0,0.2);
+}
+.hero-item-card:active { transform: scale(0.95); }
+.hero-item-big-emoji { font-size: 2rem; line-height: 1; }
+.hero-item-name { font-size: 0.65rem; font-weight: 700; color: #333; margin-top: 3px; text-align: center; }
+.hero-craft-badge {
+  font-size: 0.6rem; color: #b8820a; font-weight: 800; margin-top: 2px;
+}
+.hero-almost-item {
+  display: flex; align-items: center; gap: 10px; justify-content: center;
+}
+.hero-almost-info { display: flex; flex-direction: column; gap: 2px; }
+.hero-item-missing { font-size: 0.68rem; color: #4a7bc8; font-weight: 700; }
+
+/* ── クラフトリビールオーバーレイ ── */
+.craft-reveal-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(255,255,255,0.85);
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+}
+.craft-reveal-overlay.reveal-dark {
+  background: rgba(20,10,40,0.82);
+}
+.craft-reveal-inner {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  transform: scale(0);
+  transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1);
+}
+.craft-reveal-inner.reveal-show { transform: scale(1); }
+.craft-reveal-skin-img {
+  width: 200px; height: 200px; object-fit: contain;
+  filter: drop-shadow(0 0 24px rgba(255,220,80,0.9));
+}
+.craft-reveal-emoji { font-size: 5rem; line-height: 1; }
+.craft-reveal-name {
+  font-size: 1.1rem; font-weight: 800; color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  margin: 0;
+}
+.craft-reveal-overlay:not(.reveal-dark) .craft-reveal-name { color: #333; text-shadow: none; }
+.craft-reveal-sparks {
+  display: flex; gap: 8px; font-size: 1.5rem;
+  animation: bounce 0.6s ease infinite alternate;
+}
+
 /* 合成屋ボタン（ブックシェルフ） */
 .bookshelf-craftsman-btn {
   background: linear-gradient(135deg, #c87941, #8b5a2b);
@@ -3470,17 +3553,18 @@
 /* NPC アバターラッパー */
 .facility-npc-wrap { text-align: center; }
 .facility-npc-avatar {
-  width: 96px; height: 96px;
-  border-radius: 50%;
-  border: 3px solid var(--fac-color, #6c3fd6);
-  background: #fff;
+  width: 140px; height: 156px;
+  border-radius: 16px;
+  border: 2px solid var(--fac-color, #6c3fd6);
+  background: var(--npc-bg, rgba(200,121,65,0.08));
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
   margin: 0 auto 6px;
   font-size: 3.5rem;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
 }
-.facility-npc-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.facility-npc-avatar img { width: 100%; height: 100%; object-fit: contain; }
+.craft-npc-img { animation: float 3s ease-in-out infinite; }
 .facility-npc-name {
   font-size: 0.8rem; font-weight: 700;
   color: var(--fac-color, #6c3fd6);
