@@ -1000,6 +1000,13 @@ export class CraftsmanScreen {
     if (this._isCrafting) return;
     this._isCrafting = true;
 
+    // ボタンを即座に無効化してフィードバック
+    const craftBtn = this._element?.querySelector('.tailor-craft-btn, .craft-do-btn');
+    if (craftBtn) {
+      craftBtn.disabled = true;
+      craftBtn.innerHTML = '✨ クラフト中！';
+    }
+
     // セリフローテーションを一時停止
     if (this._dialogueTimer) { clearInterval(this._dialogueTimer); this._dialogueTimer = null; }
 

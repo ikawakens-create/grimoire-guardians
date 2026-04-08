@@ -3236,6 +3236,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  position: relative; /* 詳細パネルのabsolute配置基準 */
 }
 .craft-item-list {
   flex: 1;
@@ -3317,16 +3318,20 @@
 .badge-missing   { background: rgba(220,60,60,0.2); color: #ffaaaa; font-size: 0.52rem; }
 .badge-section   { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.4); }
 
-/* 詳細パネル */
+/* 詳細パネル — ボトムシートとして常に最前面に表示 */
 .craft-detail-panel {
-  flex-shrink: 0;
-  padding: 10px 14px;
-  background: rgba(255,255,255,0.9);
-  border-top: 2px solid rgba(0,0,0,0.08);
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  z-index: 20;
+  padding: 12px 16px 14px;
+  background: rgba(255,255,255,0.97);
+  border-top: 2px solid rgba(0,0,0,0.10);
+  border-radius: 16px 16px 0 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.07);
+  gap: 10px;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.13);
+  animation: slide-in-up 0.22s ease;
 }
 .detail-header { display: flex; align-items: center; gap: 10px; }
 .detail-big-emoji { font-size: 2rem; }
@@ -3346,6 +3351,18 @@
 .recipe-chip.ok { background: rgba(72,187,120,0.15); color: #276749; }
 .recipe-chip.ng { background: rgba(229,62,62,0.12); color: #c53030; }
 .detail-recipe-free { font-size: 0.8rem; color: #276749; margin: 0; }
+
+/* 詳細パネル内のクラフト・配置ボタン — 大きく・目立つ */
+.tailor-craft-btn,
+.craft-do-btn,
+.craft-place-btn {
+  width: 100%;
+  min-height: 56px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  border-radius: 16px;
+}
 
 /* クラフト中アニメーション */
 .crafting-overlay {
