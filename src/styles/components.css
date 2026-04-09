@@ -6391,16 +6391,7 @@
   text-align: center;
 }
 
-.wardrobe-reaction-bubble {
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.25);
-  border-radius: 12px;
-  padding: 6px 12px;
-  font-size: 0.8rem;
-  text-align: center;
-  max-width: 200px;
-  min-height: 36px;
-}
+/* .wardrobe-reaction-bubble は wardrobe-reaction-section に統合 */
 
 .wardrobe-action-btn {
   min-width: 160px;
@@ -6430,13 +6421,7 @@
   font-size: 0.78rem;
 }
 
-.wardrobe-equip-effect {
-  font-size: 0.9rem;
-  text-align: center;
-  min-height: 1.4em;
-  color: #fde68a;
-  animation: slide-in-up 0.4s ease;
-}
+/* .wardrobe-equip-effect は wardrobe-equip-flash に統合 */
 
 /* ── グリッドパネル（右） ── */
 .wardrobe-grid-panel {
@@ -6536,6 +6521,100 @@
 
 .wardrobe-skin-card.previewing .card-badge { background: rgba(167,139,250,0.6); }
 .wardrobe-skin-card.equipped   .card-badge { background: rgba(52,211,153,0.6); }
+
+/* ── プレビューパネル カテゴリ背景グラデーション ── */
+.wardrobe-preview-panel[data-cat="cute"]   { background: linear-gradient(160deg, #4a1942 0%, #7c2f6c 100%); }
+.wardrobe-preview-panel[data-cat="cool"]   { background: linear-gradient(160deg, #0f2957 0%, #1e4d8c 100%); }
+.wardrobe-preview-panel[data-cat="funny"]  { background: linear-gradient(160deg, #5c2800 0%, #a04a00 100%); }
+.wardrobe-preview-panel[data-cat="secret"] { background: linear-gradient(160deg, #1a0a3d 0%, #3d1878 100%); }
+
+/* ── スキン名レアリティカラー ── */
+.wardrobe-skin-name[data-rarity="SUPER_RARE"] { color: #fde68a; text-shadow: 0 0 8px #f59e0b88; }
+.wardrobe-skin-name[data-rarity="RARE"]       { color: #c4b5fd; }
+
+/* ── プレビューパネル ポップイン演出 ── */
+@keyframes wardrobe-pop-in {
+  0%   { transform: scale(0.88); opacity: 0; }
+  70%  { transform: scale(1.04); opacity: 1; }
+  100% { transform: scale(1);    opacity: 1; }
+}
+.wardrobe-pop-in { animation: wardrobe-pop-in 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+/* ── リアクションプレビューセクション ── */
+.wardrobe-reaction-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0 4px;
+}
+
+.wardrobe-reaction-hint {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.02em;
+}
+
+/* ── リアクションボタン 2×2グリッド ── */
+.wardrobe-reaction-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  width: 100%;
+}
+
+.wardrobe-reaction-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 52px;
+  padding: 6px 4px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.12s ease;
+  touch-action: manipulation;
+}
+.wardrobe-reaction-btn:active { transform: scale(0.92); }
+
+.wardrobe-reaction-btn .wrb-emoji {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+.wardrobe-reaction-btn .wrb-label {
+  font-size: 0.62rem;
+  color: rgba(255,255,255,0.75);
+  white-space: nowrap;
+}
+
+/* 再生中 glow 演出 */
+@keyframes wrb-glow {
+  0%, 100% { box-shadow: 0 0 0px transparent; }
+  50%       { box-shadow: 0 0 10px 2px rgba(253,230,138,0.6); }
+}
+.wardrobe-reaction-btn.is-playing {
+  background: rgba(255,255,255,0.22);
+  animation: wrb-glow 0.6s ease 3;
+}
+
+/* ── 装備時全画面フラッシュ ── */
+@keyframes wardrobe-equip-flash {
+  0%   { opacity: 0.45; }
+  100% { opacity: 0; }
+}
+.wardrobe-equip-flash {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  pointer-events: none;
+  border-radius: inherit;
+  animation: wardrobe-equip-flash 0.5s ease forwards;
+}
 
 /* アニメーション無効化（debug-skip-animations クラス付与時） */
 body.debug-skip-animations *,

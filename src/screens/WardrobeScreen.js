@@ -19,6 +19,7 @@ import { GameStore } from '../core/GameStore.js';
 import { Config } from '../core/Config.js';
 import { SoundManager, SoundType } from '../core/SoundManager.js';
 import { SkinManager } from '../core/SkinManager.js';
+import { CharacterAvatar } from '../components/CharacterAvatar.js';
 import {
   SKINS, COLLECTIBLE_SKINS, SKIN_OBTAIN, SKIN_RARITY,
   RARITY_LABEL, FRAGMENTS_NEEDED, getSkinById,
@@ -26,11 +27,38 @@ import {
 
 // ─── カテゴリ定義 ──────────────────────────────────────────
 const CATEGORIES = [
-  { id: 'all',    label: 'すべて' },
+  { id: 'all',    label: 'すべて'     },
   { id: 'cool',   label: 'かっこいい' },
-  { id: 'cute',   label: 'かわいい' },
-  { id: 'funny',  label: 'おもしろ' },
-  { id: 'secret', label: 'ひみつ' },
+  { id: 'cute',   label: 'かわいい'   },
+  { id: 'funny',  label: 'おもしろ'   },
+  { id: 'secret', label: 'ひみつ'     },
+];
+
+// ─── リアクションプレビューボタン定義 ─────────────────────
+// fn(avatar, skin, playerName, streak) → void
+const REACTION_BTNS = [
+  {
+    emoji: '✨',
+    label: 'せいかい！',
+    fn: (av, sk) => av.victoryPose(sk.reactions?.correct),
+  },
+  {
+    emoji: '😅',
+    label: 'おしい！',
+    fn: (av, sk) => av.sadReact(sk.reactions?.wrong),
+  },
+  {
+    emoji: '🔥',
+    label: 'コンボ！',
+    fn: (av, sk) => av.startTalking(
+      sk.reactions?.combo3 ?? sk.reactions?.correct ?? '🔥', 1500
+    ),
+  },
+  {
+    emoji: '👋',
+    label: 'あいさつ',
+    fn: (av, _sk, name, streak) => av.greet(name, streak),
+  },
 ];
 
 // 素材絵文字
@@ -55,6 +83,12 @@ export class WardrobeScreen {
 
     /** @type {string} プレビュー中のスキンID（未確定） */
     this._previewId = SkinManager.getCurrentSkinId();
+
+    /** @type {CharacterAvatar|null} プレビューアバターインスタンス（使い回す） */
+    this._avatar = null;
+
+    /** @type {number|null} 自動greetの遅延タイマーID */
+    this._greetTimer = null;
   }
 
   // ─────────────────────────────────────────────
@@ -75,6 +109,12 @@ export class WardrobeScreen {
   }
 
   destroy() {
+    clearTimeout(this._greetTimer);
+    this._greetTimer = null;
+    if (this._avatar) {
+      this._avatar.stopTalking();
+      this._avatar = null;
+    }
     if (this._el) {
       this._el.remove();
       this._el = null;
@@ -127,30 +167,29 @@ export class WardrobeScreen {
     return body;
   }
 
-  /** 左カラム：キャラプレビュー + スキン情報 + アクションボタン */
+  /** 左カラム：CharacterAvatar プレビュー + スキン情報 + リアクションボタン + 装備ボタン */
   _buildPreviewPanel() {
-    const panel = document.createElement('div');
-    panel.className = 'wardrobe-preview-panel';
-
     const skin = getSkinById(this._previewId);
 
-    // キャラ画像（200px）
-    const imgWrap = document.createElement('div');
-    imgWrap.className = 'wardrobe-char-wrap';
+    const panel = document.createElement('div');
+    panel.className = 'wardrobe-preview-panel';
+    // カテゴリに応じた背景色クラスを付与（all は無指定）
+    if (skin.category) panel.dataset.cat = skin.category;
 
-    const img = document.createElement('img');
-    img.className = 'wardrobe-preview-img';
-    img.src = skin.image;
-    img.alt = skin.name;
-    img.addEventListener('error', () => {
-      imgWrap.innerHTML = `<span class="wardrobe-char-emoji">${skin.emoji}</span>`;
-    });
-    imgWrap.appendChild(img);
-    panel.appendChild(imgWrap);
+    // ─ アバター（CharacterAvatar xl・インスタンス初回生成 or 再利用）
+    const charWrap = document.createElement('div');
+    charWrap.className = 'wardrobe-char-wrap';
 
-    // スキン名・レアリティ
+    if (!this._avatar) {
+      this._avatar = new CharacterAvatar('xl', 'normal', { skinIdOverride: this._previewId });
+    }
+    charWrap.appendChild(this._avatar.render());
+    panel.appendChild(charWrap);
+
+    // ─ スキン名・レアリティ
     const nameEl = document.createElement('div');
     nameEl.className = 'wardrobe-skin-name';
+    nameEl.dataset.rarity = skin.rarity ?? '';
     nameEl.textContent = skin.name;
     panel.appendChild(nameEl);
 
@@ -159,13 +198,39 @@ export class WardrobeScreen {
     rarityEl.textContent = RARITY_LABEL[skin.rarity] ?? '';
     panel.appendChild(rarityEl);
 
-    // reactions.correct セリフ吹き出し
-    const bubbleEl = document.createElement('div');
-    bubbleEl.className = 'wardrobe-reaction-bubble';
-    bubbleEl.textContent = skin.reactions?.correct ?? skin.emoji;
-    panel.appendChild(bubbleEl);
+    // ─ リアクションプレビューボタン群
+    const reactionSection = document.createElement('div');
+    reactionSection.className = 'wardrobe-reaction-section';
 
-    // アクションボタン
+    const hint = document.createElement('div');
+    hint.className = 'wardrobe-reaction-hint';
+    hint.textContent = '👆 たたいてためしてみて！';
+    reactionSection.appendChild(hint);
+
+    const btnRow = document.createElement('div');
+    btnRow.className = 'wardrobe-reaction-btns';
+
+    REACTION_BTNS.forEach(def => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'wardrobe-reaction-btn';
+      btn.innerHTML = `<span class="wrb-emoji">${def.emoji}</span><span class="wrb-label">${def.label}</span>`;
+      btn.addEventListener('click', () => {
+        SoundManager.playSFX(SoundType.BUTTON_CLICK);
+        // 再生中はglow演出
+        btn.classList.add('is-playing');
+        setTimeout(() => btn.classList.remove('is-playing'), 1800);
+        const name   = GameStore.getState('player.name')   || 'プレイヤー';
+        const streak = GameStore.getState('player.streak') || 1;
+        def.fn(this._avatar, skin, name, streak);
+      });
+      btnRow.appendChild(btn);
+    });
+
+    reactionSection.appendChild(btnRow);
+    panel.appendChild(reactionSection);
+
+    // ─ 装備ボタン
     panel.appendChild(this._buildActionButton(this._previewId));
 
     return panel;
@@ -338,8 +403,21 @@ export class WardrobeScreen {
     if (this._previewId === skinId) return;
     SoundManager.playSFX(SoundType.BUTTON_CLICK);
     this._previewId = skinId;
+
+    // アバターをスキン切り替え（ポップイン演出は refresh() 内で CSS が担う）
+    if (this._avatar) this._avatar.updateSkin(skinId);
+
     this._refreshPreviewPanel();
     this._refreshGridCards();
+
+    // スキン選択直後に自動 greet（0.3秒後）
+    clearTimeout(this._greetTimer);
+    this._greetTimer = setTimeout(() => {
+      if (!this._avatar) return;
+      const name   = GameStore.getState('player.name')   || 'プレイヤー';
+      const streak = GameStore.getState('player.streak') || 1;
+      this._avatar.greet(name, streak);
+    }, 300);
   }
 
   /** きがえる！実行 */
@@ -354,34 +432,21 @@ export class WardrobeScreen {
     this._refreshGridCards();
   }
 
-  /** 装備時の軽い演出（sparkle + セリフ） */
+  /** 装備時の演出（victoryPose + 全画面フラッシュ） */
   _showEquipEffect() {
     if (!this._el) return;
-    const charWrap = this._el.querySelector('.wardrobe-char-wrap');
-    if (!charWrap) return;
 
-    // sparkle クラスを一時付与
-    charWrap.style.animation = 'none';
-    void charWrap.offsetHeight;
-    charWrap.style.animation = 'sparkle 0.6s ease';
-    setTimeout(() => {
-      if (charWrap) charWrap.style.animation = '';
-    }, 600);
+    // CharacterAvatar の victoryPose で bounce + セリフ
+    if (this._avatar) {
+      const skin = getSkinById(this._previewId);
+      this._avatar.victoryPose(skin.reactions?.correct);
+    }
 
-    // greet セリフを大きく表示
-    const skin = getSkinById(this._previewId);
-    const name = GameStore.getState('player.name') || 'プレイヤー';
-    const streak = GameStore.getState('player.streak') || 1;
-    const greet = skin.reactions?.greet
-      ?.replace('{name}', name)
-      .replace('{n}', String(streak))
-      ?? `${skin.reactions?.correct ?? '✨'}`;
-
+    // 全画面フラッシュ
     const flash = document.createElement('div');
-    flash.className = 'wardrobe-equip-effect';
-    flash.textContent = greet;
+    flash.className = 'wardrobe-equip-flash';
     this._el.appendChild(flash);
-    setTimeout(() => flash.remove(), 1500);
+    setTimeout(() => flash.remove(), 600);
   }
 
   // ─────────────────────────────────────────────
@@ -393,9 +458,10 @@ export class WardrobeScreen {
     if (!this._el) return;
     const old = this._el.querySelector('.wardrobe-preview-panel');
     if (!old) return;
+    // _avatar インスタンスは使い回すため、次の _buildPreviewPanel では
+    // this._avatar が非 null のまま render() だけ呼ばれる
     const next = this._buildPreviewPanel();
-    // slide-in 演出
-    next.style.animation = 'slide-in-left 0.2s ease';
+    next.classList.add('wardrobe-pop-in');
     old.replaceWith(next);
   }
 
