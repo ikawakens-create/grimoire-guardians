@@ -22,6 +22,7 @@
 import { SkinManager } from '../core/SkinManager.js';
 import { SoundManager } from '../core/SoundManager.js';
 import { Config } from '../core/Config.js';
+import { getSkinById } from '../data/skinItems.js';
 
 const SIZE_PX = { sm: 40, md: 80, lg: 120, xl: 200 };
 
@@ -30,15 +31,26 @@ export class CharacterAvatar {
    * @param {'sm'|'md'|'lg'|'xl'} size
    * @param {'normal'|'happy'|'sad'} [emotion='normal']
    */
-  constructor(size = 'md', emotion = 'normal') {
-    this._size      = size;
-    this._emotion   = emotion;
-    this._element   = null;
+  constructor(size = 'md', emotion = 'normal', { skinIdOverride = null } = {}) {
+    this._size           = size;
+    this._emotion        = emotion;
+    this._element        = null;
+    this._skinIdOverride = skinIdOverride;
 
     /** @type {number|null} 吹き出しタイマーID */
     this._talkTimer = null;
     /** @type {HTMLElement|null} 吹き出し要素（参照で確実クリーンアップ） */
     this._bubbleEl  = null;
+  }
+
+  /**
+   * プレビュー用スキンを差し替えてリフレッシュする。
+   * WardrobeScreen でプレビュー中スキンを変更するときに呼ぶ。
+   * @param {string} skinId
+   */
+  updateSkin(skinId) {
+    this._skinIdOverride = skinId;
+    this.refresh();
   }
 
   // ─────────────────────────────────────────────
@@ -51,7 +63,9 @@ export class CharacterAvatar {
    * @returns {HTMLElement}
    */
   render() {
-    const skin = SkinManager.getCurrentSkin();
+    const skin = this._skinIdOverride
+      ? (getSkinById(this._skinIdOverride) ?? SkinManager.getCurrentSkin())
+      : SkinManager.getCurrentSkin();
     const px   = SIZE_PX[this._size] || 80;
 
     const wrapper = document.createElement('div');
@@ -121,8 +135,10 @@ export class CharacterAvatar {
     if (!this._element) return;
     this._clearBubble();  // タイマーとバブルだけ消す（クラス操作なし）
 
-    // ゴニョゴニョSE（スキンの voiceFreq を使用）
-    const skin = SkinManager.getCurrentSkin();
+    // ゴニョゴニョSE（プレビュー中スキンの voiceFreq を使用）
+    const skin = this._skinIdOverride
+      ? (getSkinById(this._skinIdOverride) ?? SkinManager.getCurrentSkin())
+      : SkinManager.getCurrentSkin();
     SoundManager.playTalk(skin?.voiceFreq);
 
     // 吹き出し生成
