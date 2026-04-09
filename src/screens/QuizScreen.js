@@ -480,7 +480,7 @@ export class QuizScreen {
     // 時計タイプの場合はSVG時計を表示する
     const clockDisplayEl = this._el.querySelector('.quiz-clock-display');
     if (q.type === 'clock' && q.clockFace) {
-      clockDisplayEl.innerHTML = ClockFace.renderSVG(q.clockFace.hour, q.clockFace.minute, 170);
+      clockDisplayEl.innerHTML = ClockFace.renderSVG(q.clockFace.hour, q.clockFace.minute, 130);
       clockDisplayEl.classList.remove('hidden');
     } else {
       clockDisplayEl.innerHTML = '';
@@ -1152,64 +1152,92 @@ export class QuizScreen {
    * @param {number} count - 連続正解数
    */
   _triggerVictoryIfNeeded(count) {
-    if (count >= 5) {
-      this._showVictoryPose();
+    if (count === 5 || count === 10 || count >= 11) {
+      this._showComboReaction(count);
     }
   }
 
   /**
-   * キャラクターを画面中央に大きく登場させる victory 演出
+   * コンボ連続正解の右下キャラ演出（in-place、問題を隠さない）
+   * 5連・10連は節目、11連〜は毎回豪華さが上がっていく
    * @private
+   * @param {number} count - 連続正解数
    */
-  _showVictoryPose() {
+  _showComboReaction(count) {
     if (!this._el) return;
-
-    const reactions = Config.FEATURES.ENABLE_SKINS
-      ? SkinManager.getCurrentSkin()?.reactions
-      : null;
-    const line = reactions?.combo5 ?? 'すごい！5れんぞく！';
-
-    // 右下マスコットを一時的に非表示（重複防止）
     const mascot = this._el.querySelector('.quiz-mascot');
-    if (mascot) mascot.classList.add('hidden');
+    if (!mascot) return;
 
-    // victory overlay を生成
-    const overlay = document.createElement('div');
-    overlay.className = 'quiz-victory-overlay';
-    overlay.style.cssText = `
-      position: absolute; inset: 0;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      z-index: 6; pointer-events: none;
-    `;
+    // コンボ段階に応じた演出を決定
+    let label, bubbleClass, avatarAnim;
+    if (count >= 15) {
+      label = `${count}れんぞく！！💎`;
+      bubbleClass = 'combo-max';
+      avatarAnim = 'bounce 0.4s ease, sparkle 1.2s ease 0.2s';
+    } else if (count === 14) {
+      label = '14れんぞく！💥💥';
+      bubbleClass = 'combo-fire combo-fire-hot';
+      avatarAnim = 'bounce 0.4s ease, sparkle 1.0s ease 0.2s';
+    } else if (count === 13) {
+      label = '13れんぞく！🔥🔥🔥';
+      bubbleClass = 'combo-fire combo-fire-hot';
+      avatarAnim = 'bounce 0.4s ease, sparkle 1.0s ease 0.2s';
+    } else if (count === 12) {
+      label = '12れんぞく！🔥🔥';
+      bubbleClass = 'combo-fire';
+      avatarAnim = 'bounce 0.4s ease';
+    } else if (count === 11) {
+      label = '11れんぞく！🔥';
+      bubbleClass = 'combo-fire';
+      avatarAnim = 'bounce 0.4s ease';
+    } else if (count === 10) {
+      label = '10れんぞく！🌈';
+      bubbleClass = 'combo-rainbow';
+      avatarAnim = 'bounce 0.5s ease, sparkle 1.2s ease 0.3s';
+    } else { // count === 5
+      const reactions = Config.FEATURES.ENABLE_SKINS
+        ? SkinManager.getCurrentSkin()?.reactions
+        : null;
+      label = reactions?.combo5 ?? '5れんぞく！🌟';
+      bubbleClass = 'combo-gold';
+      avatarAnim = 'bounce 0.5s ease';
+    }
 
-    const avatarInst = new CharacterAvatar('xl');
-    const avatarEl   = avatarInst.render();
-    avatarEl.style.animation = 'bounce 0.5s ease, sparkle 1.2s ease 0.3s';
-    avatarEl.style.willChange = 'transform';
+    // マスコット消去タイマーをキャンセル（コンボバブル表示中は消さない）
+    if (this._mascotTimer) {
+      clearTimeout(this._mascotTimer);
+      this._mascotTimer = null;
+    }
+    mascot.classList.remove('hidden', 'mascot-exit');
 
+    // 既存コンボバブルを削除
+    mascot.querySelector('.quiz-combo-bubble')?.remove();
+
+    // コンボバブル生成（position: absolute で mascot の上に浮かぶ）
     const bubble = document.createElement('div');
-    bubble.className = 'mascot-bubble';
-    bubble.textContent = line;
-    bubble.style.cssText = `
-      animation: voice-bubble-in 0.3s ease 0.2s both;
-      font-size: 1.1rem; margin-top: 0.5rem;
-    `;
+    bubble.className = `quiz-combo-bubble ${bubbleClass}`;
+    bubble.textContent = label;
+    mascot.appendChild(bubble);
 
-    overlay.appendChild(avatarEl);
-    overlay.appendChild(bubble);
-    this._el.appendChild(overlay);
+    // アバターアニメーション
+    if (this._avatarEl) {
+      this._avatarEl.style.animation = 'none';
+      void this._avatarEl.offsetHeight;
+      this._avatarEl.style.animation = `${avatarAnim}, float 3s ease-in-out 1s infinite`;
+    }
 
-    // 1.8秒後にフェードアウト → 削除 → マスコット復元
+    // バブル自動消去後にマスコットを退場
+    const duration = count >= 10 ? 2000 : 1500;
+    if (this._victoryTimer) clearTimeout(this._victoryTimer);
     this._victoryTimer = setTimeout(() => {
-      overlay.style.transition = 'opacity 0.3s';
-      overlay.style.opacity = '0';
+      bubble.style.transition = 'opacity 0.3s';
+      bubble.style.opacity = '0';
       setTimeout(() => {
-        overlay.remove();
-        if (mascot && this._el) mascot.classList.remove('hidden');
+        bubble.remove();
+        if (mascot && this._el) mascot.classList.add('hidden');
         this._victoryTimer = null;
       }, 300);
-    }, 1800);
+    }, duration);
   }
 
   /**

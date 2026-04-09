@@ -824,6 +824,60 @@
 }
 
 /* ==========================================================================
+   Quiz Combo Bubble（コンボ連続正解バブル・右下マスコットの上に浮かぶ）
+   ========================================================================== */
+
+.quiz-combo-bubble {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  margin-bottom: 6px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: var(--font-size-md);
+  font-weight: 800;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 5;
+  animation: voice-bubble-in 0.3s ease both;
+  will-change: transform;
+}
+
+.quiz-combo-bubble.combo-gold {
+  background: linear-gradient(135deg, #ffd700, #ff8c00);
+  color: white;
+  box-shadow: 0 2px 12px rgba(255, 190, 0, 0.5);
+}
+
+.quiz-combo-bubble.combo-rainbow {
+  background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff);
+  color: white;
+  font-size: var(--font-size-lg);
+  box-shadow: 0 2px 16px rgba(77, 150, 255, 0.5);
+}
+
+.quiz-combo-bubble.combo-fire {
+  background: linear-gradient(135deg, #ff4500, #ff8c00, #ffd700);
+  color: white;
+  font-size: var(--font-size-lg);
+  box-shadow: 0 2px 16px rgba(255, 100, 0, 0.6);
+}
+
+.quiz-combo-bubble.combo-fire-hot {
+  font-size: var(--font-size-xl);
+  box-shadow: 0 4px 20px rgba(255, 69, 0, 0.8);
+  animation: voice-bubble-in 0.3s ease both, glow-pulse 0.7s ease-in-out infinite;
+}
+
+.quiz-combo-bubble.combo-max {
+  background: linear-gradient(135deg, #7c3aed, #4f46e5, #0ea5e9);
+  color: white;
+  font-size: var(--font-size-xl);
+  box-shadow: 0 4px 24px rgba(124, 58, 237, 0.7);
+  animation: voice-bubble-in 0.3s ease both, glow-pulse 0.6s ease-in-out infinite;
+}
+
+/* ==========================================================================
    Event Layer（イベントレイヤー）
    - #event-layer は #app の直下に常駐
    - .hidden クラスとの衝突を避けるため visibility ベースで表示制御
