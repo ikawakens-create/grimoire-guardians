@@ -1225,7 +1225,8 @@ export class CraftsmanScreen {
     });
 
     // スキンカードタップ（詳細表示）
-    this._container.querySelectorAll('[data-skin-id]').forEach(card => {
+    // :not(button) でアクションボタンを除外（craft/equipボタンも data-skin-id を持つため）
+    this._container.querySelectorAll('[data-skin-id]:not(button)').forEach(card => {
       card.addEventListener('click', () => {
         const id = card.dataset.skinId;
         this._selectedSkin = this._selectedSkin === id ? null : id;
@@ -1234,20 +1235,26 @@ export class CraftsmanScreen {
       });
     });
 
-    // スキンクラフトボタン
-    this._container.querySelector('.tailor-craft-btn')?.addEventListener('click', () => {
-      const id = this._container.querySelector('.tailor-craft-btn')?.dataset.skinId;
-      if (!id) return;
-      this._startCraftRitual('skin', id);
-    });
+    // スキンクラフトボタン（クロージャでID保持・DOM再クエリしない）
+    const craftBtn = this._container.querySelector('.tailor-craft-btn');
+    if (craftBtn) {
+      const skinId = craftBtn.dataset.skinId;
+      craftBtn.addEventListener('click', () => {
+        if (skinId) this._startCraftRitual('skin', skinId);
+      });
+    }
 
-    // スキン装備ボタン
-    this._container.querySelector('.tailor-equip-btn')?.addEventListener('click', () => {
-      const id = this._container.querySelector('.tailor-equip-btn')?.dataset.skinId;
-      if (!id) return;
-      SkinManager.equip(id);
-      GameStore.setState('app.currentScreen', 'wardrobe');
-    });
+    // スキン装備ボタン（同様にクロージャでID保持）
+    const equipBtn = this._container.querySelector('.tailor-equip-btn');
+    if (equipBtn) {
+      const skinId = equipBtn.dataset.skinId;
+      equipBtn.addEventListener('click', () => {
+        if (skinId) {
+          SkinManager.equip(skinId);
+          GameStore.setState('app.currentScreen', 'wardrobe');
+        }
+      });
+    }
   }
 
   // ─────────────────────────────────────────────
