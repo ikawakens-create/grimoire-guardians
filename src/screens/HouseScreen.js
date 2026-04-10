@@ -19,7 +19,7 @@ import { Config } from '../core/Config.js';
 import Logger from '../core/Logger.js';
 import { HouseManager } from '../core/HouseManager.js';
 import { getItemById } from '../data/houseItems.js';
-import { getStyleById } from '../data/styleItems.js';
+import { getStyleById, getSpriteLayerSpec } from '../data/styleItems.js';
 import { SoundManager, SoundType } from '../core/SoundManager.js';
 
 // ビューモード
@@ -275,14 +275,8 @@ export class HouseScreen {
    * @returns {string} HTML文字列
    */
   _renderVisualHouse(sections, layerStyles) {
-    // レイヤーごとのCSS切り取りパラメータ
-    const SPRITE_SPEC = {
-      tower:  { aspectW: 512, aspectH: 688, bgSize: '100% 300%', bgPos: '0% 0%'   },
-      floor3: { aspectW: 512, aspectH: 344, bgSize: '100% 600%', bgPos: '0% 40%'  },
-      floor2: { aspectW: 512, aspectH: 344, bgSize: '100% 600%', bgPos: '0% 60%'  },
-      floor1: { aspectW: 512, aspectH: 344, bgSize: '100% 600%', bgPos: '0% 80%'  },
-      garden: { aspectW: 512, aspectH: 344, bgSize: '100% 600%', bgPos: '0% 100%' },
-    };
+    // getSpriteLayerSpec() でティア別に動的計算（styleItems.js）
+    // Basic:1032px/3段, Special:1376px/4段, Legend:2064px/5段
 
     const layers = LAYER_ORDER_TOP.map(id => {
       const isUnlocked = id === 'floor1' || sections[id];
@@ -293,7 +287,11 @@ export class HouseScreen {
       const sheet   = style?.spritesheet;
       if (!sheet) return '';
 
-      const { aspectW, aspectH, bgSize, bgPos } = SPRITE_SPEC[id];
+      // このレイヤーがスタイルのspritesheetに含まれない場合はスキップ
+      const spec = getSpriteLayerSpec(style, id);
+      if (!spec) return '';
+
+      const { aspectW, aspectH, bgSize, bgPos } = spec;
       return `<div class="house-sprite-layer"
                    data-layer="${id}"
                    style="aspect-ratio:${aspectW}/${aspectH};background-image:url('${sheet}');background-size:${bgSize};background-position:${bgPos};"

@@ -26,7 +26,7 @@ import {
   GARDEN_ITEMS,
   RARITY,
 } from '../data/houseItems.js';
-import { HOUSE_STYLES, getStyleById } from '../data/styleItems.js';
+import { HOUSE_STYLES, getStyleById, getSpriteLayerSpec } from '../data/styleItems.js';
 
 // 素材絵文字マップ
 const MATERIAL_EMOJI = {
@@ -330,13 +330,19 @@ export class HouseBuildScreen {
       const unlockAt   = Config.HOUSE.STYLE_UNLOCK_WORLDS?.[style.id] ?? 0;
       const worldsLeft = Math.max(0, unlockAt - clearedWorlds);
 
+      // スプライト画像があればCSSスライスで実画像プレビュー、なければ色グラデーション
+      const spec = style.spritesheet ? getSpriteLayerSpec(style, this._selectedLayer) : null;
+      const previewStyle = spec
+        ? `background-image:url('${style.spritesheet}');background-size:${spec.bgSize};background-position:${spec.bgPos};`
+        : `background:linear-gradient(135deg,${style.color},${style.colorDark});`;
+
       return `
         <div class="style-card-v4 ${isCurrent ? 'is-current' : ''} ${!owned ? 'is-locked' : 'is-owned'} rarity-${style.tier || 'basic'}"
              data-style-id="${style.id}"
              style="--sc:${style.color};--sd:${style.colorDark};"
              role="button" tabindex="${owned ? '0' : '-1'}">
-          <div class="sc-preview" style="background:linear-gradient(135deg,${style.color},${style.colorDark})">
-            <span class="sc-emoji">${style.layerEmoji?.[this._selectedLayer] || style.emoji}</span>
+          <div class="sc-preview" style="${previewStyle}">
+            ${!spec ? `<span class="sc-emoji">${style.layerEmoji?.[this._selectedLayer] || style.emoji}</span>` : ''}
             ${isCurrent ? '<span class="sc-badge-now">いま</span>' : ''}
             ${!owned ? `<span class="sc-badge-lock">🔒 あと${worldsLeft}W</span>` : ''}
           </div>

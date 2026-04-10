@@ -58,6 +58,9 @@ export const HOUSE_STYLES = [
     },
     // スプライトシート（1枚のまま使用 — CSSで切り取り位置を指定）
     spritesheet: 'assets/houses/style_wood/spritesheet.png',
+    spritesheetWidth: 1024,
+    spritesheetHeight: 1032,
+    sections: ['tower', 'floor1', 'garden'],
   },
   {
     id: 'style_stone',
@@ -75,6 +78,9 @@ export const HOUSE_STYLES = [
       floor3: '🗿', tower: '⛰️', decoration: '✦',
     },
     spritesheet: 'assets/houses/style_stone/spritesheet.png',
+    spritesheetWidth: 1024,
+    spritesheetHeight: 1032,
+    sections: ['tower', 'floor1', 'garden'],
   },
   {
     id: 'style_brick',
@@ -92,6 +98,9 @@ export const HOUSE_STYLES = [
       floor3: '🏗️', tower: '🧱', decoration: '🏮',
     },
     spritesheet: 'assets/houses/style_brick/spritesheet.png',
+    spritesheetWidth: 1024,
+    spritesheetHeight: 1032,
+    sections: ['tower', 'floor1', 'garden'],
   },
   {
     id: 'style_bamboo',
@@ -109,6 +118,9 @@ export const HOUSE_STYLES = [
       floor3: '🪭', tower: '🎐', decoration: '🏮',
     },
     spritesheet: 'assets/houses/style_bamboo/spritesheet.png',
+    spritesheetWidth: 1024,
+    spritesheetHeight: 1032,
+    sections: ['tower', 'floor1', 'garden'],
   },
   {
     id: 'style_forest',
@@ -126,6 +138,9 @@ export const HOUSE_STYLES = [
       floor3: '🌳', tower: '🦋', decoration: '✨',
     },
     spritesheet: 'assets/houses/style_forest/spritesheet.png',
+    spritesheetWidth: 1024,
+    spritesheetHeight: 1032,
+    sections: ['tower', 'floor1', 'garden'],
   },
   // ─── スペシャル（中盤） ────────────────────────────
   {
@@ -145,6 +160,9 @@ export const HOUSE_STYLES = [
     },
     // スプライトシート（1枚のまま使用 — CSSで切り取り位置を指定）
     spritesheet: 'assets/houses/style_ice/spritesheet.png',
+    spritesheetWidth: 1024,
+    spritesheetHeight: 1376,
+    sections: ['tower', 'floor2', 'floor1', 'garden'],
   },
   {
     id: 'style_sakura',
@@ -162,6 +180,9 @@ export const HOUSE_STYLES = [
       floor3: '🌷', tower: '🌸', decoration: '🌸',
     },
     spritesheet: 'assets/houses/style_sakura/spritesheet.png',
+    spritesheetWidth: 1024,
+    spritesheetHeight: 1376,
+    sections: ['tower', 'floor2', 'floor1', 'garden'],
   },
   {
     id: 'style_candy',
@@ -179,6 +200,9 @@ export const HOUSE_STYLES = [
       floor3: '🍩', tower: '🍫', decoration: '🍭',
     },
     spritesheet: 'assets/houses/style_candy/spritesheet.png',
+    spritesheetWidth: 1024,
+    spritesheetHeight: 1376,
+    sections: ['tower', 'floor2', 'floor1', 'garden'],
   },
   {
     id: 'style_flame',
@@ -196,6 +220,9 @@ export const HOUSE_STYLES = [
       floor3: '💥', tower: '🕯️', decoration: '🔥',
     },
     spritesheet: 'assets/houses/style_flame/spritesheet.png',
+    spritesheetWidth: 1024,
+    spritesheetHeight: 1376,
+    sections: ['tower', 'floor2', 'floor1', 'garden'],
   },
   {
     id: 'style_sea',
@@ -213,6 +240,9 @@ export const HOUSE_STYLES = [
       floor3: '🐠', tower: '⚓', decoration: '🫧',
     },
     spritesheet: 'assets/houses/style_sea/spritesheet.png',
+    spritesheetWidth: 1024,
+    spritesheetHeight: 1376,
+    sections: ['tower', 'floor2', 'floor1', 'garden'],
   },
   // ─── レジェンド（後半・超希少） ────────────────────
   {
@@ -231,6 +261,9 @@ export const HOUSE_STYLES = [
       floor3: '💀', tower: '🔮', decoration: '💜',
     },
     spritesheet: 'assets/houses/style_black/spritesheet.png',
+    spritesheetWidth: 1024,
+    spritesheetHeight: 2064,
+    sections: ['tower', 'floor3', 'floor2', 'floor1', 'garden'],
   },
   {
     id: 'style_thunder',
@@ -248,6 +281,9 @@ export const HOUSE_STYLES = [
       floor3: '🌪️', tower: '☁️', decoration: '⚡',
     },
     spritesheet: 'assets/houses/style_thunder/spritesheet.png',
+    spritesheetWidth: 1024,
+    spritesheetHeight: 2064,
+    sections: ['tower', 'floor3', 'floor2', 'floor1', 'garden'],
   },
   {
     id: 'style_moon',
@@ -265,6 +301,9 @@ export const HOUSE_STYLES = [
       floor3: '✨', tower: '🌙', decoration: '🌟',
     },
     spritesheet: 'assets/houses/style_moon/spritesheet.png',
+    spritesheetWidth: 1024,
+    spritesheetHeight: 2064,
+    sections: ['tower', 'floor3', 'floor2', 'floor1', 'garden'],
   },
   {
     id: 'style_jewel',
@@ -282,6 +321,9 @@ export const HOUSE_STYLES = [
       floor3: '🔷', tower: '💎', decoration: '🌈',
     },
     spritesheet: 'assets/houses/style_jewel/spritesheet.png',
+    spritesheetWidth: 1024,
+    spritesheetHeight: 2064,
+    sections: ['tower', 'floor3', 'floor2', 'floor1', 'garden'],
   },
   {
     id: 'style_star',
@@ -299,6 +341,9 @@ export const HOUSE_STYLES = [
       floor3: '✨', tower: '🏆', decoration: '🌌',
     },
     spritesheet: 'assets/houses/style_star/spritesheet.png',
+    spritesheetWidth: 1024,
+    spritesheetHeight: 2064,
+    sections: ['tower', 'floor3', 'floor2', 'floor1', 'garden'],
   },
 ];
 
@@ -331,4 +376,45 @@ export function getNextStyleToUnlock(clearedCount) {
     .sort((a, b) => a.unlockWorld - b.unlockWorld);
   if (!locked.length) return null;
   return { style: locked[0], remaining: locked[0].unlockWorld - clearedCount };
+}
+
+/**
+ * スプライトシートの1レイヤー分のCSS背景プロパティを計算する
+ *
+ * Basic  (1032px, 3段): tower/floor1/garden
+ * Special(1376px, 4段): tower/floor2/floor1/garden
+ * Legend (2064px, 5段): tower/floor3/floor2/floor1/garden
+ *
+ * @param {Object} style   - HOUSE_STYLES の要素
+ * @param {string} layerId - 'tower'|'floor3'|'floor2'|'floor1'|'garden'
+ * @returns {{ aspectW, aspectH, bgSize, bgPos }|null} - null = このスタイルに該当レイヤーなし
+ */
+export function getSpriteLayerSpec(style, layerId) {
+  const sections = style?.sections;
+  if (!sections?.includes(layerId)) return null;
+
+  const totalH = style.spritesheetHeight;
+  const totalW = style.spritesheetWidth || 1024;
+
+  // towerセクションはLegendのみ2段分(688px)、他は1段(344px)
+  const getH = id => (id === 'tower' && style.tier === 'legend') ? 688 : 344;
+
+  let sy = 0;
+  for (const sid of sections) {
+    if (sid === layerId) break;
+    sy += getH(sid);
+  }
+  const sh = getH(layerId);
+
+  // bgSize: 100% N% (N = totalH/sh × 100)
+  const bgSizePct = Math.round(totalH / sh * 100);
+  // bgPos: 0% M% (M = sy/(totalH−sh) × 100)
+  const bgPosPct  = sh >= totalH ? 0 : Math.round(sy / (totalH - sh) * 100);
+
+  return {
+    aspectW: totalW,
+    aspectH: sh,
+    bgSize:  `100% ${bgSizePct}%`,
+    bgPos:   `0% ${bgPosPct}%`,
+  };
 }
