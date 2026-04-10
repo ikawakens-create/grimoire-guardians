@@ -2935,8 +2935,61 @@
 .house-overview {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  padding: 6px 8px 4px;
+  box-sizing: border-box;
+}
+
+/* 左右分割ボディ */
+.house-overview-body {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  gap: 8px;
+  min-height: 0;
+}
+
+/* 左パネル：家ビジュアル（主役・55%） */
+.house-overview-left {
+  flex: 0 0 55%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+  overflow: hidden;
+}
+
+.house-visual-placeholder {
+  font-size: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  opacity: 0.4;
+}
+
+/* きせかえボタン（家ビジュアルの下に重ねる） */
+.house-craft-btn-overlay {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  padding: 6px 14px;
+  min-height: 36px;
+}
+
+/* 右パネル：レイヤーリスト（45%） */
+.house-overview-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   gap: 0;
-  padding: 8px;
 }
 
 .overview-floor-divider {
@@ -4437,16 +4490,21 @@
 .house-visual-panel {
   display: flex;
   justify-content: center;
-  padding: 8px 0 4px;
+  align-items: flex-end;
+  width: 100%;
+  flex: 1;
+  padding: 4px 8px 0;
+  box-sizing: border-box;
 }
 
 .house-visual-stack {
   display: flex;
   flex-direction: column;
-  width: 160px;
+  width: 100%;
+  max-width: 260px;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .house-sprite-layer {
@@ -4860,7 +4918,7 @@
 
 .style-card-grid-v4 {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 8px;
 }
 
@@ -4929,6 +4987,123 @@
   overflow: hidden;
   text-overflow: ellipsis;
   display: block;
+}
+
+/* ティアバッジ（スタイルカードプレビュー右下） */
+.sc-tier-badge {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
+/* ─── 家プレビュー（HouseBuildScreen v4.1 divスタック） ─── */
+.hb-house-preview {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* 各レイヤースロット */
+.hb-layer-slot {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-repeat: no-repeat;
+  background-color: rgba(255,255,255,0.06);
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow 0.15s, filter 0.15s;
+  min-height: 40px;
+  /* flex値はインラインで各スロットごとに指定（aspect比に応じた比率） */
+}
+
+/* 編集可能レイヤー */
+.hb-available:active {
+  filter: brightness(1.15);
+}
+
+/* 選択中レイヤー */
+.hb-layer-slot.hb-selected {
+  box-shadow: inset 0 0 0 3px #ffe060, 0 0 12px rgba(255,220,60,0.4);
+}
+
+/* レイヤーラベルオーバーレイ（タップ時・選択時に表示） */
+.hb-layer-label-overlay {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.65);
+  color: #ffe88a;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+}
+.hb-layer-label-overlay.visible {
+  opacity: 1;
+}
+.hb-layer-slot:active .hb-layer-label-overlay {
+  opacity: 1;
+}
+
+/* ティアロック（スタイルのティアが低いため存在しない階層） */
+.hb-layer-slot.hb-tier-locked {
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  background: repeating-linear-gradient(
+    135deg,
+    rgba(255,255,255,0.03) 0px,
+    rgba(255,255,255,0.03) 4px,
+    transparent 4px,
+    transparent 12px
+  );
+  cursor: default;
+  opacity: 0.55;
+}
+
+/* ワールド進捗ロック */
+.hb-layer-slot.hb-world-locked {
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  background: rgba(0,0,0,0.25);
+  cursor: default;
+  opacity: 0.65;
+}
+
+.hb-lock-icon {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+.hb-lock-hint {
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.6);
+  text-align: center;
+  padding: 0 4px;
+}
+
+/* フラッシュアニメーション（スタイル適用時） */
+@keyframes hb-flash-anim {
+  0%   { filter: brightness(2) saturate(0); }
+  40%  { filter: brightness(1.4) saturate(1.5); }
+  100% { filter: brightness(1) saturate(1); }
+}
+.hb-flash {
+  animation: hb-flash-anim 0.4s ease-out forwards;
 }
 
 /* ─── にわかざり ─── */

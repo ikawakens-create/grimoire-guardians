@@ -52,22 +52,10 @@ const STYLE_LAYERS = [
   { id: 'tower',  label: '⭐ てっぺん', emoji: '⭐' },
 ];
 
-/** SVG内の各レイヤーの描画エリア（viewBox 480×540 基準の座標） */
-const LAYER_ZONES = {
-  tower:  { y: 15,  h: 100, rx: 18, shape: 'triangle' },
-  floor3: { y: 120, h: 95,  rx: 12 },
-  floor2: { y: 222, h: 100, rx: 12 },
-  floor1: { y: 328, h: 110, rx: 12 },
-  garden: { y: 444, h: 85,  rx: 12 },
-};
-
-/** レイヤーゾーンのホットスポット（コンテナに対する % — landscape右半分に置くので左起点） */
-const LAYER_HOTSPOT_POS = {
-  tower:  { top: '3%',  height: '18%' },
-  floor3: { top: '22%', height: '18%' },
-  floor2: { top: '41%', height: '19%' },
-  floor1: { top: '61%', height: '20%' },
-  garden: { top: '82%', height: '16%' },
+/** 家プレビューの表示順（上から下）と表示ラベル */
+const DISPLAY_ORDER = ['tower', 'floor3', 'floor2', 'floor1', 'garden'];
+const LAYER_LABEL = {
+  tower: 'てっぺん', floor3: '3かい', floor2: '2かい', floor1: '1かい', garden: 'にわ',
 };
 
 export class HouseBuildScreen {
@@ -144,9 +132,9 @@ export class HouseBuildScreen {
         <!-- メインレイアウト（左: 家断面図 / 右: オプション） -->
         <div class="house-build-body">
 
-          <!-- 左パネル: 家の断面図 + タップゾーン -->
+          <!-- 左パネル: リアル家プレビュー（タップでレイヤー選択） -->
           <div class="house-cross-section-wrap">
-            ${this._renderCrossSection(house)}
+            ${this._renderHousePreview(house)}
           </div>
 
           <!-- 右パネル: オプション -->
@@ -190,109 +178,68 @@ export class HouseBuildScreen {
   }
 
   // ─────────────────────────────────────────────
-  // 左パネル: 家の断面図SVG
+  // 左パネル: リアル家プレビュー（divスタック）
   // ─────────────────────────────────────────────
 
-  _renderCrossSection(house) {
-    const sections    = house.sections    || {};
-    const layerStyles = house.layerStyles || {};
+  /** 1かいのスタイルのティアで「使えるレイヤー」を決定 */
+  _getAvailableLayers(house) {
+    const floor1StyleId = house.layerStyles?.floor1 || 'style_wood';
+    const floor1Style   = getStyleById(floor1StyleId);
+    return new Set(floor1Style?.sections || ['tower', 'floor1', 'garden']);
+  }
 
-    // 各レイヤーの色を現在のスタイルから取得
-    const getLayerColor = (id) => {
-      const sid   = layerStyles[id] || 'style_wood';
-      const style = getStyleById(sid);
-      return { color: style?.color || '#a0522d', dark: style?.colorDark || '#6b3a1f' };
-    };
+  _renderHousePreview(house) {
+    const sections        = house.sections    || {};
+    const layerStyles     = house.layerStyles || {};
+    const availableLayers = this._getAvailableLayers(house);
+    const cleared         = HouseManager._getClearedWorldCount?.() ?? 0;
 
-    const isUnlocked = (id) => id === 'floor1' || !!sections[id];
+    const divs = DISPLAY_ORDER.map(id => {
+      const isSelected    = this._selectedLayer === id && this._tab === 'style';
+      const tierAvailable = availableLayers.has(id);
+      const worldUnlocked = id === 'floor1' || !!sections[id];
 
-    // SVGレイヤーを描画
-    const layers = STYLE_LAYERS.map(layer => {
-      const unlocked = isUnlocked(layer.id);
-      const { color, dark } = getLayerColor(layer.id);
-      const z = LAYER_ZONES[layer.id];
-      const sid = `grad-${layer.id}`;
-      const isSelected = this._selectedLayer === layer.id && this._tab === 'style';
-
-      if (layer.id === 'tower') {
-        // てっぺんは三角形
+      // ティアロック（1かいのスタイルが低ティアのためこのレイヤーが存在しない）
+      if (!tierAvailable) {
+        const hint = id === 'floor3' ? 'レジェンドスタイルで解放！' : 'スペシャルスタイルで解放！';
         return `
-          <defs>
-            <linearGradient id="${sid}" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="${unlocked ? color : '#444'}"/>
-              <stop offset="100%" stop-color="${unlocked ? dark : '#333'}"/>
-            </linearGradient>
-          </defs>
-          <polygon
-            points="240,${z.y} 80,${z.y + z.h} 400,${z.y + z.h}"
-            fill="url(#${sid})"
-            stroke="${isSelected ? '#fff' : 'none'}"
-            stroke-width="${isSelected ? 3 : 0}"
-            opacity="${unlocked ? 1 : 0.35}"
-          />
-          <text x="240" y="${z.y + z.h - 18}"
-                text-anchor="middle" fill="${unlocked ? 'white' : '#666'}"
-                font-family="sans-serif" font-size="20" font-weight="bold">${layer.emoji}</text>
-          <text x="240" y="${z.y + z.h - 2}"
-                text-anchor="middle" fill="${unlocked ? 'rgba(255,255,255,0.85)' : '#666'}"
-                font-family="sans-serif" font-size="13">${unlocked ? layer.label : '🔒 ロック'}</text>
-        `;
+          <div class="hb-layer-slot hb-tier-locked" data-layer="${id}">
+            <span class="hb-lock-icon">🔒</span>
+            <span class="hb-lock-hint">${hint}</span>
+          </div>`;
       }
 
-      return `
-        <defs>
-          <linearGradient id="${sid}" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="${unlocked ? color : '#444'}"/>
-            <stop offset="100%" stop-color="${unlocked ? dark : '#333'}"/>
-          </linearGradient>
-        </defs>
-        <rect
-          x="20" y="${z.y}" width="440" height="${z.h}" rx="${z.rx}"
-          fill="url(#${sid})"
-          stroke="${isSelected ? '#fff' : 'rgba(255,255,255,0.15)'}"
-          stroke-width="${isSelected ? 3 : 1}"
-          opacity="${unlocked ? 1 : 0.35}"
-        />
-        <text x="240" y="${z.y + z.h / 2 - 6}"
-              text-anchor="middle" fill="${unlocked ? 'white' : '#666'}"
-              font-family="sans-serif" font-size="22" font-weight="bold">${layer.emoji}</text>
-        <text x="240" y="${z.y + z.h / 2 + 14}"
-              text-anchor="middle" fill="${unlocked ? 'rgba(255,255,255,0.9)' : '#666'}"
-              font-family="sans-serif" font-size="14">${unlocked ? layer.label : '🔒 ロック中'}</text>
-      `;
-    });
+      // ワールド進捗ロック（まだクリア数が足りない）
+      if (!worldUnlocked) {
+        const unlockAt  = Config.HOUSE.SECTION_UNLOCK_WORLDS?.[id] || 0;
+        const remaining = Math.max(0, unlockAt - cleared);
+        return `
+          <div class="hb-layer-slot hb-world-locked" data-layer="${id}">
+            <span class="hb-lock-icon">🔒</span>
+            <span class="hb-lock-hint">あと${remaining}ワールド</span>
+          </div>`;
+      }
 
-    // タップゾーンボタン（SVGの上に重ねるHTML）
-    const tapZones = STYLE_LAYERS.map(layer => {
-      const unlocked = isUnlocked(layer.id);
-      if (!unlocked) return '';
-      const pos = LAYER_HOTSPOT_POS[layer.id];
-      const isSelected = this._selectedLayer === layer.id && this._tab === 'style';
+      // 編集可能なレイヤー
+      const styleId = layerStyles[id] || 'style_wood';
+      const style   = getStyleById(styleId);
+      const spec    = getSpriteLayerSpec(style, id);
+      const flexVal = spec?.aspectH || 344;
+
+      const bgStyle = spec
+        ? `background-image:url('${style.spritesheet}');background-size:${spec.bgSize};background-position:${spec.bgPos};background-color:${style.color};`
+        : `background-color:${style.color};`;
+
       return `
-        <button class="layer-tap-btn ${isSelected ? 'selected' : ''}"
-                data-layer="${layer.id}"
-                style="top:${pos.top};height:${pos.height};"
-                aria-label="${layer.label}をえらぶ">
-        </button>
-      `;
+        <div class="hb-layer-slot hb-available ${isSelected ? 'hb-selected' : ''}"
+             data-layer="${id}"
+             style="flex:${flexVal};${bgStyle}"
+             role="button" tabindex="0" aria-label="${LAYER_LABEL[id]}をえらぶ">
+          <div class="hb-layer-label-overlay ${isSelected ? 'visible' : ''}">${LAYER_LABEL[id]}</div>
+        </div>`;
     }).join('');
 
-    return `
-      <div class="cross-section-inner">
-        <svg viewBox="0 0 480 540"
-             xmlns="http://www.w3.org/2000/svg"
-             width="100%" height="100%"
-             preserveAspectRatio="xMidYMid meet">
-          <!-- 背景 -->
-          <rect width="480" height="540" fill="#1a1a4e"/>
-          ${layers.join('')}
-        </svg>
-        <!-- 透明タップゾーン（SVGの上に重ねる） -->
-        <div class="layer-tap-zones">
-          ${tapZones}
-        </div>
-      </div>
-    `;
+    return `<div class="hb-house-preview">${divs}</div>`;
   }
 
   // ─────────────────────────────────────────────
@@ -321,16 +268,21 @@ export class HouseBuildScreen {
     const layerStyles    = house.layerStyles    || {};
     const currentStyleId = layerStyles[this._selectedLayer] || 'style_wood';
     const clearedWorlds  = HouseManager._getClearedWorldCount?.() ?? 0;
+    const layerLabel     = LAYER_LABEL[this._selectedLayer] || this._selectedLayer;
 
-    const layerLabel = STYLE_LAYERS.find(l => l.id === this._selectedLayer)?.label || '';
+    // このレイヤーに対応するスタイルだけ表示（sectionsにこのレイヤーが含まれるもの）
+    const compatibleStyles = HOUSE_STYLES.filter(s =>
+      s.sections?.includes(this._selectedLayer)
+    );
 
-    const cards = HOUSE_STYLES.map(style => {
+    const TIER_BADGE = { basic: '🟤', special: '🔵', legend: '🟣' };
+
+    const cards = compatibleStyles.map(style => {
       const owned      = unlockedStyles.includes(style.id);
       const isCurrent  = style.id === currentStyleId;
       const unlockAt   = Config.HOUSE.STYLE_UNLOCK_WORLDS?.[style.id] ?? 0;
       const worldsLeft = Math.max(0, unlockAt - clearedWorlds);
 
-      // スプライト画像があればCSSスライスで実画像プレビュー、なければ色グラデーション
       const spec = style.spritesheet ? getSpriteLayerSpec(style, this._selectedLayer) : null;
       const previewStyle = spec
         ? `background-image:url('${style.spritesheet}');background-size:${spec.bgSize};background-position:${spec.bgPos};`
@@ -343,6 +295,7 @@ export class HouseBuildScreen {
              role="button" tabindex="${owned ? '0' : '-1'}">
           <div class="sc-preview" style="${previewStyle}">
             ${!spec ? `<span class="sc-emoji">${style.layerEmoji?.[this._selectedLayer] || style.emoji}</span>` : ''}
+            <span class="sc-tier-badge">${TIER_BADGE[style.tier] || ''}</span>
             ${isCurrent ? '<span class="sc-badge-now">いま</span>' : ''}
             ${!owned ? `<span class="sc-badge-lock">🔒 あと${worldsLeft}W</span>` : ''}
           </div>
@@ -469,10 +422,10 @@ export class HouseBuildScreen {
       });
     });
 
-    // レイヤータップゾーン
-    this._element.querySelectorAll('.layer-tap-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        this._selectedLayer = btn.dataset.layer;
+    // 家プレビューの編集可能レイヤーをタップ
+    this._element.querySelectorAll('.hb-layer-slot.hb-available').forEach(slot => {
+      slot.addEventListener('click', () => {
+        this._selectedLayer = slot.dataset.layer;
         this._tab = 'style';   // スタイルタブに自動切替
         this._render();
       });
@@ -513,6 +466,14 @@ export class HouseBuildScreen {
       this._craftResult = { success: false, message: '❌ かえられませんでした' };
     }
     this._render();
+    // 適用したレイヤーにフラッシュアニメーションを付与
+    if (ok) {
+      const slot = this._element?.querySelector(`.hb-layer-slot[data-layer="${this._selectedLayer}"]`);
+      if (slot) {
+        slot.classList.add('hb-flash');
+        setTimeout(() => slot.classList.remove('hb-flash'), 400);
+      }
+    }
     // 前のタイマーをキャンセルしてから新しくセット（連打しても競合しない）
     clearTimeout(this._toastTimer);
     this._toastTimer = setTimeout(() => { this._craftResult = null; this._render(); }, 2000);

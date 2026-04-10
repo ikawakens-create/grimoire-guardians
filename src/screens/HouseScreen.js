@@ -215,40 +215,46 @@ export class HouseScreen {
   // ─── 全景ビュー（v3.1 刷新） ─────────────────
 
   _renderOverview(house, comboName, bonus, bonusClass) {
-    const sections   = house.sections || {};
+    const sections    = house.sections   || {};
     const layerStyles = house.layerStyles || {};
-    const cleared    = HouseManager._getClearedWorldCount();
+    const cleared     = HouseManager._getClearedWorldCount();
 
     // レイヤーを上から下へ積み上げ
-    const rows = LAYER_ORDER_TOP.map(id => {
-      return this._renderLayerRow(id, sections, layerStyles, cleared, house);
-    });
+    const rows = LAYER_ORDER_TOP.map(id =>
+      this._renderLayerRow(id, sections, layerStyles, cleared, house)
+    );
 
     // 装飾レイヤー（オーバーレイ）
     const decoRow = this._renderDecoLayer(sections, layerStyles, cleared);
 
-    // ビジュアル家画像パネル（PNG画像がある場合のみ表示）
+    // ビジュアル家画像パネル
     const visualPanel = this._renderVisualHouse(sections, layerStyles);
 
     return `
       <div class="house-overview ${bonusClass}" id="house-overview-root">
         <!-- コンボ名バッジ -->
-        ${comboName ? `
-          <div class="house-combo-badge house-fullset-badge">
-            ✨ ${comboName}
+        ${comboName ? `<div class="house-combo-badge house-fullset-badge">✨ ${comboName}</div>` : ''}
+
+        <!-- 左右分割：左＝家ビジュアル（主役）、右＝レイヤーリスト -->
+        <div class="house-overview-body">
+
+          <!-- 左パネル: 家の外観（スプライト合成） -->
+          <div class="house-overview-left">
+            ${visualPanel || `<div class="house-visual-placeholder">🏠</div>`}
+            <button class="btn btn-small btn-warning house-craft-btn house-craft-btn-overlay">
+              🎨 きせかえ
+            </button>
           </div>
-        ` : ''}
 
-        <!-- ビジュアル家パネル -->
-        ${visualPanel}
+          <!-- 右パネル: レイヤーリスト + 装飾 -->
+          <div class="house-overview-right">
+            <div class="house-layers-stack">
+              ${rows.join('')}
+            </div>
+            ${decoRow}
+          </div>
 
-        <!-- レイヤー積み上げ -->
-        <div class="house-layers-stack">
-          ${rows.join('')}
         </div>
-
-        <!-- 装飾レイヤー（全体オーバーレイ） -->
-        ${decoRow}
       </div>
     `;
   }
@@ -598,10 +604,12 @@ export class HouseScreen {
       GameStore.setState('app.currentScreen', 'photo');
     });
 
-    // スタイル変更ボタン（合成屋→スタイルタブへ）
-    this._container.querySelector('.house-craft-btn')?.addEventListener('click', () => {
-      GameStore.setState('app.currentScreen', 'house_build');
-      GameStore.setState('app.houseBuildMode', 'style');
+    // スタイル変更ボタン（合成屋→スタイルタブへ）複数ボタン対応
+    this._container.querySelectorAll('.house-craft-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        GameStore.setState('app.currentScreen', 'house_build');
+        GameStore.setState('app.houseBuildMode', 'style');
+      });
     });
 
     // 全景：レイヤー行タップ → 詳細へ
