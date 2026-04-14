@@ -1,41 +1,31 @@
 # セッション引き継ぎ
 
-**保存日時**: 2026-04-10
+**保存日時**: 2026-04-14
 
 ---
 
 ## 今日やったこと
 
-### マイハウス UX 全面刷新（コミット済み）
+### マイハウス スタイル画像生成（スプライトシート配置）
 
-**コミット**: `30a79f0` — feat: マイハウス UX 全面刷新（divプレビュー・左右レイアウト・ティアロック）
+Basic ティア 5スタイル + Special ティア 1スタイルの spritesheet.png を生成・配置完了。
 
-#### 変更内容
+#### 処理済みスタイル
 
-**HouseBuildScreen.js**
-- SVG断面図を廃止し、実スプライト divスタックに置き換え
-- `_renderHousePreview()`: flexの比例高さで各レイヤーを実画像表示
-  - `hb-layer-slot.hb-available`: タップで選択・スタイルタブへ自動切替
-  - `hb-layer-slot.hb-tier-locked`: ティアが低いため存在しない階層（ロック表示）
-  - `hb-layer-slot.hb-world-locked`: ワールドクリア不足（ロック表示）
-- `_bindEvents()`: `.layer-tap-btn` → `.hb-layer-slot.hb-available` に更新
-- `_applyStyle()`: 適用レイヤーに `hb-flash` アニメーション（0.4秒）追加
-- `_renderStyleOptions()`: 2列グリッド・ティアバッジ（🟤🔵🟣）・レイヤー互換フィルタ
+| スタイル | ティア | サイズ | 状態 |
+|---------|-------|--------|------|
+| style_wood | Basic | 1024×1032px | ✅ 配置済み |
+| style_stone | Basic | 1024×1032px | ✅ 配置済み |
+| style_brick | Basic | 1024×1032px | ✅ 配置済み |
+| style_bamboo | Basic | 1024×1032px | ✅ 配置済み |
+| style_forest | Basic | 1024×1032px | ✅ 配置済み |
+| style_ice | Special | 1024×1376px | 🔄 画像生成済み・main未アップ・処理待ち |
 
-**HouseScreen.js**
-- 全景ビューを横画面向け左右分割レイアウトに変更
-  - 左55%：家ビジュアル（スプライト合成）が主役
-  - 右45%：レイヤーリスト＋装飾行
-  - 「きせかえ」ボタンを家画像の下にオーバーレイ表示
-- `house-craft-btn` を `querySelectorAll` 対応に変更（複数ボタン）
+#### 処理手順（確立済みパターン）
 
-**components.css**
-- `.house-overview-body` / `.house-overview-left` / `.house-overview-right` 追加
-- `.house-visual-stack` を `width: 100%` / `max-width: 260px` に変更
-- `.style-card-grid-v4` を3列→2列に変更
-- `.hb-*` スタイル群すべて追加（hb-house-preview, hb-layer-slot, hb-selected,
-  hb-tier-locked, hb-world-locked, hb-layer-label-overlay, hb-flash）
-- `.sc-tier-badge` 追加
+- 屋根・壁セクション: `rembg` で透過処理
+- 庭セクション（Section 3 or 4）: 元画像を保持（rembg で草が消えるため）
+- forest は Section1（丘）も元画像保持、Section2（ドア）のみ rembg
 
 ---
 
@@ -47,61 +37,71 @@
 
 ## 次にやること（優先順）
 
-### 【最優先】動作確認
+### 【最優先】style_ice の処理
 
-ブラウザで開いてテスト：
-1. HouseBuildScreen で家プレビューが実画像で表示されるか（style_wood）
-2. レイヤータップでスタイルタブが開き、タップしたレイヤーが選択状態になるか
-3. スタイルカードをタップすると家プレビューが即変化し、フラッシュアニメーションが出るか
-4. ティアロック・ワールドロックが正しく表示されるか
-5. HouseScreen で家が左55%に大きく表示されるか
+1. ユーザーが main に画像をアップロード
+2. `git pull origin main`
+3. 処理スクリプト実行（屋根〜Floor1 rembg、Gardenは元画像保持）
+4. コミット & プッシュ
 
-### 【その後】残り14スタイルの画像生成
+### 【その次】残り Special 4スタイルのプロンプト生成・画像処理
 
-style_wood 動作確認後、各ティアのプロンプトを確定して順次生成：
-- Basic 残り4（stone / brick / bamboo / forest）
-- Special 5（ice / sakura / candy / flame / sea）
-- Legend 5（black / thunder / moon / jewel / star）
+| スタイル | 方向性 | 状態 |
+|---------|-------|------|
+| style_sakura | **和風茶室**（低い切妻屋根・縁側・桜が覆いかぶさる） | ⬜ プロンプト未作成 |
+| style_candy | お菓子の家 | ⬜ プロンプト未作成 |
+| style_flame | 炎の家 | ⬜ プロンプト未作成 |
+| style_sea | 海の家 | ⬜ プロンプト未作成 |
+
+### 【その後】Legend ティア 5スタイル（1024×2064px・5セクション）
+
+| スタイル | テーマ |
+|---------|-------|
+| style_black | 黒・闇 |
+| style_thunder | 雷 |
+| style_moon | 月 |
+| style_jewel | 宝石 |
+| style_star | 星 |
 
 ---
 
 ## 未解決のバグ・問題
 
-なし（確認待ち）
+なし
 
 ---
 
 ## 重要なメモ
 
-### ブランチ・バージョン情報
-- **現在のブランチ**: `claude/session-april-10-morning-n3eft`
-- **現在の SW バージョン**: `v2.3.9`（sw.js）
-- **spritesheet.png**: style_wood のみ実画像・残り14スタイルはプレースホルダー
-
 ### ティア別スプライトシート仕様
-| ティア | 対象スタイル | キャンバスサイズ | セクション数 |
-|-------|-----------|--------------|------------|
-| Basic  | wood/stone/brick/bamboo/forest | 1024×1032px | 3（tower/floor1/garden） |
-| Special | ice/sakura/candy/flame/sea | 1024×1376px | 4（tower/floor2/floor1/garden） |
-| Legend | black/thunder/moon/jewel/star | 1024×2064px | 5（tower/floor3/floor2/floor1/garden） |
 
-### getSpriteLayerSpec() のロジック（styleItems.js）
-- `style.sections` 配列順に積算してY座標を計算
-- legendティアの tower だけ sh=688、それ以外は sh=344
-- bgSizePct = totalH / sh * 100、bgPosPct = sy / (totalH - sh) * 100
+| ティア | 対象スタイル | キャンバスサイズ | セクション数 | セクション順 |
+|-------|-----------|--------------|------------|------------|
+| Basic | wood/stone/brick/bamboo/forest | 1024×1032px | 3 | tower/floor1/garden |
+| Special | ice/sakura/candy/flame/sea | 1024×1376px | 4 | tower/floor2/floor1/garden |
+| Legend | black/thunder/moon/jewel/star | 1024×2064px | 5? | tower/floor3/floor2/floor1/garden? ※要確認 |
 
-### 実装済みの主要 API
+### 各セクションの Y 座標（Special ティア）
 
-**CharacterAvatar（v2.1）**
-```js
-const avatar = new CharacterAvatar('md');
-avatar.updateSkin(skinId);
-avatar.greet(name, streak);
-avatar.victoryPose(line);
-```
+| セクション | Y範囲 | 内容 |
+|-----------|------|------|
+| Section 1 | 0–343 | TOWER（塔・屋根） |
+| Section 2 | 344–687 | FLOOR 2（2階） |
+| Section 3 | 688–1031 | FLOOR 1（1階・ドア） |
+| Section 4 | 1032–1375 | GARDEN（庭） |
 
-**WardrobeScreen（リアクションプレビュー付き試着室）**
-- `GameStore.setState('app.currentScreen', 'wardrobe')` で遷移
-- スキン選択 → 0.3秒後に自動 greet
-- REACTION_BTNS: correct/wrong/combo3/greet の4種試し再生
-- Create/Destroy パターン
+**ドア配置ルール（Special）**: ドア底辺は Y 991 以上（Section 3 下端 1031 から 40px 以上余白）
+
+### プロンプト品質ルール（確立済み）
+
+1. 屋根の形を全スタイルで差別化（三角/ギャンブレル/パゴダ/ドーム/ダイヤモンドスパイア）
+2. 建物の形そのものでも個性を出す（高床式/ホビット穴/etc）
+3. ドア含有ルールを必ず明記（ドアが庭セクションにはみ出す問題への対処）
+4. 草の発光グラデーション禁止を明記
+5. Building width = 320px（1/3 of canvas）を厳守指示
+
+### ブランチ情報
+
+- **開発ブランチ**: `claude/session-april-10-morning-n3eft`
+- **現在の SW バージョン**: `v2.3.9`
+- **sw.js の ASSETS[] 更新**: style_* の spritesheet.png を全部追加する必要あり（画像配置完了後にまとめて対応）
